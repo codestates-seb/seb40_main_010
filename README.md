@@ -9,10 +9,10 @@
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/mozzi327"><img src="https://avatars.githubusercontent.com/u/80810465?v=4" width="100px;" alt=""/><br /><sub><b>이름</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_main_010/commits?author=mozzi327" title="Documentation">📖</a> <a href="https://github.com/codestates-seb/seb40_main_010/pulls?q=is%3Apr+author%3Amozzi327" title="Pull Requests">🏡</a></td>           
+      <td align="center"><a href="https://github.com/mozzi327"><img src="https://avatars.githubusercontent.com/u/80810465?v=4" width="100px;" alt=""/><br /><sub><b>Kyungmin Cho</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_main_010/commits?author=mozzi327" title="Documentation">📖</a> <a href="https://github.com/codestates-seb/seb40_main_010/pulls?q=is%3Apr+author%3Amozzi327" title="Pull Requests">🏡</a></td>           
       <td align="center"><a href="https://github.com/Quartz614"><img src="https://avatars.githubusercontent.com/u/96826217?v=4" width="100px;" alt=""/><br /><sub><b>Seokyoung joo</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_main_010/commits?author=Quartz614" title="Documentation">📖</a> <a href="https://github.com/codestates-seb/seb40_main_010/pulls?q=is%3Apr+author%3AQuartz614" title="Pull Requests">🏡</a></td>          
       <td align="center"><a href="https://github.com/LimJaeminZ"><img src="https://avatars.githubusercontent.com/u/107789417?v=4" width="100px;" alt=""/><br /><sub><b>
-이름</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_main_010/commits?author=LimJaeminZ" title="Documentation">📖</a> <a href="https://github.com/codestates-seb/seb40_main_010/pulls?q=is%3Apr+author%3ALimJaeminZ" title="Pull Requests">🏡</a></td>
+Jaemin Lim</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_main_010/commits?author=LimJaeminZ" title="Documentation">📖</a> <a href="https://github.com/codestates-seb/seb40_main_010/pulls?q=is%3Apr+author%3ALimJaeminZ" title="Pull Requests">🏡</a></td>
       <td align="center"><a href="https://github.com/LeeGoh"><img src="https://avatars.githubusercontent.com/u/107545016?v=4" width="100px;" alt=""/><br /><sub><b>Gyuri Lee</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_main_010/commits?author=LeeGoh" title="Documentation">📖</a> <a href="https://github.com/codestates-seb/seb40_main_010/pulls?q=is%3Apr+author%3ALeeGoh" title="Pull Requests">🏡</a></td>
     </tr>  
     <tr>
