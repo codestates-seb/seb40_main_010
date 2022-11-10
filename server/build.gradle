@@ -1,0 +1,110 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"    // (1)
+    id 'java'
+}
+
+group = 'ver3.7'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+// (2)
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+// (3)
+configurations {
+    asciidoctorExtensions
+}
+
+dependencies {
+    //스프링데이터 JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // (4) mockmvc 라이브러리
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    //스프링 벨리데이션
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // (5) 아스키 닥터
+    asciidoctorExtensions "org.springframework.restdocs:spring-restdocs-asciidoctor"
+
+    //스프링 웹
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //스프링 시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //롬복
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    //스프링데이터 JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    //h2
+    runtimeOnly 'com.h2database:h2'
+
+    // mysql
+//    runtimeOnly 'com.mysql:mysql-connector-java'
+//    implementation 'mysql:mysql-connector-java'
+
+    //mapper 자동 생성
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+
+    //문서화
+    implementation 'com.google.code.gson:gson'
+
+    //jjwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly    'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    //mvnRepository jwt토큰 base64로 인코딩해주는 라이브러리
+// https://mvnrepository.com/artifact/com.auth0/java-jwt
+    implementation group: 'com.auth0', name: 'java-jwt', version: '4.0.0'
+    //test용 시큐리티
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+
+// (6)
+tasks.named('test') {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+
+// (7)
+tasks.named('asciidoctor') {
+    configurations "asciidoctorExtensions"
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+
+// (8)
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor            // (8-1)
+    from file("${asciidoctor.outputDir}")   // (8-2)
+    into file("src/main/resources/static/docs")   // (8-3)
+}
+
+build {
+    dependsOn copyDocument  // (9)
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+// (10)
+bootJar {
+    dependsOn copyDocument    // (10-1)
+    from("${asciidoctor.outputDir}") {  // (10-2)
+        into 'static/docs'     // (10-3)
+    }
+}
