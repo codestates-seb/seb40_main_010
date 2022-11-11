@@ -4,6 +4,7 @@ import com.main21.reserve.dto.ReserveDto;
 import com.main21.reserve.entity.Reserve;
 import com.main21.reserve.service.ReserveService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,6 @@ public class ReserveController {
 
         Reserve reserve = reserveService.createReserve(post, placeId);
 
-        return null;//new ResponseEntity<>();
+        return new ResponseEntity<>(reserve, HttpStatus.CREATED);
     }
 }

@@ -12,9 +12,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true
   sql:
     init:
-      data-locations: classpath*:db/h2/data.sql
+      data-locations: classpath*:db/h2/CategoryData.sql
 logging:
   level:
     org:

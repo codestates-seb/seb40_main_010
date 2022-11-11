@@ -15,7 +15,7 @@ public class ReserveDto {
     public static class Post {
         private Long id;
         private int capacity;
-        private Date checkIn;
-        private Date checkOut;
+        private Date startTime;
+        private Date endTime;
     }
 }
