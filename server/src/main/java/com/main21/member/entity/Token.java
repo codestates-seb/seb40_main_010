@@ -1,4 +1,4 @@
-package com.main21.bookmark.member.entity;
+package com.main21.member.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
