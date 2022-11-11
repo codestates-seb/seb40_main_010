@@ -1,6 +1,8 @@
 package com.main21.member.entity;
 
 import com.main21.bookmark.entity.Bookmark;
+import com.main21.place.entity.Place;
+import com.main21.reserve.entity.Reserve;
 import com.main21.review.entity.Review;
 import com.main21.util.Auditable;
 import lombok.*;
@@ -34,8 +36,7 @@ public class Member extends Auditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private MBTI mbti;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -43,6 +44,12 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Reserve> reserves = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Place> places = new ArrayList<>();
 
 
     @Builder
