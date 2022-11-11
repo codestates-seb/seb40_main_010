@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,7 @@ public class Place {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PLACE_ID")
     private long id;
 
     private String title;
@@ -35,15 +35,12 @@ public class Place {
 
     private int view;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-
     @OneToMany(mappedBy = "place")
     private List<PlaceCategory> placeCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "place")
-    private List<PlaceImage> placeImages = new ArrayList<>();
+//    @OneToMany(mappedBy = "place")
+//    private List<PlaceImage> placeImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "place")
-    private List<MBTICount> mbtiCounts = new ArrayList<>();
+//    @OneToMany(mappedBy = "place")
+//    private List<MBTICount> mbtiCounts = new ArrayList<>();
 }
