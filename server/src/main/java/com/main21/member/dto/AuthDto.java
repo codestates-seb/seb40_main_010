@@ -17,11 +17,15 @@ public class AuthDto {
     }
 
     @Getter
-    @Builder
-    @AllArgsConstructor
     public static class Token {
-        private String accessToken;
-        private String refreshToken;
+        private final String accessToken;
+        private final String refreshToken;
+
+        @Builder
+        public Token(String accessToken, String refreshToken) {
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
+        }
     }
 
     @Getter
