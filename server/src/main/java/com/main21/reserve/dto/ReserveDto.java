@@ -7,9 +7,6 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class ReserveDto {
 
     @Getter
