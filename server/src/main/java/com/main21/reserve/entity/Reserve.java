@@ -34,4 +34,16 @@ public class Reserve {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
     }
+
+
+    // 편의 메서드
+    public void addPlace(Place place) {
+        if (this.place != null) {
+            this.place.getReserves().remove(this);
+        }
+        this.place = place;
+        if (place.getReserves() != this) {
+            place.addReserve(this);
+        }
+    }
 }
