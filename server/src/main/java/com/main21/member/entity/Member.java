@@ -1,10 +1,9 @@
 package com.main21.member.entity;
 
+import com.main21.bookmark.entity.Bookmark;
+import com.main21.review.entity.Review;
 import com.main21.util.Auditable;
 import lombok.*;
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
-import org.springframework.data.annotation.Id;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +12,11 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends Auditable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
-    private Long Id;
+    private Long id;
 
     private String email;
 
@@ -31,11 +31,20 @@ public class Member extends Auditable {
 
     private MemberStatus memberStatus;
 
-    private List<String> roles;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private MBTI mbti;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Bookmark> bookmarks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
+
+
     @Builder
     public Member(String email, String name, String nickname, String password, String phoneNumber, List<String> roles) {
         this.email = email;
