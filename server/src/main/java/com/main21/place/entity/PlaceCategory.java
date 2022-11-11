@@ -21,4 +21,14 @@ public class PlaceCategory {
     @ManyToOne
     @JoinColumn(name = "PLACE_ID")
     private Place place;
+
+    public void addPlace(Place place) {
+        if (this.place != null) {
+            this.place.getPlaceCategories().remove(this);
+        }
+        this.place = place;
+        if (place.getPlaceCategories() != this) {
+            place.addPlaceCategory(this);
+        }
+    }
 }
