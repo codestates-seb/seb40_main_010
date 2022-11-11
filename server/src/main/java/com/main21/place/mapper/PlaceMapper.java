@@ -6,5 +6,4 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface PlaceMapper {
-    Place placePostToPlace(PlaceDto.Post post);
 }

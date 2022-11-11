@@ -25,8 +25,7 @@ public class PlaceController {
 
     @PostMapping("place/post")
     public ResponseEntity createPlace(@Valid @RequestBody PlaceDto.Post post) { //추후 유저 아이디 추가
-        Place place = placeService.createPlace(mapper.placePostToPlace(post));
-//        Place place = placeService.createPlace(post);
+        Place place = placeService.createPlace(post);
         return new ResponseEntity<>(place, HttpStatus.CREATED);
     }
 
