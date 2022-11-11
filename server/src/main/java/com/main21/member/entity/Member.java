@@ -1,4 +1,4 @@
-package com.main21.bookmark.member.entity;
+package com.main21.member.entity;
 
 import com.main21.util.Auditable;
 import lombok.*;
@@ -33,7 +33,8 @@ public class Member extends Auditable {
 
     private List<String> roles;
 
-    @ManyToOne(mappedBy = "members")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
     private MBTI mbti;
     @Builder
     public Member(String email, String name, String nickname, String password, String phoneNumber, List<String> roles) {
