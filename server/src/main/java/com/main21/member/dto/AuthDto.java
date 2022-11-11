@@ -25,11 +25,16 @@ public class AuthDto {
     }
 
     @Getter
-    @Builder
-    @AllArgsConstructor
     public static class Response {
-        private String accessToken;
-        private String nickname;
-        private String email;
+        private final String accessToken;
+        private final String nickname;
+        private final String email;
+
+        @Builder
+        public Response(String accessToken, String nickname, String email) {
+            this.accessToken = accessToken;
+            this.nickname = nickname;
+            this.email = email;
+        }
     }
 }
