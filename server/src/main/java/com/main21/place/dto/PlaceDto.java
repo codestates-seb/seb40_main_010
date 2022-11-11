@@ -11,11 +11,11 @@ public class PlaceDto {
     @Getter
     public static class Post {
         private String title;
-        private List<PlaceCategory> categories;
+        private List<String> categoryList;
         private int maxCapacity;
         private String address;
         private String detailInfo;
-        private List<PlaceImage> placeImages;
+//        private List<PlaceImage> placeImages;
         private int charge;
     }
 

@@ -18,8 +18,16 @@ public class PlaceService {
      * @return
      */
     public Place createPlace(PlaceDto.Post post) {
-        Place place = new Place(post.getTitle(), post.getDetailInfo(), post.getMaxCapacity(), post.getAddress(), post.getCharge(), post.getCategories());
-        return place;
+
+        Place place = Place.builder()
+                .title(post.getTitle())
+                .detailInfo(post.getDetailInfo())
+                .maxCapacity(post.getMaxCapacity())
+                .address(post.getAddress())
+                .charge(post.getCharge())
+                .build();
+
+        return placeRepository.save(place);
     }
 
 

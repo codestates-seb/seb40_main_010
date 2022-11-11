@@ -1,5 +1,6 @@
 package com.main21.place.entity;
 
+import com.main21.place.dto.PlaceCategoryDto;
 import com.main21.reserve.entity.Reserve;
 import lombok.*;
 
@@ -59,14 +60,19 @@ public class Place {
 
     // createPlace 생성자
     @Builder
-    public Place(String title, String detailInfo, int maxCapacity, String address, int charge,
-                 List<PlaceCategory> placeCategories) {
+    public Place(String title, String detailInfo, int maxCapacity, String address, int charge ){
         this.title = title;
         this.detailInfo = detailInfo;
         this.maxCapacity = maxCapacity;
         this.address = address;
         this.charge = charge;
-        this.placeCategories = placeCategories;
+    }
+
+    public void addPlaceCategory(PlaceCategory placeCategory) {
+        this.addPlaceCategory(placeCategory);
+        if (placeCategory.getPlace() != this) {
+            placeCategory.addPlace(this);
+        }
     }
 
     // 편의 메서드
