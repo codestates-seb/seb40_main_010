@@ -20,19 +20,19 @@ public class Reserve {
 
     private int capacity;
 
-    private Date checkIn;
+    private Date startTime;
 
-    private Date checkOut;
+    private Date endTime;
 
     @ManyToOne
     @JoinColumn(name = "PLACE_ID")
     private Place place;
 
     @Builder
-    public Reserve(int capacity, Date checkIn, Date checkOut) {
+    public Reserve(int capacity, Date startTime, Date endTime) {
         this.capacity = capacity;
-        this.checkIn = checkIn;
-        this.checkOut = checkOut;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
 

@@ -25,12 +25,19 @@ public class ReserveService {
 
         //유저확인
 
-        Reserve reserve = new Reserve(post.getCapacity(), post.getCheckIn(), post.getCheckOut());
+        Reserve reserve = Reserve.builder()
+                .capacity(post.getCapacity())
+                .startTime(post.getStartTime())
+                .endTime(post.getEndTime())
+                .build();
 
         //매핑 관계 저장
+        reserve.addPlace(findPlace);
 
         Reserve savedReserve = reserveRepository.save(reserve);
 
-        return null;
+        findPlace.addReserve(savedReserve);
+
+        return savedReserve;
     }
 }
