@@ -1,7 +1,5 @@
 package com.main21.place.entity;
 
-import com.main21.place.dto.PlaceCategoryDto;
-import com.main21.reserve.entity.Reserve;
 import lombok.*;
 
 import javax.persistence.*;

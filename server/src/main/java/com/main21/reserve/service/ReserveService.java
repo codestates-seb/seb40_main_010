@@ -32,11 +32,11 @@ public class ReserveService {
                 .build();
 
         //매핑 관계 저장
-        reserve.addPlace(findPlace);
+        //reserve.addPlace(findPlace);
 
         Reserve savedReserve = reserveRepository.save(reserve);
 
-        findPlace.addReserve(savedReserve);
+        //findPlace.addReserve(savedReserve);
 
         return savedReserve;
     }
