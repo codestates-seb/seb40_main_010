@@ -48,6 +48,7 @@ public class Place {
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PlaceImage> placeImages = new ArrayList<>();
 
+
     // 공간 - MBTI Count 1:N
 //    @OneToMany(mappedBy = "place")
 //    private List<MBTICount> mbtiCounts = new ArrayList<>();
@@ -69,7 +70,7 @@ public class Place {
     public void addPlaceCategory(PlaceCategory placeCategory) {
         this.addPlaceCategory(placeCategory);
         if (placeCategory.getPlace() != this) {
-            placeCategory.addPlace(this);
+            placeCategory.setPlace(this);
         }
     }
 

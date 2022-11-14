@@ -7,22 +7,30 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 public class PlaceCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PLACE_CATEGORY_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PLACE_ID")
     private Place place;
 
-    public void addPlace(Place place) {
+    @Column
+    private String categoryName;
+
+    public PlaceCategory(Place place, String categoryName, Category category) {
+        this.place = place;
+        this.categoryName = categoryName;
+        this.category = category;
+    }
+
+    public void setPlace(Place place) {
         if (this.place != null) {
             this.place.getPlaceCategories().remove(this);
         }
