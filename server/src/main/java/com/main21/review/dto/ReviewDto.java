@@ -1,4 +1,4 @@
-package com.main21.review.entity.dto;
+package com.main21.review.dto;
 
 import lombok.Builder;
 import lombok.Getter;

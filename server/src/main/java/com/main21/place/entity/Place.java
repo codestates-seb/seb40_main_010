@@ -54,9 +54,8 @@ public class Place {
 //    @OneToMany(mappedBy = "place")
 //    private List<MBTICount> mbtiCounts = new ArrayList<>();
 
-    // 공간 - 예약 등록 1:N
-    @OneToMany(mappedBy = "place")
-    private List<Reserve> reserves = new ArrayList<>();
+    // 공간 - 리뷰 간접 참조
+    private Long reserveId;
 
     // createPlace 생성자
     @Builder
@@ -76,10 +75,7 @@ public class Place {
     }
 
     // 편의 메서드
-    public void addReserve(Reserve reserve) {
-        this.reserves.add(reserve);
-        if (reserve.getPlace() != this) {
-            reserve.addPlace(this);
-        }
+    public void addReserve(Long reserveId) {
+        this.reserveId = reserveId;
     }
 }
