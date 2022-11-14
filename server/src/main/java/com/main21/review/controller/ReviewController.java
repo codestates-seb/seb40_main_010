@@ -14,10 +14,24 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping("/{place-Id}")
-    public ResponseEntity postReview(@PathVariable("place-Id") Long placeId, @RequestBody ReviewDto.Post reviewDtoPost,
+    @PostMapping("/{place-id}")
+    public ResponseEntity postReview(@PathVariable("place-id") Long placeId,
+                                     @RequestBody ReviewDto.Post post,
                                      @CookieValue(name = "memberId") Long memberId) {
-        reviewService.createReview(reviewDtoPost, memberId, placeId);
+        reviewService.createReview(post, memberId, placeId);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{review-id}/edit")
+    public ResponseEntity patchReview(@PathVariable("review-id") Long reviewId,
+                                      @RequestBody ReviewDto.Patch patch) {
+        reviewService.updateReview(reviewId, patch);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{review-id}")
+    public ResponseEntity deleteReview(@PathVariable("review-id") Long reviewId) {
+        reviewService.deleteReview(reviewId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
