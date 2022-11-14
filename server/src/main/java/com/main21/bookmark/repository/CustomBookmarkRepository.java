@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface CustomBookmarkRepository {
     Bookmark findBookmark(Long placeId, Long memberId);
-    Boolean exist(Long placeId, Long memberId);
     List<BookmarkDto.Response> getBookmark(Long memberId);
 }
