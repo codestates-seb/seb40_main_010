@@ -23,6 +23,7 @@ public class Reserve {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
+   
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
@@ -34,9 +35,15 @@ public class Reserve {
     }
 
     @Builder
-    public Reserve(int capacity, Date startTime, Date endTime) {
+    public Reserve(int capacity, Date startTime, Date endTime, Long placeId) {
         this.capacity = capacity;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.placeId = placeId;
+    }
+    public void editReserve(int capacity, Date startTime, Date endTime){
+        this.capacity = capacity;
+        this. startTime = startTime;
+        this. endTime = endTime;
     }
 }
