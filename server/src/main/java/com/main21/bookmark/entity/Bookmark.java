@@ -4,6 +4,7 @@ package com.main21.bookmark.entity;
 import com.main21.member.entity.Member;
 import com.main21.util.Auditable;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,11 +23,14 @@ public class Bookmark extends Auditable {
     @Column(length = 1000)
     private String bookmarkUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    private Long memberId;
 
-    public Bookmark(String bookmarkUrl) {
-        this.bookmarkUrl = bookmarkUrl;
+    private Long placeId;
+
+    @Builder
+    public Bookmark(Long memberId, Long placeId) {
+        this.bookmarkUrl = "http://localhost:3000/" + placeId;
+        this.memberId = memberId;
+        this.placeId = placeId;
     }
 }
