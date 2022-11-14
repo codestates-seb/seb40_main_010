@@ -8,6 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< Updated upstream
+=======
+import java.util.List;
+
+>>>>>>> Stashed changes
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
@@ -34,4 +39,12 @@ public class ReviewController {
         reviewService.deleteReview(reviewId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+<<<<<<< Updated upstream
+=======
+//    @GetMapping("/{place-id}")
+//    public ResponseEntity getDetailReviews(@PathVariable("place-id") Long placeId) {
+//        List<ReviewDto.Response> DetailReviews = reviewService.getDetailReviews(placeId);
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
+>>>>>>> Stashed changes
 }
