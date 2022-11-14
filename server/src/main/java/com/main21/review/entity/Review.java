@@ -20,7 +20,7 @@ public class Review extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double score;
+    private Double score;
 
     @Column(length = 1000)
     private String comment;
@@ -28,8 +28,15 @@ public class Review extends Auditable {
 
     private Long memberId;
 
+    private Long placeId;
     @Builder
-    public Review(double score, String comment) {
+    public Review(Double score, String comment, Long memberId, Long placeId) {
+        this.score = score;
+        this.comment = comment;
+        this.memberId = memberId;
+        this.placeId = placeId;
+    }
+    public void editReview(Double score, String comment) {
         this.score = score;
         this.comment = comment;
     }
