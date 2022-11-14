@@ -1,6 +1,5 @@
 package com.main21.reserve.entity;
 
-import com.main21.place.entity.Place;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

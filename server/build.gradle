@@ -77,7 +77,6 @@ dependencies {
     //test용 시큐리티
     testImplementation 'org.springframework.security:spring-security-test'
 
-
     //파일 업로드
 
 
@@ -86,7 +85,6 @@ dependencies {
     // querydsl 디펜던시 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
-
 }
 
 

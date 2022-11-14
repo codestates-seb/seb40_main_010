@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ReviewDto {
     @Getter
     public static class Post {
-        private Double score;
+        private double score;
 
         private String comment;
     }
@@ -20,6 +20,7 @@ public class ReviewDto {
     }
 
     @Getter
+
     public static class Response implements Comparable<Response> {
         private final Long reviewId;
 
