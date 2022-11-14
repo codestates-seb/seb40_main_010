@@ -26,9 +26,7 @@ public class Review extends Auditable {
     private String comment;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    private Long memberId;
 
     @Builder
     public Review(double score, String comment) {

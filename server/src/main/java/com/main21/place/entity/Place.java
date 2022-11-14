@@ -1,7 +1,5 @@
 package com.main21.place.entity;
 
-import com.main21.place.dto.PlaceCategoryDto;
-import com.main21.reserve.entity.Reserve;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,16 +45,15 @@ public class Place {
     private List<PlaceCategory> placeCategories = new ArrayList<>();
 
     // 공간 - 공간 이미지 1:N
-//    @OneToMany(mappedBy = "place")
-//    private List<PlaceImage> placeImages = new ArrayList<>();
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    private List<PlaceImage> placeImages = new ArrayList<>();
 
     // 공간 - MBTI Count 1:N
 //    @OneToMany(mappedBy = "place")
 //    private List<MBTICount> mbtiCounts = new ArrayList<>();
 
-    // 공간 - 예약 등록 1:N
-    @OneToMany(mappedBy = "place")
-    private List<Reserve> reserves = new ArrayList<>();
+    // 공간 - 리뷰 간접 참조
+    private Long reserveId;
 
     // createPlace 생성자
     @Builder
@@ -68,6 +65,7 @@ public class Place {
         this.charge = charge;
     }
 
+
     public void addPlaceCategory(PlaceCategory placeCategory) {
         this.addPlaceCategory(placeCategory);
         if (placeCategory.getPlace() != this) {
@@ -76,10 +74,15 @@ public class Place {
     }
 
     // 편의 메서드
-    public void addReserve(Reserve reserve) {
-        this.reserves.add(reserve);
-        if (reserve.getPlace() != this) {
-            reserve.addPlace(this);
+    public void addReserve(Long reserveId) {
+        this.reserveId = reserveId;
+    }
+
+    public void addPlaceImage(PlaceImage placeImage) {
+        this.placeImages.add(placeImage);
+
+        if(placeImage.getPlace() != this) {
+            placeImage.setPlace(this);
         }
     }
 }

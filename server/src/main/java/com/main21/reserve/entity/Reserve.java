@@ -1,6 +1,5 @@
 package com.main21.reserve.entity;
 
-import com.main21.place.entity.Place;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,26 +23,16 @@ public class Reserve {
 
     private Date endTime;
 
-    @ManyToOne
-    @JoinColumn(name = "PLACE_ID")
-    private Place place;
+    private Long placeId;
+
+    public void addPlaceId(Long placeId) {
+        this.placeId = placeId;
+    }
 
     @Builder
     public Reserve(int capacity, Date startTime, Date endTime) {
         this.capacity = capacity;
         this.startTime = startTime;
         this.endTime = endTime;
-    }
-
-
-    // 편의 메서드
-    public void addPlace(Place place) {
-        if (this.place != null) {
-            this.place.getReserves().remove(this);
-        }
-        this.place = place;
-        if (place.getReserves() != this) {
-            place.addReserve(this);
-        }
     }
 }
