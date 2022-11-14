@@ -36,24 +36,13 @@ public class Member extends Auditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-//    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    private MBTI mbti;
-//
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    private List<Bookmark> bookmarks = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    private List<Review> reviews = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    private List<Reserve> reserves = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    private List<Place> places = new ArrayList<>();
-
-
     @Builder
-    public Member(String email, String name, String nickname, String password, String phoneNumber, List<String> roles) {
+    public Member(String email,
+                  String name,
+                  String nickname,
+                  String password,
+                  String phoneNumber,
+                  List<String> roles) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
