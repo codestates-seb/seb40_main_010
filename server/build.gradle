@@ -69,6 +69,9 @@ dependencies {
     implementation group: 'com.auth0', name: 'java-jwt', version: '4.0.0'
     //test용 시큐리티
     testImplementation 'org.springframework.security:spring-security-test'
+
+    //파일 업로드
+    implementation 'commons-io:commons-io:2.6'
 }
 
 
