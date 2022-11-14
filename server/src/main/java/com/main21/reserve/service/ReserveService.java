@@ -35,13 +35,13 @@ public class ReserveService {
                 .build();
 
         //매핑 관계 저장
-        //reserve.addPlace(findPlace);
+//        reserve.addPlace(findPlace);
+//
+//        Reserve savedReserve = reserveRepository.save(reserve);
+//
+////        findPlace.addReserve(savedReserve);
 
-        Reserve savedReserve = reserveRepository.save(reserve);
-
-        //findPlace.addReserve(savedReserve);
-
-        return savedReserve;
+        return reserve;
     }
     public Reserve updateReserve(ReserveDto.Patch patch, Long reserveId) {
         Reserve findReserve = reserveRepository.findById(reserveId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 추후 수정
