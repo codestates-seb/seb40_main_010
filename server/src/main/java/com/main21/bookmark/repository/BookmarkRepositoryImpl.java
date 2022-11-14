@@ -30,17 +30,6 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository{
     }
 
     @Override
-    public Boolean exist(Long placeId, Long memberId) {
-        Integer fetchOne = queryFactory
-                .selectOne()
-                .from(bookmark)
-                .where(bookmark.placeId.eq(placeId),
-                        bookmark.memberId.eq(memberId))
-                .fetchFirst();
-        return fetchOne != null;
-    }
-
-    @Override
     public List<BookmarkDto.Response> getBookmark(Long memberId) {
         List<BookmarkDto.Response> results = queryFactory
                 .select(new QBookmarkDto_Response(
