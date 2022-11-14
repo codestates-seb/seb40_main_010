@@ -5,7 +5,7 @@ plugins {
     id 'java'
 }
 
-group = 'ver3.7'
+group = 'com.main21'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -62,6 +62,9 @@ dependencies {
     //문서화
     implementation 'com.google.code.gson:gson'
 
+    // Redis 추가
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     //jjwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
@@ -72,6 +75,13 @@ dependencies {
     implementation group: 'com.auth0', name: 'java-jwt', version: '4.0.0'
     //test용 시큐리티
     testImplementation 'org.springframework.security:spring-security-test'
+
+    //파일 업로드
+    implementation 'commons-io:commons-io:2.11.0'
+
+    // querydsl 디펜던시 추가
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 }
 
 

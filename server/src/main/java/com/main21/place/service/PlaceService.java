@@ -27,7 +27,18 @@ public class PlaceService {
                 .charge(post.getCharge())
                 .build();
 
+<<<<<<< Updated upstream
         return placeRepository.save(place);
+=======
+        //파일이 존재할 때 처리
+        if(!placeImageList.isEmpty()) {
+            for(PlaceImage placeImage : placeImageList) {
+                //파일 DB 저장
+                place.addPlaceImage(placeImageRepository.save(placeImage));
+            }
+        }
+        return placeRepository.save(place).getId();
+>>>>>>> Stashed changes
     }
 
 
