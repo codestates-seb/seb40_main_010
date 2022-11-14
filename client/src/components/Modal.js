@@ -1,6 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 
+function Modal() {
+  return (
+    <ModalContainer>
+      <ModalText>예약을 취소하시겠습니까?</ModalText>
+      <ButtonContainer>
+        <ModalButton className="cancle">예약 취소</ModalButton>
+        <ModalButton>돌아가기</ModalButton>
+      </ButtonContainer>
+    </ModalContainer>
+  );
+}
+
 const ModalContainer = styled.div`
   box-sizing: border-box;
   display: flex;
@@ -45,17 +57,5 @@ const ModalButton = styled.button`
     color: #ffffff;
   }
 `;
-
-function Modal() {
-  return (
-    <ModalContainer>
-      <ModalText>예약을 취소하시겠습니까?</ModalText>
-      <ButtonContainer>
-        <ModalButton className="cancle">예약 취소</ModalButton>
-        <ModalButton>돌아가기</ModalButton>
-      </ButtonContainer>
-    </ModalContainer>
-  );
-}
 
 export default Modal;
