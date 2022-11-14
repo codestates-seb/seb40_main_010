@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -26,10 +28,10 @@ public class BookmarkService {
                 .placeId(placeId)
                 .build();
 
-        Bookmark findBookmark = bookmarkRepository.findBookmark(placeId, memberId);
+        Optional<Bookmark> findBookmark = bookmarkRepository.findBookmarkByMemberIdAndPlaceId(placeId, memberId);
 
-        if (bookmarkRepository.exist(placeId, memberId)) {
-            bookmarkRepository.delete(findBookmark);
+        if (findBookmark.isPresent()) {
+            bookmarkRepository.delete(findBookmark.get());
         } else bookmarkRepository.save(bookmark);
     }
 }
