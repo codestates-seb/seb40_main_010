@@ -47,8 +47,8 @@ public class Place {
     private List<PlaceCategory> placeCategories = new ArrayList<>();
 
     // 공간 - 공간 이미지 1:N
-//    @OneToMany(mappedBy = "place")
-//    private List<PlaceImage> placeImages = new ArrayList<>();
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    private List<PlaceImage> placeImages = new ArrayList<>();
 
     // 공간 - MBTI Count 1:N
 //    @OneToMany(mappedBy = "place")
@@ -68,6 +68,7 @@ public class Place {
         this.charge = charge;
     }
 
+
     public void addPlaceCategory(PlaceCategory placeCategory) {
         this.addPlaceCategory(placeCategory);
         if (placeCategory.getPlace() != this) {
@@ -80,6 +81,14 @@ public class Place {
         this.reserves.add(reserve);
         if (reserve.getPlace() != this) {
             reserve.addPlace(this);
+        }
+    }
+
+    public void addPlaceImage(PlaceImage placeImage) {
+        this.placeImages.add(placeImage);
+
+        if(placeImage.getPlace() != this) {
+            placeImage.setPlace(this);
         }
     }
 }

@@ -1,32 +1,35 @@
 package com.main21.place.controller;
 
-import com.main21.place.dto.PlaceDto;
-import com.main21.place.entity.Place;
-import com.main21.place.mapper.PlaceMapper;
-import com.main21.place.service.PlaceService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.main21.place.dto.PlacePostDto;
 
-import javax.validation.Valid;
+import com.main21.place.service.PlaceService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class PlaceController {
 
     private final PlaceService placeService;
-    private final PlaceMapper mapper;
 
-    public PlaceController(PlaceService placeService, PlaceMapper mapper) {
-        this.placeService = placeService;
-        this.mapper = mapper;
-    }
+    @PostMapping(value = "/place/post",consumes = {"multipart/form-data"})
+    public void create(@RequestPart(value = "key") PlacePostDto placePostDto,
+                       @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
-    @PostMapping("place/post")
-    public ResponseEntity createPlace(@Valid @RequestBody PlaceDto.Post post) { //추후 유저 아이디 추가
-        Place place = placeService.createPlace(post);
-        return new ResponseEntity<>(place, HttpStatus.CREATED);
+        PlacePostDto postDto =
+                PlacePostDto.builder()
+                        .title(placePostDto.getTitle())
+                        .categoryList(placePostDto.getCategoryList())
+                        .maxCapacity(placePostDto.getMaxCapacity())
+                        .address(placePostDto.getAddress())
+                        .detailInfo(placePostDto.getDetailInfo())
+                        .charge(placePostDto.getCharge())
+                        .build();
+
+        placeService.create(postDto, files);
     }
 
 }
