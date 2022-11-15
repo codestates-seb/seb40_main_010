@@ -32,11 +32,11 @@ public class JwtTokenUtils {
     private String secretKey;
 
     @Getter
-    @Value("jwt.access-token-expiration-minutes")
+    @Value("${jwt.access-token-expiration-minutes}")
     private int accessTokenExpirationMinutes;
 
     @Getter
-    @Value("jwt.refresh-token-expiration-minutes")
+    @Value("${jwt.refresh-token-expiration-minutes}")
     private int refreshTokenExpirationMinutes;
 
     private final RedisUtils redisUtils;
