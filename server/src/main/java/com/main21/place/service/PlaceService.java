@@ -1,6 +1,10 @@
 package com.main21.place.service;
 
+import com.main21.exception.BusinessLogicException;
+import com.main21.exception.ExceptionCode;
+import com.main21.file.S3Upload;
 import com.main21.place.dto.PlacePostDto;
+import com.main21.place.dto.PlaceResponseDto;
 import com.main21.place.entity.Category;
 import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceCategory;
@@ -10,10 +14,12 @@ import com.main21.place.repository.PlaceCategoryRepository;
 import com.main21.place.repository.PlaceImageRepository;
 import com.main21.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +30,51 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceImageRepository placeImageRepository;
     private final FileHandler fileHandler;
-
     private final CategoryRepository categoryRepository;
     private final PlaceCategoryRepository placeCategoryRepository;
 
-    /*
-     * 공간 등록 메서드
-     * @param place
-     * @return
+    @Autowired
+    private S3Upload s3Upload;
+
+    /**
+     * 장소 + S3이미지 저장 메서드
+     */
+    @Transactional
+    public void createS3(PlacePostDto postDto, List<MultipartFile> files) throws Exception {
+        //유저 확인 필요
+
+        Place place = new Place(
+                postDto.getTitle(),
+                postDto.getDetailInfo(),
+                postDto.getMaxCapacity(),
+                postDto.getAddress(),
+                postDto.getCharge()
+        );
+
+        List<PlaceImage> placeImageList = s3Upload.uploadList(files);
+
+        //파일이 존재할 때 처리
+        if(!placeImageList.isEmpty()) {
+            for(PlaceImage placeImage : placeImageList) {
+                //파일 DB 저장
+                place.addPlaceImage(placeImageRepository.save(placeImage));
+            }
+        }
+
+        Long placeId = placeRepository.save(place).getId();
+
+        List<String> categoryList = postDto.getCategoryList();
+        categoryList.forEach(
+                s -> {
+                    Category category = categoryRepository.findByCategoryName(s);
+                    PlaceCategory placeCategory = new PlaceCategory(place, s, category);
+                    placeCategoryRepository.save(placeCategory);
+                }
+        );
+    }
+
+    /**
+     * 장소 저장 메서드 (Local)
      */
     @Transactional
     public Long create(PlacePostDto postDto, List<MultipartFile> files) throws Exception {
@@ -67,5 +110,16 @@ public class PlaceService {
         );
 
         return placeId;
+    }
+
+    /**
+     * 장소 상세검색(카테고리 추가 구현 필요)
+     */
+    @Transactional
+    public PlaceResponseDto searchById(Long placeId, List<String> filePath) { //List<Long> fileId) {
+        Place place = placeRepository.findById(placeId).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+
+        return new PlaceResponseDto(place, filePath);
     }
 }

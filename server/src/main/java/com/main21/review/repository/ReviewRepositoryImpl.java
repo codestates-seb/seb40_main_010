@@ -25,8 +25,8 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
     public List<ReviewDto.Response> getReviews(Long placeId) {
         List<ReviewDto.Response> result = queryFactory
                 .select(new QReviewDto_Response(
-                        member,
-                        review
+                        review,
+                        member
                 ))
                 .from(review)
                 .leftJoin(member).on(review.memberId.eq(member.id))

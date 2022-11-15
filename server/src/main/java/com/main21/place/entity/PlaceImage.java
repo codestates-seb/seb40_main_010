@@ -32,6 +32,11 @@ public class PlaceImage {
         this.fileSize = fileSize;
     }
 
+    public PlaceImage(String filePath, Place place) {
+        this.filePath = filePath;
+        this.place = place;
+    }
+
     public void setPlace(Place place) {
         this.place = place;
         if(place.getPlaceImages().contains(this)) {
