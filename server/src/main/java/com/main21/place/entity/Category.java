@@ -15,8 +15,9 @@ public class Category {
     @Column(name = "CATEGORY_ID")
     private Long id;
 
+    @Column
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "category")
     private List<PlaceCategory> placeCategories = new ArrayList<>();
 }

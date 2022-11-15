@@ -1,6 +1,13 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id "org.asciidoctor.jvm.convert" version "3.3.2"    // (1)
     id 'java'
 }
@@ -56,8 +63,8 @@ dependencies {
 //    implementation 'mysql:mysql-connector-java'
 
     //mapper 자동 생성
-    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
     //문서화
     implementation 'com.google.code.gson:gson'
@@ -120,4 +127,32 @@ bootJar {
     from("${asciidoctor.outputDir}") {  // (10-2)
         into 'static/docs'     // (10-3)
     }
+}
+
+// querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
+def querydslDir = "$buildDir/generated/'querydsl'"
+
+// JPA 사용여부 및 사용 경로 설정
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+// build시 사용할 sourceSet 추가 설정
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+
+// querydsl 컴파일 시 사용할 옵션 설정
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+// querydsl이 compileClassPath를 상속하도록 설정
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
 }

@@ -33,16 +33,13 @@ public class Member extends Auditable {
 
     private MemberStatus memberStatus;
 
+    private String profileImage;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
     @Builder
-    public Member(String email,
-                  String name,
-                  String nickname,
-                  String password,
-                  String phoneNumber,
-                  List<String> roles) {
+    public Member(String email, String name, String nickname, String password, String phoneNumber, List<String> roles, String profileImage) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
@@ -50,6 +47,7 @@ public class Member extends Auditable {
         this.phoneNumber = phoneNumber;
         this.memberStatus = MemberStatus.MEMBER_ACTIVE;
         this.roles = roles;
+        this.profileImage = profileImage;
     }
 
 
