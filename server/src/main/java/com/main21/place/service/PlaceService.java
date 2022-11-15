@@ -123,3 +123,4 @@ public class PlaceService {
         return new PlaceResponseDto(place, filePath);
     }
 }
+

@@ -12,7 +12,7 @@ plugins {
     id 'java'
 }
 
-group = 'ver3.7'
+group = 'com.main21'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -43,7 +43,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     //스프링 시큐리티
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     //롬복
@@ -66,6 +69,9 @@ dependencies {
     //문서화
     implementation 'com.google.code.gson:gson'
 
+    // Redis 추가
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     //jjwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
@@ -78,8 +84,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     //파일 업로드
-
-
     implementation 'commons-io:commons-io:2.11.0'
 
     // querydsl 디펜던시 추가

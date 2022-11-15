@@ -28,6 +28,7 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
                         review,
                         member
                 ))
+
                 .from(review)
                 .leftJoin(member).on(review.memberId.eq(member.id))
                 .where(

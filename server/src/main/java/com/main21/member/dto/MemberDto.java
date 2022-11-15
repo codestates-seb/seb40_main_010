@@ -9,18 +9,20 @@ public class MemberDto {
 
         private String password;
 
-        private String name;
-
         private String nickname;
 
         private String phoneNumber;
 
-        private String profileImage;
+        private String mbti;
+
+        public Post() {
+        }
     }
+
     @Getter
     public static class Patch {
-        private String profileImage;
         private String nickname;
         private String mbti;
     }
+
 }

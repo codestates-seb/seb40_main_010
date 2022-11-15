@@ -10,6 +10,7 @@ import com.main21.reserve.repository.ReserveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,36 +20,47 @@ public class ReserveService {
     private final ReserveRepository reserveRepository;
     private final PlaceRepository placeRepository;
 
-    public Reserve createReserve(ReserveDto.Post post, Long placeId) {
+    // 예약 등록
+    public Reserve createReserve(ReserveDto.Post post, Long placeId, Long memberId) {
 
         //공간 확인
         Place findPlace = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
         //유저확인
-
         Reserve reserve = Reserve.builder()
                 .capacity(post.getCapacity())
                 .startTime(post.getStartTime())
                 .endTime(post.getEndTime())
                 .placeId(findPlace.getId())
+                .memberId(memberId)
+                .totalCharge(((post.getEndTime().getTime() - post.getStartTime().getTime())/3600000) * findPlace.getCharge())
                 .build();
 
-        //매핑 관계 저장
-//        reserve.addPlace(findPlace);
-//
-//        Reserve savedReserve = reserveRepository.save(reserve);
-//
-////        findPlace.addReserve(savedReserve);
+        Reserve savedReserve = reserveRepository.save(reserve);
+        findPlace.addReserve(savedReserve.getPlaceId());
 
         return reserve;
     }
+
+    // 예약 수정
     public Reserve updateReserve(ReserveDto.Patch patch, Long reserveId) {
         Reserve findReserve = reserveRepository.findById(reserveId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 추후 수정
-        findReserve.editReserve(patch.getCapacity(),patch.getStartTime(),patch.getEndTime());
+        findReserve.editReserve(patch.getCapacity(), patch.getStartTime(), patch.getEndTime());
 
         Reserve updateReserve = reserveRepository.save(findReserve);
 
         return updateReserve;
     }
+
+    // 예약 전체 조회
+    public List<ReserveDto.Response> getReservation(Long memberId) {
+        return reserveRepository.getReservation(memberId);
+    }
+
+    // 예약 삭제(취소)
+    public void deleteReserve(Long reserveId) {
+        reserveRepository.deleteById(reserveId);
+    }
+
 }
