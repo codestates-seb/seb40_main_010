@@ -1,6 +1,9 @@
 # 🏡 대여가 대여
 <br />
-![스크린샷 2022-11-14 오후 10 43 20](https://user-images.githubusercontent.com/96826217/201924160-d90c8de6-0b56-4575-860c-c76c1e9a192a.png)
+
+### 단체사진
+
+![단체사진](https://user-images.githubusercontent.com/96826217/201924160-d90c8de6-0b56-4575-860c-c76c1e9a192a.png)
 
 대여가대여 팀입니다! 아래는 팀원 소개입니다~ 🐥
 
@@ -8,7 +11,7 @@
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tbody>![Uploading 스크린샷 2022-11-14 오후 10.43.20.png…]()
+  <tbody>
 
     <tr>
       <td align="center"><a href="https://github.com/mozzi327"><img src="https://avatars.githubusercontent.com/u/80810465?v=4" width="100px;" alt=""/><br /><sub><b>Kyungmin Cho</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_main_010/commits?author=mozzi327" title="Documentation">📖</a> <a href="https://github.com/codestates-seb/seb40_main_010/pulls?q=is%3Apr+author%3Amozzi327" title="Pull Requests">🏡</a></td>           
