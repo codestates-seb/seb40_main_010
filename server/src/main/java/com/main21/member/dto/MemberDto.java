@@ -16,6 +16,7 @@ public class MemberDto {
         private String phoneNumber;
 
     }
+
     @Getter
     public static class Patch {
         private String nickname;
