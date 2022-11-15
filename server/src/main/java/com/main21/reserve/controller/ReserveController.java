@@ -27,5 +27,4 @@ public class ReserveController {
         Reserve reserve = reserveService.updateReserve(patch, reserveId);
         return new ResponseEntity<>(reserve, HttpStatus.OK);
     }
-
 }

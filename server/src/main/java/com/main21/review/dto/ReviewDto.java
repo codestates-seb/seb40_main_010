@@ -1,9 +1,14 @@
 package com.main21.review.dto;
 
+import com.main21.member.entity.Member;
+import com.main21.review.entity.Review;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+
+import static com.main21.review.entity.QReview.review;
 
 public class ReviewDto {
     @Getter
@@ -37,13 +42,14 @@ public class ReviewDto {
 
 
         @Builder
-        public Response(Long reviewId, String profileImage, String nickname, Double score, String comment, LocalDateTime createdAt) {
-            this.reviewId = reviewId;
-            this.profileImage = profileImage;
-            this.nickname = nickname;
-            this.score = score;
-            this.comment = comment;
-            this.createdAt = createdAt;
+        @QueryProjection
+        public Response(Review review, Member member) {
+            this.reviewId = review.getId();
+            this.profileImage = member.getProfileImage();
+            this.nickname = member.getNickname();
+            this.score = review.getScore();
+            this.comment = review.getComment();
+            this.createdAt = review.getCreatedAt();
         }
 
 
