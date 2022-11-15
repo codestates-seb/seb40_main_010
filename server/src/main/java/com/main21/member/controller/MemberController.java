@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
     @PostMapping("/join")
@@ -19,10 +19,12 @@ public class MemberController {
         memberService.createMember(post);
         return new ResponseEntity(post, HttpStatus.CREATED);
     }
-    @PatchMapping("/member/edit")
+    @PatchMapping("/edit")
     public ResponseEntity patchMember(@RequestBody MemberDto.Patch patch,
                                       @CookieValue(name = "memberId") Long memberId) {
     memberService.updateMember(memberId, patch);
     return new ResponseEntity<>(HttpStatus.OK);
     }
+//    @GetMapping
+//    public ResponseEntity getMember(@Cookie)
 }
