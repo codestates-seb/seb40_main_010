@@ -40,6 +40,12 @@ public class Place {
     // 조회수
     private int view;
 
+    // 공간 - 리뷰 간접 참조
+    private Long reserveId;
+
+    // 공간 - 회원 간접 참
+    private Long memberId;
+
     // 공간 - 공간 카테고리 1:N
     @OneToMany(mappedBy = "place")
     private List<PlaceCategory> placeCategories = new ArrayList<>();
@@ -52,9 +58,6 @@ public class Place {
     // 공간 - MBTI Count 1:N
 //    @OneToMany(mappedBy = "place")
 //    private List<MBTICount> mbtiCounts = new ArrayList<>();
-
-    // 공간 - 리뷰 간접 참조
-    private Long reserveId;
 
     // createPlace 생성자
     @Builder

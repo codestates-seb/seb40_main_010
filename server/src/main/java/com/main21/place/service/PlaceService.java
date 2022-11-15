@@ -3,6 +3,8 @@ package com.main21.place.service;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.file.S3Upload;
+import com.main21.place.dto.PlaceCategoryDto;
+import com.main21.place.dto.PlaceDto;
 import com.main21.place.dto.PlacePostDto;
 import com.main21.place.dto.PlaceResponseDto;
 import com.main21.place.entity.Category;
@@ -15,6 +17,8 @@ import com.main21.place.repository.PlaceImageRepository;
 import com.main21.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -121,6 +125,27 @@ public class PlaceService {
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
         return new PlaceResponseDto(place, filePath);
+    }
+
+    /**
+     * 페이지네이션 적용한 공간 전체 조회 메서드
+     * @param pageable
+     * @return
+     */
+    @Transactional
+    public Page<PlaceDto.Response> getPlaces(Pageable pageable) {
+        return placeRepository.getPlaces(pageable);
+    }
+
+    /**
+     * 페이지네이션 적용한 카테고리별 공간 조회 메서드
+     * @param categoryId
+     * @param pageable
+     * @return
+     */
+    @Transactional
+    public Page<PlaceCategoryDto.Response> getCategory(Long categoryId, Pageable pageable) {
+        return placeRepository.getCategory(categoryId, pageable);
     }
 }
 

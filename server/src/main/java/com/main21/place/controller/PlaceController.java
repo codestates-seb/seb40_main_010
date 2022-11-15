@@ -1,16 +1,17 @@
 package com.main21.place.controller;
 
+import com.main21.dto.MultiResponseDto;
 import com.main21.file.S3Upload;
-import com.main21.place.dto.PlaceImageDto;
-import com.main21.place.dto.PlaceImageResponseDto;
-import com.main21.place.dto.PlacePostDto;
+import com.main21.place.dto.*;
 
-import com.main21.place.dto.PlaceResponseDto;
 import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceImage;
 import com.main21.place.service.PlaceImageService;
 import com.main21.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -83,5 +84,34 @@ public class PlaceController {
             filePath.add(placeImageResponseDto.getFilePath());
 
         return placeService.searchById(placeId, filePath);
+    }
+
+    /**
+     * 메인페이지 공간 전체 조회
+     * @param memberId
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/")
+    public ResponseEntity getPlaces(@CookieValue(name = "memberId", required = false) Long memberId,
+                                    Pageable pageable) {
+        Page<PlaceDto.Response> pagePlace = placeService.getPlaces(pageable);
+        List<PlaceDto.Response> place = pagePlace.getContent();
+        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+    }
+
+    /**
+     * 메인페이지 카테고리별 공간 조회
+     * @param categoryId
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/{category-id}")
+    public ResponseEntity getCategory(@PathVariable("category-id") Long categoryId,
+                                      Pageable pageable) {
+
+        Page<PlaceCategoryDto.Response> pagePlace = placeService.getCategory(categoryId, pageable);
+        List<PlaceCategoryDto.Response> place = pagePlace.getContent();
+        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
 }
