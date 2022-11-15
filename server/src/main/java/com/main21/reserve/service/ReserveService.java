@@ -58,4 +58,9 @@ public class ReserveService {
         return reserveRepository.getReservation(memberId);
     }
 
+    // 예약 삭제(취소)
+    public void deleteReserve(Long reserveId) {
+        reserveRepository.deleteById(reserveId);
+    }
+
 }

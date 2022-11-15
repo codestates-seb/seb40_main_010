@@ -37,4 +37,10 @@ public class ReserveController {
         List<ReserveDto.Response> reservations = reserveService.getReservation(memberId);
         return new ResponseEntity(new SingleResponseDto<>(reservations), HttpStatus.OK);
     }
+
+    @DeleteMapping("/reserve/{reserve-id}")
+    public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId) {
+        reserveService.deleteReserve(reserveId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
