@@ -87,9 +87,7 @@ public class JwtTokenUtils {
 
     /**
      * 리프레시 토큰을 발급하는 메서드
-     * @param subject 사용자 subject(이메일)
-     * @param expiration 토큰 만료시간
-     * @param base64EncodedSecretKey base64 인코딩된 키
+     *
      * @return String(리프레시 토큰)
      * @author mozzi327
      */
@@ -177,20 +175,6 @@ public class JwtTokenUtils {
         return findMember;
     }
 
-    /**
-     * 전달받은 쿠키 값 중 RefreshToken이 있는지 확인하는 메서드<br>
-     * 존재한다면 해당 토큰 값을 반환한다.
-     * @param cookies (쿠키 배열)
-     * @return 리프레시 토큰
-     * @author mozzi327
-     */
-    public String isExistRefresh(Cookie[] cookies) {
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(REFRESH_TOKEN)) return cookie.getValue();
-        }
-        throw new BusinessLogicException(ExceptionCode.COOKIE_NOT_FOUND);
-    }
-
 
     /**
      * redis에서 RefreshToken을 가져오는 메서드
@@ -198,6 +182,6 @@ public class JwtTokenUtils {
      * @author mozzi327
      */
     public String isExsistRefreshInRedis(String email) {
-        return redisUtils.getData(email);
+        return (String)redisUtils.getData(email);
     }
 }
