@@ -2,11 +2,13 @@ package com.main21.place.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class PlaceCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
