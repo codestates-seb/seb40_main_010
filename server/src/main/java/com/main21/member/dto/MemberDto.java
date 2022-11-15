@@ -15,6 +15,10 @@ public class MemberDto {
 
         private String phoneNumber;
 
+        private String mbti;
+
+        public Post() {
+        }
     }
 
     @Getter
@@ -22,4 +26,5 @@ public class MemberDto {
         private String nickname;
         private String mbti;
     }
+
 }
