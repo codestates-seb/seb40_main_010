@@ -6,31 +6,36 @@ import com.main21.member.dto.MemberDto;
 import com.main21.member.entity.Member;
 import com.main21.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     public void createMember(MemberDto.Post post) {
         verifyEmail(post);
         Member member = Member.builder()
                 .email(post.getEmail())
-                .password(post.getPassword())
-                .name(post.getName())
+                .password(passwordEncoder.encode(post.getPassword()))
                 .nickname(post.getNickname())
                 .phoneNumber(post.getPhoneNumber())
                 .mbti(post.getMbti())
                 .build();
+
         memberRepository.save(member);
     }
     public void updateMember(Long memberId, MemberDto.Patch patch) {
         Member findMember = findVerifyMember(memberId);
         findMember.editMember(patch.getNickname(), patch.getMbti());
         memberRepository.save(findMember);
-
+    }
+    public Member getMember(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() ->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     // 이미 존재하는 회원 파악
