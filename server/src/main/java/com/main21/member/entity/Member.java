@@ -51,6 +51,24 @@ public class Member extends Auditable {
         this.memberStatus = MemberStatus.MEMBER_ACTIVE;
         this.roles = roles;
     }
+
+
+    public void setDetailsId(Long id) {
+        this.id = id;
+    }
+
+    public void setDetailsEamil(String email) {
+        this.email = email;
+    }
+
+    public void setDetailsPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDetailsRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
     public enum MemberStatus {
         MEMBER_ACTIVE("활동중인 회원입니다."),
         MEMBER_SLEEP("휴먼 회원입니다."),

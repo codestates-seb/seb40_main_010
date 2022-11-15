@@ -13,7 +13,6 @@ import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
@@ -22,7 +21,7 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static com.main21.security.utils.AuthConstraints.*;
+import static com.main21.security.utils.AuthConstants.*;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class JwtTokenUtils {
     @Value("jwt.refresh-token-expiration-minutes")
     private int refreshTokenExpirationMinutes;
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisUtils redisUtils;
     private final MemberRepository memberRepository;
 
 
@@ -190,5 +189,15 @@ public class JwtTokenUtils {
             if (cookie.getName().equals(REFRESH_TOKEN)) return cookie.getValue();
         }
         throw new BusinessLogicException(ExceptionCode.COOKIE_NOT_FOUND);
+    }
+
+
+    /**
+     * redis에서 RefreshToken을 가져오는 메서드
+     * @return String(refresh)
+     * @author mozzi327
+     */
+    public String isExsistRefreshInRedis(String email) {
+        return redisUtils.getData(email);
     }
 }

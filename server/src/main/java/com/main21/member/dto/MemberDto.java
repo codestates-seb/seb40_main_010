@@ -17,6 +17,7 @@ public class MemberDto {
 
         private String profileImage;
     }
+
     @Getter
     public static class Patch {
         private String profileImage;

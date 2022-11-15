@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.main21.member.dto.AuthDto;
 import com.main21.member.entity.Member;
 import com.main21.security.dto.LoginDto;
+import com.main21.security.utils.CookieUtils;
 import com.main21.security.utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -23,10 +24,11 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
-import static com.main21.security.utils.AuthConstraints.*;
+import static com.main21.security.utils.AuthConstants.*;
 
 /**
  * 사용자 인증을 위한 AuthenticationFilter 클래스
+ *
  * @author mozzi327
  */
 @RequiredArgsConstructor
@@ -34,10 +36,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtils jwtTokenUtils;
     private final RedisTemplate<String, String> redisTemplate;
+    private final CookieUtils cookieUtils;
 
 
     /**
      * request에 요청 스트림을 추출해서 권한 인증을 authenticationManager에게 전달하는 메서드
+     *
      * @param req 요청
      * @param res 응답
      * @return Authentication
@@ -57,9 +61,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     /**
      * 인증 성공 시 엑세스 토큰을 응답 바디에, 리프레시 토큰과 사용자 식별자를 쿠키에 담아주는 메서드
-     * @param req 요청
-     * @param res 응답
-     * @param chain 필터체인
+     *
+     * @param req        요청
+     * @param res        응답
+     * @param chain      필터체인
      * @param authResult 인증 객체
      * @author mozzi327
      */
@@ -77,8 +82,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String refreshToken = jwtTokenUtils.generateRefreshToken(findMember);
 
         redisTemplate.opsForValue().set(
-                email,
                 refreshToken,
+                "login",
                 jwtTokenUtils.getRefreshTokenExpirationMinutes(),
                 TimeUnit.MILLISECONDS
         );
@@ -87,23 +92,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String encodedRefresh = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8);
 
         // refreshToken 쿠키 추가
-        ResponseCookie refCookie = ResponseCookie.from(REFRESH_TOKEN, encodedRefresh)
-                .maxAge(7 * 24 * 60 * 60)
-                .path("/")
-                .secure(true)
-                .sameSite("None")
-                .httpOnly(true)
-                .build();
+        ResponseCookie refCookie = cookieUtils
+                .createCookie(REFRESH_TOKEN, encodedRefresh, MAX_AGE_SECOND);
+
         res.setHeader(SET_COOKIE, refCookie.toString());
 
         // memberId 쿠키 추가
-        ResponseCookie memberCookie = ResponseCookie.from(MEMBER_ID, findMember.getId().toString())
-                .maxAge(7 * 24 * 60 * 60)
-                .path("/")
-                .secure(true)
-                .sameSite("None")
-                .httpOnly(true)
-                .build();
+        ResponseCookie memberCookie = cookieUtils
+                .createCookie(MEMBER_ID, findMember.getId().toString(), MAX_AGE_SECOND);
+
         res.addHeader(SET_COOKIE, memberCookie.toString());
 
         AuthDto.Response response = AuthDto.Response.builder()
