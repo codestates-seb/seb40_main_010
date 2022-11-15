@@ -1,6 +1,7 @@
 package com.main21.reserve.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,16 +31,22 @@ public class Reserve {
 
     private Long placeId;
 
+    private Long memberId;
+
+    private Long totalCharge;
+
     public void addPlaceId(Long placeId) {
         this.placeId = placeId;
     }
 
     @Builder
-    public Reserve(int capacity, Date startTime, Date endTime, Long placeId) {
+    public Reserve(int capacity, Date startTime, Date endTime, Long placeId, Long memberId, Long totalCharge) {
         this.capacity = capacity;
         this.startTime = startTime;
         this.endTime = endTime;
         this.placeId = placeId;
+        this.memberId = memberId;
+        this.totalCharge = totalCharge;
     }
     public void editReserve(int capacity, Date startTime, Date endTime){
         this.capacity = capacity;
