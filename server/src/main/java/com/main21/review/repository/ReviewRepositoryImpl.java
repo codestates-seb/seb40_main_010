@@ -27,7 +27,8 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
                 .select(new QReviewDto_Response(
                         review,
                         member
-                                ))
+                ))
+
                 .from(review)
                 .leftJoin(member).on(review.memberId.eq(member.id))
                 .where(

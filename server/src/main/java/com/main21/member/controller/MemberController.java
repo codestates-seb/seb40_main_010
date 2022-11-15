@@ -17,7 +17,7 @@ public class MemberController {
     @PostMapping("/join")
     public ResponseEntity postMember(@RequestBody MemberDto.Post post) {
         memberService.createMember(post);
-        return new ResponseEntity(post, HttpStatus.CREATED);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
     @PatchMapping("/edit")
     public ResponseEntity patchMember(@RequestBody MemberDto.Patch patch,
@@ -25,6 +25,9 @@ public class MemberController {
     memberService.updateMember(memberId, patch);
     return new ResponseEntity<>(HttpStatus.OK);
     }
-//    @GetMapping
-//    public ResponseEntity getMember(@Cookie)
+    @GetMapping
+    public ResponseEntity getMember(@CookieValue(name = "memberId") Long memberId) {
+        Member member = memberService.getMember(memberId);
+        return new ResponseEntity(member, HttpStatus.OK);
+    }
 }

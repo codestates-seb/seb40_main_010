@@ -12,6 +12,4 @@ public class PlaceCategoryDto {
         private Long categoryId;
         private String categoryName;
     }
-
-
 }
