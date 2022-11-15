@@ -1,5 +1,8 @@
 package com.main21.bookmark.dto;
 
+import com.main21.bookmark.entity.Bookmark;
+import com.main21.place.entity.Place;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +12,7 @@ public class BookmarkDto {
     @Getter
     public static class Response implements Comparable<Response> {
         private final Long bookmarkId;
-        private final MultipartFile image;
+        private final String image;
         private final String title;
         private final String bookmarkUrl;
         private final double score;
@@ -17,20 +20,15 @@ public class BookmarkDto {
         private final String address;
 
         @Builder
-        public Response(Long bookmarkId,
-                        MultipartFile image,
-                        String title,
-                        String bookmarkUrl,
-                        double score,
-                        int charge,
-                        String address) {
-            this.bookmarkId = bookmarkId;
-            this.image = image;
-            this.title = title;
-            this.bookmarkUrl = bookmarkUrl;
-            this.score = score;
-            this.charge = charge;
-            this.address = address;
+        @QueryProjection
+        public Response(Bookmark bookmark, Place place) {
+            this.bookmarkId = bookmark.getId();
+            this.image = place.getPlaceImages().get(0).getFilePath();
+            this.title = place.getTitle();
+            this.bookmarkUrl = bookmark.getBookmarkUrl();
+            this.score = place.getScore();
+            this.charge = place.getCharge();
+            this.address = place.getAddress();
         }
 
         /**

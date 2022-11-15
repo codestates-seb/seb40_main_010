@@ -10,6 +10,8 @@ import com.main21.reserve.repository.ReserveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ReserveService {
@@ -29,15 +31,24 @@ public class ReserveService {
                 .capacity(post.getCapacity())
                 .startTime(post.getStartTime())
                 .endTime(post.getEndTime())
+                .placeId(findPlace.getId())
                 .build();
 
         //매핑 관계 저장
-        reserve.addPlace(findPlace);
+//        reserve.addPlace(findPlace);
+//
+//        Reserve savedReserve = reserveRepository.save(reserve);
+//
+////        findPlace.addReserve(savedReserve);
 
-        Reserve savedReserve = reserveRepository.save(reserve);
+        return reserve;
+    }
+    public Reserve updateReserve(ReserveDto.Patch patch, Long reserveId) {
+        Reserve findReserve = reserveRepository.findById(reserveId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 추후 수정
+        findReserve.editReserve(patch.getCapacity(),patch.getStartTime(),patch.getEndTime());
 
-        findPlace.addReserve(savedReserve);
+        Reserve updateReserve = reserveRepository.save(findReserve);
 
-        return savedReserve;
+        return updateReserve;
     }
 }

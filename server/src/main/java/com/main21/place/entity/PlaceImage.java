@@ -1,4 +1,41 @@
 package com.main21.place.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Getter
+@Entity
+@NoArgsConstructor
 public class PlaceImage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PLACE_IMAGE_ID")
+    private Long id;
+
+    private String fileName; //원본 파일명
+
+    private String filePath; //파일 저장 경로
+
+    private Long fileSize;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PLACE_ID")
+    private Place place;
+
+    @Builder
+    public PlaceImage(String fileName, String filePath, Long fileSize) {
+        this.fileName = fileName;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+        if(place.getPlaceImages().contains(this)) {
+            place.getPlaceImages().add(this);
+        }
+    }
 }
