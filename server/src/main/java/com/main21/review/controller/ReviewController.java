@@ -33,4 +33,8 @@ public class ReviewController {
         reviewService.deleteReview(reviewId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+    @GetMapping("/{place-id}")
+    public ResponseEntity getReserve(@PathVariable("place-id") Long placeId) {
+        return new ResponseEntity(reviewService.getPlaceReviews(placeId), HttpStatus.OK);
+    }
 }
