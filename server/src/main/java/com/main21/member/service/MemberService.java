@@ -22,8 +22,15 @@ public class MemberService {
                 .name(post.getName())
                 .nickname(post.getNickname())
                 .phoneNumber(post.getPhoneNumber())
+                .mbti(post.getMbti())
                 .build();
         memberRepository.save(member);
+    }
+    public void updateMember(Long memberId, MemberDto.Patch patch) {
+        Member findMember = findVerifyMember(memberId);
+        findMember.editMember(patch.getNickname(), patch.getMbti());
+        memberRepository.save(findMember);
+
     }
 
     // 이미 존재하는 회원 파악

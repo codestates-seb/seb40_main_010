@@ -19,4 +19,10 @@ public class MemberController {
         memberService.createMember(post);
         return new ResponseEntity(post, HttpStatus.CREATED);
     }
+    @PatchMapping("/member/edit")
+    public ResponseEntity patchMember(@RequestBody MemberDto.Patch patch,
+                                      @CookieValue(name = "memberId") Long memberId) {
+    memberService.updateMember(memberId, patch);
+    return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

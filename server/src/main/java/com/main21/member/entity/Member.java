@@ -26,6 +26,8 @@ public class Member extends Auditable {
 
     private String nickname;
 
+    private String mbti;
+
     @Column(length = 500)
     private String password;
 
@@ -39,10 +41,11 @@ public class Member extends Auditable {
     private List<String> roles = new ArrayList<>();
 
     @Builder
-    public Member(String email, String name, String nickname, String password, String phoneNumber, List<String> roles, String profileImage) {
+    public Member(String email, String name, String nickname, String mbti, String password, String phoneNumber, List<String> roles, String profileImage) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
+        this.mbti = mbti;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.memberStatus = MemberStatus.MEMBER_ACTIVE;
@@ -77,5 +80,9 @@ public class Member extends Auditable {
         MemberStatus(String status) {
             this.status = status;
         }
+    }
+    public void editMember(String nickname, String mbti) {
+        this.nickname = nickname;
+        this.mbti = mbti;
     }
 }
