@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class FileHandler {
@@ -36,7 +37,7 @@ public class FileHandler {
             String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
 
             //파일 저장 세부 경로
-            String path = "images" + File.pathSeparator + current_date;
+            String path = "images"; //+ File.pathSeparator + current_date;
             File file = new File(path);
 
             //디렉터리가 존재하지 않을 경우
@@ -69,6 +70,9 @@ public class FileHandler {
 
                 //파일명 중복을 피하고자 나노초까지 얻어와 지정
                 String new_file_name = System.nanoTime() + originalFileExtension;
+
+                //UUID uuid = UUID.randomUUID();
+                //String new_file_name = uuid + originalFileExtension;
 
                 //파일 DTO 생성
                 PlaceImageDto placeImageDto =
