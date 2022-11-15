@@ -30,9 +30,8 @@ public class ReviewService {
         findReview.editReview(patch.getScore(),patch.getComment());
         reviewRepository.save(findReview);
     }
-    public List<Review> getPlaceReviews (Long placeId) {
-        List<Review> findReview = reviewRepository.findAllByPlaceId(placeId);
-        return findReview;
+    public List<ReviewDto.Response> getPlaceReviews (Long placeId) {
+        return reviewRepository.getReviews(placeId);
 
     }
 
