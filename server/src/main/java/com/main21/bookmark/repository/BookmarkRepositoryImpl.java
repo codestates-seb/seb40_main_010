@@ -4,6 +4,9 @@ import com.main21.bookmark.dto.BookmarkDto;
 import com.main21.bookmark.dto.QBookmarkDto_Response;
 import com.main21.bookmark.entity.Bookmark;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -19,18 +22,14 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * Pagination 적용
+     * 회원별 북마크 전체 조회 Query
+     * @param memberId
+     * @return
+     */
     @Override
-    public Bookmark findBookmark(Long placeId, Long memberId) {
-        return queryFactory
-                .select(bookmark)
-                .from(bookmark)
-                .where(bookmark.placeId.eq(placeId),
-                        bookmark.memberId.eq(memberId))
-                .fetchFirst();
-    }
-
-    @Override
-    public List<BookmarkDto.Response> getBookmark(Long memberId) {
+    public Page<BookmarkDto.Response> getBookmark(Long memberId, Pageable pageable) {
         List<BookmarkDto.Response> results = queryFactory
                 .select(new QBookmarkDto_Response(
                         bookmark,
@@ -41,9 +40,12 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository{
                 .where(
                         bookmark.memberId.eq(memberId)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
-        return results;
+        long total = results.size();
+        return new PageImpl<>(results, pageable, total);
 
     }
 
