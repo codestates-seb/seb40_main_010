@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100vw;
@@ -40,7 +41,7 @@ const Container = styled.div`
     /* border: 10px solid red; */
   }
 
-  .btn {
+  .submit-button {
     width: 300px;
     height: 55px;
     margin-top: 15px;
@@ -64,13 +65,6 @@ const Container = styled.div`
       box-shadow: none;
     }
   }
-
-  .link {
-    color: #2b2b2b;
-    font-size: 1rem;
-    font-weight: 500;
-  }
-
   .description {
     width: 100%;
     margin-top: 10px;
@@ -94,13 +88,18 @@ const Input = styled.input`
   color: #2b2b2b;
 `;
 
+const SignUpLink = styled(Link)`
+  color: #2b2b2b;
+  font-size: 1rem;
+  font-weight: 500;
+`;
+
 function LogIn() {
   const {
     register,
     handleSubmit,
-    // watch,
     formState: { isSubmitting, errors },
-  } = useForm();
+  } = useForm({ mode: 'onChange' });
 
   const onSubmit = data => console.log(data);
 
@@ -136,12 +135,14 @@ function LogIn() {
               <div className="alert">{errors.password.message}</div>
             )}
           </div>
-          <button type="submit" className="btn">
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isSubmitting}
+          >
             Log In
           </button>
-          <a className="link" href="/signup" disabled={isSubmitting}>
-            Sign Up
-          </a>
+          <SignUpLink to="/signup">Sign Up</SignUpLink>
         </div>
       </form>
     </Container>
