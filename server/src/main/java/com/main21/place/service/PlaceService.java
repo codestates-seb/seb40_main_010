@@ -48,6 +48,7 @@ public class PlaceService {
     @Transactional
     public void createS3(PlacePostDto postDto, List<MultipartFile> files) throws Exception {
         //유저 확인 필요
+        String dir = "placeImage";
 
         Place place = new Place(
                 postDto.getTitle(),
@@ -57,7 +58,7 @@ public class PlaceService {
                 postDto.getCharge()
         );
 
-        List<PlaceImage> placeImageList = s3Upload.uploadList(files);
+        List<PlaceImage> placeImageList = s3Upload.uploadList(files, dir);
 
         //파일이 존재할 때 처리
         if(!placeImageList.isEmpty()) {

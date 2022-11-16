@@ -40,6 +40,9 @@ public class Member extends Auditable {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private MemberImage memberImage;
+
     @Builder
     public Member(String email, String name, String nickname, String mbti, String password, String phoneNumber, List<String> roles, String profileImage) {
         this.email = email;
