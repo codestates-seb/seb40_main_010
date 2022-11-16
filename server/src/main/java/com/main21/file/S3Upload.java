@@ -50,9 +50,12 @@ public class S3Upload {
             try(InputStream inputStream = file.getInputStream()) {
                 amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
+
+                // 파일 DTO 생성
                 PlaceImageDto placeImageDto =
                         PlaceImageDto.builder()
-                                .fileName(file.getOriginalFilename())
+                                //.fileName(file.getOriginalFilename())
+                                .fileName(fileName)
                                 .filePath(amazonS3Client.getUrl(bucket, fileName).toString())
                                 .fileSize(file.getSize())
                                 .build();

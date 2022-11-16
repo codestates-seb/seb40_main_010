@@ -6,6 +6,8 @@ import com.main21.place.dto.*;
 
 import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceImage;
+import com.main21.place.repository.PlaceCategoryRepository;
+import com.main21.place.service.PlaceCategoryService;
 import com.main21.place.service.PlaceImageService;
 import com.main21.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class PlaceController {
 
     private final PlaceService placeService;
     private final PlaceImageService placeImageService;
-    private final S3Upload s3Upload;
+    private final PlaceCategoryService placeCategoryService;
 
     /**
      * 장소 + S3이미지 업로드
@@ -55,8 +57,8 @@ public class PlaceController {
      * 장소 생성
      */
     @PostMapping(value = "/place/post",consumes = {"multipart/form-data"})
-    public void create(@RequestPart(value = "key") PlacePostDto placePostDto,
-                       @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
+    public void createPlace(@RequestPart(value = "key") PlacePostDto placePostDto,
+                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
         PlacePostDto postDto =
                 PlacePostDto.builder()
@@ -68,22 +70,24 @@ public class PlaceController {
                         .charge(placePostDto.getCharge())
                         .build();
 
-        placeService.create(postDto, files);
+        placeService.createPlace(postDto, files);
     }
 
     /**
-     * 장소 상세검색(카테고리 출력 구현 필요)
+     * 장소 상세검색
      */
     @GetMapping("/place/{place-id}")
     public PlaceResponseDto getPlace(@PathVariable("place-id") Long placeId) {
 
         List<PlaceImageResponseDto> placeImageResponseDtoList = placeImageService.findAllByPlaceImage(placeId);
 
+        List<PlaceCategoryDto.Search> placeCategoryResponseDtoList = placeCategoryService.findByAllPlaceCategory(placeId);
+
         List<String> filePath = new ArrayList<>();
         for(PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
             filePath.add(placeImageResponseDto.getFilePath());
 
-        return placeService.searchById(placeId, filePath);
+        return placeService.searchPlace(placeId, filePath, placeCategoryResponseDtoList);
     }
 
     /**
@@ -114,4 +118,6 @@ public class PlaceController {
         List<PlaceCategoryDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
+
+
 }
