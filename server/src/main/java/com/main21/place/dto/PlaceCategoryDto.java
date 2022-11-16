@@ -14,6 +14,11 @@ public class PlaceCategoryDto {
     public static class Search {
         private Long categoryId;
         private String categoryName;
+
+        public Search(PlaceCategory placeCategory) {
+            this.categoryId = placeCategory.getId();
+            this.categoryName = placeCategory.getCategoryName();
+        }
     }
 
     @Getter
