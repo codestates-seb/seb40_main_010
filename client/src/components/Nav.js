@@ -177,7 +177,7 @@ function Nav() {
   };
 
   const result = [...searchState];
-  console.log(`${result[0]} [${result[1]}]`);
+  console.log(`[${result[1]}] ${result[0]}`);
 
   return (
     <NavContainer>
