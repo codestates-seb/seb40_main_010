@@ -81,7 +81,7 @@ public class PlaceService {
      * 장소 저장 메서드 (Local)
      */
     @Transactional
-    public Long create(PlacePostDto postDto, List<MultipartFile> files) throws Exception {
+    public Long createPlace(PlacePostDto postDto, List<MultipartFile> files) throws Exception {
         //유저 확인 필요
 
         Place place = new Place(
@@ -117,14 +117,14 @@ public class PlaceService {
     }
 
     /**
-     * 장소 상세검색(카테고리 추가 구현 필요)
+     * 장소 상세검색
      */
     @Transactional
-    public PlaceResponseDto searchById(Long placeId, List<String> filePath) { //List<Long> fileId) {
+    public PlaceResponseDto searchPlace(Long placeId, List<String> filePath, List<PlaceCategoryDto.Search> placeCategoryResponseDtoList) { //List<Long> fileId) {
         Place place = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
-        return new PlaceResponseDto(place, filePath);
+        return new PlaceResponseDto(place, filePath, placeCategoryResponseDtoList);
     }
 
     /**
