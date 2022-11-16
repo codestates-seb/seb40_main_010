@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100vw;
@@ -40,7 +41,7 @@ const Container = styled.div`
     /* border: 10px solid red; */
   }
 
-  .btn {
+  .submit-button {
     width: 300px;
     height: 55px;
     margin-top: 15px;
@@ -76,12 +77,6 @@ const Container = styled.div`
     color: #eb7470;
     font-weight: 500;
   }
-
-  .link {
-    color: #2b2b2b;
-    font-size: 1rem;
-    font-weight: 500;
-  }
 `;
 
 const Input = styled.input`
@@ -94,7 +89,7 @@ const Input = styled.input`
   color: #2b2b2b;
 `;
 
-const StyledSelect = styled(Select)`
+const MbtiSelect = styled(Select)`
   font-size: 1rem;
   width: 100%;
 
@@ -122,6 +117,12 @@ const StyledSelect = styled(Select)`
   }
 `;
 
+const LogInLink = styled(Link)`
+  color: #2b2b2b;
+  font-size: 1rem;
+  font-weight: 500;
+`;
+
 function SignUp() {
   const {
     register,
@@ -129,12 +130,13 @@ function SignUp() {
     watch,
     control,
     formState: { isSubmitting, errors },
-  } = useForm();
+  } = useForm({ mode: 'onChange' });
 
   const onSubmit = data => console.log(data);
   console.log(isSubmitting);
 
   const mbtiList = [
+    { value: 'null', label: '없음' },
     { value: 'ISTJ', label: 'ISTJ' },
     { value: 'ISFJ', label: 'ISFJ' },
     { value: 'INFJ', label: 'INFJ' },
@@ -152,8 +154,6 @@ function SignUp() {
     { value: 'ENFP', label: 'ENFP' },
     { value: 'ENTP', label: 'ENTP' },
   ];
-
-  // /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
 
   return (
     <Container>
@@ -267,10 +267,10 @@ function SignUp() {
             <div className="title">MBTI</div>
             <Controller
               control={control}
-              // defaultValue={default_value}
               name="mbti"
+              rules={{ required: '필수 정보입니다.' }}
               render={({ field: { onChange, value, ref } }) => (
-                <StyledSelect
+                <MbtiSelect
                   inputRef={ref}
                   classNamePrefix="Select"
                   options={mbtiList}
@@ -280,13 +280,16 @@ function SignUp() {
                 />
               )}
             />
+            {errors.mbti && <div className="alert">{errors.mbti.message}</div>}
           </div>
-          <button type="submit" className="btn" disabled={isSubmitting}>
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isSubmitting}
+          >
             Sign Up
           </button>
-          <a className="link" href="/login">
-            Log In
-          </a>
+          <LogInLink to="/login">Log In</LogInLink>
         </div>
       </form>
     </Container>
