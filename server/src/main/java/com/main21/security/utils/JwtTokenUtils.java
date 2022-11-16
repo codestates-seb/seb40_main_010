@@ -3,7 +3,9 @@ package com.main21.security.utils;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.member.entity.Member;
+import com.main21.member.entity.Token;
 import com.main21.member.repository.MemberRepository;
+import com.main21.member.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -39,8 +41,9 @@ public class JwtTokenUtils {
     @Value("${jwt.refresh-token-expiration-minutes}")
     private int refreshTokenExpirationMinutes;
 
-    private final RedisUtils redisUtils;
+//    private final RedisUtils redisUtils;
     private final MemberRepository memberRepository;
+    private final TokenRepository tokenRepository;
 
 
     /**
@@ -57,9 +60,10 @@ public class JwtTokenUtils {
 
     /**
      * 엑세스 토큰을 발급하는 메서드
-     * @param claims claims 정보
-     * @param subject 사용자 subject(이메일)
-     * @param expriration 토큰 만료시간
+     *
+     * @param claims                 claims 정보
+     * @param subject                사용자 subject(이메일)
+     * @param expriration            토큰 만료시간
      * @param base64EncodedSecretKey base64 인코딩된 키
      * @return String(액세스 토큰)
      * @author mozzi327
@@ -87,9 +91,7 @@ public class JwtTokenUtils {
 
     /**
      * 리프레시 토큰을 발급하는 메서드
-     * @param subject 사용자 subject(이메일)
-     * @param expiration 토큰 만료시간
-     * @param base64EncodedSecretKey base64 인코딩된 키
+     *
      * @return String(리프레시 토큰)
      * @author mozzi327
      */
@@ -111,8 +113,9 @@ public class JwtTokenUtils {
 
     /**
      * 검증 후 Jws(Claims) 정보를 반환해주는 메서드
-     * @param jws 시그니처 정보
-     * @param base64EncodedSecretKey  base64 인코딩된 키
+     *
+     * @param jws                    시그니처 정보
+     * @param base64EncodedSecretKey base64 인코딩된 키
      * @return jws
      * @author mozzi327
      */
@@ -127,6 +130,7 @@ public class JwtTokenUtils {
 
     /**
      * 액세스 토큰의 만료시간을 반환해주는 메서드
+     *
      * @param accessTokenExpirationMinutes 서버 지정 액세스 토큰 만료 시간
      * @return Date
      * @author mozzi327
@@ -140,6 +144,7 @@ public class JwtTokenUtils {
 
     /**
      * base64로 인코딩된 키를 Key 객체로 만들어 반환하는 메서드
+     *
      * @param base64EncodedSecretKey base64 인코딩된 키
      * @return Key
      * @author mozzi327
@@ -153,6 +158,7 @@ public class JwtTokenUtils {
     /**
      * 리프레시 토큰이 데이터베이스에 존재하는지 유무를 확인하는 메서드 (임시)<br>
      * - 리프레시 토큰 값이 같은지도 확인한다.
+     *
      * @param refreshToken 리프레시 토큰
      * @author mozzi327
      */
@@ -164,6 +170,7 @@ public class JwtTokenUtils {
     /**
      * 인증 성공 시 사용되는 사용자 정보(엔티티)를 반환하는 메서드<br>
      * - save를 한번 하는 이유는 최근 로그인 날짜를 갱신하기 위함
+     *
      * @param email 사용자 이메일
      * @return 사용자 정보
      * @author mozzi327
@@ -177,27 +184,34 @@ public class JwtTokenUtils {
         return findMember;
     }
 
+
     /**
-     * 전달받은 쿠키 값 중 RefreshToken이 있는지 확인하는 메서드<br>
-     * 존재한다면 해당 토큰 값을 반환한다.
-     * @param cookies (쿠키 배열)
-     * @return 리프레시 토큰
+     * 리프레시 토큰은 데이터베이스에 저장하는 메서드<br>
+     * - 데이터베이스에 리프레시 토큰이 존재하는지 확인하고, 존재한다면 삭제후 저장
+     *
+     * @param refreshToken 리프레시 토큰
+     * @param email        사용자 이메일
+     * @param memberId     사용자 식별자
      * @author mozzi327
      */
-    public String isExistRefresh(Cookie[] cookies) {
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(REFRESH_TOKEN)) return cookie.getValue();
-        }
-        throw new BusinessLogicException(ExceptionCode.COOKIE_NOT_FOUND);
+    public void savedRefreshToken(String refreshToken, String email, Long memberId) {
+        Optional<Token> findRefreshToken = tokenRepository.findTokenByMemberId(memberId);
+        findRefreshToken.ifPresent(tokenRepository::delete);
+        tokenRepository.save(Token.builder()
+                .memberId(memberId)
+                .memberEmail(email)
+                .refreshToken(refreshToken)
+                .build());
     }
 
 
-    /**
-     * redis에서 RefreshToken을 가져오는 메서드
-     * @return String(refresh)
-     * @author mozzi327
-     */
-    public String isExsistRefreshInRedis(String email) {
-        return redisUtils.getData(email);
-    }
+//    /**
+//     * redis에서 RefreshToken을 가져오는 메서드
+//     *
+//     * @return String(refresh)
+//     * @author mozzi327
+//     */
+//    public String isExsistRefreshInRedis(String email) {
+//        return (String) redisUtils.getData(email);
+//    }
 }

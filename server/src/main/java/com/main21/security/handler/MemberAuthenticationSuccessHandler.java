@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 public class MemberAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
-    @SneakyThrows
     public void onAuthenticationSuccess(HttpServletRequest req,
                                         HttpServletResponse res,
                                         Authentication authentication) {

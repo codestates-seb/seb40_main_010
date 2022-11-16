@@ -34,6 +34,7 @@ public class AuthDto {
         private final String nickname;
         private final String email;
 
+
         @Builder
         public Response(String accessToken, String nickname, String email) {
             this.accessToken = accessToken;

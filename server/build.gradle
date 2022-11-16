@@ -77,9 +77,6 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly    'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    //mvnRepository jwt토큰 base64로 인코딩해주는 라이브러리
-// https://mvnrepository.com/artifact/com.auth0/java-jwt
-    implementation group: 'com.auth0', name: 'java-jwt', version: '4.0.0'
     //test용 시큐리티
     testImplementation 'org.springframework.security:spring-security-test'
 
@@ -133,7 +130,7 @@ bootJar {
 }
 
 // querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
-def querydslDir = "$buildDir/generated/'querydsl'"
+def querydslDir = "$buildDir/generated/querydsl"
 
 // JPA 사용여부 및 사용 경로 설정
 querydsl {
