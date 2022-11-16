@@ -1,9 +1,12 @@
 package com.main21.member.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class MemberDto {
+
     @Getter
+    @AllArgsConstructor
     public static class Post {
         private String email;
 
@@ -15,8 +18,6 @@ public class MemberDto {
 
         private String mbti;
 
-        public Post() {
-        }
     }
 
     @Getter

@@ -3,13 +3,13 @@ package com.main21.security.utils;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import org.springframework.http.ResponseCookie;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 
 import static com.main21.security.utils.AuthConstants.REFRESH_TOKEN;
 
-@Service
+@Component
 public class CookieUtils {
 
 
@@ -27,7 +27,7 @@ public class CookieUtils {
         return ResponseCookie.from(cookieName, cookieValue)
                 .maxAge(maxAgeSecond)
                 .path("/")
-                .secure(true)
+//                .secure(true)
                 .sameSite("None")
                 .httpOnly(true)
                 .build();

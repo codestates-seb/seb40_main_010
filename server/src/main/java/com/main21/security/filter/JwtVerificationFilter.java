@@ -5,6 +5,8 @@ import com.main21.security.exception.AuthException;
 import com.main21.security.utils.CookieUtils;
 import com.main21.security.utils.CustomAuthorityUtils;
 import com.main21.security.utils.JwtTokenUtils;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain filterChain) {
+/* ----------------- Redis 토큰 전용 로직 --------------------
         String jwtToken;
         String email;
         String savedRedisToken;
@@ -68,9 +71,25 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             req.setAttribute("exception", e);
         }
+        filterChain.doFilter(req, res);
+   ----------------- Redis 토큰 전용 로직 --------------------
+*/
 
+        try {
+            String refreshToken = cookieUtils.isExistRefresh(req.getCookies());
+            jwtTokenUtils.verifiedExistRefresh(refreshToken);
+            Map<String, Object> claims = verifyJws(req);
+            setAuthenticationToContext(claims);
+        } catch (SignatureException se) {
+            req.setAttribute("exception", se);
+        } catch (ExpiredJwtException ee) {
+            req.setAttribute("exception", ee);
+        } catch (Exception e) {
+            req.setAttribute("exception", e);
+        }
 
         filterChain.doFilter(req, res);
+
     }
 
 

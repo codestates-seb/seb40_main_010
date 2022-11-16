@@ -19,16 +19,16 @@ public class Token {
     @GeneratedValue
     @Column(name = "REFRESH_TOKEN_ID")
     private Long id;
-    private String userEmail;
+    private String memberEmail;
     private String refreshToken;
-    private Long userId;
+    private Long memberId;
 
     @Builder
-    public Token(String userEmail,
+    public Token(String memberEmail,
                  String refreshToken,
-                 Long userId) {
-        this.userEmail = userEmail;
+                 Long memberId) {
+        this.memberEmail = memberEmail;
         this.refreshToken = refreshToken;
-        this.userId = userId;
+        this.memberId = memberId;
     }
 }

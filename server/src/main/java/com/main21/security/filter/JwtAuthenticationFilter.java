@@ -7,6 +7,7 @@ import com.main21.member.entity.Member;
 import com.main21.security.dto.LoginDto;
 import com.main21.security.utils.CookieUtils;
 import com.main21.security.utils.JwtTokenUtils;
+import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,8 +36,11 @@ import static com.main21.security.utils.AuthConstants.*;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtils jwtTokenUtils;
-    private final RedisTemplate<String, String> redisTemplate;
     private final CookieUtils cookieUtils;
+
+    /* ----------------- Redis 토큰 전용 로직 --------------------
+        private final RedisUtils redisUtils;
+       ----------------- Redis 토큰 전용 로직 -------------------- */
 
 
     /**
@@ -80,13 +84,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Member findMember = jwtTokenUtils.findMemberByEmail(email);
         String accessToken = jwtTokenUtils.generateAccessToken(findMember);
         String refreshToken = jwtTokenUtils.generateRefreshToken(findMember);
+        /* ----------------- 테스트용 토큰 전용 로직 -------------------- */
+        jwtTokenUtils.savedRefreshToken(refreshToken, email, findMember.getId());
+        /* ----------------- 테스트용 토큰 전용 로직 -------------------- */
 
+
+/*  ----------------- Redis 토큰 전용 로직 --------------------
         redisTemplate.opsForValue().set(
                 refreshToken,
                 "login",
                 jwtTokenUtils.getRefreshTokenExpirationMinutes(),
                 TimeUnit.MILLISECONDS
         );
+    ----------------- Redis 토큰 전용 로직 --------------------
+*/
 
         // ***.***.*** 형식 전달을 위한 리프레시 토큰 인코딩
         String encodedRefresh = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8);
@@ -111,5 +122,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
         res.getWriter().write(gson.toJson(response, AuthDto.Response.class));
+        this.getSuccessHandler().onAuthenticationSuccess(req, res, authResult);
     }
 }
