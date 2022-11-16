@@ -3,6 +3,7 @@
 2. 분류명 '전체' 추가, 고정 스타일로 구현 (main에서 useEffect로 전체조회로 요청한다고 생각해서 카테고리 컴포넌트에서는 클릭 시 api요청이 가게 구현)
 3. focus된 id가 전역 상태로 관리될 필요가 없다 생각하여 useState로 관리
 4. 카테고리를 배열로 관리하면서 react-icons 모듈 사용이 어려워 index.html에 cdn fontawesome 사용
+5. icon 클릭시 api 요청 2번 감(div-글자는 1번만 감) > z-index 조절하면 되기는 하는데,,, 
 */
 
 // import axios from 'axios';
@@ -47,6 +48,7 @@ const CategoryButton = styled.button`
   > i {
     font-size: 1.5rem;
     padding: 5px;
+    z-index: -1;
   }
 
   &:hover {
@@ -63,14 +65,15 @@ function Category() {
   const [focusCategoryID, setFocusCategoryID] = useState([0]);
   const onClickCategoryButton = event => {
     setFocusCategoryID([event.target.id]);
-    // if (event.target.id === 0) {
+    // if (focusCategoryID[0] === 0) {
     //   axios.get(`{{BACKEND}}/`).then(res => console.log(res));
     // } else {
     //   axios
     //     .get(`{{BACKEND}}/category/${event.target.id}`)
     //     .then(res => console.log(res));
     // }
-    console.log(event.target.id);
+    // console.log(event.target.id);
+    // console.log(event.target.id);
   };
 
   return (
@@ -86,7 +89,12 @@ function Category() {
               Number(focusCategoryID[0]) === category.id ? 'focus' : null
             }
           >
-            <i id={category.id} className={category.icon} />
+            <i
+              role="presentation"
+              id={category.id}
+              className={category.icon}
+              onClick={e => onClickCategoryButton(e)}
+            />
             {category.name}
           </CategoryButton>
         );
