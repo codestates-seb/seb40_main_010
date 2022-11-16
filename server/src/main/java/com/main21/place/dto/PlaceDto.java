@@ -23,7 +23,14 @@ public class PlaceDto {
     }
 
     @Getter
-    public static class Response {
+    public static class SearchDetail {
+        private int startCharge;
+        private int endCharge;
+        private int capacity;
+    }
+
+    @Getter
+    public static class Response implements Comparable<Response>{
         private Long placeId;
         private String title;
         private int charge;
@@ -41,6 +48,11 @@ public class PlaceDto {
             this.score = place.getScore();
             this.address = place.getAddress();
 
+        }
+
+        @Override
+        public int compareTo(Response o) {
+            return (int) (this.placeId-o.placeId);
         }
     }
 

@@ -5,9 +5,7 @@ import com.main21.place.dto.PlaceDto;
 import com.main21.place.dto.QPlaceCategoryDto_Response;
 import com.main21.place.dto.QPlaceDto_Response;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -23,17 +21,13 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-//    @Override
-//    public List<PlaceDto.Response> getPlaces() {
-//        List<PlaceDto.Response> results = queryFactory
-//                .select(new QPlaceDto_Response(place))
-//                .from(place)
-//                .fetch();
-//
-//        return results;
-//    }
+    /**
+     * Pagination 적용한 공간 전체 조회 Querydsl
+     * @param pageable
+     * @return
+     */
     @Override
-    public Page<PlaceDto.Response> getPlaces(Pageable pageable) {
+    public Page<PlaceDto.Response> getPlacesPage(Pageable pageable) {
         List<PlaceDto.Response> results = queryFactory
                 .select(new QPlaceDto_Response(place))
                 .from(place)
@@ -46,17 +40,100 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
         return new PageImpl<>(results, pageable, total);
     }
 
+    /**
+     * Slice 무한스크롤 공간 전체 조회 Querydsl
+     * @param pageable
+     * @return
+     */
     @Override
-    public Page<PlaceCategoryDto.Response> getCategory(Long categoryId, Pageable pageable) {
+    public Slice<PlaceDto.Response> getPlacesSlice(Pageable pageable) {
+        List<PlaceDto.Response> results = queryFactory
+                .select(new QPlaceDto_Response(place))
+                .from(place)
+                .orderBy(place.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = false;
+        if (results.size() > pageable.getPageSize()) {
+            results.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
+
+    /**
+     * Pagination 적용한 공간 카테고리 조회 Querydsl
+     * @param categoryId
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable) {
         List<PlaceCategoryDto.Response> results = queryFactory
                 .select(new QPlaceCategoryDto_Response(
                         place,
                         placeCategory
-                        ))
+                ))
                 .from(place)
                 .leftJoin(placeCategory).on(place.id.eq(placeCategory.place.id))
                 .where(placeCategory.category.id.eq(categoryId))
                 .orderBy(place.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = results.size();
+        return new PageImpl<>(results, pageable, total);
+    }
+
+    /**
+     * Slice 무한스크롤 공간 카테고리 조회 Querydsl
+     * @param categoryId
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Slice<PlaceCategoryDto.Response> getCategorySlice(Long categoryId, Pageable pageable) {
+        List<PlaceCategoryDto.Response> results = queryFactory
+                .select(new QPlaceCategoryDto_Response(
+                        place,
+                        placeCategory
+                ))
+                .from(place)
+                .leftJoin(placeCategory).on(place.id.eq(placeCategory.place.id))
+                .where(placeCategory.category.id.eq(categoryId))
+                .orderBy(place.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = false;
+        if (results.size() > pageable.getPageSize()) {
+            results.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
+
+    /**
+     * 상세 검색(int )
+     * @param searchDetail
+     * @param pageable
+     * @return
+     */
+    @Override
+    public Page<PlaceDto.Response> getSearchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
+        List<PlaceDto.Response> results = queryFactory
+                .select(new QPlaceDto_Response(
+                        place
+                ))
+                .from(place)
+                .where(place.charge.between(searchDetail.getStartCharge(), searchDetail.getEndCharge())
+                        .or(place.maxCapacity.goe(searchDetail.getCapacity())))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
