@@ -44,3 +44,23 @@ export const registerFormImage = atom({
   key: 'registerFormImage',
   default: [],
 });
+
+export const navSearchValue = atom({
+  key: 'navSearchValue',
+  default: '',
+});
+
+export const navSearchState = atom({
+  key: 'navSearchState',
+  default: [],
+});
+
+export const navClickState = atom({
+  key: 'navClickState',
+  default: false,
+});
+
+export const navCategoryCheckState = atom({
+  key: 'navCategoryCheckState',
+  default: [],
+});
