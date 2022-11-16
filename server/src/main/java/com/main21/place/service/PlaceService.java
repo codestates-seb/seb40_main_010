@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -141,24 +142,57 @@ public class PlaceService {
     }
 
     /**
-     * 페이지네이션 적용한 공간 전체 조회 메서드
+     * Pagination 적용한 공간 전체 조회 메서드
      * @param pageable
      * @return
      */
     @Transactional
-    public Page<PlaceDto.Response> getPlaces(Pageable pageable) {
-        return placeRepository.getPlaces(pageable);
+    public Page<PlaceDto.Response> getPlacesPage(Pageable pageable) {
+        return placeRepository.getPlacesPage(pageable);
+    }
+
+
+    /**
+     * Slice 무한스크롤 공간 전체 조회 메서드
+     * @param pageable
+     * @return
+     */
+    @Transactional
+    public Slice<PlaceDto.Response> getPlacesSlice(Pageable pageable) {
+        return placeRepository.getPlacesSlice(pageable);
     }
 
     /**
-     * 페이지네이션 적용한 카테고리별 공간 조회 메서드
+     * Pagination 적용한 카테고리별 공간 조회 메서드
      * @param categoryId
      * @param pageable
      * @return
      */
     @Transactional
-    public Page<PlaceCategoryDto.Response> getCategory(Long categoryId, Pageable pageable) {
-        return placeRepository.getCategory(categoryId, pageable);
+    public Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable) {
+        return placeRepository.getCategoryPage(categoryId, pageable);
+    }
+
+    /**
+     * Slice 무한스크롤 카테고리별 공간 조회 메서드
+     * @param categoryId
+     * @param pageable
+     * @return
+     */
+    @Transactional
+    public Slice<PlaceCategoryDto.Response> getCategorySlice(Long categoryId, Pageable pageable) {
+        return placeRepository.getCategorySlice(categoryId, pageable);
+    }
+
+    /**
+     * Pagination 적용한 카테고리별 공간 검색 메서드
+     * @param searchDetail
+     * @param pageable
+     * @return
+     */
+    @Transactional
+    public Page<PlaceDto.Response> getSearchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
+        return placeRepository.getSearchDetail(searchDetail, pageable);
     }
 }
 

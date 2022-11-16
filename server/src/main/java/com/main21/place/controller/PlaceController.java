@@ -13,6 +13,7 @@ import com.main21.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +76,7 @@ public class PlaceController {
     }
 
     /**
-     * 장소 상세검색
+     * 장소 상세 조회
      */
     @GetMapping("/place/{place-id}")
     public PlaceResponseDto getPlace(@PathVariable("place-id") Long placeId) {
@@ -92,17 +93,30 @@ public class PlaceController {
     }
 
     /**
-     * 메인페이지 공간 전체 조회
+     * Pagination 메인페이지 공간 전체 조회
      * @param memberId
      * @param pageable
      * @return
      */
     @GetMapping("/")
-    public ResponseEntity getPlaces(@CookieValue(name = "memberId", required = false) Long memberId,
-                                    Pageable pageable) {
-        Page<PlaceDto.Response> pagePlace = placeService.getPlaces(pageable);
+    public ResponseEntity getPlacesPage(@CookieValue(name = "memberId", required = false) Long memberId,
+                                        Pageable pageable) {
+        Page<PlaceDto.Response> pagePlace = placeService.getPlacesPage(pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+    }
+
+    /**
+     * Slice 무한스크롤 메인페이지 공간 전체 조회
+     * @param memberId
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/slice")
+    public ResponseEntity getPlacesSlice(@CookieValue(name = "memberId", required = false) Long memberId,
+                                         Pageable pageable) {
+        Slice<PlaceDto.Response> place = placeService.getPlacesSlice(pageable);
+        return new ResponseEntity<>(place, HttpStatus.OK);
     }
 
     /**
@@ -111,12 +125,40 @@ public class PlaceController {
      * @param pageable
      * @return
      */
-    @GetMapping("/{category-id}")
-    public ResponseEntity getCategory(@PathVariable("category-id") Long categoryId,
-                                      Pageable pageable) {
+    @GetMapping("category/{category-id}")
+    public ResponseEntity getCategoryPage(@PathVariable("category-id") Long categoryId,
+                                          Pageable pageable) {
 
-        Page<PlaceCategoryDto.Response> pagePlace = placeService.getCategory(categoryId, pageable);
+        Page<PlaceCategoryDto.Response> pagePlace = placeService.getCategoryPage(categoryId, pageable);
         List<PlaceCategoryDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+    }
+
+    /**
+     * Slice 무한스크롤 메인페이지 카테고리별 공간 조회
+     * @param categoryId
+     * @param pageable
+     * @return
+     */
+    @GetMapping("slice/category/{category-id}")
+    public ResponseEntity getCategorySlice(@PathVariable("category-id") Long categoryId,
+                                           Pageable pageable) {
+
+        Slice<PlaceCategoryDto.Response> place = placeService.getCategorySlice(categoryId, pageable);
+        return new ResponseEntity<>(place, HttpStatus.OK);
+    }
+
+    /**
+     * 공간 상세 검색
+     * @param searchDetail
+     * @return
+     */
+    @PostMapping("/search/detail")
+    public ResponseEntity searchDetail(@RequestBody PlaceDto.SearchDetail searchDetail,
+                                       Pageable pageable) {
+
+        Page<PlaceDto.Response> pagePlace = placeService.getSearchDetail(searchDetail, pageable);
+        List<PlaceDto.Response> place = pagePlace.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
 }
