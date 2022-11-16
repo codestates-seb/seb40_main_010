@@ -1,11 +1,11 @@
-package com.main21.place.dto;
+package com.main21.file;
 
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
-public class PlaceImageDto {
+@Builder
+public class UploadFile {
     private String originFileName;
     private String fileName;
     private String filePath;

@@ -2,7 +2,9 @@ package com.main21.place.service;
 
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
+import com.main21.file.FileHandler;
 import com.main21.file.S3Upload;
+import com.main21.file.UploadFile;
 import com.main21.place.dto.PlaceCategoryDto;
 import com.main21.place.dto.PlaceDto;
 import com.main21.place.dto.PlacePostDto;
@@ -25,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -92,7 +93,18 @@ public class PlaceService {
                 postDto.getCharge()
         );
 
-        List<PlaceImage> placeImageList = fileHandler.parseFileInfo(files);
+        List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(files);
+        List<PlaceImage> placeImageList = new ArrayList<>();
+
+        uploadFileList.forEach(uploadFile -> {
+            PlaceImage placeImage = PlaceImage.builder()
+                    .originFileName(uploadFile.getOriginFileName())
+                    .fileName(uploadFile.getFileName())
+                    .filePath(uploadFile.getFilePath())
+                    .fileSize(uploadFile.getFileSize())
+                    .build();
+            placeImageList.add(placeImage);
+        });
 
         //파일이 존재할 때 처리
         if(!placeImageList.isEmpty()) {
@@ -121,6 +133,7 @@ public class PlaceService {
      */
     @Transactional
     public PlaceResponseDto searchPlace(Long placeId, List<String> filePath, List<PlaceCategoryDto.Search> placeCategoryResponseDtoList) { //List<Long> fileId) {
+
         Place place = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 

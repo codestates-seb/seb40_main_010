@@ -14,8 +14,8 @@ public class PlaceImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PLACE_IMAGE_ID")
     private Long id;
-
-    private String fileName; //원본 파일명
+    private String originFileName; //원본 파일명
+    private String fileName;
 
     private String filePath; //파일 저장 경로
 
@@ -26,7 +26,8 @@ public class PlaceImage {
     private Place place;
 
     @Builder
-    public PlaceImage(String fileName, String filePath, Long fileSize) {
+    public PlaceImage(String originFileName, String fileName, String filePath, Long fileSize) {
+        this.originFileName = originFileName;
         this.fileName = fileName;
         this.filePath = filePath;
         this.fileSize = fileSize;

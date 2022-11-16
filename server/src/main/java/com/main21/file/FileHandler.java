@@ -1,6 +1,7 @@
-package com.main21.place.service;
+package com.main21.file;
 
 
+import com.main21.file.UploadFile;
 import com.main21.place.entity.PlaceImage;
 import com.main21.place.dto.PlaceImageDto;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,9 @@ import java.util.UUID;
 @Component
 public class FileHandler {
 
-    public List<PlaceImage> parseFileInfo(List<MultipartFile> multipartFiles) throws Exception {
+    public List<UploadFile> parseUploadFileInfo(List<MultipartFile> multipartFiles) throws Exception {
         //변환 파일 리스트
-        List<PlaceImage> fileList = new ArrayList<>();
+        List<UploadFile> fileList = new ArrayList<>();
         if(multipartFiles.isEmpty()) {
             return fileList;
         }
@@ -75,22 +76,15 @@ public class FileHandler {
                 //String new_file_name = uuid + originalFileExtension;
 
                 //파일 DTO 생성
-                PlaceImageDto placeImageDto =
-                        PlaceImageDto.builder()
-                                .fileName(multipartFile.getOriginalFilename())
-                                .filePath(path + File.separator + new_file_name)
-                                .fileSize(multipartFile.getSize())
-                                .build();
-
-                //파일 DTO 이용하여 PlaceImage 엔티티 생성
-                PlaceImage placeImage = new PlaceImage(
-                        placeImageDto.getFileName(),
-                        placeImageDto.getFilePath(),
-                        placeImageDto.getFileSize()
-                );
+                UploadFile uploadFile = UploadFile.builder()
+                        .originFileName(multipartFile.getOriginalFilename())
+                        .fileName(new_file_name)
+                        .filePath(path + File.separator + new_file_name)
+                        .fileSize(multipartFile.getSize())
+                        .build();
 
                 //생성 후 리스트에 추가
-                fileList.add(placeImage);
+                fileList.add(uploadFile);
 
                 //업로드 한 파일 데이터를 지정한 파일에 저장
                 file = new File(absolutePath + path + File.separator + new_file_name);

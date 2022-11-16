@@ -54,7 +54,7 @@ public class PlaceController {
     }
 
     /**
-     * 장소 생성
+     * 장소 생성 (Local)
      */
     @PostMapping(value = "/place/post",consumes = {"multipart/form-data"})
     public void createPlace(@RequestPart(value = "key") PlacePostDto placePostDto,
@@ -69,6 +69,7 @@ public class PlaceController {
                         .detailInfo(placePostDto.getDetailInfo())
                         .charge(placePostDto.getCharge())
                         .build();
+
 
         placeService.createPlace(postDto, files);
     }
@@ -118,6 +119,4 @@ public class PlaceController {
         List<PlaceCategoryDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
-
-
 }

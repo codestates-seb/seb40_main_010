@@ -15,6 +15,7 @@ public class PlaceResponseDto {
     private int charge;
     private List<String> filePath;
 
+
     public PlaceResponseDto(Place place, List<String> filePath, List<PlaceCategoryDto.Search> categoryList) {
         this.placeId = place.getId();
         this.title = place.getTitle();

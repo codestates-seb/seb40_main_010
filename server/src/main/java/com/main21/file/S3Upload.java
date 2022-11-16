@@ -3,6 +3,7 @@ package com.main21.file;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.main21.place.dto.PlaceImageDto;
@@ -54,7 +55,7 @@ public class S3Upload {
                 // 파일 DTO 생성
                 PlaceImageDto placeImageDto =
                         PlaceImageDto.builder()
-                                //.fileName(file.getOriginalFilename())
+                                .originFileName(file.getOriginalFilename())
                                 .fileName(fileName)
                                 .filePath(amazonS3Client.getUrl(bucket, fileName).toString())
                                 .fileSize(file.getSize())
@@ -62,6 +63,7 @@ public class S3Upload {
 
                 //파일 DTO 이용하여 PlaceImage 엔티티 생성
                 PlaceImage placeImage = new PlaceImage(
+                        placeImageDto.getOriginFileName(),
                         placeImageDto.getFileName(),
                         placeImageDto.getFilePath(),
                         placeImageDto.getFileSize()
@@ -94,6 +96,10 @@ public class S3Upload {
            }
         });
         return filePathList;
+    }
+
+    public void deleteFile(String fileName) {
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
     private String createFileName(String fileName) {
