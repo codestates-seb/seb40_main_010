@@ -23,14 +23,16 @@ public class ReviewController {
 
     @PatchMapping("/{review-id}/edit")
     public ResponseEntity patchReview(@PathVariable("review-id") Long reviewId,
-                                      @RequestBody ReviewDto.Patch patch) {
-        reviewService.updateReview(reviewId, patch);
+                                      @RequestBody ReviewDto.Patch patch,
+                                      @CookieValue(name = "memberId") Long memberId) {
+        reviewService.updateReview(reviewId, patch, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{review-id}")
-    public ResponseEntity deleteReview(@PathVariable("review-id") Long reviewId) {
-        reviewService.deleteReview(reviewId);
+    public ResponseEntity deleteReview(@PathVariable("review-id") Long reviewId,
+                                       @CookieValue(name = "memberId") Long memberId) {
+        reviewService.deleteReview(reviewId, memberId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
     @GetMapping("/{place-id}")

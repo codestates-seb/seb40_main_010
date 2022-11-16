@@ -25,17 +25,26 @@ public class ReviewService {
                 .placeId(placeId).build();
         reviewRepository.save(review);
     }
-    public void updateReview (Long reviewId, ReviewDto.Patch patch){
-        Review findReview = reviewRepository.findById(reviewId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
+    public void updateReview (Long reviewId, ReviewDto.Patch patch, Long memberId){
+        Review findReview = reviewRepository
+                .findById(reviewId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
+        if (!memberId.equals(findReview.getMemberId()))
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+
         findReview.editReview(patch.getScore(),patch.getComment());
         reviewRepository.save(findReview);
     }
     public List<ReviewDto.Response> getPlaceReviews (Long placeId) {
         return reviewRepository.getReviews(placeId);
-
     }
+    public void deleteReview (Long reviewId, Long memberId) {
+        Review findReview = reviewRepository
+                .findById(reviewId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
+        if (!memberId.equals(findReview.getMemberId()))
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
-    public void deleteReview (Long reviewId) {
         reviewRepository.deleteById(reviewId);
     }
 }

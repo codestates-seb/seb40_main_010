@@ -44,10 +44,14 @@ public class ReserveService {
     }
 
     // 예약 수정
-    public Reserve updateReserve(ReserveDto.Patch patch, Long reserveId) {
-        Reserve findReserve = reserveRepository.findById(reserveId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 추후 수정
-        findReserve.editReserve(patch.getCapacity(), patch.getStartTime(), patch.getEndTime());
+    public Reserve updateReserve(ReserveDto.Patch patch, Long reserveId, Long memberId) {
+        Reserve findReserve = reserveRepository
+                .findById(reserveId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 추후 수정
+        if (!memberId.equals(findReserve.getMemberId()))
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
+        findReserve.editReserve(patch.getCapacity(), patch.getStartTime(), patch.getEndTime());
         Reserve updateReserve = reserveRepository.save(findReserve);
 
         return updateReserve;
