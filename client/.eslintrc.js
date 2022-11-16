@@ -15,5 +15,6 @@ module.exports = {
     'no-console': 0,
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'off',
+    'import/prefer-default-export': 'off',
   },
 };

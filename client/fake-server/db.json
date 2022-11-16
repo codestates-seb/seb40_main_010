@@ -1,0 +1,27 @@
+{
+  "place": [
+    {
+      "id": 1,
+      "title": "첫 메모 제목",
+      "category": [],
+      "maxCapacity": 1,
+      "address": "안녕",
+      "detailedAddress": "55호",
+      "detailInfo": "상세정보",
+      "image": [],
+      "charge": 23000
+    },
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    },
+    {
+      "id": 4
+    },
+    {
+      "id": 5
+    }
+  ]
+}
