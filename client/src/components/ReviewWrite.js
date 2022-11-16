@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 
-function ReviewWrite({ reviewModalOpen, setReviewModalOpen }) {
+function ReviewWrite({
+  reviewModalOpen,
+  setReviewModalOpen,
+  placeName,
+  placeImageURL,
+}) {
   // 모달창 여닫는 상태
   const showReviewModal = () => {
     setReviewModalOpen(!reviewModalOpen);
@@ -54,7 +59,7 @@ function ReviewWrite({ reviewModalOpen, setReviewModalOpen }) {
             <Review>리뷰 작성</Review>
             <CurrentDate>{today.toLocaleDateString()}</CurrentDate>
           </TextDateContainer>
-          <PlaceName>인테리어가 아름다운 리빙형 대관 공간</PlaceName>
+          <PlaceName>{placeName}</PlaceName>
           <RatingBox>
             {ratings.map(el => (
               <ImStarFull
@@ -66,7 +71,7 @@ function ReviewWrite({ reviewModalOpen, setReviewModalOpen }) {
             ))}
           </RatingBox>
         </HeadTextContainer>
-        <Image src="https://picsum.photos/200" />
+        <Image src={placeImageURL} />
       </HeadContainer>
       <ReviewInput
         placeholder="255자 이내로 작성해주세요."
@@ -95,6 +100,11 @@ const ReviewContainer = styled.div`
   width: 570px;
   height: 420px;
   border-radius: 20px;
+
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 `;
 
 const HeadContainer = styled.div`
