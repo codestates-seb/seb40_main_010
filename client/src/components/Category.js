@@ -6,7 +6,7 @@
 5. icon 클릭시 api 요청 2번 감(div-글자는 1번만 감) > z-index 조절하면 되기는 하는데,,, 
 */
 
-import axios from 'axios';
+// import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -65,14 +65,14 @@ function Category() {
   const [focusCategoryID, setFocusCategoryID] = useState([0]);
   const onClickCategoryButton = event => {
     setFocusCategoryID([event.target.id]);
-    if (focusCategoryID[0] === 0) {
-      axios.get(`{{BACKEND}}/`).then(res => console.log(res));
-    } else {
-      axios
-        .get(`{{BACKEND}}/category/${event.target.id}`)
-        .then(res => console.log(res));
-    }
-    console.log(event.target.id);
+    // if (focusCategoryID[0] === 0) {
+    //   axios.get(`{{BACKEND}}/`).then(res => console.log(res));
+    // } else {
+    //   axios
+    //     .get(`{{BACKEND}}/category/${event.target.id}`)
+    //     .then(res => console.log(res));
+    // }
+    // console.log(event.target.id);
     // console.log(event.target.id);
   };
 
