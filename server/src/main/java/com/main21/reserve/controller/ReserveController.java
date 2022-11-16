@@ -27,8 +27,9 @@ public class ReserveController {
     }
     @PatchMapping("place/reserve/{reserve-id}/edit") // 유저 테이블 생성 시 유저 추가
     public ResponseEntity patchReserve(@PathVariable("reserve-id") Long reserveId,
-                                       @RequestBody ReserveDto.Patch patch) {
-        Reserve reserve = reserveService.updateReserve(patch, reserveId);
+                                       @RequestBody ReserveDto.Patch patch,
+                                       @CookieValue(name = "memberId") Long memberId) {
+        Reserve reserve = reserveService.updateReserve(patch, reserveId, memberId);
         return new ResponseEntity<>(reserve, HttpStatus.OK);
     }
 
