@@ -1,10 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function Modal(modalText, modalActionText, modalAction) {
+function Modal({
+  modalText,
+  modalActionText,
+  modalAction,
+  modalOpen,
+  setModalOpen,
+}) {
   // 각 페이지에서 모달창에 필요한 텍스트를 props로 전달
 
   // 각 페이지에서 모달창에서 필요한 기능을 props로 전달
+
+  const showModal = () => {
+    setModalOpen(!modalOpen);
+  };
 
   return (
     <ModalContainer>
@@ -13,7 +23,7 @@ function Modal(modalText, modalActionText, modalAction) {
         <ModalButton className="cancel" onClick={modalAction}>
           {modalActionText}
         </ModalButton>
-        <ModalButton>돌아가기</ModalButton>
+        <ModalButton onClick={showModal}>돌아가기</ModalButton>
       </ButtonContainer>
     </ModalContainer>
   );
@@ -30,6 +40,11 @@ const ModalContainer = styled.div`
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 20px;
   padding: 20px;
+
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 `;
 
 const ModalText = styled.div`
