@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -35,5 +38,14 @@ public class MemberController {
     public ResponseEntity getMember(@CookieValue(name = "memberId") Long memberId) {
         Member member = memberService.getMember(memberId);
         return new ResponseEntity(member, HttpStatus.OK);
+    }
+
+    /**
+     * 회원 프로필 사진 업로드 로컬
+     */
+    @PostMapping("/profile")
+    public void createMemberImage(@RequestPart(value = "file") List<MultipartFile> multipartFiles) throws Exception {
+
+        memberService.createProfile(multipartFiles);
     }
 }

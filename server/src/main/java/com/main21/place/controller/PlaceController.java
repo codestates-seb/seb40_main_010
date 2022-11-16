@@ -40,7 +40,6 @@ public class PlaceController {
     public void createS3(HttpServletRequest request,
                          @RequestPart(value = "key") PlacePostDto placePostDto,
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
-
         PlacePostDto postDto =
                 PlacePostDto.builder()
                         .title(placePostDto.getTitle())

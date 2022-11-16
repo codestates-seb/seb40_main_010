@@ -36,7 +36,7 @@ public class S3Upload {
 
     private final AmazonS3Client amazonS3Client;
 
-    public List<PlaceImage> uploadList(List<MultipartFile> multipartFiles) {
+    public List<PlaceImage> uploadList(List<MultipartFile> multipartFiles, String dir) {
         List<PlaceImage> fileList = new ArrayList<>();
         if(multipartFiles.isEmpty()) {
             return fileList;
@@ -49,7 +49,7 @@ public class S3Upload {
             objectMetadata.setContentType(file.getContentType());
 
             try(InputStream inputStream = file.getInputStream()) {
-                amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                amazonS3Client.putObject(new PutObjectRequest(bucket, dir + "/" + fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
 
                 // 파일 DTO 생성
