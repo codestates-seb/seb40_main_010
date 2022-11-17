@@ -37,41 +37,20 @@ public class PlaceController {
      * 장소 + S3이미지 업로드
      */
     @PostMapping(value = "/place/postS3", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createS3(HttpServletRequest request,
-                         @RequestPart(value = "key") PlacePostDto placePostDto,
+    public void createS3(@RequestPart(value = "key") PlacePostDto placePostDto,
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
-        PlacePostDto postDto =
-                PlacePostDto.builder()
-                        .title(placePostDto.getTitle())
-                        .categoryList(placePostDto.getCategoryList())
-                        .maxCapacity(placePostDto.getMaxCapacity())
-                        .address(placePostDto.getAddress())
-                        .detailInfo(placePostDto.getDetailInfo())
-                        .charge(placePostDto.getCharge())
-                        .build();
 
-        placeService.createS3(placePostDto, files);
+        placeService.createPlaceS3(placePostDto, files);
     }
 
     /**
      * 장소 생성 (Local)
      */
-    @PostMapping(value = "/place/post",consumes = {"multipart/form-data"})
+    @PostMapping(value = "/place/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void createPlace(@RequestPart(value = "key") PlacePostDto placePostDto,
                             @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
-        PlacePostDto postDto =
-                PlacePostDto.builder()
-                        .title(placePostDto.getTitle())
-                        .categoryList(placePostDto.getCategoryList())
-                        .maxCapacity(placePostDto.getMaxCapacity())
-                        .address(placePostDto.getAddress())
-                        .detailInfo(placePostDto.getDetailInfo())
-                        .charge(placePostDto.getCharge())
-                        .build();
-
-
-        placeService.createPlace(postDto, files);
+        placeService.createPlace(placePostDto, files);
     }
 
     /**

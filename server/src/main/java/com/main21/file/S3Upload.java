@@ -77,54 +77,40 @@ public class S3Upload {
         return fileList;
     }
 
-
-    public List<String> upload(List<MultipartFile> multipartFiles) {
-        List<String> filePathList = new ArrayList<>();
-
-        multipartFiles.forEach(file -> {
-            String fileName = createFileName(file.getOriginalFilename());
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
-
-           try(InputStream inputStream = file.getInputStream()) {
-               amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                       .withCannedAcl(CannedAccessControlList.PublicRead));
-               filePathList.add(amazonS3Client.getUrl(bucket, fileName).toString());
-           } catch (IOException e) {
-               throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 실패");
-           }
-        });
-        return filePathList;
-    }
-
-    public void deleteFile(String fileName) {
-        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
-    }
-
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
     private String getFileExtension(String fileName) {
-        /*ArrayList<String> fileValidate = new ArrayList<>();
-        fileValidate.add(".jpg");
-        fileValidate.add(".jpeg");
-        fileValidate.add(".png");
-        fileValidate.add(".JPG");
-        fileValidate.add(".JPEG");
-        fileValidate.add(".PNG");
-        String idxFileName = fileName.substring(fileName.lastIndexOf("."));
-        if(!fileValidate.contains(idxFileName)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ")");
-        }
-        return idxFileName;*/
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ")");
         }
     }
+
+    public UploadFile uploadfile(MultipartFile multipartFile, String dir) throws IOException {
+        String fileName = createFileName(multipartFile.getOriginalFilename());
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(multipartFile.getInputStream().available());
+
+        amazonS3Client.putObject(bucket, dir + "/" + fileName, multipartFile.getInputStream(), objectMetadata);
+
+        UploadFile uploadFile = UploadFile.builder()
+                .originFileName(multipartFile.getOriginalFilename())
+                .fileName(fileName)
+                .filePath(amazonS3Client.getUrl(bucket, fileName).toString())
+                .fileSize(multipartFile.getSize())
+                .build();
+
+        return uploadFile;
+    }
+
+
+
+
+
 
     // MulitpartFile을 전달받아 File로 전환 후 S3에 업로드
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {

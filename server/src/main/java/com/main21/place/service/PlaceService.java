@@ -46,16 +46,16 @@ public class PlaceService {
      * 장소 + S3이미지 저장 메서드
      */
     @Transactional
-    public void createS3(PlacePostDto postDto, List<MultipartFile> files) throws Exception {
+    public void createPlaceS3(PlacePostDto placePostDto, List<MultipartFile> files) throws Exception {
         //유저 확인 필요
         String dir = "placeImage";
 
         Place place = new Place(
-                postDto.getTitle(),
-                postDto.getDetailInfo(),
-                postDto.getMaxCapacity(),
-                postDto.getAddress(),
-                postDto.getCharge()
+                placePostDto.getTitle(),
+                placePostDto.getDetailInfo(),
+                placePostDto.getMaxCapacity(),
+                placePostDto.getAddress(),
+                placePostDto.getCharge()
         );
 
         List<PlaceImage> placeImageList = s3Upload.uploadList(files, dir);
@@ -70,7 +70,7 @@ public class PlaceService {
 
         Long placeId = placeRepository.save(place).getId();
 
-        List<String> categoryList = postDto.getCategoryList();
+        List<String> categoryList = placePostDto.getCategoryList();
         categoryList.forEach(
                 s -> {
                     Category category = categoryRepository.findByCategoryName(s);
@@ -84,15 +84,15 @@ public class PlaceService {
      * 장소 저장 메서드 (Local)
      */
     @Transactional
-    public Long createPlace(PlacePostDto postDto, List<MultipartFile> files) throws Exception {
+    public void createPlace(PlacePostDto placePostDto, List<MultipartFile> files) throws Exception {
         //유저 확인 필요
 
         Place place = new Place(
-                postDto.getTitle(),
-                postDto.getDetailInfo(),
-                postDto.getMaxCapacity(),
-                postDto.getAddress(),
-                postDto.getCharge()
+                placePostDto.getTitle(),
+                placePostDto.getDetailInfo(),
+                placePostDto.getMaxCapacity(),
+                placePostDto.getAddress(),
+                placePostDto.getCharge()
         );
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(files);
@@ -118,7 +118,7 @@ public class PlaceService {
 
         Long placeId = placeRepository.save(place).getId();
 
-        List<String> categoryList = postDto.getCategoryList();
+        List<String> categoryList = placePostDto.getCategoryList();
         categoryList.forEach(
                 s -> {
                     Category category = categoryRepository.findByCategoryName(s);
@@ -126,8 +126,6 @@ public class PlaceService {
                     placeCategoryRepository.save(placeCategory);
                 }
         );
-
-        return placeId;
     }
 
     /**
