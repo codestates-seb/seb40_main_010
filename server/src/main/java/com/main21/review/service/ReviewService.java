@@ -7,8 +7,11 @@ import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
 import com.main21.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -46,6 +49,10 @@ public class ReviewService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
         reviewRepository.deleteById(reviewId);
+    }
+
+    public Page<ReviewDto.Response> getReviewsMypage(Long memberId, Pageable pageable) {
+        return reviewRepository.getReviewsMypage(memberId, pageable);
     }
 }
 

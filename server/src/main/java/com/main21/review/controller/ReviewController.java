@@ -1,11 +1,17 @@
 package com.main21.review.controller;
 
+import com.main21.dto.MultiResponseDto;
+import com.main21.place.dto.PlaceDto;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,5 +44,14 @@ public class ReviewController {
     @GetMapping("/{place-id}")
     public ResponseEntity getReserve(@PathVariable("place-id") Long placeId) {
         return new ResponseEntity(reviewService.getPlaceReviews(placeId), HttpStatus.OK);
+    }
+    @GetMapping
+    public ResponseEntity getReviewsMypage(@CookieValue(name = "memberId") Long memberId,
+                                          Pageable pageable) {
+        Page<ReviewDto.Response> getReview = reviewService.getReviewsMypage(memberId, pageable);
+        List<ReviewDto.Response> reviews = getReview.getContent();
+
+        return new ResponseEntity(new MultiResponseDto<>(reviews, getReview), HttpStatus.OK);
+
     }
 }
