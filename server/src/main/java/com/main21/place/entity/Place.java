@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Place {
 
@@ -36,6 +37,8 @@ public class Place {
 
     // 평점
     private double score;
+
+    private double totalScore;
 
     // 조회수
     private int view;
