@@ -3,6 +3,7 @@ package com.main21.member.service;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.file.FileHandler;
+import com.main21.file.S3Upload;
 import com.main21.file.UploadFile;
 import com.main21.member.dto.MemberDto;
 import com.main21.member.entity.Member;
@@ -12,6 +13,7 @@ import com.main21.member.repository.MemberRepository;
 import com.main21.place.entity.PlaceImage;
 import com.main21.security.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +31,9 @@ public class MemberService {
     private final CustomAuthorityUtils authorityUtils;
     private final FileHandler fileHandler;
     private final MemberImageRepository memberImageRepository;
+
+    @Autowired
+    private S3Upload s3Upload;
 
 
     public void createMember(MemberDto.Post post) {
@@ -67,6 +72,9 @@ public class MemberService {
         }
     }
 
+    /**
+     * 회원 프로필 사진 업로드 Local (유저검증 필요)
+     */
     public void createProfile(List<MultipartFile> multipartFiles) throws Exception {
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(multipartFiles);
@@ -90,5 +98,23 @@ public class MemberService {
                 memberImageRepository.save(memberImage);
             }
         }
+    }
+
+    /**
+     * 회원 프로필 사진 업로드 S3 (유저검증 필요)
+     */
+    public void createProfileS3(MultipartFile file) throws Exception {
+        String dir = "memberImage";
+
+        UploadFile uploadFile = s3Upload.uploadfile(file, dir);
+
+        MemberImage memberImage = MemberImage.builder()
+                .originFileName(uploadFile.getOriginFileName())
+                .fileName(uploadFile.getFileName())
+                .filePath(uploadFile.getFilePath())
+                .fileSize(uploadFile.getFileSize())
+                .build();
+
+        memberImageRepository.save(memberImage);
     }
 }
