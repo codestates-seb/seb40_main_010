@@ -15,7 +15,7 @@ public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PLACE_ID")
-    private long id;
+    private Long id;
 
     // 공간명
     private String title;
@@ -40,8 +40,6 @@ public class Place {
     // 조회수
     private int view;
 
-    // 공간 - 리뷰 간접 참조
-    private Long reserveId;
 
     // 공간 - 회원 간접 참
     private Long memberId;
@@ -61,14 +59,16 @@ public class Place {
 
     // createPlace 생성자
     @Builder
-    public Place(String title, String detailInfo, int maxCapacity, String address, int charge ){
+    public Place(String title, String detailInfo, int maxCapacity, String address, int charge, Long memberId, double score, int view){
         this.title = title;
         this.detailInfo = detailInfo;
         this.maxCapacity = maxCapacity;
         this.address = address;
         this.charge = charge;
+        this.memberId = memberId;
+        this.score = score;
+        this.view = view;
     }
-
 
     public void addPlaceCategory(PlaceCategory placeCategory) {
         this.addPlaceCategory(placeCategory);
@@ -77,10 +77,6 @@ public class Place {
         }
     }
 
-    // 편의 메서드
-    public void addReserve(Long reserveId) {
-        this.reserveId = reserveId;
-    }
 
     public void addPlaceImage(PlaceImage placeImage) {
         this.placeImages.add(placeImage);

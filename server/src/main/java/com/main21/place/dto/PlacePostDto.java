@@ -9,6 +9,10 @@ import java.util.List;
 @Builder
 @Getter
 public class PlacePostDto {
+    private Long memberId;
+    private Long reserveId;
+    private double score;
+    private int view;
     private String title;
     private List<String> categoryList;
     private int maxCapacity;
