@@ -2,10 +2,12 @@ package com.main21.member.controller;
 
 import com.main21.member.dto.AuthDto;
 import com.main21.member.service.AuthService;
+import com.main21.security.utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.main21.security.utils.AuthConstants.*;
@@ -15,6 +17,7 @@ import static com.main21.security.utils.AuthConstants.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final JwtTokenUtils jwtTokenUtils;
 
     /**
      * 사용자 로그아웃을 위한 컨트롤러 호출 메서드(레디스용)
@@ -53,5 +56,13 @@ public class AuthController {
 
         AuthDto.Response response = authService.reIssueToken(memberId, refreshToken);
         return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/test")
+    public ResponseEntity authenticateForMember(HttpServletRequest request) {
+        String accessToken = request.getHeader(AUTHORIZATION);
+        String email = jwtTokenUtils.getEmail(accessToken);
+        return ResponseEntity.ok(email);
     }
 }

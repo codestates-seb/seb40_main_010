@@ -8,6 +8,7 @@ import com.main21.member.repository.MemberRepository;
 import com.main21.member.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -60,11 +61,7 @@ public class JwtTokenUtils {
 
     /**
      * 엑세스 토큰을 발급하는 메서드
-     *
-     * @param claims                 claims 정보
-     * @param subject                사용자 subject(이메일)
-     * @param expriration            토큰 만료시간
-     * @param base64EncodedSecretKey base64 인코딩된 키
+     * @param member 사용자 정보
      * @return String(액세스 토큰)
      * @author mozzi327
      */
@@ -127,11 +124,23 @@ public class JwtTokenUtils {
                 .build().parseClaimsJws(jws);
     }
 
+    public String getEmail(String accessToken) {
+        if (accessToken.startsWith(BEARER)) {
+            accessToken = accessToken.split(" ")[1];
+        }
+
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
+        Jws<Claims> claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build().parseClaimsJws(accessToken);
+        return (String) claims.getBody().get(USERNAME);
+    }
+
 
     /**
      * 액세스 토큰의 만료시간을 반환해주는 메서드
      *
-     * @param accessTokenExpirationMinutes 서버 지정 액세스 토큰 만료 시간
+     * @param expirationMinutes 서버 지정 액세스 토큰 만료 시간
      * @return Date
      * @author mozzi327
      */
@@ -203,15 +212,4 @@ public class JwtTokenUtils {
                 .refreshToken(refreshToken)
                 .build());
     }
-
-
-//    /**
-//     * redis에서 RefreshToken을 가져오는 메서드
-//     *
-//     * @return String(refresh)
-//     * @author mozzi327
-//     */
-//    public String isExsistRefreshInRedis(String email) {
-//        return (String) redisUtils.getData(email);
-//    }
 }
