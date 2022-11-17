@@ -13,6 +13,7 @@ public class PlaceResponseDto {
     private int maxCapacity;
     private String detailInfo;
     private int charge;
+    private double score;
     private List<String> filePath;
 
 
@@ -23,6 +24,7 @@ public class PlaceResponseDto {
         this.maxCapacity = place.getMaxCapacity();
         this.detailInfo = place.getDetailInfo();
         this.charge = place.getCharge();
+        this.score = place.getScore();
         this.filePath = filePath;
     }
 }

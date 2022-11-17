@@ -151,6 +151,7 @@ public class PlaceService {
      * Pagination 적용한 공간 전체 조회 메서드
      * @param pageable
      * @return
+     * @author LeeGoh
      */
     @Transactional
     public Page<PlaceDto.Response> getPlacesPage(Pageable pageable) {
@@ -162,17 +163,21 @@ public class PlaceService {
      * Slice 무한스크롤 공간 전체 조회 메서드
      * @param pageable
      * @return
+      @author LeeGoh
      */
+    /*
     @Transactional
     public Slice<PlaceDto.Response> getPlacesSlice(Pageable pageable) {
         return placeRepository.getPlacesSlice(pageable);
     }
+     */
 
     /**
      * Pagination 적용한 카테고리별 공간 조회 메서드
      * @param categoryId
      * @param pageable
      * @return
+      @author LeeGoh
      */
     @Transactional
     public Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable) {
@@ -184,22 +189,68 @@ public class PlaceService {
      * @param categoryId
      * @param pageable
      * @return
+      @author LeeGoh
      */
+    /*
     @Transactional
     public Slice<PlaceCategoryDto.Response> getCategorySlice(Long categoryId, Pageable pageable) {
         return placeRepository.getCategorySlice(categoryId, pageable);
     }
+     */
+
 
     /**
-     * Pagination 적용한 카테고리별 공간 검색 메서드
+     * 공간 최소 가격, 최대 가격, 인원수별 상세 검색 메서드
      * @param searchDetail
      * @param pageable
      * @return
+      @author LeeGoh
      */
     @Transactional
-    public Page<PlaceDto.Response> getSearchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
-        return placeRepository.getSearchDetail(searchDetail, pageable);
+    public Page<PlaceDto.Response> searchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
+        return placeRepository.searchDetail(searchDetail, pageable);
     }
+
+    /**
+     * 공간 전체 타이틀 검색 메서드
+     * @param title
+     * @param pageable
+     * @return
+     * @author LeeGoh
+     */
+    @Transactional
+    public Page<PlaceDto.Response> searchTitleAll(String title, Pageable pageable) {
+        return placeRepository.searchTitle(split(title), pageable);
+    }
+
+    /**
+     * 공간 카테고리별 타이틀 검색 메서드
+     * @param categoryId
+     * @param title
+     * @param pageable
+     * @return
+     @author LeeGoh
+     */
+    @Transactional
+    public Page<PlaceCategoryDto.Response> searchTitleCategory(Long categoryId, String title, Pageable pageable) {
+        return placeRepository.searchCategoryTitle(categoryId, split(title), pageable);
+    }
+
+    /**
+     * Stirng 검색어 공백을 기준으로 분리하여 List에 담는 메서드
+     * @param title
+     * @return
+     @author LeeGoh
+     */
+    public List<String> split(String title) {
+        List<String> titles = new ArrayList<>();
+        String[] list = title.split(" ");
+        for (int i = 0; i < list.length; i++) {
+            titles.add(list[i]);
+        }
+        return titles;
+    }
+
     /** getPlaceMypage
      * @param pageable
      * @return

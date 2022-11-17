@@ -18,6 +18,5 @@ public class PlacePostDto {
     private int maxCapacity;
     private String address;
     private String detailInfo;
-    //private List<PlaceImage> placeImages;
     private int charge;
 }

@@ -80,6 +80,7 @@ public class PlaceController {
      * @param memberId
      * @param pageable
      * @return
+     * @author LeeGoh
      */
     @GetMapping("/")
     public ResponseEntity getPlacesPage(@CookieValue(name = "memberId", required = false) Long memberId,
@@ -94,19 +95,23 @@ public class PlaceController {
      * @param memberId
      * @param pageable
      * @return
+      @author LeeGoh
      */
+    /*
     @GetMapping("/slice")
     public ResponseEntity getPlacesSlice(@CookieValue(name = "memberId", required = false) Long memberId,
                                          Pageable pageable) {
         Slice<PlaceDto.Response> place = placeService.getPlacesSlice(pageable);
         return new ResponseEntity<>(place, HttpStatus.OK);
     }
+     */
 
     /**
      * 메인페이지 카테고리별 공간 조회
      * @param categoryId
      * @param pageable
      * @return
+      @author LeeGoh
      */
     @GetMapping("category/{category-id}")
     public ResponseEntity getCategoryPage(@PathVariable("category-id") Long categoryId,
@@ -122,7 +127,9 @@ public class PlaceController {
      * @param categoryId
      * @param pageable
      * @return
+      @author LeeGoh
      */
+    /*
     @GetMapping("slice/category/{category-id}")
     public ResponseEntity getCategorySlice(@PathVariable("category-id") Long categoryId,
                                            Pageable pageable) {
@@ -130,19 +137,53 @@ public class PlaceController {
         Slice<PlaceCategoryDto.Response> place = placeService.getCategorySlice(categoryId, pageable);
         return new ResponseEntity<>(place, HttpStatus.OK);
     }
+     */
 
     /**
-     * 공간 상세 검색
+     * 공간 최소 가격, 최대 가격, 인원수별 상세 검색
      * @param searchDetail
      * @return
+     * @author LeeGoh
      */
     @PostMapping("/search/detail")
     public ResponseEntity searchDetail(@RequestBody PlaceDto.SearchDetail searchDetail,
                                        Pageable pageable) {
 
-        Page<PlaceDto.Response> pagePlace = placeService.getSearchDetail(searchDetail, pageable);
+        Page<PlaceDto.Response> pagePlace = placeService.searchDetail(searchDetail, pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
-        return new ResponseEntity(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+    }
+
+    /**
+     * 공간 전체 타이틀 검색
+     * @param title
+     * @param pageable
+     * @return
+     @author LeeGoh
+     */
+    @GetMapping("/search/{title:.+}")
+    public ResponseEntity searchTitleAll(@PathVariable("title") String title,
+                                         Pageable pageable) {
+        Page<PlaceDto.Response> pagePlace = placeService.searchTitleAll(title, pageable);
+        List<PlaceDto.Response> place = pagePlace.getContent();
+        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+    }
+
+    /**
+     * 공간 카테고리별 타이틀 검색
+     * @param categoryId
+     * @param title
+     * @param pageable
+     * @return
+     @author LeeGoh
+     */
+    @GetMapping("/category/{category-id}/search/{title:.+}")
+    public ResponseEntity searchTitleCategory(@PathVariable("category-id") Long categoryId,
+                                              @PathVariable("title") String title,
+                                              Pageable pageable) {
+        Page<PlaceCategoryDto.Response> pagePlace = placeService.searchTitleCategory(categoryId, title, pageable);
+        List<PlaceCategoryDto.Response> place = pagePlace.getContent();
+        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
 
     /**
