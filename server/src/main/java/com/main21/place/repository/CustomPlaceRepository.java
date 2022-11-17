@@ -12,4 +12,6 @@ public interface CustomPlaceRepository {
     Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable);
     Slice<PlaceCategoryDto.Response> getCategorySlice(Long categoryId, Pageable pageable);
     Page<PlaceDto.Response> getSearchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable);
+
+    Page<PlaceDto.Response> getPlaceMypage(Long memberId, Pageable pageable);
 }

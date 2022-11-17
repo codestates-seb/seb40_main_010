@@ -38,8 +38,6 @@ public class ReserveService {
                 .build();
 
         Reserve savedReserve = reserveRepository.save(reserve);
-        findPlace.addReserve(savedReserve.getPlaceId());
-
         return reserve;
     }
 
