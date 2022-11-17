@@ -37,7 +37,11 @@ public class PlaceController {
      * 장소 + S3이미지 업로드
      */
     @PostMapping(value = "/place/postS3", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createS3(@RequestPart(value = "key") PlacePostDto placePostDto,
+
+
+    public void createS3(HttpServletRequest request,
+                         @RequestPart(value = "key") PlacePostDto placePostDto,
+                         @CookieValue (name = "memberId") Long memberId,
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
         placeService.createPlaceS3(placePostDto, files);
@@ -48,9 +52,10 @@ public class PlaceController {
      */
     @PostMapping(value = "/place/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void createPlace(@RequestPart(value = "key") PlacePostDto placePostDto,
+                            @CookieValue (name = "memberId") Long memberId,
                             @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
-        placeService.createPlace(placePostDto, files);
+        placeService.createPlace(placePostDto, files, memberId);
     }
 
     /**
@@ -138,5 +143,19 @@ public class PlaceController {
         Page<PlaceDto.Response> pagePlace = placeService.getSearchDetail(searchDetail, pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
         return new ResponseEntity(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+    }
+
+    /**
+     * 마이페이지 호스팅 조회
+     * @param memberId
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/place")
+    public ResponseEntity getPlaceMypage(@CookieValue(name = "memberId") Long memberId,
+                                         Pageable pageable) {
+        Page<PlaceDto.Response> hosting = placeService.getPlaceMypage(memberId, pageable);
+        List<PlaceDto.Response> place = hosting.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(place, hosting), HttpStatus.OK);
     }
 }

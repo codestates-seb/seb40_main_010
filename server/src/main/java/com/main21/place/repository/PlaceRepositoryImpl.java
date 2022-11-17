@@ -141,4 +141,22 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
         long total = results.size();
         return new PageImpl<>(results, pageable, total);
     }
+
+    @Override
+    public Page<PlaceDto.Response> getPlaceMypage(Long memberId, Pageable pageable) {
+        List<PlaceDto.Response> results = queryFactory
+                .select(new QPlaceDto_Response(
+                        place
+                ))
+                .from(place)
+                .where(
+                        place.memberId.eq(memberId)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = results.size();
+        return new PageImpl<>(results, pageable, total);
+    }
 }

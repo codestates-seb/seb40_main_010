@@ -50,13 +50,17 @@ public class PlaceService {
         //유저 확인 필요
         String dir = "placeImage";
 
-        Place place = new Place(
-                placePostDto.getTitle(),
-                placePostDto.getDetailInfo(),
-                placePostDto.getMaxCapacity(),
-                placePostDto.getAddress(),
-                placePostDto.getCharge()
-        );
+        Place place = Place.builder()
+                .title(placePostDto.getTitle())
+                .detailInfo(placePostDto.getDetailInfo())
+                .maxCapacity(placePostDto.getMaxCapacity())
+                .address(placePostDto.getAddress())
+                .charge(placePostDto.getCharge())
+                .memberId(placePostDto.getMemberId())
+                .score(placePostDto.getScore())
+                .view(placePostDto.getView())
+                .build();
+
 
         List<PlaceImage> placeImageList = s3Upload.uploadList(files, dir);
 
@@ -84,16 +88,19 @@ public class PlaceService {
      * 장소 저장 메서드 (Local)
      */
     @Transactional
-    public void createPlace(PlacePostDto placePostDto, List<MultipartFile> files) throws Exception {
+    public void createPlace(PlacePostDto placePostDto, List<MultipartFile> files, Long memberId) throws Exception {
         //유저 확인 필요
 
-        Place place = new Place(
-                placePostDto.getTitle(),
-                placePostDto.getDetailInfo(),
-                placePostDto.getMaxCapacity(),
-                placePostDto.getAddress(),
-                placePostDto.getCharge()
-        );
+        Place place = Place.builder()
+                .title(placePostDto.getTitle())
+                .detailInfo(placePostDto.getDetailInfo())
+                .maxCapacity(placePostDto.getMaxCapacity())
+                .address(placePostDto.getAddress())
+                .charge(placePostDto.getCharge())
+                .memberId(memberId)
+                .score(placePostDto.getScore())
+                .view(placePostDto.getView())
+                .build();
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(files);
         List<PlaceImage> placeImageList = new ArrayList<>();
@@ -192,6 +199,15 @@ public class PlaceService {
     @Transactional
     public Page<PlaceDto.Response> getSearchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
         return placeRepository.getSearchDetail(searchDetail, pageable);
+    }
+    /** getPlaceMypage
+     * @param pageable
+     * @return
+     * @author quartz614
+     */
+    @Transactional
+    public Page<PlaceDto.Response> getPlaceMypage(Long memberId, Pageable pageable) {
+        return placeRepository.getPlaceMypage(memberId, pageable);
     }
 }
 
