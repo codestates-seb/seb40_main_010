@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +19,15 @@ public class ReserveService {
     private final ReserveRepository reserveRepository;
     private final PlaceRepository placeRepository;
 
-    // 예약 등록
-    public Reserve createReserve(ReserveDto.Post post, Long placeId, Long memberId) {
+
+    /**
+     * 예약 등록 메서드
+     * @param post 예약 등록 정보
+     * @param placeId 장소 식별자
+     * @param memberId 사용자 식별자
+     * @author LimJaeminZ
+     */
+    public void createReserve(ReserveDto.Post post, Long placeId, Long memberId) {
 
         //공간 확인
         Place findPlace = placeRepository.findById(placeId).orElseThrow(() ->
@@ -37,12 +43,35 @@ public class ReserveService {
                 .totalCharge(((post.getEndTime().getTime() - post.getStartTime().getTime())/3600000) * findPlace.getCharge())
                 .build();
 
-        Reserve savedReserve = reserveRepository.save(reserve);
-        return reserve;
+        reserveRepository.save(reserve);
     }
 
-    // 예약 수정
-    public Reserve updateReserve(ReserveDto.Patch patch, Long reserveId, Long memberId) {
+
+
+
+
+
+
+
+
+
+
+    /* ------------------------------------ 일단 예외 -------------------------------------*/
+
+
+
+
+
+
+
+    /**
+     * 예약 수정 메서드
+     * @param patch 에약 수정 정보
+     * @param reserveId 예약 식별자
+     * @param memberId 사용자 식별자
+     * @author Quartz614
+     */
+    public void updateReserve(ReserveDto.Patch patch, Long reserveId, Long memberId) {
         Reserve findReserve = reserveRepository
                 .findById(reserveId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 추후 수정
@@ -50,19 +79,27 @@ public class ReserveService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
         findReserve.editReserve(patch.getCapacity(), patch.getStartTime(), patch.getEndTime());
-        Reserve updateReserve = reserveRepository.save(findReserve);
-
-        return updateReserve;
+        reserveRepository.save(findReserve);
     }
 
-    // 예약 전체 조회
+
+    /**
+     * 예약 전체 조회 메서드
+     * @param memberId 사용자 식별자
+     * @return List
+     * @author LeeGoh
+     */
     public List<ReserveDto.Response> getReservation(Long memberId) {
         return reserveRepository.getReservation(memberId);
     }
 
-    // 예약 삭제(취소)
+
+    /**
+     * 예약 삭제 메서드
+     * @param reserveId 예약 식별자
+     * @author LeeGoh
+     */
     public void deleteReserve(Long reserveId) {
         reserveRepository.deleteById(reserveId);
     }
-
 }

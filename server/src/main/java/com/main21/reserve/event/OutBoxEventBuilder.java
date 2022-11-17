@@ -1,4 +1,4 @@
-package com.main21.payment.outbox.event;
+package com.main21.reserve.event;
 
 public interface OutBoxEventBuilder <T> {
 

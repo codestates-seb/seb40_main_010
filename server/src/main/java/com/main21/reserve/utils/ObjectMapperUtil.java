@@ -1,4 +1,4 @@
-package com.main21.payment.utils;
+package com.main21.reserve.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
