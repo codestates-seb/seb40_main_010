@@ -41,11 +41,21 @@ public class MemberController {
     }
 
     /**
-     * 회원 프로필 사진 업로드 로컬
+     * 회원 프로필 사진 업로드 S3 (유저검증 필요)
+     */
+    @PostMapping("/profileS3")
+    public void createMemberImageS3(@RequestPart(value = "file") MultipartFile file) throws Exception {
+
+        memberService.createProfileS3(file);
+    }
+
+
+    /**
+     * 회원 프로필 사진 업로드 Local (유저검증 필요)
      */
     @PostMapping("/profile")
-    public void createMemberImage(@RequestPart(value = "file") List<MultipartFile> multipartFiles) throws Exception {
+    public void createMemberImage(@RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
-        memberService.createProfile(multipartFiles);
+        memberService.createProfile(files);
     }
 }
