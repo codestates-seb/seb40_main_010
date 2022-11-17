@@ -1,4 +1,4 @@
-package com.main21.payment.outbox.event;
+package com.main21.reserve.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ReserveCreated {
-    private int quantity;
-    private int itemNumber;
-    private String itemName;
-    private int totalAmount;
+public class PayCancelDto {
+    private String tid;
+    private Integer cancelAmount;
+    private Integer cancelTaxFreeAmount;
 }

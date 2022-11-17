@@ -1,4 +1,4 @@
-package com.main21.payment.response;
+package com.main21.reserve.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

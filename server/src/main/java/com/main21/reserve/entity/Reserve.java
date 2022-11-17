@@ -35,12 +35,22 @@ public class Reserve {
 
     private Long totalCharge;
 
+    @Enumerated(value = EnumType.STRING)
+    private ReserveStatus status = ReserveStatus.PAY_IN_PROGRESS;
+
+
     public void addPlaceId(Long placeId) {
         this.placeId = placeId;
     }
 
+
     @Builder
-    public Reserve(int capacity, Date startTime, Date endTime, Long placeId, Long memberId, Long totalCharge) {
+    public Reserve(int capacity,
+                   Date startTime,
+                   Date endTime,
+                   Long placeId,
+                   Long memberId,
+                   Long totalCharge) {
         this.capacity = capacity;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -48,9 +58,38 @@ public class Reserve {
         this.memberId = memberId;
         this.totalCharge = totalCharge;
     }
-    public void editReserve(int capacity, Date startTime, Date endTime){
+
+
+    public void editReserve(int capacity,
+                            Date startTime,
+                            Date endTime){
         this.capacity = capacity;
         this. startTime = startTime;
         this. endTime = endTime;
+    }
+
+
+    public void setStatus(ReserveStatus reserveStatus) {
+        this.status = reserveStatus;
+    }
+
+
+    public enum ReserveStatus {
+        PAY_IN_PROGRESS(1, "결제 진행중"),
+        PAY_SUCCESS(2, "결제 완료"),
+        PAY_FAILED(3, "결제 실패"),
+        RESERVATION_CANCELED(4, "예약 취소");
+
+        @Getter
+        private int stepNumber;
+
+        @Getter
+        private String status;
+
+
+        ReserveStatus(int stepNumber, String status) {
+            this.stepNumber = stepNumber;
+            this.status = status;
+        }
     }
 }

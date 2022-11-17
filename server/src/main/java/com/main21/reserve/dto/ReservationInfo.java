@@ -1,4 +1,4 @@
-package com.main21.payment.outbox.event;
+package com.main21.reserve.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -7,19 +7,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class OutboxEvent {
-
-    private Long aggregateId;
-    private String aggregateType;
-    private String eventType;
-    private String payload;
-    private String eventAction;
-    private List<ReserveCreated> cartList;
+public class ReservationInfo {
+    private int quantity;
+    private int itemNumber;
+    private String itemName;
+    private int totalAmount;
 }
