@@ -3,6 +3,7 @@ package com.main21.review.service;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.place.entity.Place;
+import com.main21.place.repository.PlaceRepository;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
 import com.main21.review.repository.ReviewRepository;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final PlaceRepository placeRepository;
 
     /**
      * 리뷰 등록 로직
@@ -36,6 +38,10 @@ public class ReviewService {
                 .memberId(memberId)
                 .placeId(placeId).build();
         reviewRepository.save(review);
+        Place findPlace = placeRepository.findById(placeId).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+
+        modifyScore(findPlace, findPlace.getTotalScore()+review.getScore(), placeId);
     }
 
     /**
@@ -52,8 +58,16 @@ public class ReviewService {
         if (!memberId.equals(findReview.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
+        Place findPlace = placeRepository.findById(findReview.getPlaceId()).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+
+        findPlace.setTotalScore(findPlace.getTotalScore() - findReview.getScore());
+        placeRepository.save(findPlace);
+
         findReview.editReview(patch.getScore(),patch.getComment());
         reviewRepository.save(findReview);
+
+        modifyScore(findPlace, findPlace.getTotalScore()+findReview.getScore(), findReview.getPlaceId());
     }
 
     /**
@@ -79,7 +93,16 @@ public class ReviewService {
         if (!memberId.equals(findReview.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
+        Place findPlace = placeRepository.findById(findReview.getPlaceId()).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+
+        findPlace.setTotalScore(findPlace.getTotalScore() - findReview.getScore());
+        placeRepository.save(findPlace);
+
         reviewRepository.deleteById(reviewId);
+
+        modifyScore(findPlace, findPlace.getTotalScore(), findPlace.getId());
+
     }
 
     /**
@@ -91,6 +114,15 @@ public class ReviewService {
      */
     public Page<ReviewDto.Response> getReviewsMypage(Long memberId, Pageable pageable) {
         return reviewRepository.getReviewsMypage(memberId, pageable);
+    }
+
+    private void modifyScore(Place findPlace, Double totalScore, Long placeId) {
+        Long reviewer = reviewRepository.countByPlaceId(placeId);
+        String str = String.format("%.2f", totalScore / reviewer);
+        double score = Double.parseDouble(str);
+        findPlace.setTotalScore(totalScore);
+        findPlace.setScore(score);
+        placeRepository.save(findPlace);
     }
 }
 

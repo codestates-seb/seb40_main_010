@@ -1,14 +1,17 @@
 package com.main21.place.entity;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
 @NoArgsConstructor
+@DynamicUpdate
 public class PlaceImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +19,7 @@ public class PlaceImage {
     private Long id;
     private String originFileName; //원본 파일명
     private String fileName;
-
     private String filePath; //파일 저장 경로
-
     private Long fileSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
