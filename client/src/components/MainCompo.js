@@ -5,7 +5,7 @@ import { ImStarFull } from 'react-icons/im';
 function MainCompo() {
   return (
     <MainComponent>
-      <Image src="https://a0.muscache.com/im/pictures/miso/Hosting-46566256/original/7225b27d-fb5d-431b-9fc4-40be31efea23.jpeg?im_w=1200" />
+      <Image src="https://picsum.photos/200" />
       <TitleContainer>
         <PlaceName>인테리어가 아름다운 리빙형 대관 공간</PlaceName>
         <ImStarFull style={{ color: '#ffce31' }} />
