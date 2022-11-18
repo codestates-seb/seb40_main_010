@@ -83,14 +83,14 @@ function Category() {
     } else if (searchState) {
       axios
         .get(
-          `{{BACKEND}}/search/${encodeURI(searchState)}/category/${
-            event.target.id
-          }`,
+          `{{BACKEND}}/category/${event.target.id}/search/${encodeURI(
+            searchState,
+          )}`,
         )
         .then(res => console.log(res));
     } else {
       axios
-        .get(`{{BACKEND}}/search/category/${event.target.id}`)
+        .get(`{{BACKEND}}/category/${event.target.id}/search`)
         .then(res => console.log(res));
     }
     // console.log(event.target.id);
