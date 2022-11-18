@@ -49,6 +49,8 @@ public class ReserveDto {
     public static class Response implements Comparable<Response>{
 
         private Long reserveId;
+
+        private Long placeId;
         private String title;
         private String address;
         private String image;
@@ -68,6 +70,7 @@ public class ReserveDto {
         @QueryProjection
         public Response(Reserve reserve, Place place) {
             this.reserveId = reserve.getPlaceId();
+            this.placeId = place.getId();
             this.title = place.getTitle();
             this.address = place.getAddress();
             this.image = place.getPlaceImages().get(0).getFilePath();
