@@ -12,6 +12,7 @@ public class BookmarkDto {
     @Getter
     public static class Response implements Comparable<Response> {
         private final Long bookmarkId;
+        private final Long placeId;
         private final String image;
         private final String title;
         private final String bookmarkUrl;
@@ -23,6 +24,7 @@ public class BookmarkDto {
         @QueryProjection
         public Response(Bookmark bookmark, Place place) {
             this.bookmarkId = bookmark.getId();
+            this.placeId = place.getId();
             this.image = place.getPlaceImages().get(0).getFilePath();
             this.title = place.getTitle();
             this.bookmarkUrl = bookmark.getBookmarkUrl();

@@ -42,6 +42,7 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository{
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(bookmark.id.desc())
                 .fetch();
 
         long total = results.size();
