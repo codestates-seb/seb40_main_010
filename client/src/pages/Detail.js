@@ -1,7 +1,8 @@
 import React from 'react';
+import ReservationAsideBar from '../components/ReservationAsideBar';
 
 function Detail() {
-  return <div />;
+  return <ReservationAsideBar />;
 }
 
 export default Detail;

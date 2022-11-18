@@ -64,3 +64,28 @@ export const navCategoryCheckState = atom({
   key: 'navCategoryCheckState',
   default: [],
 });
+
+export const reservationStartDate = atom({
+  key: 'reservationStartDate',
+  default: false,
+});
+
+export const reservationEndDate = atom({
+  key: 'reservationEndDate',
+  default: false,
+});
+
+export const reservationStartDateChangedState = atom({
+  key: 'reservationStartDateChangedState',
+  default: null,
+});
+
+export const reservationMaxCapacity = atom({
+  key: 'reservationMaxCapacity',
+  default: 1,
+});
+
+export const reservationPlaceBookmarkState = atom({
+  key: 'reservationPlaceBookmarkState',
+  default: false,
+});

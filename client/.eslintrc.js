@@ -16,5 +16,6 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'off',
     'import/prefer-default-export': 'off',
+    'no-alert': 'off',
   },
 };

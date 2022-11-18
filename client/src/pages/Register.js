@@ -204,6 +204,7 @@ function Register() {
               type="number"
               onChange={handleMaxCapacity}
               value={maxCapacity}
+              readOnly
             />
             <RightIcon onClick={plusCapacity} />
           </div>
@@ -417,7 +418,7 @@ const Container = styled.div`
   }
 
   img {
-    width: 80px;
+    /* width: 80px; */
     height: 80px;
     margin-left: 10px;
     border-radius: 10px;
