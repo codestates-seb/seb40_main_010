@@ -1,11 +1,11 @@
 package com.main21.reserve.repository;
 
-import com.main21.member.entity.QMember;
-import com.main21.place.entity.QPlace;
 import com.main21.reserve.dto.QReserveDto_Response;
 import com.main21.reserve.dto.ReserveDto;
-import com.main21.reserve.entity.QReserve;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ReserveRepositoryImpl implements CustomReserveRepository{
      * @author LeeGoh
      */
     @Override
-    public List<ReserveDto.Response> getReservation(Long memberId) {
+    public Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable) {
         List<ReserveDto.Response> results = queryFactory
                 .select(new QReserveDto_Response(
                         reserve,
@@ -38,8 +38,11 @@ public class ReserveRepositoryImpl implements CustomReserveRepository{
                 .leftJoin(place).on(reserve.placeId.eq(place.id))
                 .where(reserve.memberId.eq(memberId))
                 .orderBy(reserve.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
-        return results;
+        long total = results.size();
+        return new PageImpl<>(results, pageable, total);
     }
 }

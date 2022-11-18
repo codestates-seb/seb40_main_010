@@ -8,6 +8,8 @@ import com.main21.reserve.dto.ReserveDto;
 import com.main21.reserve.entity.Reserve;
 import com.main21.reserve.repository.ReserveRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -89,8 +91,8 @@ public class ReserveService {
      * @return List
      * @author LeeGoh
      */
-    public List<ReserveDto.Response> getReservation(Long memberId) {
-        return reserveRepository.getReservation(memberId);
+    public Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable) {
+        return reserveRepository.getReservation(memberId, pageable);
     }
 
 
