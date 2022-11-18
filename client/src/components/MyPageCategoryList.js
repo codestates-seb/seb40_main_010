@@ -1,19 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 import { BsFillBookmarkFill } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
+import Modal from './Modal';
+import ReviewWrite from './ReviewWrite';
 
 const chargeComponent = (listData, type) => {
   if (type === 'reviews') {
     return null;
   }
   if (type === 'reservation') {
-    return <PlaceCharge>{listData.totalCharge}원</PlaceCharge>;
+    return <PlaceCharge>{listData.totalCharge / 1000},000원</PlaceCharge>;
   }
-  return <PlaceCharge>{listData.charge}원</PlaceCharge>;
+  return <PlaceCharge>{listData.charge / 1000},000원</PlaceCharge>;
 };
 
 function MyPageCategoryList({ listData, type }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+
+  const showModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
+  const showReviewModal = () => {
+    setReviewModalOpen(!reviewModalOpen);
+  };
+
+  const handleDate = createdAt => {
+    if (createdAt !== undefined) {
+      let date = new Date(createdAt);
+      const month = date.getMonth() + 1;
+      const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
+      const KR_TIME_DIFF = 9 * 60 * 60 * 1000; // 한국 시간(KST)은 UTC시간보다 9시간 더 빠르므로 9시간을 밀리초 단위로 변환.
+      const krCurr = utc + KR_TIME_DIFF;
+
+      date = new Date(krCurr).toString();
+
+      const splitDate = date.split(' ');
+      const day = splitDate[2];
+      const year = splitDate[3].slice(2);
+      let time = splitDate[4].slice(0, 2);
+
+      if (time > 12) {
+        time -= 12;
+        return `${year}.${month}.${day} ${time}PM`;
+      }
+
+      return `${year}.${month}.${day} ${time}AM`;
+    }
+    return '';
+  };
+
   return (
     <CategoryItemList>
       <CategoryContainer>
@@ -24,7 +63,8 @@ function MyPageCategoryList({ listData, type }) {
             <PlaceAddress>{listData.address}</PlaceAddress>
             {type === 'reservation' && (
               <ReservationDate>
-                {listData.startTime}~{listData.endTime}
+                {handleDate(listData.startTime)} ~{' '}
+                {handleDate(listData.endTime)}
               </ReservationDate>
             )}
             <ReservationDate>{listData.createdAt}</ReservationDate>
@@ -37,8 +77,28 @@ function MyPageCategoryList({ listData, type }) {
           )}
         </CategoryBodyContainer>
         <CategoryActionContainer>
-          {type === 'registration' && <CategoryButton>수정하기</CategoryButton>}
-          {type === 'reservation' && <CategoryButton>취소하기</CategoryButton>}
+          {type === 'registration' && (
+            <Link to="/detail" style={{ textDecoration: 'none' }}>
+              <CategoryButton>수정하기</CategoryButton>
+            </Link>
+          )}
+          {type === 'reservation' && (
+            <>
+              <CategoryButton onClick={showModal}>취소하기</CategoryButton>
+              {modalOpen && (
+                <Modal
+                  modalOpen={modalOpen}
+                  setModalOpen={setModalOpen}
+                  modalText="예악을 취소하시겠습니까?"
+                  modalActionText="취소하기"
+                  modalAction="취소하는 함수 만들어서 넣기"
+                />
+              )}
+              <CategoryButton onClick={showReviewModal}>
+                리뷰쓰기
+              </CategoryButton>
+            </>
+          )}
           {type === 'bookmark' && (
             <CategoryButton>
               <BsFillBookmarkFill size={24} />
@@ -47,13 +107,31 @@ function MyPageCategoryList({ listData, type }) {
           {type === 'reviews' && (
             <>
               <CategoryButton>수정하기</CategoryButton>
-              <CategoryButton>삭제하기</CategoryButton>
+              <CategoryButton onClick={showModal}>삭제하기</CategoryButton>
+              {modalOpen && (
+                <Modal
+                  modalOpen={modalOpen}
+                  setModalOpen={setModalOpen}
+                  modalText="리뷰를 삭제하시겠습니까?"
+                  modalActionText="삭제하기"
+                  modalAction="삭제하는 함수 만들어서 넣기"
+                />
+              )}
             </>
           )}
           {chargeComponent(listData, type)}
         </CategoryActionContainer>
       </CategoryContainer>
       <PlaceImage src={listData.image} />
+
+      {reviewModalOpen && (
+        <ReviewWrite
+          reviewModalOpen={reviewModalOpen}
+          setReviewModalOpen={setReviewModalOpen}
+          placeName={listData.title}
+          placeImageURL={listData.image}
+        />
+      )}
     </CategoryItemList>
   );
 }
@@ -69,7 +147,7 @@ const CategoryItemList = styled.div`
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 15px;
-  margin: 16px 0px;
+  margin: 18px 0px;
 `;
 
 const CategoryContainer = styled.div`

@@ -52,42 +52,58 @@ function ReviewWrite({
   };
 
   return (
-    <ReviewContainer>
-      <HeadContainer>
-        <HeadTextContainer>
-          <TextDateContainer>
-            <Review>리뷰 작성</Review>
-            <CurrentDate>{today.toLocaleDateString()}</CurrentDate>
-          </TextDateContainer>
-          <PlaceName>{placeName}</PlaceName>
-          <RatingBox>
-            {ratings.map(el => (
-              <ImStarFull
-                key={el}
-                onClick={() => handleStarClick(el)}
-                className={ratedStars[el] && 'black'}
-                size="35"
-              />
-            ))}
-          </RatingBox>
-        </HeadTextContainer>
-        <Image src={placeImageURL} />
-      </HeadContainer>
-      <ReviewInput
-        placeholder="255자 이내로 작성해주세요."
-        onChange={changeReviewText}
-      >
-        {reviewText}
-      </ReviewInput>
-      <ButtonContainer>
-        <ReviewButton className="blue" onClick={submitReview}>
-          등록
-        </ReviewButton>
-        <ReviewButton onClick={showReviewModal}>취소</ReviewButton>
-      </ButtonContainer>
-    </ReviewContainer>
+    <BlurBackground>
+      <ReviewContainer>
+        <HeadContainer>
+          <HeadTextContainer>
+            <TextDateContainer>
+              <Review>리뷰 작성</Review>
+              <CurrentDate>{today.toLocaleDateString()}</CurrentDate>
+            </TextDateContainer>
+            <PlaceName>{placeName}</PlaceName>
+            <RatingBox>
+              {ratings.map(el => (
+                <ImStarFull
+                  key={el}
+                  onClick={() => handleStarClick(el)}
+                  className={ratedStars[el] && 'black'}
+                  size="35"
+                />
+              ))}
+            </RatingBox>
+          </HeadTextContainer>
+          <Image src={placeImageURL} />
+        </HeadContainer>
+        <ReviewInput
+          placeholder="255자 이내로 작성해주세요."
+          onChange={changeReviewText}
+        >
+          {reviewText}
+        </ReviewInput>
+        <ButtonContainer>
+          <ReviewButton className="blue" onClick={submitReview}>
+            등록
+          </ReviewButton>
+          <ReviewButton onClick={showReviewModal}>취소</ReviewButton>
+        </ButtonContainer>
+      </ReviewContainer>
+    </BlurBackground>
   );
 }
+
+const BlurBackground = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 100;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+`;
 
 const ReviewContainer = styled.div`
   box-sizing: border-box;
@@ -100,11 +116,13 @@ const ReviewContainer = styled.div`
   width: 570px;
   height: 420px;
   border-radius: 20px;
+  background-color: #ffffff;
 
   z-index: 999;
   position: absolute;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const HeadContainer = styled.div`

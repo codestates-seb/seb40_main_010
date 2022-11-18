@@ -17,17 +17,33 @@ function Modal({
   };
 
   return (
-    <ModalContainer>
-      <ModalText>{modalText}</ModalText>
-      <ButtonContainer>
-        <ModalButton className="cancel" onClick={modalAction}>
-          {modalActionText}
-        </ModalButton>
-        <ModalButton onClick={showModal}>돌아가기</ModalButton>
-      </ButtonContainer>
-    </ModalContainer>
+    <BlurBackground>
+      <ModalContainer>
+        <ModalText>{modalText}</ModalText>
+        <ButtonContainer>
+          <ModalButton className="cancel" onClick={modalAction}>
+            {modalActionText}
+          </ModalButton>
+          <ModalButton onClick={showModal}>돌아가기</ModalButton>
+        </ButtonContainer>
+      </ModalContainer>
+    </BlurBackground>
   );
 }
+
+const BlurBackground = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 100;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+`;
 
 const ModalContainer = styled.div`
   box-sizing: border-box;
@@ -40,11 +56,13 @@ const ModalContainer = styled.div`
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 20px;
   padding: 20px;
+  background-color: #ffffff;
 
   z-index: 999;
   position: absolute;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ModalText = styled.div`
