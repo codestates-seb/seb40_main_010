@@ -15,5 +15,9 @@ module.exports = {
     'no-console': 0,
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'off',
+    'import/prefer-default-export': 'off',
+    'no-alert': 'off',
+    'no-nested-ternary': 0,
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
   },
 };

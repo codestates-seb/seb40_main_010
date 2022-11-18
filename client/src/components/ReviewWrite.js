@@ -2,22 +2,54 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 
-const array = [0, 1, 2, 3, 4];
+function ReviewWrite({
+  reviewModalOpen,
+  setReviewModalOpen,
+  placeName,
+  placeImageURL,
+}) {
+  // 모달창 여닫는 상태
+  const showReviewModal = () => {
+    setReviewModalOpen(!reviewModalOpen);
+  };
 
-function ReviewWrite() {
-  const [clicked, setClicked] = useState([false, false, false, false, false]);
+  // TODO: 별점 관리 for문 없애고 코드 정리하기
+  const ratings = [0, 1, 2, 3, 4];
+
+  const [ratedStars, setRatedStars] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const today = new Date();
 
   const handleStarClick = index => {
-    const clickStates = [...clicked];
+    const clickStates = [...ratedStars];
     for (let i = 0; i < 5; i += 1) {
       clickStates[i] = i <= index;
     }
-    setClicked(clickStates);
+    setRatedStars(clickStates);
   };
-  const score = clicked.filter(Boolean).length;
-  console.log(score);
+
+  const score = ratedStars.filter(Boolean).length;
+
+  // TODO : 작성 내용 상태로 저장해서 등록 클릭시 데이터 담아서 보내는 것까지 구현하기
+  const [reviewText, setReviewText] = useState('');
+
+  const changeReviewText = e => {
+    setReviewText(e.target.value);
+  };
+
+  const submitReview = () => {
+    const data = {
+      score,
+      comment: reviewText,
+    };
+    console.log(data);
+  };
 
   return (
     <ReviewContainer>
@@ -27,24 +59,31 @@ function ReviewWrite() {
             <Review>리뷰 작성</Review>
             <CurrentDate>{today.toLocaleDateString()}</CurrentDate>
           </TextDateContainer>
-          <PlaceName>인테리어가 아름다운 리빙형 대관 공간</PlaceName>
+          <PlaceName>{placeName}</PlaceName>
           <RatingBox>
-            {array.map(el => (
+            {ratings.map(el => (
               <ImStarFull
                 key={el}
                 onClick={() => handleStarClick(el)}
-                className={clicked[el] && 'black'}
+                className={ratedStars[el] && 'black'}
                 size="35"
               />
             ))}
           </RatingBox>
         </HeadTextContainer>
-        <Image src="https://a0.muscache.com/im/pictures/miso/Hosting-46566256/original/7225b27d-fb5d-431b-9fc4-40be31efea23.jpeg?im_w=1200" />
+        <Image src={placeImageURL} />
       </HeadContainer>
-      <ReviewInput placeholder="255자 이내로 작성해주세요." />
+      <ReviewInput
+        placeholder="255자 이내로 작성해주세요."
+        onChange={changeReviewText}
+      >
+        {reviewText}
+      </ReviewInput>
       <ButtonContainer>
-        <ReviewButton className="blue">등록</ReviewButton>
-        <ReviewButton>취소</ReviewButton>
+        <ReviewButton className="blue" onClick={submitReview}>
+          등록
+        </ReviewButton>
+        <ReviewButton onClick={showReviewModal}>취소</ReviewButton>
       </ButtonContainer>
     </ReviewContainer>
   );
@@ -61,6 +100,11 @@ const ReviewContainer = styled.div`
   width: 570px;
   height: 420px;
   border-radius: 20px;
+
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 `;
 
 const HeadContainer = styled.div`
@@ -148,6 +192,10 @@ const ReviewButton = styled.button`
   &.blue {
     background-color: #89bbff;
     color: white;
+  }
+
+  :hover {
+    cursor: pointer;
   }
 `;
 
