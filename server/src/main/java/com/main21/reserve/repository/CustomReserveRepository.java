@@ -1,9 +1,9 @@
 package com.main21.reserve.repository;
 
 import com.main21.reserve.dto.ReserveDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CustomReserveRepository {
-    List<ReserveDto.Response> getReservation(Long memberId);
+    Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable);
 }
