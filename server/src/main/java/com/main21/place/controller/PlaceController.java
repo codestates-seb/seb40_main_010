@@ -66,13 +66,13 @@ public class PlaceController {
 
         List<PlaceImageResponseDto> placeImageResponseDtoList = placeImageService.findAllByPlaceImage(placeId);
 
-        List<PlaceCategoryDto.Search> placeCategoryResponseDtoList = placeCategoryService.findByAllPlaceCategory(placeId);
+        List<String> categoryList = placeCategoryService.findByAllPlaceCategoryList(placeId);
 
         List<String> filePath = new ArrayList<>();
         for(PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
             filePath.add(placeImageResponseDto.getFilePath());
 
-        return placeService.searchPlace(placeId, filePath, placeCategoryResponseDtoList);
+        return placeService.searchPlace(placeId, filePath, categoryList);
     }
 
     /**

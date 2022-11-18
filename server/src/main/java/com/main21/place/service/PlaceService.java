@@ -139,12 +139,12 @@ public class PlaceService {
      * 장소 상세검색
      */
     @Transactional
-    public PlaceResponseDto searchPlace(Long placeId, List<String> filePath, List<PlaceCategoryDto.Search> placeCategoryResponseDtoList) { //List<Long> fileId) {
+    public PlaceResponseDto searchPlace(Long placeId, List<String> filePath, List<String> categoryList) {
 
         Place place = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
-        return new PlaceResponseDto(place, filePath, placeCategoryResponseDtoList);
+        return new PlaceResponseDto(place, filePath, categoryList);
     }
 
     /**

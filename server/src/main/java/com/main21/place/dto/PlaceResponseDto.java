@@ -9,7 +9,7 @@ import java.util.List;
 public class PlaceResponseDto {
     private Long placeId;
     private String title;
-    private List<PlaceCategoryDto.Search> categoryList;
+    private List<String> category;
     private int maxCapacity;
     private String detailInfo;
     private int charge;
@@ -17,10 +17,10 @@ public class PlaceResponseDto {
     private List<String> filePath;
 
 
-    public PlaceResponseDto(Place place, List<String> filePath, List<PlaceCategoryDto.Search> categoryList) {
+    public PlaceResponseDto(Place place, List<String> filePath, List<String> category) {
         this.placeId = place.getId();
         this.title = place.getTitle();
-        this.categoryList = categoryList;
+        this.category = category;
         this.maxCapacity = place.getMaxCapacity();
         this.detailInfo = place.getDetailInfo();
         this.charge = place.getCharge();
