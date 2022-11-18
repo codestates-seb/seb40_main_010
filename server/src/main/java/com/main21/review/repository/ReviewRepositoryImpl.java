@@ -1,10 +1,8 @@
 package com.main21.review.repository;
 
 
-import com.main21.member.entity.QMember;
 import com.main21.review.dto.QReviewDto_Response;
 import com.main21.review.dto.ReviewDto;
-import com.main21.review.entity.QReview;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,6 +13,7 @@ import java.util.List;
 
 import static com.main21.member.entity.QMember.*;
 import static com.main21.review.entity.QReview.*;
+import static com.querydsl.jpa.JPAExpressions.select;
 
 public class ReviewRepositoryImpl implements CustomReviewRepository {
 
@@ -24,8 +23,10 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+
+
     @Override
-    public List<ReviewDto.Response> getReviews(Long placeId) {
+    public Page<ReviewDto.Response> getReviews(Long placeId, Pageable pageable) {
         List<ReviewDto.Response> result = queryFactory
                 .select(new QReviewDto_Response(
                         review,
@@ -37,8 +38,12 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
                 .where(
                         review.placeId.eq(placeId)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
-        return result;
+
+        long total = result.size();
+        return new PageImpl<>(result, pageable, total);
     }
 
     @Override

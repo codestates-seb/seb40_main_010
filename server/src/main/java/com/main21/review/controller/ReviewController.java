@@ -72,8 +72,10 @@ public class ReviewController {
      * @author Quartz614
      */
     @GetMapping("/{place-id}")
-    public ResponseEntity getReserve(@PathVariable("place-id") Long placeId) {
-        return new ResponseEntity(reviewService.getPlaceReviews(placeId), HttpStatus.OK);
+    public ResponseEntity getReserve(@PathVariable("place-id") Long placeId, Pageable pageable) {
+        Page<ReviewDto.Response> getReview = reviewService.getPlaceReviews(placeId, pageable);
+        List<ReviewDto.Response> reviews = getReview.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(reviews, getReview), HttpStatus.OK);
     }
 
     /**
@@ -82,13 +84,13 @@ public class ReviewController {
      * @return
      * @author Quartz614
      */
-    @GetMapping
+
+    @GetMapping // 마이페이지에서 placeId, placeTitle 추가해야하고
     public ResponseEntity getReviewsMypage(@CookieValue(name = "memberId") Long memberId,
                                           Pageable pageable) {
         Page<ReviewDto.Response> getReview = reviewService.getReviewsMypage(memberId, pageable);
         List<ReviewDto.Response> reviews = getReview.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(reviews, getReview), HttpStatus.OK);
-
     }
 }
