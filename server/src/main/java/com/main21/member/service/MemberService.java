@@ -10,18 +10,16 @@ import com.main21.member.entity.Member;
 import com.main21.member.entity.MemberImage;
 import com.main21.member.repository.MemberImageRepository;
 import com.main21.member.repository.MemberRepository;
-import com.main21.place.entity.PlaceImage;
 import com.main21.security.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,8 +55,16 @@ public class MemberService {
         findMember.editMember(patch.getNickname(), patch.getMbti());
         memberRepository.save(findMember);
     }
-    public Member getMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() ->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+    public MemberDto.Info getMember(Long memberId) {
+        Member findMember = findVerifyMember(memberId);
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                //.profileImage(findMember.getMemberImage().getFilePath()) // 추후 수정
+                .nickname(findMember.getNickname())
+                .mbti(findMember.getMbti())
+                .build();
+
+        return memberInfo;
     }
 
     // 이미 존재하는 회원 파악
