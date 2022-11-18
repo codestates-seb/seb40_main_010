@@ -1,5 +1,6 @@
 package com.main21.reserve.controller;
 
+import com.main21.dto.MultiResponseDto;
 import com.main21.dto.SingleResponseDto;
 import com.main21.reserve.dto.PayApprovalDto;
 import com.main21.reserve.dto.ReserveDto;
@@ -7,6 +8,8 @@ import com.main21.reserve.response.Message;
 import com.main21.reserve.service.PaymentService;
 import com.main21.reserve.service.ReserveService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -149,9 +152,11 @@ public class ReserveController {
      * @author LeeGoh
      */
     @GetMapping("/reserve")
-    public ResponseEntity getReservations(@CookieValue(name = "memberId") Long memberId) {
-        List<ReserveDto.Response> reservations = reserveService.getReservation(memberId);
-        return ResponseEntity.ok(new SingleResponseDto<>(reservations));
+    public ResponseEntity getReservations(@CookieValue(name = "memberId") Long memberId,
+                                          Pageable pageable) {
+        Page<ReserveDto.Response> pageReservations = reserveService.getReservation(memberId, pageable);
+        List<ReserveDto.Response> reservations = pageReservations.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(reservations, pageReservations), HttpStatus.OK);
     }
 
 
