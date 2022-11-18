@@ -18,8 +18,8 @@ import MyPageCategoryList from './MyPageCategoryList';
 
 function MyPageComponent() {
   const [myPageCategory, setMyPageCategory] = useState('등록내역');
-  const [memberData, setMemberData] = useState('');
-  const [listData, setListData] = useState('');
+  const [memberData, setMemberData] = useState([]);
+  const [listData, setListData] = useState([]);
 
   const changeCategory = e => {
     setMyPageCategory(e.target.textContent);
@@ -185,7 +185,7 @@ const MyPageContentCategory = styled.div`
   flex-direction: row;
 `;
 
-const MyPageCategoryItem = styled.div`
+const MyPageCategoryItem = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -193,13 +193,22 @@ const MyPageCategoryItem = styled.div`
   font-size: 18px;
   font-weight: bold;
   border-bottom: 2px solid #ffffff;
-  margin: 16px 8px 16px 8px;
+  margin: 16px 0;
   color: #2b2b2b;
+  background-color: #ffffff;
+  border: none;
 
   & svg {
     color: #9a9a9a;
     pointer-events: none;
     margin-bottom: 8px;
+  }
+
+  :focus {
+    color: #89bbff;
+    & svg {
+      color: #89bbff;
+    }
   }
 
   :hover {
@@ -208,18 +217,30 @@ const MyPageCategoryItem = styled.div`
       color: #89bbff;
     }
   }
-
-  :active {
-    color: #89bbff;
-  }
 `;
 
 const MyPageCategoryItemTitle = styled.div`
   width: 680px;
   font-size: 18px;
   font-weight: bold;
+  margin-bottom: 12px;
 `;
 
-const MyPageCategoryItemList = styled.div``;
+const MyPageCategoryItemList = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 750px;
+  height: 400px;
+  overflow: auto;
+
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #b9b9b9;
+    border-radius: 25px;
+  }
+`;
 
 export default MyPageComponent;
