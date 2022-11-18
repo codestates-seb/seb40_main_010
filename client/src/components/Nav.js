@@ -1,28 +1,23 @@
 /*
-nav : 로그인 된 컴포넌트 완성
-검색 기능 카테고리 클릭 시 배열 형태로 input value는 스트링 형태로 api 요청 보낼까요??
-ex) search/inputvalue [1,2,3](중간에 띄어있는 형태 붙일 수 있음)
 
-추가할 사항 
 + 한글 마지막 글자가 중복되는 현상 한글 외에는 괜찮음 > keydown이벤트를 keypress로 변경하면서 수정됨 > 한글이 구성되는 시간이 걸려서 생기는 문제
-1. 체크박스 checked일때만 배열에 넣게하기 지금은 클릭 on off 중복으로 배열이 들어가는 상태 => 구현 완료 recoil로 카테고리 배열 상태 저장
-2. 로그인 상태에 다른 버튼 변화
+추가할 사항 
 3. ui 요소
 4. 완료시 console.log 없애기, 변수명 정리
+
+title 없을 때 전체 카테고리 클릭 시
+mypage 갔다가 nav 홈 로고 누르면 카테고리 요청이 그대로 유지되는 현상 > 속도 때문
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { SlHome } from 'react-icons/sl';
-import { Link } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import {
-  navSearchValue,
-  navSearchState,
-  navClickState,
-  navCategoryCheckState,
-} from '../atoms';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { BsFillPersonFill } from 'react-icons/bs';
+import axios from 'axios';
+import { navSearchValue, categoryFocus } from '../atoms';
 
 const NavContainer = styled.div`
   position: relative;
@@ -39,14 +34,18 @@ const NavBg = styled.div`
   right: 0;
   width: 100vw;
   height: 70px;
-  background-color: #89bbff;
+  background-color: ${props => props.navColor || '#89bbff'};
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  & > div {
+    margin-left: 136px;
+  }
   .NavLogo {
-    margin-right: 156px;
     font-size: 2rem;
-    margin-left: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     color: #2b2b2b;
     &:hover {
       cursor: pointer;
@@ -100,7 +99,6 @@ const ButtonContainer = styled.div`
   margin-right: 20px;
 `;
 
-// ToDo: hover 시 색 변환
 const NavButton = styled.button`
   width: 80px;
   margin: 10px 7px;
@@ -108,7 +106,7 @@ const NavButton = styled.button`
   border-radius: 20px;
   border: none;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  background-color: #ffda77;
+  background-color: ${props => props.buttonColor || '#ffda77'};
   font-size: 0.9rem;
   font-weight: 600;
   line-height: 20px;
@@ -128,99 +126,126 @@ const NavLogOutButton = styled(NavButton)`
   }
 `;
 
-const CATEGORY_LIST = [
-  { id: 0, data: '공유오피스' },
-  { id: 1, data: '캠핑' },
-  { id: 2, data: '바다근처' },
-  { id: 3, data: '짐보관' },
-  { id: 4, data: '파티룸' },
-  { id: 5, data: '게스트하우스' },
-  { id: 6, data: '호텔' },
-  { id: 7, data: '스터디룸' },
-  { id: 8, data: '계곡근처' },
-  { id: 9, data: '공연장' },
-];
+const MyPageDiv = styled.div`
+  background-color: aliceblue;
+  border-radius: 50px;
+`;
 
-// Todo: recoil사용, searchState 배열 초기화, 변수 이름
-function Nav() {
-  const [searchValue, setSearchValue] = useRecoilState(navSearchValue);
-  const [searchState, setSearchState] = useRecoilState(navSearchState);
-  const [isfocus, setIsFocus] = useRecoilState(navClickState);
-  const [checkedList, setCheckedList] = useRecoilState(navCategoryCheckState);
+function Nav({ navColor, buttonColor }) {
+  const [testSearchValue, setTestSearchValue] = useState('');
+  const setSearchValue = useSetRecoilState(navSearchValue);
+  const setFocusCategoryID = useSetRecoilState(categoryFocus);
 
-  const onCheckedElememt = (checked, item) => {
-    if (checked) {
-      setCheckedList([...checkedList, item]);
-    } else if (!checked) {
-      setCheckedList(checkedList.filter(el => el !== item));
-    }
-  };
-  console.log(checkedList);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  window.localStorage.setItem('Access_token', 'test');
+  // window.localStorage.removeItem('Access_token');
+  // window.sessionStorage.setItem('Access_token', 'test');
+
+  const isLogIn = window.localStorage.getItem('Access_token');
+
   const onChangeSearch = e => {
-    setSearchValue(e.target.value);
+    setTestSearchValue(e.target.value);
   };
   const onKeypress = e => {
     if (e.key === 'Enter') {
-      setSearchState([searchValue, checkedList]);
-      setSearchValue('');
-      setCheckedList([]);
+      setTestSearchValue('');
+      setSearchValue(testSearchValue.trim().replace(/ +(?= )/g, ''));
+      if (testSearchValue.trim()) {
+        axios
+          .get(
+            `{{BACKEND}}/search/${encodeURI(
+              testSearchValue.trim().replace(/ +(?= )/g, ''),
+            )}`,
+          )
+          .then(res => console.log(res))
+          .then(setFocusCategoryID('0'), navigate('/'));
+      }
     }
   };
   const onClickSearch = () => {
-    setSearchState([searchValue, checkedList]);
-    setSearchValue('');
-    setCheckedList([]);
+    setTestSearchValue('');
+    setSearchValue(testSearchValue.trim().replace(/ +(?= )/g, ''));
+    if (testSearchValue.trim()) {
+      axios
+        .get(
+          `{{BACKEND}}/search/${encodeURI(
+            testSearchValue.trim(' ').replace(/ +(?= )/g, ''),
+          )}`,
+        )
+        .then(res => console.log(res))
+        .then(setFocusCategoryID('0'), navigate('/'));
+    }
   };
 
-  const onClick = () => {
-    setIsFocus(true);
+  const onClickLogOutButton = () => {
+    window.localStorage.removeItem('Access_token');
   };
 
-  const result = [...searchState];
-  console.log(`[${result[1]}] ${result[0]}`);
-
+  const onClickHomeIcon = () => {
+    axios
+      .get('{{backend}}/')
+      .then(
+        res => console.log(res),
+        setFocusCategoryID('0'),
+        setSearchValue(''),
+      );
+    // .catch(err => console.log(err));
+  };
   return (
     <NavContainer>
-      <NavBg>
+      <NavBg navColor={navColor}>
         <Link to="/">
-          <SlHome className="NavLogo" />
+          <SlHome onClick={onClickHomeIcon} className="NavLogo" />
+          <div />
         </Link>
-        <div>
-          <SearchDiv>
-            <SearchInput
-              value={searchValue}
-              onChange={e => onChangeSearch(e)}
-              onKeyPress={onKeypress}
-              onClick={onClick}
-            />
-            <AiOutlineSearch onClick={onClickSearch} className="searchLogo" />
-          </SearchDiv>
-          {isfocus ? (
-            <div>
-              {CATEGORY_LIST.map(el => {
-                return (
-                  <label key={el.id} htmlFor={el.id}>
-                    <input
-                      type="checkbox"
-                      id={el.id}
-                      value={el.data}
-                      onChange={e => {
-                        onCheckedElememt(e.target.checked, e.target.value);
-                      }}
-                      checked={!!checkedList.includes(el.data)}
-                    />
-                    {el.data}
-                  </label>
-                );
-              })}
-            </div>
-          ) : null}
-        </div>
+        <SearchDiv>
+          <SearchInput
+            value={testSearchValue}
+            onChange={e => onChangeSearch(e)}
+            onKeyPress={onKeypress}
+          />
+          <AiOutlineSearch onClick={onClickSearch} className="searchLogo" />
+        </SearchDiv>
         <ButtonContainer>
-          <Link to="/register">
-            <NavButton>장소 등록</NavButton>
-          </Link>
-          <NavLogOutButton>Log out</NavLogOutButton>
+          {location.pathname === '/register' ||
+          location.pathname === '/login' ? null : (
+            <Link to={isLogIn ? '/register' : '/login'}>
+              <NavButton buttonColor={buttonColor}>
+                {isLogIn ? '장소 등록' : 'Log In'}
+              </NavButton>
+            </Link>
+          )}
+          {location.pathname === '/signup' ? null : (
+            <Link
+              to={
+                !isLogIn
+                  ? '/signup'
+                  : location.pathname === '/mypage'
+                  ? '/'
+                  : '/mypage'
+              }
+            >
+              <NavLogOutButton
+                onClick={
+                  location.pathname === '/mypage' && isLogIn
+                    ? onClickLogOutButton
+                    : null
+                }
+              >
+                {!isLogIn ? (
+                  'Sign Up'
+                ) : location.pathname === '/mypage' ? (
+                  'Log Out'
+                ) : (
+                  <MyPageDiv>
+                    <BsFillPersonFill />
+                  </MyPageDiv>
+                )}
+              </NavLogOutButton>
+            </Link>
+          )}
         </ButtonContainer>
       </NavBg>
     </NavContainer>

@@ -15,6 +15,7 @@ import {
   registerFormPreviewImage,
   registerFormImage,
 } from '../atoms';
+import Nav from '../components/Nav';
 
 function Register() {
   const [title, setTitle] = useRecoilState(registerFormTitle);
@@ -164,118 +165,122 @@ function Register() {
   };
 
   return (
-    <Container>
-      {/* <form> */}
-      <div className="register-container">
-        <div className="wrapper">
-          <div className="title">제목</div>
-          <Input onChange={handleTitle} />
-        </div>
-        <div className="wrapper">
-          <div className="title">카테고리</div>
-          <div className="category-wrapper">
-            {categories.map((category, index) => (
-              <div className="category">
-                <input
-                  type="checkbox"
-                  id={category.id}
-                  value={category.place}
-                  key={category.place}
-                  checked={isItemsClicked[index]}
-                  onChange={() => handleOnChange(index)}
-                />
-                <label
-                  htmlFor={category.id}
-                  className="label"
-                  key={category.id}
-                >
-                  {category.place}
-                </label>
-              </div>
-            ))}
+    <>
+      <Nav />
+      <Container>
+        {/* <form> */}
+        <div className="register-container">
+          <div className="wrapper">
+            <div className="title">제목</div>
+            <Input onChange={handleTitle} />
           </div>
-        </div>
-        <div className="wrapper">
-          <div className="title">최대 인원</div>
-          <div className="capa-wrapper">
-            <LeftIcon onClick={minusCapacity} />
-            <SmallInput
-              width="28px"
-              type="number"
-              onChange={handleMaxCapacity}
-              value={maxCapacity}
+          <div className="wrapper">
+            <div className="title">카테고리</div>
+            <div className="category-wrapper">
+              {categories.map((category, index) => (
+                <div className="category">
+                  <input
+                    type="checkbox"
+                    id={category.id}
+                    value={category.place}
+                    key={category.place}
+                    checked={isItemsClicked[index]}
+                    onChange={() => handleOnChange(index)}
+                  />
+                  <label
+                    htmlFor={category.id}
+                    className="label"
+                    key={category.id}
+                  >
+                    {category.place}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="wrapper">
+            <div className="title">최대 인원</div>
+            <div className="capa-wrapper">
+              <LeftIcon onClick={minusCapacity} />
+              <SmallInput
+                width="28px"
+                type="number"
+                onChange={handleMaxCapacity}
+                value={maxCapacity}
+                readOnly
+              />
+              <RightIcon onClick={plusCapacity} />
+            </div>
+          </div>
+          <div className="wrapper">
+            <div className="title">주소</div>
+            <Input
+              type="text"
+              onClick={() => postCode()}
+              value={address}
               readOnly
             />
-            <RightIcon onClick={plusCapacity} />
+            <div className="title detailed-address">상세주소</div>
+            <Input type="text" onChange={handleDedatiledAddress} />
           </div>
-        </div>
-        <div className="wrapper">
-          <div className="title">주소</div>
-          <Input
-            type="text"
-            onClick={() => postCode()}
-            value={address}
-            readOnly
-          />
-          <div className="title detailed-address">상세주소</div>
-          <Input type="text" onChange={handleDedatiledAddress} />
-        </div>
-        <div className="wrapper">
-          <div className="title">상세정보</div>
-          <Textarea type="text" onChange={handleDedatiledInformation} />
-        </div>
-        <div className="wrapper">
-          <div className="title">사진</div>
-          <div className="capa-wrapper">
-            <input
-              type="file"
-              accept="image/*"
-              style={{ display: 'none' }}
-              ref={hiddenFileInput}
-              onChange={handleUploadImage}
-              multiple
-            />
+          <div className="wrapper">
+            <div className="title">상세정보</div>
+            <Textarea type="text" onChange={handleDedatiledInformation} />
+          </div>
+          <div className="wrapper">
+            <div className="title">사진</div>
+            <div className="capa-wrapper">
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                ref={hiddenFileInput}
+                onChange={handleUploadImage}
+                multiple
+              />
+              <button
+                className="image-upload-button"
+                label="이미지 업로드"
+                type="button"
+                onClick={handleImageButtonClick}
+              >
+                사진 업로드하기
+              </button>
+            </div>
+            <div className="preview-image-wrapper">
+              {showImages.map((image, id) => (
+                <img key={`${image}`} src={image} alt={`${image} - ${id}`} />
+              ))}
+            </div>
+          </div>
+          <div className="wrapper">
+            <div className="title">금액 설정</div>
+            <div className="set-charge">
+              <div className="hour-description">1시간 / </div>
+              <SmallInput type="number" width="100px" onChange={handleCharge} />
+              <div className="hour-description">원</div>
+            </div>
+          </div>
+          <div className="btn-wrapper">
             <button
-              className="image-upload-button"
-              label="이미지 업로드"
-              type="button"
-              onClick={handleImageButtonClick}
+              type="submit"
+              className="form-register-button"
+              onClick={handleSubmit}
             >
-              사진 업로드하기
+              등록하기
             </button>
           </div>
-          <div className="preview-image-wrapper">
-            {showImages.map((image, id) => (
-              <img key={`${image}`} src={image} alt={`${image} - ${id}`} />
-            ))}
-          </div>
         </div>
-        <div className="wrapper">
-          <div className="title">금액 설정</div>
-          <div className="set-charge">
-            <div className="hour-description">1시간 / </div>
-            <SmallInput type="number" width="100px" onChange={handleCharge} />
-            <div className="hour-description">원</div>
-          </div>
-        </div>
-        <div className="btn-wrapper">
-          <button
-            type="submit"
-            className="form-register-button"
-            onClick={handleSubmit}
-          >
-            등록하기
-          </button>
-        </div>
-      </div>
-      {/* </form> */}
-    </Container>
+        {/* </form> */}
+      </Container>
+    </>
   );
 }
 
 export default Register;
 
 const Container = styled.div`
+  margin-top: 70px;
   width: 100vw;
   height: fit-content;
   background-color: #e5f0ff;

@@ -50,19 +50,9 @@ export const navSearchValue = atom({
   default: '',
 });
 
-export const navSearchState = atom({
-  key: 'navSearchState',
-  default: [],
-});
-
-export const navClickState = atom({
-  key: 'navClickState',
-  default: false,
-});
-
-export const navCategoryCheckState = atom({
-  key: 'navCategoryCheckState',
-  default: [],
+export const categoryFocus = atom({
+  key: 'categoryFocus',
+  default: '0',
 });
 
 export const reservationStartDate = atom({

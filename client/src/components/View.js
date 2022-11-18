@@ -7,7 +7,7 @@ import Location from './Map';
 const TotalContainer = styled.div`
   margin-top: 80px;
   margin: auto;
-  width: 1200px;
+  width: 900px;
   /* border: 1px solid teal; */
   border-bottom: 2px solid #89bbff;
   margin-bottom: 10px;

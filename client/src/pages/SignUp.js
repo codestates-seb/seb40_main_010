@@ -3,16 +3,20 @@ import styled from 'styled-components';
 import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import Nav from '../components/Nav';
 
 const Container = styled.div`
+  margin-top: 70px;
   width: 100vw;
   height: 100vh;
   background-color: #96c2ff;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
 
   .signup-container {
+    position: sticky;
+    top: 20%;
     width: 700px;
     height: flex;
     padding: 60px 0px;
@@ -157,6 +161,7 @@ function SignUp() {
 
   return (
     <Container>
+      <Nav navColor="#FFDA77" buttonColor="#89BBFF" />
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="signup-container">
           <div className="wrapper">
