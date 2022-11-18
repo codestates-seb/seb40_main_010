@@ -11,7 +11,7 @@ public class PayConstants {
     public static final String TAX_FREE_AMOUNT = "tax_free_amount";
     public static final String CID = "cid";
     public static final String TID = "tid";
-    public static final String PG_TOKEN = "tid";
+    public static final String PG_TOKEN = "pg_token";
     public static final String APPROVAL_URL = "approval_url";
     public static final String CANCEL_URL = "cancel_url";
     public static final String CANCEL_AMOUNT = "cancel_amount";
