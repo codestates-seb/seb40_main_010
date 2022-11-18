@@ -21,6 +21,12 @@ public class ReserveRepositoryImpl implements CustomReserveRepository{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 마이페이지 예약 내역 조회 Query
+     * @param memberId
+     * @return
+     * @author LeeGoh
+     */
     @Override
     public List<ReserveDto.Response> getReservation(Long memberId) {
         List<ReserveDto.Response> results = queryFactory
@@ -31,6 +37,7 @@ public class ReserveRepositoryImpl implements CustomReserveRepository{
                 .from(reserve)
                 .leftJoin(place).on(reserve.placeId.eq(place.id))
                 .where(reserve.memberId.eq(memberId))
+                .orderBy(reserve.id.desc())
                 .fetch();
 
         return results;
