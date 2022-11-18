@@ -1,14 +1,16 @@
 /*
 1. 카테고리 누르면 id에 따라 api 요청이 가도록 구현 > 실제 api 요청이 가기 때문에 주석처리
 2. 분류명 '전체' 추가, 고정 스타일로 구현 (main에서 useEffect로 전체조회로 요청한다고 생각해서 카테고리 컴포넌트에서는 클릭 시 api요청이 가게 구현)
-3. focus된 id가 전역 상태로 관리될 필요가 없다 생각하여 useState로 관리
-4. 카테고리를 배열로 관리하면서 react-icons 모듈 사용이 어려워 index.html에 cdn fontawesome 사용
-5. icon 클릭시 api 요청 2번 감(div-글자는 1번만 감) > z-index 조절하면 되기는 하는데,,, 
+3. 카테고리를 배열로 관리하면서 react-icons 모듈 사용이 어려워 index.html에 cdn fontawesome 사용
+
+아이콘과 버튼태그에 id중복 > 아이콘을 클릭하든 버튼 클릭하든 엔드포인트에 id로 api 요청이 가서 둘 다 값이 필요한 상황
 */
 
-// import axios from 'axios';
-import React, { useState } from 'react';
+import axios from 'axios';
+import React from 'react';
 import styled from 'styled-components';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { navSearchValue, categoryFocus } from '../atoms';
 
 const categories = [
   { id: 0, name: '전체', icon: 'fa-solid fa-house' },
@@ -25,6 +27,7 @@ const categories = [
 ];
 
 const CategoryContainer = styled.div`
+  margin-top: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +51,6 @@ const CategoryButton = styled.button`
   > i {
     font-size: 1.5rem;
     padding: 5px;
-    z-index: -1;
   }
 
   &:hover {
@@ -62,17 +64,35 @@ const CategoryButton = styled.button`
 
 // ToDo : axios 사용해서 데이터 받아서 console에 띄워주는걸 주석표시 > recoil로 받아온 데이터를 저장하는 방법 고려
 function Category() {
-  const [focusCategoryID, setFocusCategoryID] = useState([0]);
+  const [focusCategoryID, setFocusCategoryID] = useRecoilState(categoryFocus);
+  const searchState = useRecoilValue(navSearchValue);
+
   const onClickCategoryButton = event => {
-    setFocusCategoryID([event.target.id]);
-    // if (focusCategoryID[0] === 0) {
-    //   axios.get(`{{BACKEND}}/`).then(res => console.log(res));
-    // } else {
-    //   axios
-    //     .get(`{{BACKEND}}/category/${event.target.id}`)
-    //     .then(res => console.log(res));
-    // }
-    // console.log(event.target.id);
+    // console.log(searchState);
+    // console.log(decodeURI(searchState));
+    setFocusCategoryID(event.target.id);
+    if (event.target.id === '0') {
+      if (searchState) {
+        axios
+          .get(`{{BACKEND}}/search/${encodeURI(searchState)}`)
+          .then(res => console.log(res));
+      } else {
+        // axios.get(`{{BACKEND}}/search`).then(res => console.log(res));
+        axios.get(`{{BACKEND}}/`).then(res => console.log(res));
+      }
+    } else if (searchState) {
+      axios
+        .get(
+          `{{BACKEND}}/search/${encodeURI(searchState)}/category/${
+            event.target.id
+          }`,
+        )
+        .then(res => console.log(res));
+    } else {
+      axios
+        .get(`{{BACKEND}}/search/category/${event.target.id}`)
+        .then(res => console.log(res));
+    }
     // console.log(event.target.id);
   };
 
@@ -85,16 +105,9 @@ function Category() {
             key={category.id}
             id={category.id}
             onClick={onClickCategoryButton}
-            className={
-              Number(focusCategoryID[0]) === category.id ? 'focus' : null
-            }
+            className={Number(focusCategoryID) === category.id ? 'focus' : null}
           >
-            <i
-              role="presentation"
-              id={category.id}
-              className={category.icon}
-              onClick={e => onClickCategoryButton(e)}
-            />
+            <i id={category.id} className={category.icon} />
             {category.name}
           </CategoryButton>
         );

@@ -17,5 +17,6 @@ module.exports = {
     'react/prop-types': 'off',
     'import/prefer-default-export': 'off',
     'no-alert': 'off',
+    'no-nested-ternary': 0,
   },
 };
