@@ -6,6 +6,7 @@ import com.main21.member.entity.Member;
 import com.main21.member.repository.MemberRepository;
 import com.main21.place.entity.Place;
 import com.main21.place.repository.PlaceRepository;
+import com.main21.reserve.dto.PayApprovalDto;
 import com.main21.reserve.dto.PayReadyDto;
 import com.main21.reserve.dto.ReservationInfo;
 import com.main21.reserve.entity.Reserve;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
@@ -84,19 +86,25 @@ public class PaymentService {
      * @return url(결제 페이지)
      * @author mozzi327
      */
+    @Transactional
     public String getKaKaoPayUrl(Long reserveId,
                                  Long memberId,
                                  String requestUrl) {
+
+         /*
+            Todo : 예약 가능한지 확인하는 이벤트 처리
+
+        */
 
         // 헤더에 정보 추가
         HttpHeaders headers = new HttpHeaders();
         setHeaders(headers);
 
-        // 사용자, 예약, 호싙ㅇ 정보 조회
+        // 사용자, 예약, 호스트 정보 조회
         Member findMember = ifExistsReturnMember(memberId);
         Reserve findReserve = ifExistsReturnReserve(reserveId);
         Place findPlace = ifExistsReturnPlace(findReserve.getPlaceId());
-        orderId = findMember.getId() + " / " + findPlace.getTitle();
+        orderId = findReserve.getId() + "/" + findMember.getId() + "/" + findPlace.getTitle();
         userId = findMember.getId().toString();
         itemName = findPlace.getTitle();
         totalAmount = findReserve.getTotalCharge();
@@ -119,6 +127,83 @@ public class PaymentService {
 
         return getPayUrl(headers, params);
     }
+
+
+    /**
+     * 카카오페이 URL 생성 결과 리턴 메서드
+     * @param headers http 헤더
+     * @param params params Map
+     * @return payReadyDto.getNextRedirectPcUrl() or null
+     * @author mozzi327
+     */
+    private String getPayUrl(HttpHeaders headers,
+                             MultiValueMap<String, String> params) {
+        HttpEntity<MultiValueMap<String, String >> body = new HttpEntity<>(params, headers);
+
+        try {
+            payReadyDto = restTemplate.postForObject(host + kakaoPayReady,
+                    body, PayReadyDto.class);
+
+            return payReadyDto != null ? payReadyDto.getNextRedirectPcUrl() : null;
+        } catch (RestClientException e) {
+            log.error(e.getMessage());
+        }
+        return null;
+    }
+
+
+    /**
+     * 예약 프로세스 3 - 결제 완료 시 결제 결과 반환 메서드
+     * @param pgToken Payment Gateway Token
+     * @return PayApprovalDto
+     * @author mozzi327
+     */
+    @Transactional
+    public PayApprovalDto getApprovedKaKaoPayInfo(String pgToken) {
+        HttpHeaders headers = new HttpHeaders();
+        setHeaders(headers);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add(CID, testCid);
+        params.add(TID, payReadyDto.getTid());
+        params.add(PARTNER_ORDER_ID, orderId);
+        params.add(PARTNER_USER_ID, userId);
+        params.add(PG_TOKEN, pgToken);
+        params.add(TOTAL_AMOUNT, String.valueOf(totalAmount));
+
+        HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<>(params, headers);
+
+        PayApprovalDto approvalDto = restTemplate
+                .postForObject(host + kakaoPayApprove, body, PayApprovalDto.class);
+
+        // 결제 실패 시 발생
+        if (approvalDto == null) return null;
+
+        // 예약 상태 변경 및 DTO에 메시지를 담는 과정
+        String[] orderInfoList = parseOrderInfo(orderId);
+        String reserveId = orderInfoList[1];
+
+        approvalDto.setOrderStatus(ORDER_APPROVED);
+        Reserve findReserve = ifExistsReturnReserve(Long.valueOf(reserveId));
+        findReserve.setStatus(Reserve.ReserveStatus.PAY_SUCCESS);
+        reserveRepository.save(findReserve);
+
+        try {
+            return approvalDto;
+        } catch (RestClientException e) {
+            log.error(e.getMessage());
+        }
+
+        return null;
+    }
+
+
+
+
+
+
+
+    /* ------------------------------------ Common Method --------------------------------------*/
 
 
     /**
@@ -152,25 +237,13 @@ public class PaymentService {
 
 
     /**
-     * 카카오페이 URL 생성 결과 리턴 메서드
-     * @param headers http 헤더
-     * @param params params Map
-     * @return payReadyDto.getNextRedirectPcUrl() or null
+     * OrderId를 파싱하는 메서드
+     * @param orderId 카카오 주문 정보 식별자
+     * @return String[]
      * @author mozzi327
      */
-    private String getPayUrl(HttpHeaders headers,
-                             MultiValueMap<String, String> params) {
-        HttpEntity<MultiValueMap<String, String >> body = new HttpEntity<>(params, headers);
-
-        try {
-            payReadyDto = restTemplate.postForObject(host + kakaoPayReady,
-                    body, PayReadyDto.class);
-
-            return payReadyDto != null ? payReadyDto.getNextRedirectPcUrl() : null;
-        } catch (RestClientException e) {
-            log.error(e.getMessage());
-        }
-        return null;
+    private String[] parseOrderInfo(String orderId) {
+        return orderId.split("/");
     }
 
 

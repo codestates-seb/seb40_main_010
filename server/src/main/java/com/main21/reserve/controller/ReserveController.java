@@ -1,13 +1,14 @@
 package com.main21.reserve.controller;
 
 import com.main21.dto.SingleResponseDto;
-import com.main21.reserve.dto.ReservationInfo;
+import com.main21.reserve.dto.PayApprovalDto;
 import com.main21.reserve.dto.ReserveDto;
 import com.main21.reserve.response.Message;
 import com.main21.reserve.service.PaymentService;
 import com.main21.reserve.service.ReserveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,9 @@ public class ReserveController {
 
     /**
      * 예약 프로세스 1 - 예약 등록 컨트롤러 메서드
-     * @param placeId 장소 식별자
-     * @param post 예약 등록 정보
+     *
+     * @param placeId  장소 식별자
+     * @param post     예약 등록 정보
      * @param memberId 사용자 식별자
      * @return ResonseEntity
      * @author LeeGoh
@@ -42,9 +44,10 @@ public class ReserveController {
 
     /**
      * 예약 프로세스 2 - 사용자 결제 화면 전송 컨트롤러 메서드
-     * @param reservationInfo 예약 정보
-     * @param memberId 사용자 식별자
-     * @param req 요청
+     *
+     * @param reserveId 예약 식별자
+     * @param memberId  사용자 식별자
+     * @param req       요청
      * @return Message
      * @author mozzi327
      */
@@ -57,20 +60,46 @@ public class ReserveController {
                 .replace(req.getRequestURI(), "");
         String url = paymentService.getKaKaoPayUrl(reserveId, memberId, requestUrl);
 
-        if (url == null) {
-            getFailedPayMessage();
-        }
+        if (url == null) getFailedPayMessage();
 
-        return ResponseEntity.ok().body(
-                Message.builder()
-                        .data(url)
-                        .message(PAY_URI_MSG)
-                        .build());
+        return ResponseEntity
+                .ok()
+                .body(
+                        Message.builder()
+                                .data(url)
+                                .message(PAY_URI_MSG)
+                                .build());
     }
 
 
     /**
-     * Url 요청 시 리턴되는 Url이 없을 때 발생하는 이벤트 메서드
+     * 예약 프로세스 3 - 결제 승인 시 발생되는 컨트롤러 메서드
+     *
+     * @param pgToken Payment Gateway Token
+     * @return PayApprovalDto
+     * @author mozzi327
+     */
+    @GetMapping("/api/order/completed")
+    public ResponseEntity<Message> paySuccessAction(@RequestParam("pg_token") String pgToken) {
+        PayApprovalDto payInfo = paymentService.getApprovedKaKaoPayInfo(pgToken);
+
+        if (payInfo == null) getFailedPayMessage();
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        Message.builder()
+                                .data(payInfo)
+                                .message(INFO_URI_MSG)
+                                .build()
+                );
+    }
+
+
+    /**
+     * URL 요청 시 리턴되는 URL이 없을 때 발생하는 이벤트 메서드
+     *
      * @return ResponseEntity
      * @author mozzi327
      */
@@ -94,17 +123,12 @@ public class ReserveController {
     /* ------------------------------------ 일단 예외 -------------------------------------*/
 
 
-
-
-
-
-
-
     /**
      * 예약 수정 컨트롤러 메서드
+     *
      * @param reserveId 예약 식별자
-     * @param patch 예약 수정 정보
-     * @param memberId 사용자 식별자
+     * @param patch     예약 수정 정보
+     * @param memberId  사용자 식별자
      * @return ResponseEntity
      * @author Quartz614
      */
@@ -119,6 +143,7 @@ public class ReserveController {
 
     /**
      * 사용자 예약 내역 조회 컨트롤러 메서드
+     *
      * @param memberId 사용자 식별자
      * @return ResponseEntity
      * @author LeeGoh
@@ -132,6 +157,7 @@ public class ReserveController {
 
     /**
      * 예약 내역 삭제 컨트롤러 메서드
+     *
      * @param reserveId 예약 식별자
      * @return ResponseEntity
      * @author LeeGoh
