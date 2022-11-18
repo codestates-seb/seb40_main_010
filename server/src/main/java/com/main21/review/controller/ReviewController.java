@@ -73,7 +73,9 @@ public class ReviewController {
      */
     @GetMapping("/{place-id}")
     public ResponseEntity getReserve(@PathVariable("place-id") Long placeId, Pageable pageable) {
-        return new ResponseEntity(reviewService.getPlaceReviews(placeId, pageable), HttpStatus.OK);
+        Page<ReviewDto.Response> getReview = reviewService.getPlaceReviews(placeId, pageable);
+        List<ReviewDto.Response> reviews = getReview.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(reviews, getReview), HttpStatus.OK);
     }
 
     /**
