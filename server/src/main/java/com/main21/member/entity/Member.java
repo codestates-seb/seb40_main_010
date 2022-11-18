@@ -88,4 +88,9 @@ public class Member extends Auditable {
         this.nickname = nickname;
         this.mbti = mbti;
     }
+    public void getMember(String profileImage, String nickname, String mbti) {
+        this.profileImage = profileImage;
+        this.nickname = nickname;
+        this.mbti = mbti;
+    }
 }

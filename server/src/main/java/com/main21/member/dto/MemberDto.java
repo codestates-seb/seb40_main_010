@@ -1,6 +1,7 @@
 package com.main21.member.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 public class MemberDto {
@@ -24,6 +25,23 @@ public class MemberDto {
     public static class Patch {
         private String nickname;
         private String mbti;
+    }
+
+    @Getter
+    public static class Info {
+        private String profileImage;
+
+        private String nickname;
+
+        private String mbti;
+
+
+        @Builder
+        public Info(String profileImage, String nickname, String mbti) {
+            this.profileImage = profileImage;
+            this.nickname = nickname;
+            this.mbti = mbti;
+        }
     }
 
 }
