@@ -12,6 +12,7 @@ const chargeComponent = (listData, type) => {
   }
   if (type === 'reservation') {
     return <PlaceCharge>{listData.totalCharge / 1000},000원</PlaceCharge>;
+    // 시간 계산법 천 단위로 나뉘도록 바꾸기
   }
   return <PlaceCharge>{listData.charge / 1000},000원</PlaceCharge>;
 };

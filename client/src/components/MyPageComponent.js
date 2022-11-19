@@ -88,6 +88,7 @@ function MyPageComponent() {
     <MyPageComponentContainer>
       <MyProfileImage src={memberData.profileImage} />
       <MyNickName>{memberData.nickname}</MyNickName>
+      {/* // 수정 누르면 input창이 보이게 프로필 이미지도 */}
       <MyMBTI>{memberData.mbti}</MyMBTI>
       <MyPageContentCategory>
         <MyPageCategoryItem
