@@ -212,19 +212,39 @@ function MyPageComponent() {
       <MyPageCategoryItemList>
         {myPageCategory === '등록내역' &&
           listData.map(el => {
-            return <MyPageCategoryList listData={el} type="registration" />;
+            return (
+              <MyPageCategoryList
+                listData={el}
+                key={el.id}
+                type="registration"
+              />
+            );
           })}
         {myPageCategory === '예약내역' &&
           listData.map(el => {
-            return <MyPageCategoryList listData={el} type="reservation" />;
+            return (
+              <MyPageCategoryList
+                listData={el}
+                key={el.reserveId}
+                type="reservation"
+              />
+            );
           })}
         {myPageCategory === '관심장소' &&
           listData.map(el => {
-            return <MyPageCategoryList listData={el} type="bookmark" />;
+            return (
+              <MyPageCategoryList
+                listData={el}
+                key={el.bookmarkId}
+                type="bookmark"
+              />
+            );
           })}
         {myPageCategory === '리뷰내역' &&
           listData.map(el => {
-            return <MyPageCategoryList listData={el} type="reviews" />;
+            return (
+              <MyPageCategoryList listData={el} key={el.id} type="reviews" />
+            );
           })}
       </MyPageCategoryItemList>
     </MyPageComponentContainer>
