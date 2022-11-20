@@ -1,11 +1,9 @@
 package com.main21.reserve.controller;
 
 import com.main21.dto.MultiResponseDto;
-import com.main21.dto.SingleResponseDto;
 import com.main21.reserve.dto.PayApprovalDto;
 import com.main21.reserve.dto.ReserveDto;
 import com.main21.reserve.response.Message;
-import com.main21.reserve.service.PaymentService;
 import com.main21.reserve.service.ReserveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +22,6 @@ import static com.main21.reserve.utils.ReserveConstants.*;
 @RequiredArgsConstructor
 public class ReserveController {
     private final ReserveService reserveService;
-    private final PaymentService paymentService;
 
 
     /**
@@ -61,7 +58,7 @@ public class ReserveController {
         String requestUrl = req.getRequestURL()
                 .toString()
                 .replace(req.getRequestURI(), "");
-        String url = paymentService.getKaKaoPayUrl(reserveId, memberId, requestUrl);
+        String url = reserveService.getKaKaoPayUrl(reserveId, memberId, requestUrl);
 
         if (url == null) getFailedPayMessage();
 
@@ -84,7 +81,7 @@ public class ReserveController {
      */
     @GetMapping("/api/order/completed")
     public ResponseEntity<Message> paySuccessAction(@RequestParam("pg_token") String pgToken) {
-        PayApprovalDto payInfo = paymentService.getApprovedKaKaoPayInfo(pgToken);
+        PayApprovalDto payInfo = reserveService.getApprovedKaKaoPayInfo(pgToken);
 
         if (payInfo == null) getFailedPayMessage();
 
@@ -97,6 +94,26 @@ public class ReserveController {
                                 .message(INFO_URI_MSG)
                                 .build()
                 );
+    }
+
+
+    /**
+     * 예약 프로세스 4 - 결제 취소 시 발생되는 컨트롤러 메서드
+     *
+     * @return ResponseEntity
+     * @author mozzi327
+     */
+    @GetMapping("/api/order/cancel")
+    public ResponseEntity<String> payCancelAction() {
+        reserveService.setCanceledStatus();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(CANCELED_PAY_MESSAGE);
+    }
+
+
+    @GetMapping("/api/order/fail")
+    public ResponseEntity<String> payFailedAction() {
+        reserveService.setFailedStatus();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(FAILED_PAY_MESSAGE);
     }
 
 

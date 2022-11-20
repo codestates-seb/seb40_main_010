@@ -6,15 +6,13 @@ import com.main21.member.entity.Member;
 import com.main21.member.entity.Token;
 import com.main21.member.repository.MemberRepository;
 import com.main21.member.repository.TokenRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +24,7 @@ import java.util.*;
 
 import static com.main21.security.utils.AuthConstants.*;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtils {
@@ -42,7 +41,7 @@ public class JwtTokenUtils {
     @Value("${jwt.refresh-token-expiration-minutes}")
     private int refreshTokenExpirationMinutes;
 
-//    private final RedisUtils redisUtils;
+    //    private final RedisUtils redisUtils;
     private final MemberRepository memberRepository;
     private final TokenRepository tokenRepository;
 
@@ -61,6 +60,7 @@ public class JwtTokenUtils {
 
     /**
      * 엑세스 토큰을 발급하는 메서드
+     *
      * @param member 사용자 정보
      * @return String(액세스 토큰)
      * @author mozzi327
@@ -151,6 +151,20 @@ public class JwtTokenUtils {
     }
 
 
+    public Long getExpiration(String accessToken) {
+        // accessToken 남은 유효시간
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(getKeyFromBase64EncodedKey(getSecretKey()))
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .getExpiration();
+        // 현재 시간
+        long now = new Date().getTime();
+        return (expiration.getTime() - now);
+    }
+
+
     /**
      * base64로 인코딩된 키를 Key 객체로 만들어 반환하는 메서드
      *
@@ -211,5 +225,32 @@ public class JwtTokenUtils {
                 .memberEmail(email)
                 .refreshToken(refreshToken)
                 .build());
+    }
+
+
+    /**
+     * 토큰 정보를 검증하는 메서드
+     *
+     * @param token 토큰 정보
+     * @return boolean
+     * @author mozzi327
+     */
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey)))
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("Invalid JWT Token", e);
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT Token", e);
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT Token", e);
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims string is empty.", e);
+        }
+        return false;
     }
 }

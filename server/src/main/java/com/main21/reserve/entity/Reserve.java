@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 @Entity
 @Getter
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reserve {
     @Id
@@ -37,7 +39,6 @@ public class Reserve {
 
     @Enumerated(value = EnumType.STRING)
     private ReserveStatus status = ReserveStatus.PAY_IN_PROGRESS;
-
 
     public void addPlaceId(Long placeId) {
         this.placeId = placeId;
@@ -75,10 +76,12 @@ public class Reserve {
 
 
     public enum ReserveStatus {
-        PAY_IN_PROGRESS(1, "결제 진행중"),
+        PAY_IN_PROGRESS(1, "결제 대기중"),
         PAY_SUCCESS(2, "결제 완료"),
         PAY_FAILED(3, "결제 실패"),
-        RESERVATION_CANCELED(4, "예약 취소");
+        PAY_CANCELED(4, "결제 취소"),
+        RESERVATION_CANCELED(5, "예약 취소"),
+        CHECKOUT(6, "체크아웃");
 
         @Getter
         private int stepNumber;

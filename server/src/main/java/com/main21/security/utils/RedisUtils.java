@@ -52,11 +52,10 @@ public class RedisUtils {
     /**
      * redis 로그아웃 처리를 위한 블랙 리스트 메서드
      * @param key REFRESH_TOKEN
-     * @param o
-     * @param minutes
+     * @param setTime 만료시간(분)
+     * @author mozzi327
      */
-    public void setBlackList(String key, Object o, int minutes) {
-        redisBlackListTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(o.getClass()));
-        redisBlackListTemplate.opsForValue().set(key, o, minutes, TimeUnit.MINUTES);
+    public void setBlackList(String key, Long setTime) {
+        redisBlackListTemplate.opsForValue().set(key, "Logout", setTime, TimeUnit.MINUTES);
     }
 }
