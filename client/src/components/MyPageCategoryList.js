@@ -139,7 +139,9 @@ function MyPageCategoryList({ listData, type }) {
           )}
           {type === 'reviews' && (
             <>
-              <CategoryButton>수정하기</CategoryButton>
+              <CategoryButton onClick={showReviewModal}>
+                수정하기
+              </CategoryButton>
               <CategoryButton onClick={showModal}>삭제하기</CategoryButton>
               {modalOpen && (
                 <Modal
@@ -163,6 +165,8 @@ function MyPageCategoryList({ listData, type }) {
           setReviewModalOpen={setReviewModalOpen}
           placeName={listData.title}
           placeImageURL={listData.image}
+          reviewComment={listData.comment}
+          reviewScore={listData.score}
         />
       )}
     </CategoryItemList>

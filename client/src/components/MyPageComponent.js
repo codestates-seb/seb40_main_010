@@ -9,9 +9,13 @@ import Select from 'react-select';
 import MyPageCategoryList from './MyPageCategoryList';
 
 // 할 것
-// 모달창들 버튼 api모두 연결하기
-// 모달창 api통신 후 navigate
-// 닉네임이나 mbti 이미지 등 수정하기 만들기
+// 1. 프로필사진 업로드
+// 2. 카테고리 클릭시 색 유지되게 (후순위)
+// 3. 글 수정 기능
+// 4. 리뷰 수정 기능
+// 5. 예약내역 날짜 기준 취소하기/리뷰쓰기 구분 (후순위)
+// 6. 북마크 클릭시 아이콘 상태 관리
+// 7. 내역 클릭시 해당 글로 이동
 
 function MyPageComponent() {
   const [myPageCategory, setMyPageCategory] = useState('등록내역');
@@ -79,7 +83,6 @@ function MyPageComponent() {
       setUserNickName(res.data[0].nickname);
       setUserMBTI(res.data[0].mbti);
     });
-    // .then(res => setMemberData(...res.data));
   };
 
   const editStatusChange = () => {
@@ -163,7 +166,6 @@ function MyPageComponent() {
           options={mbtiList}
           placeholder={userMBTI}
           onChange={e => {
-            e.stopPropagation();
             setUserMBTI(e.value);
           }}
         />
