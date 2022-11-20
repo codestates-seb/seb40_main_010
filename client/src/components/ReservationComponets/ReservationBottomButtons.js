@@ -53,6 +53,8 @@ const Container = styled.div`
 
     :active {
       box-shadow: none;
+      position: relative;
+      box-shadow: rgba(0, 0, 0, 0.35) 1px 1px 1px;
     }
   }
 `;

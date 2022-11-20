@@ -6,10 +6,10 @@ import {
   reservationStartDate,
   reservationEndDate,
   reservationMaxCapacity,
-} from '../atoms';
-import ReservationCalander from './ReservvationComponets/ReservationCalander';
-import ReservationCapacityHandler from './ReservvationComponets/ReservationCapacityHandler';
-import ReservationBottomButtons from './ReservvationComponets/ReservationBottomButtons';
+} from '../../atoms';
+import ReservationCalander from './ReservationCalander';
+import ReservationCapacityHandler from './ReservationCapacityHandler';
+import ReservationBottomButtons from './ReservationBottomButtons';
 
 // TODO : 시간이 콘솔로는 한국 표준시, 서버에 보낼 때는 UTC로 바뀌는 오류 발생
 function ReservationAsideBar() {
@@ -147,6 +147,8 @@ const Container = styled.div`
 
     :active {
       box-shadow: none;
+      position: relative;
+      box-shadow: rgba(0, 0, 0, 0.35) 1px 1px 1px;
     }
 
     :disabled {
