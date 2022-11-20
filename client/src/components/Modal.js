@@ -21,7 +21,12 @@ function Modal({
       <ModalContainer>
         <ModalText>{modalText}</ModalText>
         <ButtonContainer>
-          <ModalButton className="cancel" onClick={modalAction}>
+          <ModalButton
+            className="cancel"
+            onClick={() => {
+              modalAction();
+            }}
+          >
             {modalActionText}
           </ModalButton>
           <ModalButton onClick={showModal}>돌아가기</ModalButton>
