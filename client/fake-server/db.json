@@ -1,83 +1,95 @@
 {
+  "member": [
+    {
+      "profileImage": "https://picsum.photos/200",
+      "nickname": "홍길동",
+      "mbti": "INFJ"
+    }
+  ],
   "place": [
     {
       "id": 1,
-      "title": "첫 메모 제목",
-      "category": [],
-      "maxCapacity": 1,
-      "address": "안녕",
-      "detailedAddress": "55호",
-      "detailInfo": "상세정보",
-      "image": [],
-      "charge": 23000
+      "title": "인테리어가 아름다운 리빙형 대관 공간",
+      "address": "경기도 남양주시",
+      "image": "https://picsum.photos/201",
+      "charge": 30000,
+      "score": 4.8
+    },
+    {
+      "id": 2,
+      "title": "바다가 보이는 놀기좋은 곳",
+      "address": "강원도 속초시",
+      "image": "https://picsum.photos/202",
+      "charge": 45000,
+      "score": 3.2
+    },
+    {
+      "id": 3,
+      "title": "남산이 보이는 아늑한 숙소",
+      "address": "서울특별시 용산구",
+      "image": "https://picsum.photos/203",
+      "charge": 106000,
+      "score": 2.7
     }
   ],
   "reserve": [
     {
+      "reserveId": 1,
+      "placeId": 1,
+      "title": "인테리어가 아름다운 리빙형 대관 공간",
+      "address": "경기도 남양주시",
+      "image": "https://picsum.photos/201",
+      "startTime": "2022-11-18T02:00:00.000Z",
+      "endTime": "2022-11-18T05:00:00.000Z",
+      "totalCharge": 120000
+    },
+    {
+      "reserveId": 2,
+      "placeId": 2,
+      "title": "바다가 보이는 놀기좋은 곳",
+      "address": "강원도 속초시",
+      "image": "https://picsum.photos/202",
+      "startTime": "2022-11-20T10:00:00.000Z",
+      "endTime": "2022-11-20T12:00:00.000Z",
+      "totalCharge": 90000
+    }
+  ],
+  "bookmark": [
+    {
+      "bookmarkId": 1,
+      "placeId": 1,
+      "image": "https://picsum.photos/202",
+      "title": "바다가 보이는 놀기좋은 곳",
+      "score": 3.2,
+      "charge": 45000,
+      "address": "강원도 속초시"
+    },
+    {
+      "bookmarkId": 2,
+      "placeId": 2,
+      "image": "https://picsum.photos/201",
+      "title": "인테리어가 아름다운 리빙형 대관 공간",
+      "score": 4.8,
+      "charge": 30000,
+      "address": "경기도 남양주시"
+    }
+  ],
+  "review": [
+    {
       "id": 1,
-      "startTime": "22년 11월 25일",
-      "endTime": "22년 11월 25일",
-      "capacity": 1
+      "placeId": 1,
+      "title": "남산이 보이는 아늑한 숙소",
+      "score": 2,
+      "comment": "남산이 잘 안보였습니다.",
+      "createdAt": "2022.11.08"
     },
     {
-      "startTime": "2022-11-18T02:00:00.000Z",
-      "endTime": "2022-11-19T02:00:00.000Z",
-      "capacity": 2,
-      "id": 2
-    },
-    {
-      "startTime": "2022-11-25T02:00:00.000Z",
-      "endTime": "2022-11-25T03:00:00.000Z",
-      "capacity": 1,
-      "id": 3
-    },
-    {
-      "startTime": "2022-11-18T02:00:00.000Z",
-      "endTime": "2022-11-18T03:00:00.000Z",
-      "capacity": 1,
-      "id": 4
-    },
-    {
-      "startTime": "2022-11-19T02:00:00.000Z",
-      "endTime": "2022-11-19T03:00:00.000Z",
-      "capacity": 1,
-      "id": 5
-    },
-    {
-      "startTime": "2022-11-26T02:00:00.000Z",
-      "endTime": "2022-12-03T03:00:00.000Z",
-      "capacity": 1,
-      "id": 6
-    },
-    {
-      "startTime": false,
-      "endTime": false,
-      "capacity": 1,
-      "id": 7
-    },
-    {
-      "startTime": "2022-11-18T02:00:00.000Z",
-      "endTime": "2022-11-18T03:00:00.000Z",
-      "capacity": 1,
-      "id": 8
-    },
-    {
-      "startTime": "2022-11-19T02:00:00.000Z",
-      "endTime": "2022-11-26T02:00:00.000Z",
-      "capacity": 1,
-      "id": 9
-    },
-    {
-      "startTime": "2022-11-18T02:00:00.000Z",
-      "endTime": "2022-11-18T03:00:00.000Z",
-      "capacity": 1,
-      "id": 10
-    },
-    {
-      "startTime": "2022-11-18T04:00:00.000Z",
-      "endTime": "2022-11-18T07:00:00.000Z",
-      "capacity": 1,
-      "id": 11
+      "id": 2,
+      "placeId": 2,
+      "title": "인테리어가 아름다운 리빙형 대관 공간",
+      "score": 4,
+      "comment": "인테리어가 이쁘고 깨끗해요.",
+      "createdAt": "2022.11.03"
     }
   ]
 }

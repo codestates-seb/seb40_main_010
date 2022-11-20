@@ -2,23 +2,34 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 import { BsFillBookmarkFill } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Modal from './Modal';
 import ReviewWrite from './ReviewWrite';
 
 const chargeComponent = (listData, type) => {
+  const totalCharge = Number(listData.totalCharge)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  const charge = Number(listData.charge)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
   if (type === 'reviews') {
     return null;
   }
   if (type === 'reservation') {
-    return <PlaceCharge>{listData.totalCharge / 1000},000원</PlaceCharge>;
+    return <PlaceCharge>{totalCharge}원</PlaceCharge>;
   }
-  return <PlaceCharge>{listData.charge / 1000},000원</PlaceCharge>;
+  return <PlaceCharge>{charge}원</PlaceCharge>;
 };
 
 function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const showModal = () => {
     setModalOpen(!modalOpen);
@@ -51,6 +62,28 @@ function MyPageCategoryList({ listData, type }) {
       return `${year}.${month}.${day} ${time}AM`;
     }
     return '';
+  };
+
+  const reviewDelete = async () => {
+    await axios
+      .delete(`http://localhost:3001/review/${listData.reviewId}`)
+      .then(() => {
+        navigate('/MyPage');
+      })
+      .catch(() => {
+        showModal();
+      });
+  };
+
+  const bookMarkStatusChange = async () => {
+    await axios
+      .get(`http://localhost:3001/bookmark/${listData.bookmarkId}`)
+      .then(() => {
+        // 북마크 아이콘 색상 변화 등
+      })
+      .catch(() => {
+        navigate('/MyPage');
+      });
   };
 
   return (
@@ -101,12 +134,14 @@ function MyPageCategoryList({ listData, type }) {
           )}
           {type === 'bookmark' && (
             <CategoryButton>
-              <BsFillBookmarkFill size={24} />
+              <BsFillBookmarkFill size={24} onClick={bookMarkStatusChange} />
             </CategoryButton>
           )}
           {type === 'reviews' && (
             <>
-              <CategoryButton>수정하기</CategoryButton>
+              <CategoryButton onClick={showReviewModal}>
+                수정하기
+              </CategoryButton>
               <CategoryButton onClick={showModal}>삭제하기</CategoryButton>
               {modalOpen && (
                 <Modal
@@ -114,7 +149,7 @@ function MyPageCategoryList({ listData, type }) {
                   setModalOpen={setModalOpen}
                   modalText="리뷰를 삭제하시겠습니까?"
                   modalActionText="삭제하기"
-                  modalAction="삭제하는 함수 만들어서 넣기"
+                  modalAction={reviewDelete}
                 />
               )}
             </>
@@ -130,6 +165,8 @@ function MyPageCategoryList({ listData, type }) {
           setReviewModalOpen={setReviewModalOpen}
           placeName={listData.title}
           placeImageURL={listData.image}
+          reviewComment={listData.comment}
+          reviewScore={listData.score}
         />
       )}
     </CategoryItemList>

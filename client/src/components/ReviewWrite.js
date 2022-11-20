@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 
@@ -7,6 +7,8 @@ function ReviewWrite({
   setReviewModalOpen,
   placeName,
   placeImageURL,
+  reviewComment,
+  reviewScore,
 }) {
   // 모달창 여닫는 상태
   const showReviewModal = () => {
@@ -51,6 +53,11 @@ function ReviewWrite({
     console.log(data);
   };
 
+  useEffect(() => {
+    setReviewText(reviewComment);
+    handleStarClick(reviewScore - 1);
+  }, []);
+
   return (
     <BlurBackground>
       <ReviewContainer>
@@ -77,6 +84,7 @@ function ReviewWrite({
         <ReviewInput
           placeholder="255자 이내로 작성해주세요."
           onChange={changeReviewText}
+          value={reviewText}
         >
           {reviewText}
         </ReviewInput>
