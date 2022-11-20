@@ -22,15 +22,15 @@ public class AuthController {
     /**
      * 사용자 로그아웃을 위한 컨트롤러 호출 메서드(레디스용)
      *
+     * @param accessToken 액세스 토큰
      * @param refreshToken 리프레시 토큰
-     * @param res          HttpServletResponse
      * @author mozzi327
      */
     @DeleteMapping("/logout")
-    public void logoutMember(@CookieValue(name = MEMBER_ID) Long memberId,
-                             @CookieValue(name = REFRESH_TOKEN) String refreshToken,
-                             HttpServletResponse res) {
-        authService.logoutMember(memberId, refreshToken, res);
+    public ResponseEntity logoutMember(@RequestHeader(AUTHORIZATION) String accessToken,
+                             @RequestHeader(REFRESH_TOKEN) String refreshToken) {
+        authService.logoutMember(accessToken, refreshToken);
+        return ResponseEntity.ok().build();
     }
 
 

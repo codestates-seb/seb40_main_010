@@ -37,9 +37,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtils jwtTokenUtils;
     private final CookieUtils cookieUtils;
+    private final RedisUtils redisUtils;
 
     /* ----------------- Redis 토큰 전용 로직 --------------------
-        private final RedisUtils redisUtils;
+
        ----------------- Redis 토큰 전용 로직 -------------------- */
 
 
@@ -89,15 +90,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         /* ----------------- 테스트용 토큰 전용 로직 -------------------- */
 
 
+
+
 /*  ----------------- Redis 토큰 전용 로직 --------------------
-        redisTemplate.opsForValue().set(
-                refreshToken,
-                "login",
-                jwtTokenUtils.getRefreshTokenExpirationMinutes(),
-                TimeUnit.MILLISECONDS
-        );
-    ----------------- Redis 토큰 전용 로직 --------------------
-*/
+    redisUtils.setData(refreshToken, findMember.getId(), jwtTokenUtils.getRefreshTokenExpirationMinutes());
+    ----------------- Redis 토큰 전용 로직 -------------------- */
 
         // ***.***.*** 형식 전달을 위한 리프레시 토큰 인코딩
         String encodedRefresh = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8);

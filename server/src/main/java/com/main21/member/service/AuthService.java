@@ -26,21 +26,26 @@ public class AuthService {
     private final JwtTokenUtils jwtTokenUtils;
     private final TokenRepository tokenRepository;
     private final MemberRepository memberRepository;
+    private final RedisUtils redisUtils;
 
 
     /**
      * 사용자 로그아웃 비즈니스 로직 메서드
-     *
+     * @param accessToken 액세스 토큰
      * @param refreshToken 리프레시 토큰
      * @author mozzi327
      */
-    public void logoutMember(Long memberId,
-                             String refreshToken,
-                             HttpServletResponse res) {
-        Date expirationDate = jwtTokenUtils
-                .getTokenExpiration(jwtTokenUtils.getRefreshTokenExpirationMinutes());
+    public void logoutMember(String accessToken,
+                             String refreshToken) {
+        if (!jwtTokenUtils.validateToken(accessToken))
+            throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
 
-        res.addHeader("Set-Cookie", null);
+        if (redisUtils.getData(refreshToken) != null) {
+            redisUtils.deleteData(refreshToken);
+        }
+
+        Long expiration = jwtTokenUtils.getExpiration(accessToken);
+        redisUtils.setBlackList(accessToken, expiration);
     }
 
 
