@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { BiTimeFive } from 'react-icons/bi';
+import { BiTimeFive, BiPencil } from 'react-icons/bi';
 import { CgMenuRound } from 'react-icons/cg';
 import { IoHeartCircleOutline } from 'react-icons/io5';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import axios from 'axios';
+import Select from 'react-select';
 import MyPageCategoryList from './MyPageCategoryList';
 
 // 할 것
-// 마이페이지 페이지에서 데이터 보내고 응답 받아오는 것 프롭스로 내려주기
-// 마이페이지 컴포넌트별 프롭스 받은 것들 렌더링 완성하기
-// 닉네임 수정하기 제작
-// 각종 모달창들 모달 프롭스 등 연결하기
-// 프롭스로 함수 넘겨주기
-// 프로필 사진 변경 모달창 제작하기
-// 등록내역에 쓰일 컴포넌트 제작해서 추가하기 거기에 프롭스로 넘겨주기
+// 모달창들 버튼 api모두 연결하기
+// 모달창 api통신 후 navigate
+// 닉네임이나 mbti 이미지 등 수정하기 만들기
 
 function MyPageComponent() {
   const [myPageCategory, setMyPageCategory] = useState('등록내역');
   const [memberData, setMemberData] = useState([]);
   const [listData, setListData] = useState([]);
+  const [userNickName, setUserNickName] = useState('');
+  const [userMBTI, setUserMBTI] = useState('');
+  const [editStatus, setEditStatus] = useState(false);
 
   const changeCategory = e => {
     setMyPageCategory(e.target.textContent);
@@ -74,9 +74,33 @@ function MyPageComponent() {
   };
 
   const callUserData = async () => {
+    await axios.get('http://localhost:3001/member').then(res => {
+      setMemberData(...res.data);
+      setUserNickName(res.data[0].nickname);
+      setUserMBTI(res.data[0].mbti);
+    });
+    // .then(res => setMemberData(...res.data));
+  };
+
+  const editStatusChange = () => {
+    setEditStatus(!editStatus);
+  };
+
+  const userDataEdit = async () => {
     await axios
-      .get('http://localhost:3001/member')
-      .then(res => setMemberData(...res.data));
+      .patch(`http://localhost:3001/member/edit`, {
+        nickname: userNickName,
+        mbti: userMBTI,
+      })
+      .then(() => {
+        callUserData();
+      })
+      .catch(() =>
+        console.log({
+          nickname: userNickName,
+          mbti: userMBTI,
+        }),
+      );
   };
 
   useEffect(() => {
@@ -84,12 +108,66 @@ function MyPageComponent() {
     callRegistrationList();
   }, []);
 
+  const mbtiList = [
+    { value: 'null', label: '없음' },
+    { value: 'ISTJ', label: 'ISTJ' },
+    { value: 'ISFJ', label: 'ISFJ' },
+    { value: 'INFJ', label: 'INFJ' },
+    { value: 'INTJ', label: 'INTJ' },
+    { value: 'ISTP', label: 'ISTP' },
+    { value: 'ISFP', label: 'ISFP' },
+    { value: 'INFP', label: 'INFP' },
+    { value: 'INTP', label: 'INTP' },
+    { value: 'ESTJ', label: 'ESTJ' },
+    { value: 'ESFJ', label: 'ESFJ' },
+    { value: 'ENFJ', label: 'ENFJ' },
+    { value: 'ENTJ', label: 'ENTJ' },
+    { value: 'ESTP', label: 'ESTP' },
+    { value: 'ESFP', label: 'ESFP' },
+    { value: 'ENFP', label: 'ENFP' },
+    { value: 'ENTP', label: 'ENTP' },
+  ];
+
   return (
     <MyPageComponentContainer>
       <MyProfileImage src={memberData.profileImage} />
-      <MyNickName>{memberData.nickname}</MyNickName>
-      {/* // 수정 누르면 input창이 보이게 프로필 이미지도 */}
-      <MyMBTI>{memberData.mbti}</MyMBTI>
+      <NameAndEditIconContainer>
+        {!editStatus && <MyNickName>{memberData.nickname}</MyNickName>}
+        {editStatus && (
+          <UserNickNameChange
+            onChange={e => {
+              e.stopPropagation();
+              setUserNickName(e.target.value);
+            }}
+            placeholder={userNickName}
+          />
+        )}
+        {!editStatus && <BiPencil onClick={editStatusChange} size="24" />}
+        {editStatus && <EditText onClick={userDataEdit}>수정하기</EditText>}
+        {editStatus && (
+          <EditText
+            onClick={() => {
+              editStatusChange();
+              setUserNickName(memberData.nickname);
+              setUserMBTI(memberData.mbti);
+            }}
+          >
+            취소
+          </EditText>
+        )}
+      </NameAndEditIconContainer>
+      {!editStatus && <MyMBTI>{memberData.mbti}</MyMBTI>}
+      {editStatus && (
+        <MbtiSelect
+          classNamePrefix="Select"
+          options={mbtiList}
+          placeholder={userMBTI}
+          onChange={e => {
+            e.stopPropagation();
+            setUserMBTI(e.value);
+          }}
+        />
+      )}
       <MyPageContentCategory>
         <MyPageCategoryItem
           onClick={e => {
@@ -169,10 +247,29 @@ const MyProfileImage = styled.img`
   margin-bottom: 8px;
 `;
 
-const MyNickName = styled.div`
-  font-size: 28px;
-  font-weight: bold;
+const NameAndEditIconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
   margin-bottom: 6px;
+
+  & svg {
+    color: #89bbff;
+    margin-left: 8px;
+    cursor: pointer;
+  }
+`;
+
+const EditText = styled.p`
+  color: #89bbff;
+  margin: 0px 4px;
+`;
+
+const MyNickName = styled.div`
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: 30px;
 `;
 
 const MyMBTI = styled.div`
@@ -242,6 +339,44 @@ const MyPageCategoryItemList = styled.div`
     background: #b9b9b9;
     border-radius: 25px;
   }
+`;
+
+const MbtiSelect = styled(Select)`
+  font-size: 1rem;
+  width: 7rem;
+
+  .Select__control {
+    height: 40px;
+    width: 100%;
+    /* border: none; */
+    border: 2px solid #96c2ff;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .Select__indicator-separator {
+    display: none;
+  }
+
+  .Select__menu {
+    color: #2b2b2b;
+  }
+
+  .Select__menu-list {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+`;
+
+const UserNickNameChange = styled.input`
+  font-size: 1rem;
+  width: 6.5rem;
+  border: 2px solid #96c2ff;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #2b2b2b;
+  margin-left: 99px;
 `;
 
 export default MyPageComponent;
