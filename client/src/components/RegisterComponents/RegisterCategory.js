@@ -26,18 +26,15 @@ function RegisterCategory({ checkedList, setCheckedList }) {
   return (
     <Wrapper>
       {categories.map(category => (
-        <Category>
+        <Category key={category.id}>
           <input
             type="checkbox"
             id={category.id}
             value={category.place}
-            key={category.id}
             checked={checkedList.includes(category.place)}
             onChange={e => handleCategory(e.target.checked, e.target.value)}
           />
-          <Label htmlFor={category.id} key={category.place}>
-            {category.place}
-          </Label>
+          <Label htmlFor={category.id}>{category.place}</Label>
         </Category>
       ))}
     </Wrapper>
@@ -51,7 +48,6 @@ const Wrapper = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   flex-direction: row;
-  /* border: 1px solid red; */
 
   input {
     margin: 0px;
@@ -64,7 +60,6 @@ const Category = styled.div`
   align-items: center;
   word-break: keep-all;
   margin-bottom: 3px;
-  /* border: 1px solid blue; */
 `;
 
 const Label = styled.label`
