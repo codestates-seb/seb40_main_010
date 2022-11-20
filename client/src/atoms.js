@@ -79,3 +79,8 @@ export const reservationPlaceBookmarkState = atom({
   key: 'reservationPlaceBookmarkState',
   default: false,
 });
+
+export const reservationEditData = atom({
+  key: 'reservationEditData',
+  default: {},
+});

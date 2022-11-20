@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 import { BsFillBookmarkFill } from 'react-icons/bs';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
 import Modal from './Modal';
 import ReviewWrite from './ReviewWrite';
+import { reservationEditData } from '../atoms';
 
 const chargeComponent = (listData, type) => {
   const totalCharge = Number(listData.totalCharge)
@@ -86,6 +88,19 @@ function MyPageCategoryList({ listData, type }) {
       });
   };
 
+  const [, setReservationData] = useRecoilState(reservationEditData);
+
+  const registerEditDataSend = async id => {
+    await axios
+      .get(`http://localhost:3001/place/${id}`)
+      .then(res => {
+        setReservationData(res.data);
+      })
+      .then(() => {
+        navigate('/register');
+      });
+  };
+
   return (
     <CategoryItemList>
       <CategoryContainer>
@@ -111,13 +126,24 @@ function MyPageCategoryList({ listData, type }) {
         </CategoryBodyContainer>
         <CategoryActionContainer>
           {type === 'registration' && (
-            <Link to="/detail" style={{ textDecoration: 'none' }}>
-              <CategoryButton>수정하기</CategoryButton>
-            </Link>
+            <CategoryButton
+              onClick={e => {
+                e.stopPropagation();
+                registerEditDataSend(listData.id);
+              }}
+            >
+              수정하기
+            </CategoryButton>
           )}
           {type === 'reservation' && (
             <>
-              <CategoryButton onClick={showModal}>취소하기</CategoryButton>
+              <CategoryButton
+                onClick={() => {
+                  showModal();
+                }}
+              >
+                취소하기
+              </CategoryButton>
               {modalOpen && (
                 <Modal
                   modalOpen={modalOpen}
@@ -127,7 +153,11 @@ function MyPageCategoryList({ listData, type }) {
                   modalAction="취소하는 함수 만들어서 넣기"
                 />
               )}
-              <CategoryButton onClick={showReviewModal}>
+              <CategoryButton
+                onClick={() => {
+                  showReviewModal();
+                }}
+              >
                 리뷰쓰기
               </CategoryButton>
             </>
