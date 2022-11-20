@@ -32,7 +32,7 @@ export const registerFormCharge = atom({
 
 export const registerFormItemsCheckedState = atom({
   key: 'registerFormItemsCheckedState',
-  default: new Array(10).fill(false),
+  default: [],
 });
 
 export const registerFormPreviewImage = atom({

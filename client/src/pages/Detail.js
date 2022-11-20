@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReservationAsideBar from '../components/ReservationAsideBar';
+import ReservationAsideBar from '../components/ReservationComponets/ReservationAsideBar';
 import Nav from '../components/Nav';
 import View from '../components/View';
 
