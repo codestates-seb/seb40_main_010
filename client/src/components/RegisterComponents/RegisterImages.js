@@ -102,12 +102,9 @@ function RegisterImages({ images, setImages }) {
       </div>
       <PreviewImagesWrapper margin={previewImages.length > 0 ? '15px' : null}>
         {previewImages.map((image, id) => (
-          <PreviewImageWrapper>
-            <img key={`${image}`} src={image} alt={`${image} - ${id}`} />
-            <DeleteImageIcon
-              onClick={() => handleDeleteImage(id)}
-              key={`${image} 1`}
-            />
+          <PreviewImageWrapper key={`${image}`}>
+            <img src={image} alt={`${image} - ${id}`} />
+            <DeleteImageIcon onClick={() => handleDeleteImage(id)} />
           </PreviewImageWrapper>
         ))}
       </PreviewImagesWrapper>

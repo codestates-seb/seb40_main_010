@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale';
 // import setHours from 'date-fns/setHours';
 // import setMinutes from 'date-fns/setMinutes';
-import subDays from 'date-fns/subDays';
+// import subDays from 'date-fns/subDays';
 // import addDays from 'date-fns/addDays';
 import { useRecoilState } from 'recoil';
 import { reservationStartDateChangedState } from '../../atoms';
@@ -13,7 +13,7 @@ import { reservationStartDateChangedState } from '../../atoms';
 // TODO:
 // 날짜를 선택하면 시간이 자동으로 오전 12시로 선택되는 오류
 // 예약된 시간 어떻게 막을 건지
-function ReservationCalander({ startDate, setStartDate, endDate, setEndDate }) {
+function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
   const [isStartDateSelected, setIsStartDateSelected] = useRecoilState(
     reservationStartDateChangedState,
   );
@@ -35,11 +35,8 @@ function ReservationCalander({ startDate, setStartDate, endDate, setEndDate }) {
   //   end: new Date(range.end),
   // }));
 
-  console.log(subDays(new Date(), 5));
-  console.log(new Date('2022-11-26T02:00:00.000Z'));
-
   const handleStartDate = time => {
-    setIsStartDateSelected(!isStartDateSelected);
+    setIsStartDateSelected(time);
     setStartDate(time);
     setEndDate(false);
   };
@@ -76,7 +73,6 @@ function ReservationCalander({ startDate, setStartDate, endDate, setEndDate }) {
           timeIntervals={60}
           placeholderText="스케줄을 선택하세요"
           filterTime={handleFilterPassedTime}
-          className="calander"
           disabledKeyboardNavigation
           // TODO: 예약된 시간 막기
           // excludeDateIntervals={[
@@ -85,7 +81,7 @@ function ReservationCalander({ startDate, setStartDate, endDate, setEndDate }) {
           excludeDateIntervals={[
             {
               start: new Date('2022-11-26T02:00:00.000Z'),
-              end: new Date('2022-11-26T05:00:00.000Z'),
+              end: new Date('2022-11-28T02:00:00.000Z'),
             },
           ]}
         />
@@ -114,10 +110,10 @@ function ReservationCalander({ startDate, setStartDate, endDate, setEndDate }) {
   );
 }
 
-export default ReservationCalander;
+export default ReservationCalendar;
 
 const DatePick = styled.div`
-  margin-bottom: ${porps => porps.marginBottom};
+  margin-bottom: ${props => props.marginBottom};
 `;
 
 const Label = styled.div`

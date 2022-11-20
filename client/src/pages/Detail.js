@@ -1,21 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 import ReservationAsideBar from '../components/ReservationComponets/ReservationAsideBar';
-import Nav from '../components/Nav';
-import View from '../components/View';
+// import Nav from '../components/Nav';
+// import View from '../components/View';
 
 const DetailContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const DetailViewContainer = styled.div``;
+// const DetailViewContainer = styled.div``;
 function Detail() {
   return (
     <DetailContainer>
-      <DetailViewContainer>
+      {/* <DetailViewContainer>
         <Nav />
         <View />
-      </DetailViewContainer>
+      </DetailViewContainer> */}
       <ReservationAsideBar />
     </DetailContainer>
   );

@@ -21,11 +21,11 @@ import RegisterCategory from '../components/RegisterComponents/RegisterCategory'
 function Register() {
   const [title, setTitle] = useRecoilState(registerFormTitle);
   const [maxCapacity, setMaxCapacity] = useRecoilState(registerFormMaxCapacity);
-  const [address, setAdress] = useRecoilState(registerFormAddress);
+  const [address, setAddress] = useRecoilState(registerFormAddress);
   const [detailedAddress, setDetailedAddress] = useRecoilState(
     registerFormDetailedAddress,
   );
-  const [deatiledInformation, setDetailedInformation] = useRecoilState(
+  const [detailedInformation, setDetailedInformation] = useRecoilState(
     registerFormDetailedInformation,
   );
   const [charge, setCharge] = useRecoilState(registerFormCharge);
@@ -52,17 +52,17 @@ function Register() {
 
   const postConfig = {
     onComplete: data => {
-      setAdress(data.address);
+      setAddress(data.address);
     },
   };
 
   const postCode = ReactDaumPost(postConfig);
 
-  const handleDedatiledAddress = e => {
+  const handleDetailedAddress = e => {
     setDetailedAddress(e.target.value);
   };
 
-  const handleDedatiledInformation = e => {
+  const handleDetailedInformation = e => {
     setDetailedInformation(e.target.value);
   };
 
@@ -77,7 +77,7 @@ function Register() {
     formData.append('maxCapacity', maxCapacity);
     formData.append('address', address);
     formData.append('detailedAddress', detailedAddress);
-    formData.append('detailInfo', deatiledInformation);
+    formData.append('detailInfo', detailedInformation);
     formData.append('charge', charge);
     images.forEach(file => {
       formData.append('image', file, file.name);
@@ -130,11 +130,11 @@ function Register() {
               readOnly
             />
             <Title marginTop="20px">상세주소</Title>
-            <Input type="text" onChange={handleDedatiledAddress} />
+            <Input type="text" onChange={handleDetailedAddress} />
           </Wrapper>
           <Wrapper>
             <Title>상세정보</Title>
-            <Textarea type="text" onChange={handleDedatiledInformation} />
+            <Textarea type="text" onChange={handleDetailedInformation} />
           </Wrapper>
           <Wrapper>
             <Title>사진</Title>
@@ -243,7 +243,7 @@ const Title = styled.div`
   font-weight: 600;
   color: #2b2b2b;
   margin-bottom: 15px;
-  margin-top: ${porps => porps.marginTop};
+  margin-top: ${props => props.marginTop};
 `;
 
 const ButtonWrapper = styled.div`
@@ -258,7 +258,6 @@ const Input = styled.input`
   height: 1.1rem;
   font-size: 0.8rem;
   outline: none;
-  /* border: none; */
   border: 3px solid #96c2ff;
   border-radius: 5px;
   color: #2b2b2b;
@@ -266,7 +265,7 @@ const Input = styled.input`
 `;
 
 const SmallInput = styled.input`
-  width: ${porps => porps.width};
+  width: ${props => props.width};
   height: 1.1rem;
   font-size: 0.8rem;
   outline: none;

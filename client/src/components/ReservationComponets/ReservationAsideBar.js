@@ -7,11 +7,10 @@ import {
   reservationEndDate,
   reservationMaxCapacity,
 } from '../../atoms';
-import ReservationCalander from './ReservationCalander';
+import ReservationCalendar from './ReservationCalendar';
 import ReservationCapacityHandler from './ReservationCapacityHandler';
 import ReservationBottomButtons from './ReservationBottomButtons';
 
-// TODO : 시간이 콘솔로는 한국 표준시, 서버에 보낼 때는 UTC로 바뀌는 오류 발생
 function ReservationAsideBar() {
   const [startDate, setStartDate] = useRecoilState(reservationStartDate);
   const [endDate, setEndDate] = useRecoilState(reservationEndDate);
@@ -46,7 +45,7 @@ function ReservationAsideBar() {
         </OuterWrapper>
         <OuterWrapper>
           <div className="title">스케줄</div>
-          <ReservationCalander
+          <ReservationCalendar
             startDate={startDate}
             setStartDate={setStartDate}
             endDate={endDate}
@@ -166,10 +165,10 @@ const OuterWrapper = styled.div`
   margin-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #e7eaee;
-  display: ${porps => porps.display};
-  justify-content: ${porps => porps.justifyContent};
-  align-items: ${porps => porps.alignItems};
-  margin-bottom: ${porps => porps.marginBottom};
+  display: ${props => props.display};
+  justify-content: ${props => props.justifyContent};
+  align-items: ${props => props.alignItems};
+  margin-bottom: ${props => props.marginBottom};
 `;
 
 const ButtonsWrapper = styled.div`
