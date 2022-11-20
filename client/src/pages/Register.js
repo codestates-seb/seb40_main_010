@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import ReactDaumPost from 'react-daumpost-hook';
@@ -12,10 +12,11 @@ import {
   registerFormDetailedInformation,
   registerFormCharge,
   registerFormItemsCheckedState,
-  registerFormPreviewImage,
   registerFormImage,
 } from '../atoms';
 import Nav from '../components/Nav';
+import RegisterImages from '../components/RegisterComponents/RegisterImages';
+import RegisterCategory from '../components/RegisterComponents/RegisterCategory';
 
 function Register() {
   const [title, setTitle] = useRecoilState(registerFormTitle);
@@ -28,18 +29,10 @@ function Register() {
     registerFormDetailedInformation,
   );
   const [charge, setCharge] = useRecoilState(registerFormCharge);
-  const [isItemsClicked, setIsItemsClicked] = useRecoilState(
+  const [checkedList, setCheckedList] = useRecoilState(
     registerFormItemsCheckedState,
   );
-  const [showImages, setShowImages] = useRecoilState(registerFormPreviewImage);
   const [images, setImages] = useRecoilState(registerFormImage);
-
-  const handleOnChange = position => {
-    const updatedCheckedState = isItemsClicked.map((isItemClicked, index) =>
-      index === position ? !isItemClicked : isItemClicked,
-    );
-    setIsItemsClicked(updatedCheckedState);
-  };
 
   const handleTitle = e => {
     setTitle(e.target.value);
@@ -77,74 +70,17 @@ function Register() {
     setCharge(e.target.value);
   };
 
-  const hiddenFileInput = useRef(null);
-  const handleImageButtonClick = () => {
-    hiddenFileInput.current.click();
-  };
-
-  const handleUploadImage = e => {
-    const selectedFIles = [];
-    const maxLength = 3;
-    if (e.target.files.length > maxLength) {
-      const transfer = new DataTransfer();
-      Array.from(e.target.files)
-        .slice(0, maxLength)
-        .forEach(file => {
-          transfer.items.add(file);
-        });
-      e.target.files = transfer.files;
-      setImages([...e.target.files]);
-    } else {
-      const transfer = new DataTransfer();
-      Array.from(e.target.files)
-        .slice(0, maxLength)
-        .forEach(file => {
-          transfer.items.add(file);
-        });
-      e.target.files = transfer.files;
-      setImages([...e.target.files]);
-    }
-
-    const targetFilesObject = [...e.target.files];
-    targetFilesObject.map(file => {
-      return selectedFIles.push(URL.createObjectURL(file));
-    });
-    setShowImages(selectedFIles);
-  };
-
-  const categories = [
-    { id: 0, place: '공유오피스' },
-    { id: 1, place: '캠핑' },
-    { id: 2, place: '바다근처' },
-    { id: 3, place: '짐보관' },
-    { id: 4, place: '파티룸' },
-    { id: 5, place: '게스트하우스' },
-    { id: 6, place: '호텔' },
-    { id: 7, place: '스터디룸' },
-    { id: 8, place: '계곡근처' },
-    { id: 9, place: '공연장' },
-  ];
-
-  for (let i = 0; i < categories.length; i += 1) {
-    categories[i].isClicked = isItemsClicked[i];
-  }
-
-  const clickedCategories = categories
-    .filter(category => category.isClicked === true)
-    .map(category => category.place);
-
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('category', clickedCategories);
+    formData.append('category', checkedList);
     formData.append('maxCapacity', maxCapacity);
     formData.append('address', address);
     formData.append('detailedAddress', detailedAddress);
     formData.append('detailInfo', deatiledInformation);
     formData.append('charge', charge);
-    // formData.append('image', images[0]);
     images.forEach(file => {
-      formData.append('image', file);
+      formData.append('image', file, file.name);
     });
 
     axios({
@@ -153,57 +89,30 @@ function Register() {
       data: formData,
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-
-    // formData.append('image', images);
-    // // eslint-disable-next-line no-restricted-syntax
-    // for (const key of formData.keys()) {
-    //   // eslint-disable-next-line no-restricted-syntax
-    //   for (const value of formData.values()) {
-    //     console.log(key, value);
-    //   }
-    // }
   };
 
   return (
     <>
       <Nav />
       <Container>
-        {/* <form> */}
-        <div className="register-container">
-          <div className="wrapper">
-            <div className="title">제목</div>
+        <FormContainer>
+          <Wrapper>
+            <Title>제목</Title>
             <Input onChange={handleTitle} />
-          </div>
-          <div className="wrapper">
-            <div className="title">카테고리</div>
-            <div className="category-wrapper">
-              {categories.map((category, index) => (
-                <div className="category">
-                  <input
-                    type="checkbox"
-                    id={category.id}
-                    value={category.place}
-                    key={category.place}
-                    checked={isItemsClicked[index]}
-                    onChange={() => handleOnChange(index)}
-                  />
-                  <label
-                    htmlFor={category.id}
-                    className="label"
-                    key={category.id}
-                  >
-                    {category.place}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="wrapper">
-            <div className="title">최대 인원</div>
-            <div className="capa-wrapper">
+          </Wrapper>
+          <Wrapper>
+            <Title>카테고리</Title>
+            <RegisterCategory
+              checkedList={checkedList}
+              setCheckedList={setCheckedList}
+            />
+          </Wrapper>
+          <Wrapper>
+            <Title>최대 인원</Title>
+            <div className="capacity-wrapper">
               <LeftIcon onClick={minusCapacity} />
               <SmallInput
-                width="28px"
+                width="20px"
                 type="number"
                 onChange={handleMaxCapacity}
                 value={maxCapacity}
@@ -211,57 +120,35 @@ function Register() {
               />
               <RightIcon onClick={plusCapacity} />
             </div>
-          </div>
-          <div className="wrapper">
-            <div className="title">주소</div>
+          </Wrapper>
+          <Wrapper>
+            <Title>주소</Title>
             <Input
               type="text"
               onClick={() => postCode()}
               value={address}
               readOnly
             />
-            <div className="title detailed-address">상세주소</div>
+            <Title marginTop="20px">상세주소</Title>
             <Input type="text" onChange={handleDedatiledAddress} />
-          </div>
-          <div className="wrapper">
-            <div className="title">상세정보</div>
+          </Wrapper>
+          <Wrapper>
+            <Title>상세정보</Title>
             <Textarea type="text" onChange={handleDedatiledInformation} />
-          </div>
-          <div className="wrapper">
-            <div className="title">사진</div>
-            <div className="capa-wrapper">
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                ref={hiddenFileInput}
-                onChange={handleUploadImage}
-                multiple
-              />
-              <button
-                className="image-upload-button"
-                label="이미지 업로드"
-                type="button"
-                onClick={handleImageButtonClick}
-              >
-                사진 업로드하기
-              </button>
-            </div>
-            <div className="preview-image-wrapper">
-              {showImages.map((image, id) => (
-                <img key={`${image}`} src={image} alt={`${image} - ${id}`} />
-              ))}
-            </div>
-          </div>
-          <div className="wrapper">
-            <div className="title">금액 설정</div>
+          </Wrapper>
+          <Wrapper>
+            <Title>사진</Title>
+            <RegisterImages images={images} setImages={setImages} />
+          </Wrapper>
+          <Wrapper>
+            <Title>금액 설정</Title>
             <div className="set-charge">
               <div className="hour-description">1시간 / </div>
               <SmallInput type="number" width="100px" onChange={handleCharge} />
               <div className="hour-description">원</div>
             </div>
-          </div>
-          <div className="btn-wrapper">
+          </Wrapper>
+          <ButtonWrapper>
             <button
               type="submit"
               className="form-register-button"
@@ -269,9 +156,8 @@ function Register() {
             >
               등록하기
             </button>
-          </div>
-        </div>
-        {/* </form> */}
+          </ButtonWrapper>
+        </FormContainer>
       </Container>
     </>
   );
@@ -288,41 +174,6 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 50px 0px;
-
-  .register-container {
-    width: 900px;
-    height: fit-content;
-  }
-
-  .wrapper {
-    height: fit-content;
-    margin-bottom: 25px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 25px 20px;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 12px;
-  }
-
-  .btn-wrapper {
-    height: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .title {
-    width: 95%;
-    height: fit-content;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #2b2b2b;
-    margin-bottom: 15px;
-    /* border: 1px solid red; */
-  }
 
   .form-register-button {
     width: 300px;
@@ -347,93 +198,65 @@ const Container = styled.div`
     }
   }
 
-  .image-upload-button {
-    width: fit-content;
-    height: 35px;
-    background-color: #ffda77;
-    border-radius: 40px;
-    color: #2b2b2b;
-    font-size: 0.9rem;
-    font-weight: 500;
-    border: none;
-    box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
-    padding: 0px 10px;
-
-    :active {
-      box-shadow: none;
-    }
-
-    :disabled {
-      cursor: not-allowed;
-      opacity: 0.7;
-      box-shadow: none;
-    }
-  }
-
-  .detailed-address {
-    margin-top: 20px;
-  }
-
-  .category-wrapper {
-    height: 1.5rem;
-    display: flex;
-    /* border: 1px solid red; */
-    /* width: 95%; */
-  }
-
-  .category {
-    padding: 0px 5px;
-    font-size: 1.05rem;
-    display: flex;
-    align-items: center;
-    /* border: 1px solid black; */
-  }
-
-  .label {
-    color: #2b2b2b;
-  }
-
   .set-charge {
     width: 95%;
     display: flex;
     align-items: center;
-    /* border: 1px solid red; */
   }
 
   .hour-description {
     width: fit-content;
     font-size: 1.1rem;
     color: #2b2b2b;
-    /* border: 1px solid red; */
   }
 
-  .capa-wrapper {
+  .capacity-wrapper {
     width: 97%;
     display: flex;
     align-items: center;
-    /* border: 10px solid red; */
   }
+`;
 
-  .preview-image-wrapper {
-    width: 97%;
-    display: flex;
-    align-items: center;
-    margin-top: 15px;
-    /* border: 5px solid red; */
-  }
+const Wrapper = styled.div`
+  height: fit-content;
+  margin-bottom: 25px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px 10px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 12px;
+`;
 
-  img {
-    /* width: 80px; */
-    height: 80px;
-    margin-left: 10px;
-    border-radius: 10px;
-  }
+const FormContainer = styled.div`
+  width: 47rem;
+  height: fit-content;
+  padding: 0px 2.5em;
+`;
+
+const Title = styled.div`
+  width: 95%;
+  height: fit-content;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2b2b2b;
+  margin-bottom: 15px;
+  margin-top: ${porps => porps.marginTop};
+`;
+
+const ButtonWrapper = styled.div`
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Input = styled.input`
   width: 94%;
-  height: 1.5rem;
-  font-size: 1rem;
+  height: 1.1rem;
+  font-size: 0.8rem;
   outline: none;
   /* border: none; */
   border: 3px solid #96c2ff;
@@ -444,8 +267,8 @@ const Input = styled.input`
 
 const SmallInput = styled.input`
   width: ${porps => porps.width};
-  height: 1.5rem;
-  font-size: 1.1rem;
+  height: 1.1rem;
+  font-size: 0.8rem;
   outline: none;
   border: 3px solid #96c2ff;
   border-radius: 5px;
@@ -465,7 +288,7 @@ const SmallInput = styled.input`
 `;
 
 const Textarea = styled.textarea`
-  width: 95%;
+  width: 94%;
   height: 200px;
   font-size: 1rem;
   outline: none;
@@ -477,7 +300,7 @@ const Textarea = styled.textarea`
 `;
 
 const LeftIcon = styled(FaCaretLeft)`
-  font-size: 30px;
+  font-size: 25px;
   color: #eb7470;
 
   :hover {
@@ -486,7 +309,7 @@ const LeftIcon = styled(FaCaretLeft)`
 `;
 
 const RightIcon = styled(FaCaretRight)`
-  font-size: 30px;
+  font-size: 25px;
   color: #eb7470;
 
   :hover {

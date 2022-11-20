@@ -3,26 +3,56 @@ import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale';
+// import setHours from 'date-fns/setHours';
+// import setMinutes from 'date-fns/setMinutes';
+import subDays from 'date-fns/subDays';
+// import addDays from 'date-fns/addDays';
 import { useRecoilState } from 'recoil';
 import { reservationStartDateChangedState } from '../../atoms';
 
+// TODO:
+// 날짜를 선택하면 시간이 자동으로 오전 12시로 선택되는 오류
+// 예약된 시간 어떻게 막을 건지
 function ReservationCalander({ startDate, setStartDate, endDate, setEndDate }) {
   const [isStartDateSelected, setIsStartDateSelected] = useRecoilState(
     reservationStartDateChangedState,
   );
 
+  const maxEndDate = new Date(startDate).setDate(
+    new Date(startDate).getDate() + 1,
+  );
+
+  // TODO: 예약된 시간 막기 테스트용 더미 데이터
+  // const events = [
+  //   {
+  //     start: '2022-11-26T02:00:00.000Z',
+  //     end: '2022-11-26T05:00:00.000Z',
+  //   },
+  // ];
+
+  // const disabledDateRanges = events.map(range => ({
+  //   start: new Date(range.start),
+  //   end: new Date(range.end),
+  // }));
+
+  console.log(subDays(new Date(), 5));
+  console.log(new Date('2022-11-26T02:00:00.000Z'));
+
   const handleStartDate = time => {
-    setIsStartDateSelected(time);
+    setIsStartDateSelected(!isStartDateSelected);
     setStartDate(time);
     setEndDate(false);
   };
 
-  const filterStartTime = time => {
+  const handleDisabledEndTime = time => {
     const selectedDate = new Date(time);
-    return new Date(startDate).getTime() < selectedDate.getTime();
+    return (
+      new Date(startDate).getTime() < selectedDate.getTime() &&
+      selectedDate.getTime() <= new Date(maxEndDate).getTime()
+    );
   };
 
-  const filterPassedTime = time => {
+  const handleFilterPassedTime = time => {
     const currentDate = new Date();
     const selectedDate = new Date(time);
     return currentDate.getTime() < selectedDate.getTime();
@@ -40,13 +70,24 @@ function ReservationCalander({ startDate, setStartDate, endDate, setEndDate }) {
           startDate={startDate}
           endDate={endDate}
           minDate={new Date()}
+          // minTime={data => console.log(data)}
           locale={ko}
           dateFormat="yyyy년 MM월 dd일 a hh시"
           timeIntervals={60}
           placeholderText="스케줄을 선택하세요"
-          filterTime={filterPassedTime}
+          filterTime={handleFilterPassedTime}
           className="calander"
           disabledKeyboardNavigation
+          // TODO: 예약된 시간 막기
+          // excludeDateIntervals={[
+          //   { start: subDays(new Date(), 5), end: addDays(new Date(), 5) },
+          // ]}
+          excludeDateIntervals={[
+            {
+              start: new Date('2022-11-26T02:00:00.000Z'),
+              end: new Date('2022-11-26T05:00:00.000Z'),
+            },
+          ]}
         />
       </DatePick>
       <DatePick>
@@ -59,11 +100,12 @@ function ReservationCalander({ startDate, setStartDate, endDate, setEndDate }) {
           startDate={startDate}
           endDate={endDate}
           minDate={startDate}
+          maxDate={maxEndDate}
           locale={ko}
           dateFormat="yyyy년 MM월 dd일 a hh시"
           timeIntervals={60}
           placeholderText="스케줄을 선택하세요"
-          filterTime={filterStartTime}
+          filterTime={handleDisabledEndTime}
           disabled={!isStartDateSelected}
           disabledKeyboardNavigation
         />
@@ -123,5 +165,8 @@ const Container = styled.div`
     margin-top: 10px;
     height: 2rem;
     padding: 0px 0px 0px 8px;
+    :focus-visible {
+      outline: #96c2ff auto 1px;
+    }
   }
 `;
