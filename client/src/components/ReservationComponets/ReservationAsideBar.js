@@ -93,7 +93,7 @@ const Container = styled.div`
   position: sticky;
   top: 90px;
   width: 18rem;
-  height: 528px;
+  height: flex;
   border-radius: 15px;
   border: 1px solid black;
   display: flex;

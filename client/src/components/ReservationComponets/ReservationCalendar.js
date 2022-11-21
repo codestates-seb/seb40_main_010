@@ -3,16 +3,10 @@ import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale';
-// import setHours from 'date-fns/setHours';
-// import setMinutes from 'date-fns/setMinutes';
-// import subDays from 'date-fns/subDays';
-// import addDays from 'date-fns/addDays';
+import moment from 'moment';
 import { useRecoilState } from 'recoil';
 import { reservationStartDateChangedState } from '../../atoms';
 
-// TODO:
-// 날짜를 선택하면 시간이 자동으로 오전 12시로 선택되는 오류
-// 예약된 시간 어떻게 막을 건지
 function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
   const [isStartDateSelected, setIsStartDateSelected] = useRecoilState(
     reservationStartDateChangedState,
@@ -22,37 +16,74 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
     new Date(startDate).getDate() + 1,
   );
 
-  // TODO: 예약된 시간 막기 테스트용 더미 데이터
-  // const events = [
-  //   {
-  //     start: '2022-11-26T02:00:00.000Z',
-  //     end: '2022-11-26T05:00:00.000Z',
-  //   },
-  // ];
-
-  // const disabledDateRanges = events.map(range => ({
-  //   start: new Date(range.start),
-  //   end: new Date(range.end),
-  // }));
-
   const handleStartDate = time => {
     setIsStartDateSelected(time);
     setStartDate(time);
     setEndDate(false);
   };
 
-  const handleDisabledEndTime = time => {
-    const selectedDate = new Date(time);
-    return (
-      new Date(startDate).getTime() < selectedDate.getTime() &&
-      selectedDate.getTime() <= new Date(maxEndDate).getTime()
-    );
+  // TODO: 예약된 시간 비활성화 테스트용 더미 데이터
+  const slots = [
+    {
+      start: '2022-11-27T09:00:00.000Z',
+      end: '2022-11-27T11:00:00.000Z',
+    },
+  ];
+
+  // eslint-disable-next-line consistent-return
+  const handleDisableStartTime = time => {
+    const currentTime = new Date();
+    const selectedTime = new Date(time);
+    const isPastTime = currentTime.getTime() > selectedTime.getTime();
+    if (!isPastTime) {
+      for (let i = 0; i < slots.length; i += 1) {
+        const slot = slots[i];
+
+        const x = moment(time);
+        const startTime = moment(slot.start);
+        const endTime = moment(slot.end);
+
+        if (
+          x.isBetween(startTime, endTime) ||
+          x.isSame(moment(startTime)) ||
+          x.isSame(moment(endTime))
+        ) {
+          return false;
+        }
+        if (i + 1 === slots.length) {
+          return true;
+        }
+      }
+    }
   };
 
-  const handleFilterPassedTime = time => {
-    const currentDate = new Date();
-    const selectedDate = new Date(time);
-    return currentDate.getTime() < selectedDate.getTime();
+  // eslint-disable-next-line consistent-return
+  const handleDisabledEndTime = time => {
+    const selectedTime = new Date(time);
+    const isStartTimePassed = new Date(startDate) < selectedTime.getTime();
+    const isBeforeEndTime =
+      selectedTime.getTime() <= new Date(maxEndDate).getTime();
+
+    if (isStartTimePassed && isBeforeEndTime) {
+      for (let i = 0; i < slots.length; i += 1) {
+        const slot = slots[i];
+
+        const x = moment(time);
+        const startTime = moment(slot.start);
+        const endTime = moment(slot.end);
+
+        if (
+          x.isBetween(startTime, endTime) ||
+          x.isSame(moment(startTime)) ||
+          x.isSame(moment(endTime))
+        ) {
+          return false;
+        }
+        if (i + 1 === slots.length) {
+          return true;
+        }
+      }
+    }
   };
 
   return (
@@ -67,23 +98,13 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
           startDate={startDate}
           endDate={endDate}
           minDate={new Date()}
-          // minTime={data => console.log(data)}
           locale={ko}
           dateFormat="yyyy년 MM월 dd일 a hh시"
           timeIntervals={60}
           placeholderText="스케줄을 선택하세요"
-          filterTime={handleFilterPassedTime}
+          filterTime={handleDisableStartTime}
           disabledKeyboardNavigation
-          // TODO: 예약된 시간 막기
-          // excludeDateIntervals={[
-          //   { start: subDays(new Date(), 5), end: addDays(new Date(), 5) },
-          // ]}
-          excludeDateIntervals={[
-            {
-              start: new Date('2022-11-26T02:00:00.000Z'),
-              end: new Date('2022-11-28T02:00:00.000Z'),
-            },
-          ]}
+          required
         />
       </DatePick>
       <DatePick>
