@@ -14,6 +14,9 @@ const categories = [
   { id: 9, place: '공연장' },
 ];
 
+// TODO
+// 변수명 바꾸기
+// onChange 함수 바꾸기
 function RegisterCategory({ checkedList, setCheckedList }) {
   const handleCategory = (isChecked, item) => {
     if (isChecked) {
@@ -32,7 +35,9 @@ function RegisterCategory({ checkedList, setCheckedList }) {
             id={category.id}
             value={category.place}
             checked={checkedList.includes(category.place)}
-            onChange={e => handleCategory(e.target.checked, e.target.value)}
+            onChange={event =>
+              handleCategory(event.target.checked, event.target.value)
+            }
           />
           <Label htmlFor={category.id}>{category.place}</Label>
         </Category>

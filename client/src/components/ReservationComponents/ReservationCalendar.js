@@ -1,13 +1,22 @@
 import React from 'react';
-import styled from 'styled-components';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { ko } from 'date-fns/esm/locale';
 import moment from 'moment';
 import { useRecoilState } from 'recoil';
+import styled from 'styled-components';
+import DatePicker from 'react-datepicker';
+import { ko } from 'date-fns/esm/locale';
+
+import 'react-datepicker/dist/react-datepicker.css';
+
 import { reservationStartDateChangedState } from '../../atoms';
 
-function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
+// TODO
+// day js 사용하기
+export default function ReservationCalendar({
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}) {
   const [isStartDateSelected, setIsStartDateSelected] = useRecoilState(
     reservationStartDateChangedState,
   );
@@ -45,6 +54,7 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
         if (x.isBetween(startTime, endTime) || x.isSame(moment(startTime))) {
           return false;
         }
+
         if (i + 1 === slots.length) {
           return true;
         }
@@ -65,17 +75,20 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
 
         const x = moment(time);
         const y = moment(startDate);
-        const startTime = moment(slot.start);
-        const endTime = moment(slot.end);
+        const slotStartTime = moment(slot.start);
+        const slotEndTime = moment(slot.end);
 
-        // TODO: y가 startTime보다 작다면 endTime 뒤의 시간들은 false
-        if (x.isBetween(startTime, endTime) || x.isSame(moment(endTime))) {
+        if (
+          x.isBetween(slotStartTime, slotEndTime) ||
+          x.isSame(moment(slotEndTime))
+        ) {
           return false;
         }
 
-        if (y.isBefore(startTime) && x.isAfter(endTime)) {
+        if (y.isBefore(slotStartTime) && x.isAfter(slotEndTime)) {
           return false;
         }
+
         if (i + 1 === slots.length) {
           return true;
         }
@@ -128,10 +141,8 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
   );
 }
 
-export default ReservationCalendar;
-
 const DatePick = styled.div`
-  margin-bottom: ${props => props.marginBottom};
+  margin-bottom: ${({ marginBottom }) => marginBottom};
 `;
 
 const Label = styled.div`

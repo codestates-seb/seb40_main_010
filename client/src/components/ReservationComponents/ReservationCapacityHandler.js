@@ -3,18 +3,18 @@ import styled from 'styled-components';
 import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
 
 function ReservationCapacityHandler({ capacity, setCapacity }) {
-  const handleCapacity = e => {
-    setCapacity(e.target.value);
+  const handleCapacity = event => {
+    setCapacity(event.target.value);
   };
 
-  const plusCapacity = e => {
+  const plusCapacity = event => {
     setCapacity(capacity + 1);
-    e.stopPropagation();
+    event.stopPropagation();
   };
 
-  const minusCapacity = e => {
+  const minusCapacity = event => {
     if (capacity > 1) setCapacity(capacity - 1);
-    e.stopPropagation();
+    event.stopPropagation();
   };
 
   return (

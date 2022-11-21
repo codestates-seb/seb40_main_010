@@ -1,14 +1,16 @@
-/* eslint-disable consistent-return */
 import React, { useRef } from 'react';
-import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import imageCompression from 'browser-image-compression';
+import styled from 'styled-components';
+
 import { FaTimes } from 'react-icons/fa';
 import { registerFormPreviewImage } from '../../atoms';
 
 // TODO
 // 1. 이미지 업로드 속도가 느림
 // 2. for await 해결 못함
+// 3. 105번째줄 onClick 바꾸기
+// 4. eslint 오류
 function RegisterImages({ images, setImages }) {
   const [previewImages, setPreviewImages] = useRecoilState(
     registerFormPreviewImage,
@@ -20,6 +22,7 @@ function RegisterImages({ images, setImages }) {
     hiddenFileInput.current.click();
   };
 
+  // eslint-disable-next-line consistent-return
   async function handleImageCompress(file) {
     const options = {
       maxSizeMB: 0.01,
@@ -36,7 +39,8 @@ function RegisterImages({ images, setImages }) {
     }
   }
 
-  async function handlePreviewImagesUrl(compressedFile) {
+  // eslint-disable-next-line consistent-return
+  async function handleGetPreviewImagesUrl(compressedFile) {
     // try {
     //   const url = await imageCompression.getDataUrlFromFile(compressedFile);
     //   return url;
@@ -60,11 +64,13 @@ function RegisterImages({ images, setImages }) {
       return;
     }
 
-    for (let i = 0; i < maxImages; i += 1) {
+    for (let i = 0; i < maxImages.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const compressedImage = await handleImageCompress(selectedImages[i]);
       // eslint-disable-next-line no-await-in-loop
-      const compressedImageUrl = await handlePreviewImagesUrl(compressedImage);
+      const compressedImageUrl = await handleGetPreviewImagesUrl(
+        compressedImage,
+      );
 
       setImages(image => [...image, compressedImage]);
       setPreviewImages(url => [...url, compressedImageUrl]);
@@ -76,9 +82,6 @@ function RegisterImages({ images, setImages }) {
     setImages(images.filter((_, index) => index !== id));
     setPreviewImages(previewImages.filter((_, index) => index !== id));
   };
-
-  // console.log(images);
-  // console.log(previewImages);
 
   return (
     <Wrapper>
@@ -101,10 +104,10 @@ function RegisterImages({ images, setImages }) {
         </button>
       </div>
       <PreviewImagesWrapper margin={previewImages.length > 0 ? '15px' : null}>
-        {previewImages.map((image, id) => (
+        {previewImages.map((image, index) => (
           <PreviewImageWrapper key={`${image}`}>
-            <img src={image} alt={`${image} - ${id}`} />
-            <DeleteImageIcon onClick={() => handleDeleteImage(id)} />
+            <img src={image} alt={`${image} - ${index}`} />
+            <DeleteImageIcon onClick={() => handleDeleteImage(index)} />
           </PreviewImageWrapper>
         ))}
       </PreviewImagesWrapper>
@@ -144,12 +147,15 @@ const Wrapper = styled.div`
 const PreviewImagesWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-top: ${porps => porps.margin};
+  margin-top: ${({ margin }) => margin};
+
   img {
     height: 80px;
+    aspect-ratio: 1/1;
     border-radius: 10px;
   }
 `;
+
 const PreviewImageWrapper = styled.div`
   display: flex;
   flex-direction: column;

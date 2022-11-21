@@ -5,128 +5,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import Nav from '../components/Nav';
 
-const Container = styled.div`
-  margin-top: 70px;
-  width: 100vw;
-  height: 100vh;
-  background-color: #96c2ff;
-  display: flex;
-  justify-content: center;
-  /* align-items: center; */
-
-  .signup-container {
-    position: sticky;
-    top: 20%;
-    width: 700px;
-    height: flex;
-    padding: 60px 0px;
-    background-color: #ffffff;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  }
-  .wrapper {
-    width: 65%;
-    height: fit-content;
-    margin-bottom: 25px;
-    /* border: 3px solid black; */
-  }
-
-  .title {
-    width: 100%;
-    height: fit-content;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #2b2b2b;
-    margin-bottom: 10px;
-    /* border: 10px solid red; */
-  }
-
-  .submit-button {
-    width: 300px;
-    height: 55px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    background-color: #ffda77;
-    border-radius: 40px;
-    color: #2b2b2b;
-    font-size: 1.5rem;
-    font-weight: 600;
-    border: none;
-    box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
-    /* transition-duration: 0.3s; */
-
-    :active {
-      box-shadow: none;
-    }
-
-    :disabled {
-      cursor: not-allowed;
-      opacity: 0.7;
-      box-shadow: none;
-    }
-  }
-
-  .description {
-    width: 100%;
-    margin-top: 10px;
-    color: #666666;
-  }
-
-  .alert {
-    margin-top: 10px;
-    color: #eb7470;
-    font-weight: 500;
-  }
-`;
-
-const Input = styled.input`
-  width: 99%;
-  height: fit-content;
-  font-size: 1rem;
-  outline: none;
-  border: none;
-  border-bottom: 2px solid #96c2ff;
-  color: #2b2b2b;
-`;
-
-const MbtiSelect = styled(Select)`
-  font-size: 1rem;
-  width: 100%;
-
-  .Select__control {
-    height: 40px;
-    width: 100%;
-    /* border: none; */
-    border: 2px solid #96c2ff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .Select__indicator-separator {
-    display: none;
-  }
-
-  .Select__menu {
-    color: #2b2b2b;
-  }
-
-  .Select__menu-list {
-    ::-webkit-scrollbar {
-      display: none;
-    }
-  }
-`;
-
-const LogInLink = styled(Link)`
-  color: #2b2b2b;
-  font-size: 1rem;
-  font-weight: 500;
-`;
-
+// TODO
+// onSubmit 함수 완성하기
 function SignUp() {
   const {
     register,
@@ -302,3 +182,120 @@ function SignUp() {
 }
 
 export default SignUp;
+
+const Container = styled.div`
+  margin-top: 70px;
+  width: 100vw;
+  height: 100vh;
+  background-color: #96c2ff;
+  display: flex;
+  justify-content: center;
+
+  .signup-container {
+    position: sticky;
+    top: 20%;
+    width: 700px;
+    height: flex;
+    padding: 60px 0px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  .wrapper {
+    width: 65%;
+    height: fit-content;
+    margin-bottom: 25px;
+  }
+
+  .title {
+    width: 100%;
+    height: fit-content;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2b2b2b;
+    margin-bottom: 10px;
+  }
+
+  .submit-button {
+    width: 300px;
+    height: 55px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: #ffda77;
+    border-radius: 40px;
+    color: #2b2b2b;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
+
+    :active {
+      box-shadow: none;
+    }
+
+    :disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+      box-shadow: none;
+    }
+  }
+
+  .description {
+    width: 100%;
+    margin-top: 10px;
+    color: #666666;
+  }
+
+  .alert {
+    margin-top: 10px;
+    color: #eb7470;
+    font-weight: 500;
+  }
+`;
+
+const Input = styled.input`
+  width: 99%;
+  height: fit-content;
+  font-size: 1rem;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #96c2ff;
+  color: #2b2b2b;
+`;
+
+const MbtiSelect = styled(Select)`
+  font-size: 1rem;
+  width: 100%;
+
+  .Select__control {
+    height: 40px;
+    width: 100%;
+    border: 2px solid #96c2ff;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .Select__indicator-separator {
+    display: none;
+  }
+
+  .Select__menu {
+    color: #2b2b2b;
+  }
+
+  .Select__menu-list {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+`;
+
+const LogInLink = styled(Link)`
+  color: #2b2b2b;
+  font-size: 1rem;
+  font-weight: 500;
+`;
