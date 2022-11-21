@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import static com.main21.reserve.utils.ReserveConstants.*;
 
@@ -185,14 +186,18 @@ public class ReserveController {
 
     /**
      * 예약 내역 삭제 컨트롤러 메서드
-     *
+     * 예약 내역 상태 변경 및 예약 취소 사유 저장
      * @param reserveId 예약 식별자
      * @return ResponseEntity
      * @author LeeGoh
      */
     @DeleteMapping("/reserve/{reserve-id}")
-    public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId) {
-        reserveService.deleteReserve(reserveId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId,
+                                        @CookieValue(name = "memberId") Long memberId,
+                                        @RequestBody(required = false) ReserveDto.Cancel cancel) {
+//                                        @RequestBody(required = false) Map<String, String> cancel) {
+//                                        @RequestBody(required = false) String cancel) {
+        reserveService.deleteReserve(cancel, reserveId, memberId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

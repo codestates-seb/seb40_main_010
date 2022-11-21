@@ -21,6 +21,8 @@ public class PlacePostDto {
     @NotBlank
     private int maxCapacity;
     @NotBlank
+    private Integer maxSpace;
+    @NotBlank
     private String address;
     @NotBlank
     private String detailInfo;
