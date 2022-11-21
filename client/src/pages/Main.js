@@ -23,21 +23,21 @@ const MainComponentContainer = styled.div`
   align-content: flex-start;
   align-items: center;
 `;
-// const MainComponentContainer = styled(MbtiComponentContainer)``;
 
 const MainContainer = styled.div`
   height: 100vh;
   width: 100vw;
 `;
 
+// ToDo : Mbti 컴포넌트 위치, 요청
 function Main() {
-  const [array, setArray] = useRecoilState(mainDataState);
+  const [mainPlaceData, setMainPlaceData] = useRecoilState(mainDataState);
 
   useEffect(() => {
     axios
       .get('http://localhost:3001/maindata/')
       .then(res => {
-        setArray([...res.data[0].data]);
+        setMainPlaceData([...res.data[0].data]);
       })
       .catch(err => console.log(err));
   }, []);
@@ -48,8 +48,14 @@ function Main() {
       <Category />
       <DisplayComponentDiv>
         <MainComponentContainer>
-          {array.map(el => {
-            return <MainCompo key={el.placeId} el={el} id={el.placeId} />;
+          {mainPlaceData.map(placeData => {
+            return (
+              <MainCompo
+                key={placeData.placeId}
+                placeData={placeData}
+                // id={placeData.placeId}
+              />
+            );
           })}
         </MainComponentContainer>
       </DisplayComponentDiv>

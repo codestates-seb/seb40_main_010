@@ -1,9 +1,9 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
 import { DetailInformation } from '../atoms';
 
 const StyledSlide = styled(Slider)`
@@ -87,7 +87,7 @@ const SlickImage = styled.img`
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 `;
-const SlickImageDiv = styled.div`
+const SlickImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,7 +98,7 @@ function Fade() {
   const detailInformation = useRecoilValue(DetailInformation);
   const settings = {
     dots: true,
-    slide: <SlickImageDiv />,
+    slide: <SlickImageContainer />,
     dotsClass: 'slick-dots',
     fade: true,
     infinite: true,
@@ -120,9 +120,9 @@ function Fade() {
         {detailInformation.image &&
           detailInformation.image.map(el => {
             return (
-              <SlickImageDiv key={el}>
+              <SlickImageContainer key={el}>
                 <SlickImage src={el} />
-              </SlickImageDiv>
+              </SlickImageContainer>
             );
           })}
       </StyledSlide>

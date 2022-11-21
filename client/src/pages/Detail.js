@@ -1,7 +1,8 @@
 import React from 'react';
+// import { useEffect } from 'react'
 import styled from 'styled-components';
 // import axios from 'axios';
-// import { useRecoilState } from 'recoil';
+// import { useRecoilValue } from 'recoil';
 import ReservationAsideBar from '../components/ReservationComponets/ReservationAsideBar';
 import Nav from '../components/Nav';
 import View from '../components/View';
@@ -22,7 +23,7 @@ function Detail() {
   //     .get(`{{BACKEND}}/place/${placeId}`)
   //     .then(res => console.log(res))
   //     .catch(err => console.log(err));
-  // }, []); > 실제 api
+  // }, []); // > 실제 api
 
   return (
     <DetailContainer>

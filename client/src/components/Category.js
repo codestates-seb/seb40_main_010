@@ -75,18 +75,24 @@ function Category() {
       if (searchState) {
         axios
           .get(`{{BACKEND}}/search/${encodeURI(searchState)}`)
-          .then(res => console.log(res));
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
       } else {
-        axios.get(`{{BACKEND}}/`).then(res => console.log(res));
+        axios
+          .get(`{{BACKEND}}/`)
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
       }
     } else if (searchState) {
       axios
         .get(`{{BACKEND}}/category/${idx}/search/${encodeURI(searchState)}`)
-        .then(res => console.log(res));
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
     } else {
       axios
         .get(`{{BACKEND}}/category/${idx}/search`)
-        .then(res => console.log(res));
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
     }
   };
 

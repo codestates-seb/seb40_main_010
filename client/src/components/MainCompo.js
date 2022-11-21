@@ -5,24 +5,19 @@ import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { PlaceIDState } from '../atoms';
 
-const MainDiv = styled.div`
-  a {
-    text-decoration: none;
-    color: #2b2b2b;
-  }
-`;
-
-function MainCompo({ el }) {
+function MainCompo({ placeData }) {
   const setFocusPlaceID = useSetRecoilState(PlaceIDState);
 
-  const { address, charge, image, score, title, placeId } = el;
-  const onClick = () => {
+  const { address, charge, image, score, title, placeId } = placeData;
+
+  const onClickPlaceComponent = () => {
     setFocusPlaceID(placeId);
   };
+
   return (
-    <MainDiv onClick={e => e.stopPropagation()}>
+    <MainContainer onClick={e => e.stopPropagation()}>
       <Link to="/detail">
-        <MainComponent onClick={onClick}>
+        <MainComponent onClick={onClickPlaceComponent}>
           <Image src={image} />
           <TitleContainer>
             <PlaceName>{title.slice(0, 15)}</PlaceName>
@@ -33,9 +28,16 @@ function MainCompo({ el }) {
           <PlaceCharge>{charge}원</PlaceCharge>
         </MainComponent>
       </Link>
-    </MainDiv>
+    </MainContainer>
   );
 }
+
+const MainContainer = styled.div`
+  a {
+    text-decoration: none;
+    color: #2b2b2b;
+  }
+`;
 
 const MainComponent = styled.div`
   display: flex;
