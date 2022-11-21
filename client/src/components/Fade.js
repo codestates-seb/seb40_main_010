@@ -63,10 +63,10 @@ const Pre = styled.div`
   width: 30px;
   height: 30px;
   position: absolute;
-  left: -6%;
+  left: 2%;
   z-index: 3;
   &::before {
-    color: black;
+    color: white;
   }
 `;
 
@@ -74,10 +74,10 @@ const NextTo = styled.div`
   width: 30px;
   height: 30px;
   position: absolute;
-  right: -8%;
+  right: 0%;
   z-index: 3;
   &::before {
-    color: black;
+    color: white;
   }
 `;
 
@@ -98,14 +98,13 @@ function Fade() {
   const detailInformation = useRecoilValue(DetailInformation);
   const settings = {
     dots: true,
-    slide: <SlickImageContainer />,
+    lazyLoad: true,
     dotsClass: 'slick-dots',
     fade: true,
     infinite: true,
     arrows: true,
     autoplay: true,
-    autoplaySpeed: 500,
-    speed: 5000,
+    autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
     pauseOnHover: true,
