@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
+import { DetailInformation } from '../atoms';
 
 const StyledSlide = styled(Slider)`
   width: 500px;
@@ -92,14 +94,8 @@ const SlickImageDiv = styled.div`
   width: 600px;
 `;
 
-function Fade(miniInformationImage) {
-  // console.log();
-  const [imageArr, setImageArr] = useState([]);
-  useEffect(() => {
-    const { data } = { ...miniInformationImage };
-    setImageArr(data);
-    // console.log(data);
-  }, [miniInformationImage]);
+function Fade() {
+  const detailInformation = useRecoilValue(DetailInformation);
   const settings = {
     dots: true,
     slide: <SlickImageDiv />,
@@ -121,13 +117,14 @@ function Fade(miniInformationImage) {
   return (
     <div>
       <StyledSlide {...settings}>
-        {imageArr.map(el => {
-          return (
-            <SlickImageDiv key={el.id}>
-              <SlickImage src={el.download_url} />
-            </SlickImageDiv>
-          );
-        })}
+        {detailInformation.image &&
+          detailInformation.image.map(el => {
+            return (
+              <SlickImageDiv key={el}>
+                <SlickImage src={el} />
+              </SlickImageDiv>
+            );
+          })}
       </StyledSlide>
     </div>
   );
