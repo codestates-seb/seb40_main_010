@@ -12,6 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ReserveDto {
@@ -49,6 +50,11 @@ public class ReserveDto {
     }
 
     @Getter
+    public static class Cancel {
+        private String reason;
+    }
+
+    @Getter
     public static class Response implements Comparable<Response>{
 
         private Long reserveId;
@@ -72,7 +78,7 @@ public class ReserveDto {
         @Builder
         @QueryProjection
         public Response(Reserve reserve, Place place) {
-            this.reserveId = reserve.getPlaceId();
+            this.reserveId = reserve.getId();
             this.placeId = place.getId();
             this.title = place.getTitle();
             this.address = place.getAddress();

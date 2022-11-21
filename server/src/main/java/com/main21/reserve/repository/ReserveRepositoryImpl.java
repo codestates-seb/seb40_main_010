@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.main21.place.entity.QPlace.place;
 import static com.main21.reserve.entity.QReserve.reserve;
+import static com.main21.reserve.entity.Reserve.ReserveStatus.RESERVATION_CANCELED;
 
 public class ReserveRepositoryImpl implements CustomReserveRepository{
 
@@ -36,7 +37,8 @@ public class ReserveRepositoryImpl implements CustomReserveRepository{
                 ))
                 .from(reserve)
                 .leftJoin(place).on(reserve.placeId.eq(place.id))
-                .where(reserve.memberId.eq(memberId))
+                .where(reserve.memberId.eq(memberId),
+                        reserve.status.ne(RESERVATION_CANCELED))
                 .orderBy(reserve.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
