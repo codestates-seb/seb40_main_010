@@ -52,7 +52,7 @@ export const navSearchValue = atom({
 
 export const categoryFocus = atom({
   key: 'categoryFocus',
-  default: '0',
+  default: 0,
 });
 
 export const reservationStartDate = atom({
