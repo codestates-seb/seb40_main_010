@@ -22,7 +22,6 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
     setEndDate(false);
   };
 
-  // TODO: 예약된 시간 비활성화 테스트용 더미 데이터
   const slots = [
     {
       start: '2022-11-27T09:00:00.000Z',
@@ -43,11 +42,7 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
         const startTime = moment(slot.start);
         const endTime = moment(slot.end);
 
-        if (
-          x.isBetween(startTime, endTime) ||
-          x.isSame(moment(startTime)) ||
-          x.isSame(moment(endTime))
-        ) {
+        if (x.isBetween(startTime, endTime) || x.isSame(moment(startTime))) {
           return false;
         }
         if (i + 1 === slots.length) {
@@ -69,14 +64,16 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
         const slot = slots[i];
 
         const x = moment(time);
+        const y = moment(startDate);
         const startTime = moment(slot.start);
         const endTime = moment(slot.end);
 
-        if (
-          x.isBetween(startTime, endTime) ||
-          x.isSame(moment(startTime)) ||
-          x.isSame(moment(endTime))
-        ) {
+        // TODO: y가 startTime보다 작다면 endTime 뒤의 시간들은 false
+        if (x.isBetween(startTime, endTime) || x.isSame(moment(endTime))) {
+          return false;
+        }
+
+        if (y.isBefore(startTime) && x.isAfter(endTime)) {
           return false;
         }
         if (i + 1 === slots.length) {
