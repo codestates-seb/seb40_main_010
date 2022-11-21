@@ -110,6 +110,11 @@ public class ReserveController {
     }
 
 
+    /**
+     * 예약 프로세스 5 - 결제 실패 시 발생되는 컨트롤러 메서드
+     * @return ResponseEntity
+     * @author mozzi327
+     */
     @GetMapping("/api/order/fail")
     public ResponseEntity<String> payFailedAction() {
         reserveService.setFailedStatus();

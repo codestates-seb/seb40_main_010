@@ -25,7 +25,7 @@ public class RankingProcess {
             "ISTP", "ISFP", "ISFJ", "ISTJ", "INTJ", "NONE"
     );
 
-    @Scheduled(cron = "*/30 * * * * *")
+    @Scheduled(cron = "* */5 * * * *")
     public void calcBestMBTI() {
         bestRepository.deleteAll();
         mbtis.forEach(mbti -> bestRepository
