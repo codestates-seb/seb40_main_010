@@ -5,6 +5,7 @@ import com.main21.security.exception.AuthException;
 import com.main21.security.utils.CookieUtils;
 import com.main21.security.utils.CustomAuthorityUtils;
 import com.main21.security.utils.JwtTokenUtils;
+import com.main21.security.utils.RedisUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -31,6 +33,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomAuthorityUtils authorityUtils;
     private final CookieUtils cookieUtils;
+    private final RedisUtils redisUtils;
 
 
     /**
@@ -48,32 +51,19 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain filterChain) {
-/* ----------------- Redis 토큰 전용 로직 --------------------
-        String jwtToken;
-        String email;
-        String savedRedisToken;
-        Map<String, Object> claims;
+// ----------------- Redis 토큰 전용 로직 --------------------
 
-        try {
-            jwtToken = cookieUtils.isExistRefresh(req.getCookies());
-            claims = verifyJws(req);
-
-            email = (String) claims.get("email");
-            if (email.isEmpty())
-                throw new AuthException(ExceptionCode.MEMBER_NOT_FOUND);
-
-            savedRedisToken = jwtTokenUtils.isExsistRefreshInRedis(email);
-            if (!jwtToken.equals(savedRedisToken))
-                throw new AuthException(ExceptionCode.INVALID_REFRESH_TOKEN);
-
-            setAuthenticationToContext(claims);
-
-        } catch (Exception e) {
-            req.setAttribute("exception", e);
+/*        String accessToken = req.getHeader(AUTHORIZATION);
+        if (accessToken != null && jwtTokenUtils.validateToken(accessToken)) {
+            String isLogout = (String) redisUtils.getData(accessToken);
+            if (ObjectUtils.isEmpty(isLogout)) {
+                Map<String, Object> claims = verifyJws(req);
+                setAuthenticationToContext(claims);
+            }
         }
-        filterChain.doFilter(req, res);
-   ----------------- Redis 토큰 전용 로직 --------------------
-*/
+
+        filterChain.doFilter(req, res);*/
+//   ----------------- Redis 토큰 전용 로직 --------------------
 
         try {
             String refreshToken = cookieUtils.isExistRefresh(req.getCookies());
@@ -118,10 +108,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         String jws = req
                 .getHeader(AUTHORIZATION)
                 .replace(BEARER, "");
-
         String base64EncodedSecretKey = jwtTokenUtils
                 .encodeBase64SecretKey(jwtTokenUtils.getSecretKey());
-
         return jwtTokenUtils
                 .getClaims(jws, base64EncodedSecretKey)
                 .getBody();

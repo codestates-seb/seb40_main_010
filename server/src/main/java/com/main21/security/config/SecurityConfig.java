@@ -9,6 +9,7 @@ import com.main21.security.handler.MemberAuthenticationSuccessHandler;
 import com.main21.security.utils.CookieUtils;
 import com.main21.security.utils.CustomAuthorityUtils;
 import com.main21.security.utils.JwtTokenUtils;
+import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +41,7 @@ public class SecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomAuthorityUtils authorityUtils;
     private final CookieUtils cookieUtils;
+    private final RedisUtils redisUtils;
 
 
     /**
@@ -51,19 +53,18 @@ public class SecurityConfig {
     @Bean
     @SneakyThrows
     public SecurityFilterChain filterChain(HttpSecurity http) {
-//        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-//        encodingFilter.setEncoding("UTF-8");
-//        encodingFilter.setForceEncoding(true);
+        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        encodingFilter.setEncoding("UTF-8");
+        encodingFilter.setForceEncoding(true);
 
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .addFilterBefore(encodingFilter, CsrfFilter.class)
+                .addFilterBefore(encodingFilter, CsrfFilter.class)
                 .headers().frameOptions().disable()
                 .and()
                 .cors(withDefaults())
                 .csrf().disable()
-//                .cors().configurationSource(corsConfigurationSource()).and()
                 .httpBasic().disable()
                 .formLogin().disable()
                 .exceptionHandling()
@@ -117,19 +118,18 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             JwtAuthenticationFilter jwtAuthenticationFilter
-                    = new JwtAuthenticationFilter(authenticationManager, jwtTokenUtils, cookieUtils);
+                    = new JwtAuthenticationFilter(authenticationManager, jwtTokenUtils, cookieUtils, redisUtils);
             jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
             JwtVerificationFilter jwtVerificationFilter
-                    = new JwtVerificationFilter(jwtTokenUtils, authorityUtils, cookieUtils);
+                    = new JwtVerificationFilter(jwtTokenUtils, authorityUtils, cookieUtils, redisUtils);
 
             builder
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
-
     }
 }
 

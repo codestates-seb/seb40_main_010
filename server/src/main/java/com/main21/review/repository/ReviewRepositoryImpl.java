@@ -1,6 +1,7 @@
 package com.main21.review.repository;
 
 
+
 import com.main21.review.dto.QReviewDto_MyPage;
 import com.main21.review.dto.QReviewDto_Response;
 import com.main21.review.dto.ReviewDto;
@@ -26,6 +27,7 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
     }
 
 
+
     /**
      * 상세페이지 리뷰 조회
      * @param placeId
@@ -33,6 +35,7 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
      * @return
      * @author Quartz614
      */
+
     @Override
     public Page<ReviewDto.Response> getReviews(Long placeId, Pageable pageable) {
         List<ReviewDto.Response> result = queryFactory
@@ -52,6 +55,7 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
 
         long total = result.size();
         return new PageImpl<>(result, pageable, total);
+
     }
     /**
      * 마이페이지에서 작성한 리뷰 조회

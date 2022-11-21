@@ -112,6 +112,7 @@ public class ReviewService {
      * @return
      * @author Quartz614
      */
+
     public Page<ReviewDto.MyPage> getReviewsMypage(Long memberId, Pageable pageable) {
         return reviewRepository.getReviewsMypage(memberId, pageable);
     }
