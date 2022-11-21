@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 public class ReserveDto {
@@ -20,6 +21,7 @@ public class ReserveDto {
     @AllArgsConstructor
     public static class Post {
         private Long id;
+        @NotBlank
         private int capacity;
         @CreatedDate
         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -34,6 +36,7 @@ public class ReserveDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Patch {
+        @NotBlank
         private int capacity;
         @CreatedDate
         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
