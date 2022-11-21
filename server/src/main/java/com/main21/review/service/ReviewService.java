@@ -112,8 +112,8 @@ public class ReviewService {
      * @return
      * @author Quartz614
      */
-    public Page<ReviewDto.Response> getReviewsMypage(Long memberId, Pageable pageable) {
-        return reviewRepository.getReviews(memberId, pageable);
+    public Page<ReviewDto.MyPage> getReviewsMypage(Long memberId, Pageable pageable) {
+        return reviewRepository.getReviewsMypage(memberId, pageable);
     }
 
     private void modifyScore(Place findPlace, Double totalScore, Long placeId) {

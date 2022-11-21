@@ -10,5 +10,5 @@ import java.util.List;
 public interface CustomReviewRepository {
     Page<ReviewDto.Response> getReviews(Long placeId, Pageable pageable);
 
-    Page<ReviewDto.Response> getReviewsMypage(Long memberId, Pageable pageable);
+    Page<ReviewDto.MyPage> getReviewsMypage(Long memberId, Pageable pageable);
 }
