@@ -1,14 +1,13 @@
 package com.main21.review.dto;
 
 import com.main21.member.entity.Member;
+import com.main21.place.entity.Place;
 import com.main21.review.entity.Review;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-
-import static com.main21.review.entity.QReview.review;
 
 public class ReviewDto {
     @Getter
@@ -26,7 +25,7 @@ public class ReviewDto {
 
     @Getter
 
-    public static class Response implements Comparable<Response> {
+    public static class Response {
         private final Long reviewId;
 
         private final String profileImage;
@@ -51,22 +50,10 @@ public class ReviewDto {
             this.comment = review.getComment();
             this.createdAt = review.getCreatedAt();
         }
-
-
-        /**
-         * 최신순 정렬 메서드
-         * @param o Response
-         * @return 1 or -1
-         * @author quartz614
-         */
-        @Override
-        public int compareTo(Response o) {
-            return (int)(this.reviewId-o.reviewId);
-        }
     }
 
     @Getter
-    public static class MyPage implements Comparable<MyPage> {
+    public static class MyPage {
         private final Long reviewId;
 
         private final String title;
@@ -74,23 +61,17 @@ public class ReviewDto {
         private final String comment;
         private final LocalDateTime createdAt;
 
+        private final Long placeId;
+
         @Builder
-        public MyPage(Long reviewId, String title, Double score, String comment, LocalDateTime createdAt) {
-            this.reviewId = reviewId;
-            this.title = title;
-            this.score = score;
-            this.comment = comment;
-            this.createdAt = createdAt;
-        }
-        /**
-         * 최신순 정렬 메서드
-         * @param o MyPage
-         * @return 1 or -1
-         * @author quartz614
-         */
-        @Override
-        public int compareTo(MyPage o) {
-            return (int)(this.reviewId-o.reviewId);
+        @QueryProjection
+        public MyPage(Review review, Place place) {
+            this.reviewId = review.getId();
+            this.title = place.getTitle();
+            this.score = review.getScore();
+            this.comment = review.getComment();
+            this.createdAt = review.getCreatedAt();
+            this.placeId = place.getId();
         }
     }
 }

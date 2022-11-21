@@ -75,6 +75,7 @@ public class ReviewController {
     public ResponseEntity getReserve(@PathVariable("place-id") Long placeId, Pageable pageable) {
         Page<ReviewDto.Response> getReview = reviewService.getPlaceReviews(placeId, pageable);
         List<ReviewDto.Response> reviews = getReview.getContent();
+
         return new ResponseEntity(new MultiResponseDto<>(reviews, getReview), HttpStatus.OK);
     }
 
@@ -88,8 +89,8 @@ public class ReviewController {
     @GetMapping // 마이페이지에서 placeId, placeTitle 추가해야하고
     public ResponseEntity getReviewsMypage(@CookieValue(name = "memberId") Long memberId,
                                           Pageable pageable) {
-        Page<ReviewDto.Response> getReview = reviewService.getReviewsMypage(memberId, pageable);
-        List<ReviewDto.Response> reviews = getReview.getContent();
+        Page<ReviewDto.MyPage> getReview = reviewService.getReviewsMypage(memberId, pageable);
+        List<ReviewDto.MyPage> reviews = getReview.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(reviews, getReview), HttpStatus.OK);
     }
