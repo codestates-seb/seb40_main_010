@@ -34,7 +34,7 @@ function Location({ address }) {
         map.setCenter(coords);
       }
     });
-  }, []);
+  }, [address]);
 
   return (
     <div>

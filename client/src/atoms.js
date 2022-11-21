@@ -84,3 +84,18 @@ export const reservationEditData = atom({
   key: 'reservationEditData',
   default: {},
 });
+
+export const mainDataState = atom({
+  key: 'mainDataState',
+  default: [],
+});
+
+export const PlaceIDState = atom({
+  key: 'PlaceIDState',
+  default: '',
+});
+
+export const DetailInformation = atom({
+  key: 'DetailInformation',
+  default: [],
+});

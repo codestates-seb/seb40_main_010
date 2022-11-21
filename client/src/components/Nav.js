@@ -127,7 +127,6 @@ const NavLogOutButton = styled(NavButton)`
 `;
 
 const MyPageDiv = styled.div`
-  background-color: aliceblue;
   border-radius: 50px;
 `;
 
@@ -139,8 +138,8 @@ function Nav({ navColor, buttonColor }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  window.localStorage.setItem('Access_token', 'test');
-  // window.localStorage.removeItem('Access_token');
+  // window.localStorage.setItem('Access_token', 'test');
+  window.localStorage.removeItem('Access_token');
   // window.sessionStorage.setItem('Access_token', 'test');
 
   const isLogIn = window.localStorage.getItem('Access_token');

@@ -1,14 +1,15 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { DetailInformation } from '../atoms';
 import Fade from './Fade';
 import Location from './Map';
 
 const TotalContainer = styled.div`
   margin-top: 80px;
   margin: auto;
-  width: 900px;
-  /* border: 1px solid teal; */
+  width: 720px;
   border-bottom: 2px solid #89bbff;
   margin-bottom: 10px;
 `;
@@ -87,13 +88,6 @@ const DetailTag = styled.div`
   margin-bottom: 20px;
 `;
 
-const detailTagName = [
-  { num: 1, name: '#공유오피소' },
-  { num: 2, name: '#파티룸' },
-  { num: 3, name: '#계곡근처' },
-  { num: 4, name: '#ESTP' },
-];
-
 const DetailInfo = styled.div`
   margin-left: 20px;
   width: 600px;
@@ -110,61 +104,53 @@ const InfoLocation = styled(Location)`
   width: 600px;
   height: 200px;
 `;
+
 const DetailNumber = styled(DetailInfo)`
   font-size: 1rem;
   margin-bottom: 20px;
 `;
 
 function View() {
-  const address = '서울 송파구 올림픽로 240';
-  const [detailInformation, setDetailInformation] = useState({});
-  const [miniInformationImage, setMiniInformationImage] = useState({
-    data: [],
-  });
-  const detailId = 1;
+  const [detailInformation, setDetailInformation] =
+    useRecoilState(DetailInformation);
+  const callDetailData = async () => {
+    await axios
+      .get('http://localhost:3001/detaildata')
+      .then(res => {
+        setDetailInformation(...res.data);
+        // setDetailInformation(...res.data);
+      })
+      .catch(err => console.log(err));
+  };
   useEffect(() => {
-    axios
-      .get(`https://koreanjson.com/posts/${detailId}`)
-      .then(res => {
-        const { id, title, content, createAt } = res.data;
-        setDetailInformation({ id, title, content, createAt });
-      })
-      .catch(err => console.log(err));
-
-    axios
-      .get(`https://picsum.photos/v2/list?page=10&limit=4`)
-      .then(res => {
-        setMiniInformationImage({
-          ...miniInformationImage,
-          data: [...res.data],
-        });
-      })
-      // .then(console.log(miniInformationImage))
-      .catch(err => console.log(err));
+    callDetailData();
   }, []);
+
   return (
     <TotalContainer>
       <InfoContainer>
         <InfoTitle>{detailInformation.title}</InfoTitle>
         <CarouselImageContainer>
-          <Fade {...miniInformationImage} />
+          <Fade />
         </CarouselImageContainer>
         <InfoMiniImageContainer>
-          {miniInformationImage.data.map(el => {
-            return <InfoMiniImage key={el.id} src={el.download_url} />;
-          })}
+          {detailInformation.image &&
+            detailInformation.image.map(el => {
+              return <InfoMiniImage key={el} src={el} />;
+            })}
         </InfoMiniImageContainer>
         <DetailTitle>상세 정보</DetailTitle>
         <DetailTagContainer>
-          {detailTagName.map(el => {
-            return <DetailTag key={el.num}>{el.name}</DetailTag>;
-          })}
+          {detailInformation.category &&
+            detailInformation.category.map(el => {
+              return <DetailTag key={el}>{el}</DetailTag>;
+            })}
         </DetailTagContainer>
-        <DetailInfo>{detailInformation.content}</DetailInfo>
+        <DetailInfo>{detailInformation.detailInfo}</DetailInfo>
         <DetailNonStyleTitle>위치</DetailNonStyleTitle>
-        <InfoLocation address={address} />
+        <InfoLocation address={detailInformation.address} />
         <DetailNonStyleTitle>호스트 연락처</DetailNonStyleTitle>
-        <DetailNumber>010-1234-5678</DetailNumber>
+        <DetailNumber>{detailInformation.phoneNumber}</DetailNumber>
       </InfoContainer>
     </TotalContainer>
   );
