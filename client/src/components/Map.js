@@ -17,17 +17,19 @@ function Location({ address }) {
     };
     const map = new kakao.maps.Map(mapContainer, mapOption);
     const geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(address, function (result, status) {
-      if (status === kakao.maps.services.Status.OK) {
-        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        const marker = new kakao.maps.Marker({
-          map,
-          position: coords,
-        });
-        marker.setMap(map);
-        map.setCenter(coords);
-      }
-    });
+    if (address) {
+      geocoder.addressSearch(address, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          const marker = new kakao.maps.Marker({
+            map,
+            position: coords,
+          });
+          marker.setMap(map);
+          map.setCenter(coords);
+        }
+      });
+    }
   }, [address]);
 
   return (
