@@ -1,9 +1,10 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
 import ReactDaumPost from 'react-daumpost-hook';
 import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
-import { useRecoilState } from 'recoil';
+
 import {
   registerFormTitle,
   registerFormAddress,
@@ -14,11 +15,12 @@ import {
   registerFormItemsCheckedState,
   registerFormImage,
 } from '../atoms';
+
 import Nav from '../components/Nav';
 import RegisterImages from '../components/RegisterComponents/RegisterImages';
 import RegisterCategory from '../components/RegisterComponents/RegisterCategory';
 
-function Register() {
+export default function Register() {
   const [title, setTitle] = useRecoilState(registerFormTitle);
   const [maxCapacity, setMaxCapacity] = useRecoilState(registerFormMaxCapacity);
   const [address, setAddress] = useRecoilState(registerFormAddress);
@@ -34,12 +36,17 @@ function Register() {
   );
   const [images, setImages] = useRecoilState(registerFormImage);
 
-  const handleTitle = e => {
-    setTitle(e.target.value);
+  const handler = {
+    title: setTitle,
+    maxCapacity: setMaxCapacity,
+    detailedAddress: setDetailedAddress,
+    detailedInformation: setDetailedInformation,
+    charge: setCharge,
   };
 
-  const handleMaxCapacity = e => {
-    setMaxCapacity(e.target.value);
+  const handleChange = event => {
+    const { name, value } = event.target;
+    handler[name](value);
   };
 
   const plusCapacity = () => {
@@ -57,18 +64,6 @@ function Register() {
   };
 
   const postCode = ReactDaumPost(postConfig);
-
-  const handleDetailedAddress = e => {
-    setDetailedAddress(e.target.value);
-  };
-
-  const handleDetailedInformation = e => {
-    setDetailedInformation(e.target.value);
-  };
-
-  const handleCharge = e => {
-    setCharge(e.target.value);
-  };
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -98,7 +93,7 @@ function Register() {
         <FormContainer>
           <Wrapper>
             <Title>제목</Title>
-            <Input onChange={handleTitle} />
+            <Input onChange={handleChange} name="title" />
           </Wrapper>
           <Wrapper>
             <Title>카테고리</Title>
@@ -114,7 +109,8 @@ function Register() {
               <SmallInput
                 width="20px"
                 type="number"
-                onChange={handleMaxCapacity}
+                onChange={handleChange}
+                name="maxCapacity"
                 value={maxCapacity}
                 readOnly
               />
@@ -130,11 +126,15 @@ function Register() {
               readOnly
             />
             <Title marginTop="20px">상세주소</Title>
-            <Input type="text" onChange={handleDetailedAddress} />
+            <Input type="text" onChange={handleChange} name="detailedAddress" />
           </Wrapper>
           <Wrapper>
             <Title>상세정보</Title>
-            <Textarea type="text" onChange={handleDetailedInformation} />
+            <Textarea
+              type="text"
+              onChange={handleChange}
+              name="detailInformation"
+            />
           </Wrapper>
           <Wrapper>
             <Title>사진</Title>
@@ -144,7 +144,12 @@ function Register() {
             <Title>금액 설정</Title>
             <div className="set-charge">
               <div className="hour-description">1시간 / </div>
-              <SmallInput type="number" width="100px" onChange={handleCharge} />
+              <SmallInput
+                type="number"
+                width="100px"
+                onChange={handleChange}
+                name="charge"
+              />
               <div className="hour-description">원</div>
             </div>
           </Wrapper>
@@ -162,8 +167,6 @@ function Register() {
     </>
   );
 }
-
-export default Register;
 
 const Container = styled.div`
   margin-top: 70px;
@@ -243,7 +246,7 @@ const Title = styled.div`
   font-weight: 600;
   color: #2b2b2b;
   margin-bottom: 15px;
-  margin-top: ${props => props.marginTop};
+  margin-top: ${({ marginTop }) => marginTop};
 `;
 
 const ButtonWrapper = styled.div`
@@ -265,7 +268,7 @@ const Input = styled.input`
 `;
 
 const SmallInput = styled.input`
-  width: ${props => props.width};
+  width: ${({ width }) => width};
   height: 1.1rem;
   font-size: 0.8rem;
   outline: none;

@@ -1,11 +1,13 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+
 import { FaRegBookmark, FaLink } from 'react-icons/fa';
 
+// TODO
+// window를 지원하지 않을 수 있다.
 function ReservationBottomButtons() {
   const copyLinkRef = useRef();
 
-  // eslint-disable-next-line consistent-return
   const handleCopyLink = () => {
     if (!document.queryCommandSupported('copy')) {
       return alert('복사 기능이 지원되지 않는 브라우저입니다.');
@@ -15,7 +17,7 @@ function ReservationBottomButtons() {
     copyLinkRef.current.select();
     document.execCommand('copy');
 
-    alert('링크를 복사했습니다.');
+    return alert('링크를 복사했습니다.');
   };
 
   return (
@@ -68,6 +70,7 @@ const BookmarkIcon = styled(FaRegBookmark)`
     cursor: pointer;
   }
 `;
+
 const LinkCopyIcon = styled(FaLink)`
   font-size: 1rem;
   margin-right: 8px;

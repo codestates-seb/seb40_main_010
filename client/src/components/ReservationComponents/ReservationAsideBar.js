@@ -1,16 +1,20 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
+
 import {
   reservationStartDate,
   reservationEndDate,
   reservationMaxCapacity,
 } from '../../atoms';
+
 import ReservationCalendar from './ReservationCalendar';
 import ReservationCapacityHandler from './ReservationCapacityHandler';
 import ReservationBottomButtons from './ReservationBottomButtons';
 
+// TODO
+// 23~32까지 파일로 빼기
 function ReservationAsideBar() {
   const [startDate, setStartDate] = useRecoilState(reservationStartDate);
   const [endDate, setEndDate] = useRecoilState(reservationEndDate);
@@ -76,7 +80,7 @@ function ReservationAsideBar() {
         <button
           type="submit"
           className="reservation-button"
-          disabled={!startDate || !endDate ? 'disabled' : null}
+          disabled={!(startDate && endDate)}
         >
           예약하기
         </button>
@@ -89,7 +93,6 @@ function ReservationAsideBar() {
 }
 
 const Container = styled.div`
-  /* margin-top: 90px; */
   position: sticky;
   top: 90px;
   width: 18rem;
@@ -167,10 +170,10 @@ const OuterWrapper = styled.div`
   margin-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #e7eaee;
-  display: ${props => props.display};
-  justify-content: ${props => props.justifyContent};
-  align-items: ${props => props.alignItems};
-  margin-bottom: ${props => props.marginBottom};
+  display: ${({ display }) => display};
+  justify-content: ${({ justifyContent }) => justifyContent};
+  align-items: ${({ alignItems }) => alignItems};
+  margin-bottom: ${({ marginBottom }) => marginBottom};
 `;
 
 const ButtonsWrapper = styled.div`

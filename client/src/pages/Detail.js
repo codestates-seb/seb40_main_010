@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 // import axios from 'axios';
 // import { useRecoilValue } from 'recoil';
-import ReservationAsideBar from '../components/ReservationComponets/ReservationAsideBar';
+import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Nav';
 import View from '../components/View';
 // import { PlaceIDState } from '../atoms';
