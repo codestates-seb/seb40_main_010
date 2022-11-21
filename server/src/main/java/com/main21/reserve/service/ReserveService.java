@@ -9,17 +9,11 @@ import com.main21.place.repository.PlaceRepository;
 import com.main21.reserve.dto.PayApprovalDto;
 import com.main21.reserve.dto.PayReadyDto;
 import com.main21.reserve.dto.ReserveDto;
-import com.main21.reserve.entity.HostingTime;
-import com.main21.reserve.entity.MbtiCount;
-import com.main21.reserve.entity.Reserve;
-import com.main21.reserve.entity.TimeStatus;
+import com.main21.reserve.entity.*;
 import com.main21.reserve.event.OutBoxEventBuilder;
 import com.main21.reserve.event.ReserveCreated;
 import com.main21.reserve.mapper.ReserveMapper;
-import com.main21.reserve.repository.HostingTimeRepository;
-import com.main21.reserve.repository.MbtiCountRepository;
-import com.main21.reserve.repository.ReserveRepository;
-import com.main21.reserve.repository.TimeStatusRepository;
+import com.main21.reserve.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -79,6 +73,7 @@ public class ReserveService {
     private final ReserveRepository reserveRepository;
     private final PlaceRepository placeRepository;
     private final MbtiCountRepository mbtiCountRepository;
+    private final CancelReasonRepository cancelReasonRepository;
 
     private PayReadyDto payReadyDto;
     private RestTemplate restTemplate;
@@ -369,14 +364,25 @@ public class ReserveService {
 
     /**
      * 예약 삭제 메서드
+<<<<<<< Updated upstream
      *
+=======
+     * 예약 삭제 시 취소 사유 작성
+>>>>>>> Stashed changes
      * @param reserveId 예약 식별자
      * @author LeeGoh
      */
-    public void deleteReserve(Long reserveId) {
+    public void deleteReserve(ReserveDto.Cancel cancel, Long reserveId, Long memberId) {
         Reserve findReserve = ifExistsReturnReserve(reserveId);
         findReserve.setStatus(Reserve.ReserveStatus.RESERVATION_CANCELED);
         reserveRepository.save(findReserve);
+
+        CancelReason cancelReason = CancelReason.builder()
+                .reason(cancel.getReason())
+                .reserveId(reserveId)
+                .memberId(memberId)
+                .build();
+        cancelReasonRepository.save(cancelReason);
     }
 
 
