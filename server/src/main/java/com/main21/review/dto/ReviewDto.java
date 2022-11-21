@@ -7,19 +7,22 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class ReviewDto {
     @Getter
     public static class Post {
+        @NotBlank
         private double score;
-
+        @NotBlank
         private String comment;
     }
     @Getter
     public static class Patch {
+        @NotBlank
         private Double score;
-
+        @NotBlank
         private String comment;
     }
 
