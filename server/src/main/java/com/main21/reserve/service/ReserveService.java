@@ -93,8 +93,9 @@ public class ReserveService {
 
     /**
      * 예약 프로세스 1 - 예약 등록 메서드
-     * @param post 예약 등록 정보
-     * @param placeId 장소 식별자
+     *
+     * @param post     예약 등록 정보
+     * @param placeId  장소 식별자
      * @param memberId 사용자 식별자
      * @author LimJaeminZ
      */
@@ -107,6 +108,63 @@ public class ReserveService {
         Member findMember = memberRepository.findById(memberId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
+
+        //유저확인
+        Reserve reserve = Reserve.builder()
+                .capacity(post.getCapacity())
+                .startTime(post.getStartTime())
+                .endTime(post.getEndTime())
+                .placeId(findPlace.getId())
+                .memberId(memberId)
+                .totalCharge(((post.getEndTime().getTime() - post.getStartTime().getTime()) / 3600000) * findPlace.getCharge())
+                .build();
+
+
+        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd");
+        String reserveDay = fDate.format(reserve.getStartTime());
+
+        Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getStartTime()));
+        Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getEndTime()));
+
+        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByReserveDate(reserveDay);
+
+        if (!findHostingTime.isPresent()) {
+            HostingTime hostingTime = HostingTime.builder()
+                    .reserveDate(reserveDay)
+                    .placeId(reserve.getPlaceId())
+                    .build();
+            hostingTimeRepository.save(hostingTime);
+
+            for (int i = reserveStartHH; i < reserveEndHH; i++) {
+                TimeStatus timeStatus = new TimeStatus(hostingTime, i, i + 1);
+                timeStatus.addSpaceCount();
+                timeStatusRepository.save(timeStatus);
+            }
+
+        } else {
+            for (int i = reserveStartHH; i < reserveEndHH; i++) {
+                TimeStatus findTimeStatus = timeStatusRepository.findByHostingTimeIdAndStartTime(findHostingTime.get().getId(), i);
+                if (findTimeStatus == null) {
+                    TimeStatus timeStatus = new TimeStatus(findHostingTime.get(), i, i + 1);
+                    timeStatus.addSpaceCount();
+                    timeStatusRepository.save(timeStatus);
+                } else {
+                    if (!findTimeStatus.isFull()) {
+                        findTimeStatus.addSpaceCount();
+                        timeStatusRepository.save(findTimeStatus);
+                        if (findTimeStatus.getSpaceCount().equals(findPlace.getMaxSpace())) {
+                            findTimeStatus.setIsFull();
+                            timeStatusRepository.save(findTimeStatus);
+                        }
+                    } else {
+                        throw new IllegalAccessError("Full space");
+                    }
+                }
+            }
+            if (reserve.getCapacity() > findPlace.getMaxCapacity()) {
+                throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
+            } else reserveRepository.save(reserve);
+        }
         // mbti count 로직(결제 성공 시)
         MbtiCount findMBTICount = ifExistsReturnMBTICount(findMember.getMbti(), placeId);
         if (findMBTICount == null) { // 없을 경우 새로 생성
@@ -120,62 +178,13 @@ public class ReserveService {
             findMBTICount.addOneMbti();
             mbtiCountRepository.save(findMBTICount);
         }
-
-        //유저확인
-        Reserve reserve = Reserve.builder()
-                .capacity(post.getCapacity())
-                .startTime(post.getStartTime())
-                .endTime(post.getEndTime())
-                .placeId(findPlace.getId())
-                .memberId(memberId)
-                .totalCharge(((post.getEndTime().getTime() - post.getStartTime().getTime())/3600000) * findPlace.getCharge())
-                .build();
-
-        if(reserve.getCapacity() > findPlace.getMaxCapacity()) throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
-        else reserveRepository.save(reserve);
-
-        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd");
-        String reserveDay = fDate.format(reserve.getStartTime());
-
-        Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getStartTime()));
-        Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getEndTime()));
-
-        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByReserveDate(reserveDay);
-
-        if(!findHostingTime.isPresent()) {
-            HostingTime hostingTime = HostingTime.builder()
-                    .reserveDate(reserveDay)
-                    .placeId(reserve.getPlaceId())
-                    .build();
-            hostingTimeRepository.save(hostingTime);
-
-            for(int i = reserveStartHH; i < reserveEndHH; i++) {
-                TimeStatus timeStatus = new TimeStatus(hostingTime, i, i+1);
-                if(!timeStatus.isFull()) {
-                    timeStatus.addSpaceCount();
-                    timeStatusRepository.save(timeStatus);
-                } else {
-                    throw new IllegalAccessError("Full space");
-                }
-            }
-        } else {
-            for(int i = reserveStartHH; i < reserveEndHH; i++) {
-                TimeStatus findTimeStatus = timeStatusRepository.findByHostingTimeIdAndStartTime(findHostingTime.get().getId(), i);
-                if(!findTimeStatus.isFull()) {
-                    findTimeStatus.addSpaceCount();
-                    timeStatusRepository.save(findTimeStatus);
-                } else {
-                    throw new IllegalAccessError("Full space");
-                }
-            }
-        }
     }
-
 
     /**
      * 예약 프로세스 2 - 결제 URL 요청 메서드
-     * @param reserveId 예약 식별자
-     * @param memberId 사용자 식별자
+     *
+     * @param reserveId  예약 식별자
+     * @param memberId   사용자 식별자
      * @param requestUrl 요청 URL
      * @return URL(결제 페이지)
      * @author mozzi327
@@ -224,6 +233,7 @@ public class ReserveService {
 
     /**
      * 예약 프로세스 3 - 결제 완료 시 결제 결과 반환 메서드
+     *
      * @param pgToken Payment Gateway Token
      * @return PayApprovalDto
      * @author mozzi327
@@ -270,6 +280,7 @@ public class ReserveService {
 
     /**
      * 예약 프로세스 4 - 결제 취소 시 결제 취소 상태 변경 메서드
+     *
      * @author mozzi327
      */
     public void setCanceledStatus() {
@@ -282,6 +293,7 @@ public class ReserveService {
 
     /**
      * 예약 프로세스 5 - 결제 실패 시 결제 실패 상태 변경 메서드
+     *
      * @author mozzi327
      */
     public void setFailedStatus() {
@@ -294,14 +306,15 @@ public class ReserveService {
 
     /**
      * 카카오페이 URL 생성 결과 리턴 메서드
+     *
      * @param headers http 헤더
-     * @param params params Map
+     * @param params  params Map
      * @return payReadyDto.getNextRedirectPcUrl() or null
      * @author mozzi327
      */
     private String getPayUrl(HttpHeaders headers,
                              MultiValueMap<String, String> params) {
-        HttpEntity<MultiValueMap<String, String >> body = new HttpEntity<>(params, headers);
+        HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<>(params, headers);
 
         try {
             payReadyDto = restTemplate.postForObject(host + kakaoPayReady,
@@ -324,9 +337,10 @@ public class ReserveService {
 
     /**
      * 예약 수정 메서드(사용 미정)
-     * @param patch 에약 수정 정보
+     *
+     * @param patch     에약 수정 정보
      * @param reserveId 예약 식별자
-     * @param memberId 사용자 식별자
+     * @param memberId  사용자 식별자
      * @author Quartz614
      */
     public void updateReserve(ReserveDto.Patch patch, Long reserveId, Long memberId) {
@@ -343,6 +357,7 @@ public class ReserveService {
 
     /**
      * 예약 전체 조회 메서드
+     *
      * @param memberId 사용자 식별자
      * @return List
      * @author LeeGoh
@@ -354,6 +369,7 @@ public class ReserveService {
 
     /**
      * 예약 삭제 메서드
+     *
      * @param reserveId 예약 식별자
      * @author LeeGoh
      */
@@ -371,7 +387,8 @@ public class ReserveService {
 
     /**
      * 결과별 리다이렉트 Url 파라매터 입력 메서드
-     * @param params params Map
+     *
+     * @param params     params Map
      * @param requestUrl 요청하는 url(localhost)
      * @author mozzi327
      */
@@ -386,6 +403,7 @@ public class ReserveService {
 
     /**
      * 카카오페이 통신 헤더 세팅 메서드
+     *
      * @param headers http 헤더
      * @author mozzi327
      */
@@ -401,6 +419,7 @@ public class ReserveService {
 
     /**
      * OrderId를 파싱하는 메서드
+     *
      * @param orderId 카카오 주문 정보 식별자
      * @return String[]
      * @author mozzi327
@@ -413,11 +432,12 @@ public class ReserveService {
 
 
 
-/* ------------------------------------ find Method --------------------------------------*/
+    /* ------------------------------------ find Method --------------------------------------*/
 
 
     /**
      * 예약 정보 조회 메서드
+     *
      * @param reserveId 예약 식별자
      * @return Reserve
      * @author mozzi327
@@ -430,6 +450,7 @@ public class ReserveService {
 
     /**
      * 사용자 정보 조회 메서드
+     *
      * @param memberId 사용자 식별자
      * @return Member
      * @author mozzi327
@@ -442,6 +463,7 @@ public class ReserveService {
 
     /**
      * 호스팅 정보 조회 메서드
+     *
      * @param placeId 장소 식별자
      * @return Place
      * @author mozzi327
@@ -455,7 +477,7 @@ public class ReserveService {
     /**
      * MBTICount 정보 조회 메서드
      *
-     * @param mbti MBTI
+     * @param mbti    MBTI
      * @param placeId 장소 식별자
      * @return MBTICount
      * @author mozzi327
@@ -465,3 +487,4 @@ public class ReserveService {
                 .orElse(null);
     }
 }
+

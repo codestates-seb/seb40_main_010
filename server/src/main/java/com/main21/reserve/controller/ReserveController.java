@@ -191,13 +191,13 @@ public class ReserveController {
      * @return ResponseEntity
      * @author LeeGoh
      */
-    @DeleteMapping("/reserve/{reserve-id}")
-    public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId,
-                                        @CookieValue(name = "memberId") Long memberId,
-                                        @RequestBody(required = false) ReserveDto.Cancel cancel) {
-//                                        @RequestBody(required = false) Map<String, String> cancel) {
-//                                        @RequestBody(required = false) String cancel) {
-        reserveService.deleteReserve(cancel, reserveId, memberId);
-        return new ResponseEntity(HttpStatus.OK);
-    }
+//    @DeleteMapping("/reserve/{reserve-id}")
+//    public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId,
+//                                        @CookieValue(name = "memberId") Long memberId,
+//                                        @RequestBody(required = false) ReserveDto.Cancel cancel) {
+////                                        @RequestBody(required = false) Map<String, String> cancel) {
+////                                        @RequestBody(required = false) String cancel) {
+//        reserveService.deleteReserve(cancel, reserveId, memberId);
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
 }
