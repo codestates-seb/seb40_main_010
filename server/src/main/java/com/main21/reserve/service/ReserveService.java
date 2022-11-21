@@ -94,6 +94,8 @@ public class ReserveService {
      * @param memberId 사용자 식별자
      * @author LimJaeminZ
      */
+
+    @Transactional
     public void createReserve(ReserveDto.Post post, Long placeId, Long memberId) throws ParseException {
 
         //공간 확인
@@ -156,10 +158,12 @@ public class ReserveService {
                     }
                 }
             }
-            if (reserve.getCapacity() > findPlace.getMaxCapacity()) {
-                throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
-            } else reserveRepository.save(reserve);
         }
+
+        if (reserve.getCapacity() > findPlace.getMaxCapacity()) {
+            throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
+        } else reserveRepository.save(reserve);
+
         // mbti count 로직(결제 성공 시)
         MbtiCount findMBTICount = ifExistsReturnMBTICount(findMember.getMbti(), placeId);
         if (findMBTICount == null) { // 없을 경우 새로 생성
