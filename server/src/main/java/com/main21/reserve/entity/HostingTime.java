@@ -1,6 +1,8 @@
 package com.main21.reserve.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.main21.place.entity.Category;
+import com.main21.place.entity.Place;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,9 +24,9 @@ public class HostingTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date reserveDate;
+/*    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")*/
+    private String reserveDate;
 
     @OneToMany(mappedBy = "hostingTime", cascade = CascadeType.ALL)
     List<TimeStatus> timeStatuses = new ArrayList<>();
@@ -33,7 +35,7 @@ public class HostingTime {
     private Long placeId;
 
     @Builder
-    public HostingTime (Date reserveDate,
+    public HostingTime (String reserveDate,
                         Long placeId) {
         this.reserveDate = reserveDate;
         this.placeId = placeId;

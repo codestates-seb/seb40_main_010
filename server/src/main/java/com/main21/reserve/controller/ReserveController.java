@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.List;
 
 import static com.main21.reserve.utils.ReserveConstants.*;
@@ -36,7 +37,7 @@ public class ReserveController {
     @PostMapping("/place/{place-id}/reserve")
     public ResponseEntity postReserve(@PathVariable("place-id") Long placeId,
                                       @RequestBody ReserveDto.Post post,
-                                      @CookieValue(name = "memberId") Long memberId) {
+                                      @CookieValue(name = "memberId") Long memberId) throws ParseException {
         reserveService.createReserve(post, placeId, memberId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

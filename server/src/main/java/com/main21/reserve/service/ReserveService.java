@@ -9,13 +9,17 @@ import com.main21.place.repository.PlaceRepository;
 import com.main21.reserve.dto.PayApprovalDto;
 import com.main21.reserve.dto.PayReadyDto;
 import com.main21.reserve.dto.ReserveDto;
+import com.main21.reserve.entity.HostingTime;
 import com.main21.reserve.entity.MbtiCount;
 import com.main21.reserve.entity.Reserve;
+import com.main21.reserve.entity.TimeStatus;
 import com.main21.reserve.event.OutBoxEventBuilder;
 import com.main21.reserve.event.ReserveCreated;
 import com.main21.reserve.mapper.ReserveMapper;
+import com.main21.reserve.repository.HostingTimeRepository;
 import com.main21.reserve.repository.MbtiCountRepository;
 import com.main21.reserve.repository.ReserveRepository;
+import com.main21.reserve.repository.TimeStatusRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +36,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import static com.main21.reserve.utils.PayConstants.*;
 
@@ -78,7 +87,8 @@ public class ReserveService {
     private Long totalAmount;
     private boolean exceptionFlag = true;
     private final ReserveMapper reserveMapper;
-
+    private final HostingTimeRepository hostingTimeRepository;
+    private final TimeStatusRepository timeStatusRepository;
 
     /**
      * 예약 프로세스 1 - 예약 등록 메서드
@@ -87,7 +97,7 @@ public class ReserveService {
      * @param memberId 사용자 식별자
      * @author LimJaeminZ
      */
-    public void createReserve(ReserveDto.Post post, Long placeId, Long memberId) {
+    public void createReserve(ReserveDto.Post post, Long placeId, Long memberId) throws ParseException {
 
         //공간 확인
         Place findPlace = placeRepository.findById(placeId).orElseThrow(() ->
@@ -121,6 +131,31 @@ public class ReserveService {
                 .build();
 
         reserveRepository.save(reserve);
+
+        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd");
+        String reserveDay = fDate.format(reserve.getStartTime());
+
+
+        // 예약 시간 확인
+        HostingTime hostingTime = HostingTime.builder()
+                .reserveDate(reserveDay)
+                .placeId(reserve.getPlaceId())
+                .build();
+
+        hostingTimeRepository.save(hostingTime);
+
+        Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getStartTime()));
+        Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getEndTime()));
+
+        for(int i = reserveStartHH; i < reserveEndHH; i++) {
+            TimeStatus timeStatus = new TimeStatus(hostingTime, i, i+1);
+            if(!timeStatus.isFull()) {
+                timeStatus.addSpaceCount();
+                timeStatusRepository.save(timeStatus);
+            } else {
+                throw new IllegalAccessError("Full space");
+            }
+        }
     }
 
 

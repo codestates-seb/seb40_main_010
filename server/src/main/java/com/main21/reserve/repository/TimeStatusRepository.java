@@ -1,4 +1,7 @@
 package com.main21.reserve.repository;
 
-public interface TimeStatusRepository {
+import com.main21.reserve.entity.TimeStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TimeStatusRepository extends JpaRepository<TimeStatus, Long> {
 }
