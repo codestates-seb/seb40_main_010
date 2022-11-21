@@ -89,9 +89,11 @@ function ReservationAsideBar() {
 }
 
 const Container = styled.div`
-  margin-top: 90px;
+  /* margin-top: 90px; */
+  position: sticky;
+  top: 90px;
   width: 18rem;
-  height: flex;
+  height: 528px;
   border-radius: 15px;
   border: 1px solid black;
   display: flex;

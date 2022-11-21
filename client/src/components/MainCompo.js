@@ -1,30 +1,53 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
+import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { PlaceIDState } from '../atoms';
 
-function MainCompo() {
+function MainCompo({ placeData }) {
+  const setFocusPlaceID = useSetRecoilState(PlaceIDState);
+
+  const { address, charge, image, score, title, placeId } = placeData;
+
+  const onClickPlaceComponent = () => {
+    setFocusPlaceID(placeId);
+  };
+
   return (
-    <MainComponent>
-      <Image src="https://picsum.photos/200" />
-      <TitleContainer>
-        <PlaceName>인테리어가 아름다운 리빙형 대관 공간</PlaceName>
-        <ImStarFull style={{ color: '#ffce31' }} />
-        <PlaceScore>4.8</PlaceScore>
-      </TitleContainer>
-      <PlaceAddress>경기도 남양주시</PlaceAddress>
-      <PlaceCharge>30,000원</PlaceCharge>
-    </MainComponent>
+    <MainContainer onClick={e => e.stopPropagation()}>
+      <Link to="/detail">
+        <MainComponent onClick={onClickPlaceComponent}>
+          <Image src={image} />
+          <TitleContainer>
+            <PlaceName>{title.slice(0, 15)}</PlaceName>
+            <ImStarFull className="starIcon" />
+            <PlaceScore>{score}</PlaceScore>
+          </TitleContainer>
+          <PlaceAddress>{address}</PlaceAddress>
+          <PlaceCharge>{charge}원</PlaceCharge>
+        </MainComponent>
+      </Link>
+    </MainContainer>
   );
 }
+
+const MainContainer = styled.div`
+  a {
+    text-decoration: none;
+    color: #2b2b2b;
+  }
+`;
 
 const MainComponent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 300px;
-  border: 1px solid green;
+  width: 280px;
+  /* border: 1px solid green; */
   padding: 10px;
+  z-index: 10px;
 `;
 
 const Image = styled.img`
@@ -36,9 +59,16 @@ const Image = styled.img`
 `;
 
 const TitleContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
-  padding: 0 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 6px;
+  .starIcon {
+    color: #ffce31;
+    padding-bottom: 2px;
+  }
 `;
 
 const PlaceName = styled.div`
@@ -51,10 +81,11 @@ const PlaceName = styled.div`
 const PlaceAddress = styled.div`
   width: 100%;
   font-size: 15px;
+  padding-bottom: 5px;
 `;
 
 const PlaceScore = styled.div`
-  margin-left: 8px;
+  margin-top: 1px;
 `;
 
 const PlaceCharge = styled.div`

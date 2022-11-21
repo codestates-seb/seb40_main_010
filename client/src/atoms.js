@@ -52,7 +52,7 @@ export const navSearchValue = atom({
 
 export const categoryFocus = atom({
   key: 'categoryFocus',
-  default: '0',
+  default: 0,
 });
 
 export const reservationStartDate = atom({
@@ -83,4 +83,19 @@ export const reservationPlaceBookmarkState = atom({
 export const reservationEditData = atom({
   key: 'reservationEditData',
   default: {},
+});
+
+export const mainDataState = atom({
+  key: 'mainDataState',
+  default: [],
+});
+
+export const PlaceIDState = atom({
+  key: 'PlaceIDState',
+  default: '',
+});
+
+export const DetailInformation = atom({
+  key: 'DetailInformation',
+  default: [],
 });

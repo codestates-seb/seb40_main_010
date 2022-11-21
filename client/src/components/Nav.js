@@ -1,22 +1,18 @@
 /*
-
 + 한글 마지막 글자가 중복되는 현상 한글 외에는 괜찮음 > keydown이벤트를 keypress로 변경하면서 수정됨 > 한글이 구성되는 시간이 걸려서 생기는 문제
 추가할 사항 
 3. ui 요소
 4. 완료시 console.log 없애기, 변수명 정리
-
-title 없을 때 전체 카테고리 클릭 시
-mypage 갔다가 nav 홈 로고 누르면 카테고리 요청이 그대로 유지되는 현상 > 속도 때문
 */
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { SlHome } from 'react-icons/sl';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
 import { BsFillPersonFill } from 'react-icons/bs';
-import axios from 'axios';
+import { useSetRecoilState } from 'recoil';
 import { navSearchValue, categoryFocus } from '../atoms';
 
 const NavContainer = styled.div`
@@ -24,7 +20,7 @@ const NavContainer = styled.div`
   z-index: 100;
 `;
 
-const NavBg = styled.div`
+const NavBackground = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,7 +49,7 @@ const NavBg = styled.div`
   }
 `;
 
-const SearchDiv = styled.div`
+const SearchContainer = styled.div`
   width: 40%;
   display: flex;
   justify-content: row;
@@ -61,7 +57,7 @@ const SearchDiv = styled.div`
   margin: 0;
   text-align: center;
   align-items: center;
-  .searchLogo {
+  .searchIcon {
     position: absolute;
     right: 0;
     margin: 0;
@@ -99,7 +95,7 @@ const ButtonContainer = styled.div`
   margin-right: 20px;
 `;
 
-const NavButton = styled.button`
+const NavLeftButton = styled.button`
   width: 80px;
   margin: 10px 7px;
   padding: 8px;
@@ -119,7 +115,7 @@ const NavButton = styled.button`
   }
 `;
 
-const NavLogOutButton = styled(NavButton)`
+const NavRightButton = styled(NavLeftButton)`
   &:hover {
     background-color: #eb7470;
     transition: 0.5s;
@@ -127,12 +123,11 @@ const NavLogOutButton = styled(NavButton)`
 `;
 
 const MyPageDiv = styled.div`
-  background-color: aliceblue;
-  border-radius: 50px;
+  border-radius: 50%;
 `;
 
 function Nav({ navColor, buttonColor }) {
-  const [testSearchValue, setTestSearchValue] = useState('');
+  const [temporarySearchValue, setTemporarySearchValue] = useState('');
   const setSearchValue = useSetRecoilState(navSearchValue);
   const setFocusCategoryID = useSetRecoilState(categoryFocus);
 
@@ -146,36 +141,47 @@ function Nav({ navColor, buttonColor }) {
   const isLogIn = window.localStorage.getItem('Access_token');
 
   const onChangeSearch = e => {
-    setTestSearchValue(e.target.value);
+    setTemporarySearchValue(e.target.value);
   };
+
   const onKeypress = e => {
     if (e.key === 'Enter') {
-      setTestSearchValue('');
-      setSearchValue(testSearchValue.trim().replace(/ +(?= )/g, ''));
-      if (testSearchValue.trim()) {
+      setSearchValue(temporarySearchValue.trim().replace(/ +(?= )/g, ''));
+      if (temporarySearchValue.trim()) {
         axios
           .get(
             `{{BACKEND}}/search/${encodeURI(
-              testSearchValue.trim().replace(/ +(?= )/g, ''),
+              temporarySearchValue.trim().replace(/ +(?= )/g, ''),
             )}`,
           )
           .then(res => console.log(res))
-          .then(setFocusCategoryID('0'), navigate('/'));
+          .then(
+            setFocusCategoryID(0),
+            setTemporarySearchValue(''),
+            navigate('/'),
+          );
+      } else {
+        setTemporarySearchValue('');
       }
     }
   };
   const onClickSearch = () => {
-    setTestSearchValue('');
-    setSearchValue(testSearchValue.trim().replace(/ +(?= )/g, ''));
-    if (testSearchValue.trim()) {
+    setSearchValue(temporarySearchValue.trim().replace(/ +(?= )/g, ''));
+    if (temporarySearchValue.trim()) {
       axios
         .get(
           `{{BACKEND}}/search/${encodeURI(
-            testSearchValue.trim(' ').replace(/ +(?= )/g, ''),
+            temporarySearchValue.trim(' ').replace(/ +(?= )/g, ''),
           )}`,
         )
         .then(res => console.log(res))
-        .then(setFocusCategoryID('0'), navigate('/'));
+        .then(
+          setFocusCategoryID(0),
+          setTemporarySearchValue(''),
+          navigate('/'),
+        );
+    } else {
+      setTemporarySearchValue('');
     }
   };
 
@@ -186,35 +192,31 @@ function Nav({ navColor, buttonColor }) {
   const onClickHomeIcon = () => {
     axios
       .get('{{backend}}/')
-      .then(
-        res => console.log(res),
-        setFocusCategoryID('0'),
-        setSearchValue(''),
-      );
-    // .catch(err => console.log(err));
+      .then(res => console.log(res), setFocusCategoryID(0), setSearchValue(''))
+      .catch(err => console.log(err));
   };
   return (
     <NavContainer>
-      <NavBg navColor={navColor}>
+      <NavBackground navColor={navColor}>
         <Link to="/">
           <SlHome onClick={onClickHomeIcon} className="NavLogo" />
           <div />
         </Link>
-        <SearchDiv>
+        <SearchContainer>
           <SearchInput
-            value={testSearchValue}
+            value={temporarySearchValue}
             onChange={e => onChangeSearch(e)}
             onKeyPress={onKeypress}
           />
-          <AiOutlineSearch onClick={onClickSearch} className="searchLogo" />
-        </SearchDiv>
+          <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />
+        </SearchContainer>
         <ButtonContainer>
           {location.pathname === '/register' ||
           location.pathname === '/login' ? null : (
             <Link to={isLogIn ? '/register' : '/login'}>
-              <NavButton buttonColor={buttonColor}>
+              <NavLeftButton buttonColor={buttonColor}>
                 {isLogIn ? '장소 등록' : 'Log In'}
-              </NavButton>
+              </NavLeftButton>
             </Link>
           )}
           {location.pathname === '/signup' ? null : (
@@ -227,7 +229,7 @@ function Nav({ navColor, buttonColor }) {
                   : '/mypage'
               }
             >
-              <NavLogOutButton
+              <NavRightButton
                 onClick={
                   location.pathname === '/mypage' && isLogIn
                     ? onClickLogOutButton
@@ -243,11 +245,11 @@ function Nav({ navColor, buttonColor }) {
                     <BsFillPersonFill />
                   </MyPageDiv>
                 )}
-              </NavLogOutButton>
+              </NavRightButton>
             </Link>
           )}
         </ButtonContainer>
-      </NavBg>
+      </NavBackground>
     </NavContainer>
   );
 }

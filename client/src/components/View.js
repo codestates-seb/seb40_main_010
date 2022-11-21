@@ -1,19 +1,20 @@
+import React, { useEffect } from 'react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Fade from './Fade';
+import { useRecoilState } from 'recoil';
+import { DetailInformation } from '../atoms';
+import FadeCarousel from './Fade';
 import Location from './Map';
 
-const TotalContainer = styled.div`
+const ViewContainer = styled.div`
   margin-top: 80px;
   margin: auto;
-  width: 900px;
-  /* border: 1px solid teal; */
+  width: 720px;
   border-bottom: 2px solid #89bbff;
   margin-bottom: 10px;
 `;
 
-const InfoContainer = styled.div`
+const InformationContainer = styled.div`
   margin-top: 100px;
   width: 700px;
   height: auto;
@@ -21,12 +22,12 @@ const InfoContainer = styled.div`
   padding-left: 15px;
 `;
 
-const InfoTitle = styled.div`
+const InformationTitle = styled.div`
   font-size: 1.3rem;
   font-weight: 600;
 `;
 
-const InfoMiniImageContainer = styled.div`
+const InformationMiniImageContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -35,7 +36,7 @@ const InfoMiniImageContainer = styled.div`
   width: 500px;
 `;
 
-const InfoMiniImage = styled.img`
+const InformationMiniImage = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 5px;
@@ -60,6 +61,10 @@ const DetailTitle = styled.div`
   font-weight: 600;
   margin-left: 20px;
   width: 600px;
+`;
+
+const NormalStyleDetailTitle = styled(DetailTitle)`
+  border: none;
 `;
 
 const DetailTagContainer = styled.div`
@@ -87,14 +92,7 @@ const DetailTag = styled.div`
   margin-bottom: 20px;
 `;
 
-const detailTagName = [
-  { num: 1, name: '#공유오피소' },
-  { num: 2, name: '#파티룸' },
-  { num: 3, name: '#계곡근처' },
-  { num: 4, name: '#ESTP' },
-];
-
-const DetailInfo = styled.div`
+const MoreInformation = styled.div`
   margin-left: 20px;
   width: 600px;
   font-size: 0.9rem;
@@ -102,71 +100,60 @@ const DetailInfo = styled.div`
   line-height: 22px;
 `;
 
-const DetailNonStyleTitle = styled(DetailTitle)`
-  border: none;
-`;
-
-const InfoLocation = styled(Location)`
+const InformationLocation = styled(Location)`
   width: 600px;
   height: 200px;
 `;
-const DetailNumber = styled(DetailInfo)`
+
+const DetailPhoneNumber = styled(MoreInformation)`
   font-size: 1rem;
   margin-bottom: 20px;
 `;
 
 function View() {
-  const address = '서울 송파구 올림픽로 240';
-  const [detailInformation, setDetailInformation] = useState({});
-  const [miniInformationImage, setMiniInformationImage] = useState({
-    data: [],
-  });
-  const detailId = 1;
-  useEffect(() => {
-    axios
-      .get(`https://koreanjson.com/posts/${detailId}`)
-      .then(res => {
-        const { id, title, content, createAt } = res.data;
-        setDetailInformation({ id, title, content, createAt });
-      })
-      .catch(err => console.log(err));
+  const [detailInformation, setDetailInformation] =
+    useRecoilState(DetailInformation);
 
-    axios
-      .get(`https://picsum.photos/v2/list?page=10&limit=4`)
+  const callDetailData = async () => {
+    await axios
+      .get('http://localhost:3001/detaildata')
       .then(res => {
-        setMiniInformationImage({
-          ...miniInformationImage,
-          data: [...res.data],
-        });
+        setDetailInformation(...res.data);
       })
-      // .then(console.log(miniInformationImage))
       .catch(err => console.log(err));
+  };
+
+  useEffect(() => {
+    callDetailData();
   }, []);
+
   return (
-    <TotalContainer>
-      <InfoContainer>
-        <InfoTitle>{detailInformation.title}</InfoTitle>
+    <ViewContainer>
+      <InformationContainer>
+        <InformationTitle>{detailInformation.title}</InformationTitle>
         <CarouselImageContainer>
-          <Fade {...miniInformationImage} />
+          <FadeCarousel />
         </CarouselImageContainer>
-        <InfoMiniImageContainer>
-          {miniInformationImage.data.map(el => {
-            return <InfoMiniImage key={el.id} src={el.download_url} />;
-          })}
-        </InfoMiniImageContainer>
+        <InformationMiniImageContainer>
+          {detailInformation.image &&
+            detailInformation.image.map(placeImage => {
+              return <InformationMiniImage key={placeImage} src={placeImage} />;
+            })}
+        </InformationMiniImageContainer>
         <DetailTitle>상세 정보</DetailTitle>
         <DetailTagContainer>
-          {detailTagName.map(el => {
-            return <DetailTag key={el.num}>{el.name}</DetailTag>;
-          })}
+          {detailInformation.category &&
+            detailInformation.category.map(placeTag => {
+              return <DetailTag key={placeTag}>{placeTag}</DetailTag>;
+            })}
         </DetailTagContainer>
-        <DetailInfo>{detailInformation.content}</DetailInfo>
-        <DetailNonStyleTitle>위치</DetailNonStyleTitle>
-        <InfoLocation address={address} />
-        <DetailNonStyleTitle>호스트 연락처</DetailNonStyleTitle>
-        <DetailNumber>010-1234-5678</DetailNumber>
-      </InfoContainer>
-    </TotalContainer>
+        <MoreInformation>{detailInformation.detailInfo}</MoreInformation>
+        <NormalStyleDetailTitle>위치</NormalStyleDetailTitle>
+        <InformationLocation address={detailInformation.address} />
+        <NormalStyleDetailTitle>호스트 연락처</NormalStyleDetailTitle>
+        <DetailPhoneNumber>{detailInformation.phoneNumber}</DetailPhoneNumber>
+      </InformationContainer>
+    </ViewContainer>
   );
 }
 
