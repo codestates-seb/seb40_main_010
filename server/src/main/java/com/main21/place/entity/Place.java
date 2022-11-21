@@ -43,6 +43,7 @@ public class Place {
     // 조회수
     private int view;
 
+    private Integer maxSpace;
 
     // 공간 - 회원 간접 참
     private Long memberId;
@@ -62,7 +63,7 @@ public class Place {
 
     // createPlace 생성자
     @Builder
-    public Place(String title, String detailInfo, int maxCapacity, String address, int charge, Long memberId, double score, int view){
+    public Place(String title, String detailInfo, int maxCapacity, String address, int charge, Long memberId, double score, int view, Integer maxSpace){
         this.title = title;
         this.detailInfo = detailInfo;
         this.maxCapacity = maxCapacity;
@@ -71,6 +72,7 @@ public class Place {
         this.memberId = memberId;
         this.score = score;
         this.view = view;
+        this.maxSpace = maxSpace;
     }
 
     public void addPlaceCategory(PlaceCategory placeCategory) {

@@ -24,7 +24,7 @@ public class HostingTime {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date currentDate;
+    private Date reserveDate;
 
     @OneToMany(mappedBy = "hostingTime", cascade = CascadeType.ALL)
     List<TimeStatus> timeStatuses = new ArrayList<>();
@@ -33,9 +33,9 @@ public class HostingTime {
     private Long placeId;
 
     @Builder
-    public HostingTime (Date currentDate,
+    public HostingTime (Date reserveDate,
                         Long placeId) {
-        this.currentDate = currentDate;
+        this.reserveDate = reserveDate;
         this.placeId = placeId;
     }
 }
