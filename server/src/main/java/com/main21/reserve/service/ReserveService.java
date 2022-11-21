@@ -40,6 +40,7 @@ import org.springframework.web.client.RestTemplate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 
 import static com.main21.reserve.utils.PayConstants.*;
@@ -135,25 +136,36 @@ public class ReserveService {
         SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd");
         String reserveDay = fDate.format(reserve.getStartTime());
 
-
-        // 예약 시간 확인
-        HostingTime hostingTime = HostingTime.builder()
-                .reserveDate(reserveDay)
-                .placeId(reserve.getPlaceId())
-                .build();
-
-        hostingTimeRepository.save(hostingTime);
-
         Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getStartTime()));
         Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getEndTime()));
 
-        for(int i = reserveStartHH; i < reserveEndHH; i++) {
-            TimeStatus timeStatus = new TimeStatus(hostingTime, i, i+1);
-            if(!timeStatus.isFull()) {
-                timeStatus.addSpaceCount();
-                timeStatusRepository.save(timeStatus);
-            } else {
-                throw new IllegalAccessError("Full space");
+        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByReserveDate(reserveDay);
+
+        if(!findHostingTime.isPresent()) {
+            HostingTime hostingTime = HostingTime.builder()
+                    .reserveDate(reserveDay)
+                    .placeId(reserve.getPlaceId())
+                    .build();
+            hostingTimeRepository.save(hostingTime);
+
+            for(int i = reserveStartHH; i < reserveEndHH; i++) {
+                TimeStatus timeStatus = new TimeStatus(hostingTime, i, i+1);
+                if(!timeStatus.isFull()) {
+                    timeStatus.addSpaceCount();
+                    timeStatusRepository.save(timeStatus);
+                } else {
+                    throw new IllegalAccessError("Full space");
+                }
+            }
+        } else {
+            for(int i = reserveStartHH; i < reserveEndHH; i++) {
+                TimeStatus findTimeStatus = timeStatusRepository.findByHostingTimeIdAndStartTime(findHostingTime.get().getId(), i);
+                if(!findTimeStatus.isFull()) {
+                    findTimeStatus.addSpaceCount();
+                    timeStatusRepository.save(findTimeStatus);
+                } else {
+                    throw new IllegalAccessError("Full space");
+                }
             }
         }
     }

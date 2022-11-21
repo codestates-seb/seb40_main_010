@@ -3,12 +3,15 @@ package com.main21.reserve.entity;
 import com.main21.place.entity.Category;
 import com.main21.place.entity.Place;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class TimeStatus {
 
     @Id
