@@ -7,7 +7,6 @@ const MapContainer = styled.div`
   height: 300px;
   margin-left: 20px;
 `;
-// ToDo: 지도 마커 & infowindow 설정 고르기
 function Location({ address }) {
   const { kakao } = window;
   useEffect(() => {
@@ -25,11 +24,6 @@ function Location({ address }) {
           map,
           position: coords,
         });
-        // const infowindow = new kakao.maps.InfoWindow({
-        //   content:
-        //     '<div class="info-subTitle" style="width:150px;text-align:center;padding:6px 0;">상세 위치</div>',
-        // });
-        // infowindow.open(map, marker);
         marker.setMap(map);
         map.setCenter(coords);
       }

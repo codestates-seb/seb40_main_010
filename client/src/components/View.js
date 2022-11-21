@@ -1,12 +1,12 @@
-import axios from 'axios';
 import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import axios from 'axios';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
 import { DetailInformation } from '../atoms';
-import Fade from './Fade';
+import FadeCarousel from './Fade';
 import Location from './Map';
 
-const TotalContainer = styled.div`
+const ViewContainer = styled.div`
   margin-top: 80px;
   margin: auto;
   width: 720px;
@@ -14,7 +14,7 @@ const TotalContainer = styled.div`
   margin-bottom: 10px;
 `;
 
-const InfoContainer = styled.div`
+const InformationContainer = styled.div`
   margin-top: 100px;
   width: 700px;
   height: auto;
@@ -22,12 +22,12 @@ const InfoContainer = styled.div`
   padding-left: 15px;
 `;
 
-const InfoTitle = styled.div`
+const InformationTitle = styled.div`
   font-size: 1.3rem;
   font-weight: 600;
 `;
 
-const InfoMiniImageContainer = styled.div`
+const InformationMiniImageContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -36,7 +36,7 @@ const InfoMiniImageContainer = styled.div`
   width: 500px;
 `;
 
-const InfoMiniImage = styled.img`
+const InformationMiniImage = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 5px;
@@ -61,6 +61,10 @@ const DetailTitle = styled.div`
   font-weight: 600;
   margin-left: 20px;
   width: 600px;
+`;
+
+const NormalStyleDetailTitle = styled(DetailTitle)`
+  border: none;
 `;
 
 const DetailTagContainer = styled.div`
@@ -88,7 +92,7 @@ const DetailTag = styled.div`
   margin-bottom: 20px;
 `;
 
-const DetailInfo = styled.div`
+const MoreInformation = styled.div`
   margin-left: 20px;
   width: 600px;
   font-size: 0.9rem;
@@ -96,16 +100,12 @@ const DetailInfo = styled.div`
   line-height: 22px;
 `;
 
-const DetailNonStyleTitle = styled(DetailTitle)`
-  border: none;
-`;
-
-const InfoLocation = styled(Location)`
+const InformationLocation = styled(Location)`
   width: 600px;
   height: 200px;
 `;
 
-const DetailNumber = styled(DetailInfo)`
+const DetailPhoneNumber = styled(MoreInformation)`
   font-size: 1rem;
   margin-bottom: 20px;
 `;
@@ -113,46 +113,47 @@ const DetailNumber = styled(DetailInfo)`
 function View() {
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
+
   const callDetailData = async () => {
     await axios
       .get('http://localhost:3001/detaildata')
       .then(res => {
         setDetailInformation(...res.data);
-        // setDetailInformation(...res.data);
       })
       .catch(err => console.log(err));
   };
+
   useEffect(() => {
     callDetailData();
   }, []);
 
   return (
-    <TotalContainer>
-      <InfoContainer>
-        <InfoTitle>{detailInformation.title}</InfoTitle>
+    <ViewContainer>
+      <InformationContainer>
+        <InformationTitle>{detailInformation.title}</InformationTitle>
         <CarouselImageContainer>
-          <Fade />
+          <FadeCarousel />
         </CarouselImageContainer>
-        <InfoMiniImageContainer>
+        <InformationMiniImageContainer>
           {detailInformation.image &&
-            detailInformation.image.map(el => {
-              return <InfoMiniImage key={el} src={el} />;
+            detailInformation.image.map(placeImage => {
+              return <InformationMiniImage key={placeImage} src={placeImage} />;
             })}
-        </InfoMiniImageContainer>
+        </InformationMiniImageContainer>
         <DetailTitle>상세 정보</DetailTitle>
         <DetailTagContainer>
           {detailInformation.category &&
-            detailInformation.category.map(el => {
-              return <DetailTag key={el}>{el}</DetailTag>;
+            detailInformation.category.map(placeTag => {
+              return <DetailTag key={placeTag}>{placeTag}</DetailTag>;
             })}
         </DetailTagContainer>
-        <DetailInfo>{detailInformation.detailInfo}</DetailInfo>
-        <DetailNonStyleTitle>위치</DetailNonStyleTitle>
-        <InfoLocation address={detailInformation.address} />
-        <DetailNonStyleTitle>호스트 연락처</DetailNonStyleTitle>
-        <DetailNumber>{detailInformation.phoneNumber}</DetailNumber>
-      </InfoContainer>
-    </TotalContainer>
+        <MoreInformation>{detailInformation.detailInfo}</MoreInformation>
+        <NormalStyleDetailTitle>위치</NormalStyleDetailTitle>
+        <InformationLocation address={detailInformation.address} />
+        <NormalStyleDetailTitle>호스트 연락처</NormalStyleDetailTitle>
+        <DetailPhoneNumber>{detailInformation.phoneNumber}</DetailPhoneNumber>
+      </InformationContainer>
+    </ViewContainer>
   );
 }
 
