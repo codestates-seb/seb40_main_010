@@ -159,7 +159,7 @@ function Nav({ navColor, buttonColor }) {
             )}`,
           )
           .then(res => console.log(res))
-          .then(setFocusCategoryID('0'), navigate('/'));
+          .then(setFocusCategoryID(0), navigate('/'));
       }
     }
   };
@@ -174,7 +174,7 @@ function Nav({ navColor, buttonColor }) {
           )}`,
         )
         .then(res => console.log(res))
-        .then(setFocusCategoryID('0'), navigate('/'));
+        .then(setFocusCategoryID(0), navigate('/'));
     }
   };
 
@@ -185,11 +185,7 @@ function Nav({ navColor, buttonColor }) {
   const onClickHomeIcon = () => {
     axios
       .get('{{backend}}/')
-      .then(
-        res => console.log(res),
-        setFocusCategoryID('0'),
-        setSearchValue(''),
-      );
+      .then(res => console.log(res), setFocusCategoryID(0), setSearchValue(''));
     // .catch(err => console.log(err));
   };
   return (

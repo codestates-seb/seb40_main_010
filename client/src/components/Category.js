@@ -13,17 +13,17 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { navSearchValue, categoryFocus } from '../atoms';
 
 const categories = [
-  { id: 0, iconId: '0', name: '전체', icon: 'fa-solid fa-house' },
-  { id: 1, iconId: '1', name: '공유오피스', icon: 'fa-solid fa-user-group' },
-  { id: 2, iconId: '2', name: '캠핑', icon: 'fa-solid fa-campground' },
-  { id: 3, iconId: '3', name: '바다근처', icon: 'fa-solid fa-umbrella-beach' },
-  { id: 4, iconId: '4', name: '짐보관', icon: 'fa-solid fa-suitcase-rolling' },
-  { id: 5, iconId: '5', name: '파티룸', icon: 'fa-solid fa-champagne-glasses' },
-  { id: 6, iconId: '6', name: '게스트하우스', icon: 'fa-solid fa-bed' },
-  { id: 7, iconId: '7', name: '호텔', icon: 'fa-solid fa-hotel' },
-  { id: 8, iconId: '8', name: '스터디룸', icon: 'fa-solid fa-pen-to-square' },
-  { id: 9, iconId: '9', name: '계곡근처', icon: 'fa-solid fa-water' },
-  { id: 10, iconId: '10', name: '공연장', icon: 'fa-solid fa-microphone' },
+  { categoryId: 0, name: '전체', icon: 'fa-solid fa-house' },
+  { categoryId: 1, name: '공유오피스', icon: 'fa-solid fa-user-group' },
+  { categoryId: 2, name: '캠핑', icon: 'fa-solid fa-campground' },
+  { categoryId: 3, name: '바다근처', icon: 'fa-solid fa-umbrella-beach' },
+  { categoryId: 4, name: '짐보관', icon: 'fa-solid fa-suitcase-rolling' },
+  { categoryId: 5, name: '파티룸', icon: 'fa-solid fa-champagne-glasses' },
+  { categoryId: 6, name: '게스트하우스', icon: 'fa-solid fa-bed' },
+  { categoryId: 7, name: '호텔', icon: 'fa-solid fa-hotel' },
+  { categoryId: 8, name: '스터디룸', icon: 'fa-solid fa-pen-to-square' },
+  { categoryId: 9, name: '계곡근처', icon: 'fa-solid fa-water' },
+  { categoryId: 10, name: '공연장', icon: 'fa-solid fa-microphone' },
 ];
 
 const CategoryContainer = styled.div`
@@ -68,9 +68,10 @@ function Category() {
   const [focusCategoryID, setFocusCategoryID] = useRecoilState(categoryFocus);
   const searchState = useRecoilValue(navSearchValue);
 
-  const onClickCategoryButton = event => {
-    setFocusCategoryID(event.target.id);
-    if (event.target.id === '0') {
+  const onClickCategoryButton = (e, idx) => {
+    // console.log(typeof idx);
+    setFocusCategoryID(idx);
+    if (idx === 0) {
       if (searchState) {
         axios
           .get(`{{BACKEND}}/search/${encodeURI(searchState)}`)
@@ -80,31 +81,26 @@ function Category() {
       }
     } else if (searchState) {
       axios
-        .get(
-          `{{BACKEND}}/category/${event.target.id}/search/${encodeURI(
-            searchState,
-          )}`,
-        )
+        .get(`{{BACKEND}}/category/${idx}/search/${encodeURI(searchState)}`)
         .then(res => console.log(res));
     } else {
       axios
-        .get(`{{BACKEND}}/category/${event.target.id}/search`)
+        .get(`{{BACKEND}}/category/${idx}/search`)
         .then(res => console.log(res));
     }
   };
 
   return (
     <CategoryContainer>
-      {categories.map(category => {
+      {categories.map((category, idx) => {
         return (
           <CategoryButton
             type="button"
-            key={category.id}
-            id={category.id}
-            onClick={onClickCategoryButton}
-            className={Number(focusCategoryID) === category.id ? 'focus' : null}
+            key={category.categoryId}
+            onClick={e => onClickCategoryButton(e, idx)}
+            className={focusCategoryID === category.categoryId ? 'focus' : null}
           >
-            <i id={category.iconId} className={category.icon} />
+            <i className={category.icon} />
             {category.name}
           </CategoryButton>
         );
