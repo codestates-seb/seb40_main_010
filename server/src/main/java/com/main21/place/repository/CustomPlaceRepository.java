@@ -11,6 +11,8 @@ import java.util.List;
 public interface CustomPlaceRepository {
     Page<PlaceDto.Response> getPlacesPage(Pageable pageable);
 //    Slice<PlaceDto.Response> getPlacesSlice(Pageable pageable);
+
+    PlaceDto.Response getPlace(Long placeId);
     Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable);
 //    Slice<PlaceCategoryDto.Response> getCategorySlice(Long categoryId, Pageable pageable);
     Page<PlaceDto.Response> searchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable);

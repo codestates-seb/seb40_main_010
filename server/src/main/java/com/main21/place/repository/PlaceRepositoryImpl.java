@@ -42,6 +42,22 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
         return new PageImpl<>(results, pageable, total);
     }
 
+
+    /**
+     * Mbti 조회를 위한 단건 조회 QueryDsl
+     * @param placeId 장소 식별자
+     * @return PlaceDto.Response
+     * @author mozzi327
+     */
+    @Override
+    public PlaceDto.Response getPlace(Long placeId) {
+        return queryFactory
+                .select(new QPlaceDto_Response(place))
+                .from(place)
+                .where(place.id.eq(placeId))
+                .fetchOne();
+    }
+
     /**
      * Slice 무한스크롤 공간 전체 조회 Querydsl
      * @param pageable
