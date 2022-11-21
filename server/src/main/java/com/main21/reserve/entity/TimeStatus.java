@@ -1,9 +1,8 @@
 package com.main21.reserve.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.main21.place.entity.Category;
+import com.main21.place.entity.Place;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -18,7 +17,7 @@ public class TimeStatus {
     private Long id;
     private Integer startTime;
     private Integer endTime;
-    private Integer spaceCount;
+    private Integer spaceCount = 0;
     private boolean isFull;
 
 
@@ -44,5 +43,11 @@ public class TimeStatus {
 
     public void setIsFull() {
         isFull = true;
+    }
+
+    public TimeStatus(HostingTime hostingTime, Integer startTime, Integer endTime) {
+        this.hostingTime = hostingTime;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 }

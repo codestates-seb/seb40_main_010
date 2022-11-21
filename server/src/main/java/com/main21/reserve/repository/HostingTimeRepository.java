@@ -1,4 +1,7 @@
 package com.main21.reserve.repository;
 
-public interface HostingTimeRepository {
+import com.main21.reserve.entity.HostingTime;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface HostingTimeRepository extends JpaRepository<HostingTime, Long> {
 }
