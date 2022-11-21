@@ -131,7 +131,8 @@ public class ReserveService {
                 .totalCharge(((post.getEndTime().getTime() - post.getStartTime().getTime())/3600000) * findPlace.getCharge())
                 .build();
 
-        reserveRepository.save(reserve);
+        if(reserve.getCapacity() > findPlace.getMaxCapacity()) throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
+        else reserveRepository.save(reserve);
 
         SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd");
         String reserveDay = fDate.format(reserve.getStartTime());
