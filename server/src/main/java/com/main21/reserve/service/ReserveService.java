@@ -12,8 +12,8 @@ import com.main21.reserve.dto.ReserveDto;
 import com.main21.reserve.entity.*;
 import com.main21.reserve.event.OutBoxEventBuilder;
 import com.main21.reserve.event.ReserveCreated;
-import com.main21.reserve.mapper.ReserveMapper;
 import com.main21.reserve.repository.*;
+import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
 
 
@@ -75,6 +74,8 @@ public class ReserveService {
     private final MbtiCountRepository mbtiCountRepository;
     private final CancelReasonRepository cancelReasonRepository;
 
+    private final RedisUtils redisUtils;
+
     private PayReadyDto payReadyDto;
     private RestTemplate restTemplate;
     private String orderId;
@@ -82,7 +83,6 @@ public class ReserveService {
     private String itemName;
     private Long totalAmount;
     private boolean exceptionFlag = true;
-    private final ReserveMapper reserveMapper;
     private final HostingTimeRepository hostingTimeRepository;
     private final TimeStatusRepository timeStatusRepository;
 
@@ -327,8 +327,82 @@ public class ReserveService {
     }
 
 
+    /* ------------------------------------ 결제 외 메서드 -------------------------------------*/
 
 
+    /**
+     * 예약 전체 조회 메서드
+     * @return List
+     * @author LeeGoh
+     */
+    public Page<ReserveDto.Response> getReservation(String refreshToken, Pageable pageable) {
+        Long memberId = redisUtils.getId(refreshToken);
+        return reserveRepository.getReservation(memberId, pageable);
+    }
+
+
+    /**
+     * 예약 삭제 메서드
+     * 예약 삭제 시 취소 사유 작성
+     * 예약 취소 시 mbtiCount -1, spaceCount -1
+     * @param reserveId 예약 식별자
+     * @author LeeGoh
+     */
+    public void deleteReserve(ReserveDto.Cancel cancel, Long reserveId, String refreshToken) {
+        Long memberId = redisUtils.getId(refreshToken);
+
+        // 예약 조회
+        Reserve findReserve = ifExistsReturnReserve(reserveId);
+
+        // 회원 조회
+        Member findMember = ifExistsReturnMember(memberId);
+
+        // 공간 조회
+        Place findPlace = ifExistsReturnPlace(findReserve.getPlaceId());
+
+        if (findReserve.getStatus().equals(Reserve.ReserveStatus.RESERVATION_CANCELED)) {
+            throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
+        }
+
+        // mbtiCount -1
+        MbtiCount findMBTICount = ifExistsReturnMBTICount(findMember.getMbti(), findReserve.getPlaceId());
+        findMBTICount.reduceOneMbti();
+        mbtiCountRepository.save(findMBTICount);
+
+        // spaceCount -1
+        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd");
+        String reserveDay = fDate.format(findReserve.getStartTime());
+
+        Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(findReserve.getStartTime()));
+        Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(findReserve.getEndTime()));
+
+        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByReserveDate(reserveDay);
+
+        for (int i = reserveStartHH; i < reserveEndHH; i++) {
+            // 시간대마다 spaceCount -1
+            TimeStatus findTimeStatus = timeStatusRepository.findByHostingTimeIdAndStartTime(findHostingTime.get().getId(), i);
+            findTimeStatus.reduceSpaceCount();
+
+            // spaceCount의 값과 maxSpace의 값이 같지 않으면 isFull = false
+            if (!findTimeStatus.getSpaceCount().equals(findPlace.getMaxSpace())) {
+                findTimeStatus.setIsFullFalse();
+            }
+
+            timeStatusRepository.save(findTimeStatus);
+        }
+
+        // 예약 상태 변경 ... -> RESERVATION_CANCELED
+        findReserve.setStatus(Reserve.ReserveStatus.RESERVATION_CANCELED);
+        reserveRepository.save(findReserve);
+
+        // 예약 취소 사유 입력
+        CancelReason cancelReason = CancelReason.builder()
+                .reason(cancel.getReason())
+                .reserveId(reserveId)
+                .memberId(memberId)
+                .build();
+        cancelReasonRepository.save(cancelReason);
+    }
 
 
     /* ------------------------------------ 일단 예외 -------------------------------------*/
@@ -352,44 +426,6 @@ public class ReserveService {
         findReserve.editReserve(patch.getCapacity(), patch.getStartTime(), patch.getEndTime());
         reserveRepository.save(findReserve);
     }
-
-
-    /**
-     * 예약 전체 조회 메서드
-     *
-     * @param memberId 사용자 식별자
-     * @return List
-     * @author LeeGoh
-     */
-    public Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable) {
-        return reserveRepository.getReservation(memberId, pageable);
-    }
-
-
-    /**
-     * 예약 삭제 메서드
-<<<<<<< Updated upstream
-     *
-=======
-     * 예약 삭제 시 취소 사유 작성
->>>>>>> Stashed changes
-     * @param reserveId 예약 식별자
-     * @author LeeGoh
-     */
-    public void deleteReserve(ReserveDto.Cancel cancel, Long reserveId, Long memberId) {
-        Reserve findReserve = ifExistsReturnReserve(reserveId);
-        findReserve.setStatus(Reserve.ReserveStatus.RESERVATION_CANCELED);
-        reserveRepository.save(findReserve);
-
-        CancelReason cancelReason = CancelReason.builder()
-                .reason(cancel.getReason())
-                .reserveId(reserveId)
-                .memberId(memberId)
-                .build();
-        cancelReasonRepository.save(cancelReason);
-    }
-
-
 
 
     /* ------------------------------------ Common Method --------------------------------------*/

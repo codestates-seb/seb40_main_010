@@ -44,8 +44,16 @@ public class TimeStatus {
         spaceCount++;
     }
 
+    public void reduceSpaceCount() {
+        spaceCount--;
+    }
+
     public void setIsFull() {
         isFull = true;
+    }
+
+    public void setIsFullFalse() {
+        isFull = false;
     }
 
     public TimeStatus(HostingTime hostingTime, Integer startTime, Integer endTime) {

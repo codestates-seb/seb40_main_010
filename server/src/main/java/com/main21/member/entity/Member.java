@@ -25,9 +25,6 @@ public class Member extends Auditable {
     private String email;
 
 
-    private String name;
-
-
     private String nickname;
 
 
@@ -41,6 +38,7 @@ public class Member extends Auditable {
     private String phoneNumber;
 
 
+    @Enumerated(value = EnumType.STRING)
     private MemberStatus memberStatus;
 
 
@@ -57,7 +55,6 @@ public class Member extends Auditable {
 
     @Builder
     public Member(String email,
-                  String name,
                   String nickname,
                   String mbti,
                   String password,
@@ -65,7 +62,6 @@ public class Member extends Auditable {
                   List<String> roles,
                   String profileImage) {
         this.email = email;
-        this.name = name;
         this.nickname = nickname;
         this.mbti = mbti;
         this.password = password;

@@ -37,4 +37,8 @@ public class MbtiCount {
     public void addOneMbti() {
         totalCount++;
     }
+
+    public void reduceOneMbti() {
+        totalCount--;
+    }
 }
