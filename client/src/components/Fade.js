@@ -1,10 +1,51 @@
 import React from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
+import { useRecoilValue } from 'recoil';
+
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useRecoilValue } from 'recoil';
+
 import { DetailInformation } from '../atoms';
+
+function Fade() {
+  const detailInformation = useRecoilValue(DetailInformation);
+
+  const settings = {
+    dots: true,
+    lazyLoad: true,
+    dotsClass: 'slick-dots',
+    fade: true,
+    infinite: true,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    pauseOnHover: true,
+    centerMode: false,
+    centerPadding: '0px',
+    nextArrow: <NextTo>＞</NextTo>,
+    prevArrow: <Pre>＜</Pre>,
+  };
+
+  return (
+    <div>
+      <StyledSlide {...settings}>
+        {detailInformation.image &&
+          detailInformation.image.map(el => {
+            return (
+              <SlickImageContainer key={el}>
+                <SlickImage src={el} />
+              </SlickImageContainer>
+            );
+          })}
+      </StyledSlide>
+    </div>
+  );
+}
+
+export default Fade;
 
 const StyledSlide = styled(Slider)`
   width: 500px;
@@ -93,40 +134,3 @@ const SlickImageContainer = styled.div`
   align-items: center;
   width: 600px;
 `;
-
-function Fade() {
-  const detailInformation = useRecoilValue(DetailInformation);
-  const settings = {
-    dots: true,
-    lazyLoad: true,
-    dotsClass: 'slick-dots',
-    fade: true,
-    infinite: true,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    pauseOnHover: true,
-    centerMode: false,
-    centerPadding: '0px',
-    nextArrow: <NextTo>＞</NextTo>,
-    prevArrow: <Pre>＜</Pre>,
-  };
-  return (
-    <div>
-      <StyledSlide {...settings}>
-        {detailInformation.image &&
-          detailInformation.image.map(el => {
-            return (
-              <SlickImageContainer key={el}>
-                <SlickImage src={el} />
-              </SlickImageContainer>
-            );
-          })}
-      </StyledSlide>
-    </div>
-  );
-}
-
-export default Fade;

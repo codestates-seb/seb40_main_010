@@ -2,9 +2,59 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
+
 import { DetailInformation } from '../atoms';
 import FadeCarousel from './Fade';
 import Location from './Map';
+
+function View() {
+  const [detailInformation, setDetailInformation] =
+    useRecoilState(DetailInformation);
+
+  const callDetailData = async () => {
+    await axios
+      .get('http://localhost:3001/detaildata')
+      .then(res => {
+        setDetailInformation(...res.data);
+      })
+      .catch(err => console.log(err));
+  };
+
+  useEffect(() => {
+    callDetailData();
+  }, []);
+
+  return (
+    <ViewContainer>
+      <InformationContainer>
+        <InformationTitle>{detailInformation.title}</InformationTitle>
+        <CarouselImageContainer>
+          <FadeCarousel />
+        </CarouselImageContainer>
+        <InformationMiniImageContainer>
+          {detailInformation.image &&
+            detailInformation.image.map(placeImage => {
+              return <InformationMiniImage key={placeImage} src={placeImage} />;
+            })}
+        </InformationMiniImageContainer>
+        <DetailTitle>상세 정보</DetailTitle>
+        <DetailTagContainer>
+          {detailInformation.category &&
+            detailInformation.category.map(placeTag => {
+              return <DetailTag key={placeTag}>{placeTag}</DetailTag>;
+            })}
+        </DetailTagContainer>
+        <MoreInformation>{detailInformation.detailInfo}</MoreInformation>
+        <NormalStyleDetailTitle>위치</NormalStyleDetailTitle>
+        <InformationLocation address={detailInformation.address} />
+        <NormalStyleDetailTitle>호스트 연락처</NormalStyleDetailTitle>
+        <DetailPhoneNumber>{detailInformation.phoneNumber}</DetailPhoneNumber>
+      </InformationContainer>
+    </ViewContainer>
+  );
+}
+
+export default View;
 
 const ViewContainer = styled.div`
   margin-top: 80px;
@@ -109,52 +159,3 @@ const DetailPhoneNumber = styled(MoreInformation)`
   font-size: 1rem;
   margin-bottom: 20px;
 `;
-
-function View() {
-  const [detailInformation, setDetailInformation] =
-    useRecoilState(DetailInformation);
-
-  const callDetailData = async () => {
-    await axios
-      .get('http://localhost:3001/detaildata')
-      .then(res => {
-        setDetailInformation(...res.data);
-      })
-      .catch(err => console.log(err));
-  };
-
-  useEffect(() => {
-    callDetailData();
-  }, []);
-
-  return (
-    <ViewContainer>
-      <InformationContainer>
-        <InformationTitle>{detailInformation.title}</InformationTitle>
-        <CarouselImageContainer>
-          <FadeCarousel />
-        </CarouselImageContainer>
-        <InformationMiniImageContainer>
-          {detailInformation.image &&
-            detailInformation.image.map(placeImage => {
-              return <InformationMiniImage key={placeImage} src={placeImage} />;
-            })}
-        </InformationMiniImageContainer>
-        <DetailTitle>상세 정보</DetailTitle>
-        <DetailTagContainer>
-          {detailInformation.category &&
-            detailInformation.category.map(placeTag => {
-              return <DetailTag key={placeTag}>{placeTag}</DetailTag>;
-            })}
-        </DetailTagContainer>
-        <MoreInformation>{detailInformation.detailInfo}</MoreInformation>
-        <NormalStyleDetailTitle>위치</NormalStyleDetailTitle>
-        <InformationLocation address={detailInformation.address} />
-        <NormalStyleDetailTitle>호스트 연락처</NormalStyleDetailTitle>
-        <DetailPhoneNumber>{detailInformation.phoneNumber}</DetailPhoneNumber>
-      </InformationContainer>
-    </ViewContainer>
-  );
-}
-
-export default View;
