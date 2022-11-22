@@ -40,35 +40,6 @@ export default function Register() {
   const [editData, setEditData] = useRecoilState(reservationEditData);
   // console.log(editData);
 
-  const handleTitleEdit = e => {
-    setEditData({ ...editData, title: e.target.value });
-  };
-
-  const handleDetailedInformationEdit = e => {
-    setEditData({ ...editData, detailInfo: e.target.value });
-  };
-
-  const handleChargeEdit = e => {
-    setEditData({ ...editData, charge: e.target.value });
-  };
-
-  const addressEdit = e => {
-    setEditData({ ...editData, address: e.target.value });
-  };
-
-  const handleMaxCapacityEdit = e => {
-    setEditData({ ...editData, capacity: e.target.value });
-  };
-
-  const plusCapacityEdit = () => {
-    setEditData({ ...editData, capacity: editData.capacity + 1 });
-  };
-
-  const minusCapacityEdit = () => {
-    if (editData.capacity > 1)
-      setEditData({ ...editData, capacity: editData.capacity - 1 });
-  };
-
   const handler = {
     title: setTitle,
     maxCapacity: setMaxCapacity,
@@ -80,6 +51,17 @@ export default function Register() {
   const handleChange = event => {
     const { name, value } = event.target;
     handler[name](value);
+  };
+
+  const editHandleChange = event => {
+    if (event.target.id === 'capacityMinus' && editData.capacity > 1) {
+      return setEditData({ ...editData, capacity: editData.capacity - 1 });
+    }
+    if (event.target.id === 'capacityPlus') {
+      return setEditData({ ...editData, capacity: editData.capacity + 1 });
+    }
+    const { name, value } = event.target;
+    return setEditData({ ...editData, [name]: value });
   };
 
   const plusCapacity = () => {
@@ -135,30 +117,27 @@ export default function Register() {
           <Wrapper>
             <Title>제목</Title>
             {editData ? (
-              <Input onChange={handleTitleEdit} value={editData.title} />
+              <Input
+                onChange={editHandleChange}
+                value={editData.title}
+                name="title"
+              />
             ) : (
               <Input onChange={handleChange} name="title" />
             )}
           </Wrapper>
           <Wrapper>
             <Title>카테고리</Title>
-            {editData ? (
-              <RegisterCategory
-                checkedList={editData.category}
-                setCheckedList={setCheckedList}
-              />
-            ) : (
-              <RegisterCategory
-                checkedList={checkedList}
-                setCheckedList={setCheckedList}
-              />
-            )}
+            <RegisterCategory
+              checkedList={checkedList}
+              setCheckedList={setCheckedList}
+            />
           </Wrapper>
           <Wrapper>
             <Title>최대 인원</Title>
             <div className="capacity-wrapper">
               {editData ? (
-                <LeftIcon onClick={minusCapacityEdit} />
+                <LeftIcon onClick={editHandleChange} id="capacityMinus" />
               ) : (
                 <LeftIcon onClick={minusCapacity} />
               )}
@@ -166,7 +145,8 @@ export default function Register() {
                 <SmallInput
                   width="20px"
                   type="number"
-                  onChange={handleMaxCapacityEdit}
+                  name="capacity"
+                  onChange={editHandleChange}
                   value={editData.capacity}
                   readOnly
                 />
@@ -181,7 +161,7 @@ export default function Register() {
                 />
               )}
               {editData ? (
-                <RightIcon onClick={plusCapacityEdit} />
+                <RightIcon onClick={editHandleChange} id="capacityPlus" />
               ) : (
                 <RightIcon onClick={plusCapacity} />
               )}
@@ -194,8 +174,9 @@ export default function Register() {
                 type="text"
                 onClick={() => postCodeEdit()}
                 value={editData.address}
-                onChange={addressEdit}
+                onChange={editHandleChange}
                 readOnly
+                name="address"
               />
             ) : (
               <Input
@@ -213,8 +194,9 @@ export default function Register() {
             {editData ? (
               <Textarea
                 type="text"
-                onChange={handleDetailedInformationEdit}
+                onChange={editHandleChange}
                 value={editData.detailInfo}
+                name="detailInfo"
               />
             ) : (
               <Textarea
@@ -236,8 +218,9 @@ export default function Register() {
                 <SmallInput
                   type="number"
                   width="100px"
-                  onChange={handleChargeEdit}
+                  onChange={editHandleChange}
                   value={editData.charge}
+                  name="charge"
                 />
               ) : (
                 <SmallInput
@@ -402,6 +385,11 @@ const LeftIcon = styled(FaCaretLeft)`
   font-size: 25px;
   color: #eb7470;
 
+  path {
+    z-index: -100;
+    pointer-events: none;
+  }
+
   :hover {
     cursor: pointer;
   }
@@ -410,6 +398,11 @@ const LeftIcon = styled(FaCaretLeft)`
 const RightIcon = styled(FaCaretRight)`
   font-size: 25px;
   color: #eb7470;
+
+  path {
+    z-index: -100;
+    pointer-events: none;
+  }
 
   :hover {
     cursor: pointer;
