@@ -1,7 +1,6 @@
 package com.main21.review.repository;
 
 
-
 import com.main21.review.dto.QReviewDto_MyPage;
 import com.main21.review.dto.QReviewDto_Response;
 import com.main21.review.dto.ReviewDto;
@@ -16,7 +15,6 @@ import java.util.List;
 import static com.main21.member.entity.QMember.*;
 import static com.main21.place.entity.QPlace.place;
 import static com.main21.review.entity.QReview.*;
-import static com.querydsl.jpa.JPAExpressions.select;
 
 public class ReviewRepositoryImpl implements CustomReviewRepository {
 

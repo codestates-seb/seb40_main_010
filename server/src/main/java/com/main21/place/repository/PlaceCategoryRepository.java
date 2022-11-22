@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PlaceCategoryRepository extends JpaRepository<PlaceCategory, Long> {
     List<PlaceCategory> findAllByPlaceId(Long placeId);
+    void deleteAllByPlaceId(Long placeId);
 }

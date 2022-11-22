@@ -18,7 +18,7 @@ public class PlaceDto {
         private int maxCapacity;
         private String address;
         private String detailInfo;
-//        private List<PlaceImage> placeImages;
+        //        private List<PlaceImage> placeImages;
         private int charge;
     }
 
@@ -37,6 +37,7 @@ public class PlaceDto {
         private String image;
         private Double score;
         private String address;
+        private Integer endTime;
 
         @Builder
         @QueryProjection
@@ -47,7 +48,7 @@ public class PlaceDto {
             this.image = place.getPlaceImages().get(0).getFilePath();
             this.score = place.getScore();
             this.address = place.getAddress();
-
+            this.endTime = place.getEndTIme();
         }
 
         @Override

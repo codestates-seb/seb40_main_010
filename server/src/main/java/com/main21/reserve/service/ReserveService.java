@@ -96,7 +96,7 @@ public class ReserveService {
      */
 
     @Transactional
-    public void createReserve(ReserveDto.Post post, Long placeId, String refreshToken) throws ParseException {
+    public void createReserve(ReserveDto.Post post, Long placeId, String refreshToken) {
         Long memberId = redisUtils.getId(refreshToken);
 
         //공간 확인
@@ -124,7 +124,7 @@ public class ReserveService {
         Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getStartTime()));
         Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getEndTime()));
 
-        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByReserveDate(reserveDay);
+        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByPlaceIdAndReserveDate(placeId, reserveDay);
 
         if (!findHostingTime.isPresent()) {
             HostingTime hostingTime = HostingTime.builder()
@@ -383,7 +383,7 @@ public class ReserveService {
         Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(findReserve.getStartTime()));
         Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(findReserve.getEndTime()));
 
-        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByReserveDate(reserveDay);
+        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByPlaceIdAndReserveDate(findPlace.getId(), reserveDay);
 
         for (int i = reserveStartHH; i < reserveEndHH; i++) {
             // 시간대마다 spaceCount -1

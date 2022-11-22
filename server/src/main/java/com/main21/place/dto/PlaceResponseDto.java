@@ -15,6 +15,7 @@ public class PlaceResponseDto {
     private int charge;
     private double score;
     private List<String> filePath;
+    private Integer endTime;
 
 
     public PlaceResponseDto(Place place, List<String> filePath, List<String> category) {
@@ -26,5 +27,6 @@ public class PlaceResponseDto {
         this.charge = place.getCharge();
         this.score = place.getScore();
         this.filePath = filePath;
+        this.endTime = place.getEndTIme();
     }
 }

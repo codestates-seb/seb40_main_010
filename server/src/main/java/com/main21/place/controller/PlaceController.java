@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.main21.member.utils.AuthConstant.REFRESH_TOKEN;
+
 @RestController
 @RequiredArgsConstructor
 public class PlaceController {
@@ -95,7 +97,7 @@ public class PlaceController {
      * @param memberId
      * @param pageable
      * @return
-      @author LeeGoh
+     @author LeeGoh
      */
     /*
     @GetMapping("/slice")
@@ -111,7 +113,7 @@ public class PlaceController {
      * @param categoryId
      * @param pageable
      * @return
-      @author LeeGoh
+     @author LeeGoh
      */
     @GetMapping("category/{category-id}")
     public ResponseEntity getCategoryPage(@PathVariable("category-id") Long categoryId,
@@ -127,7 +129,7 @@ public class PlaceController {
      * @param categoryId
      * @param pageable
      * @return
-      @author LeeGoh
+     @author LeeGoh
      */
     /*
     @GetMapping("slice/category/{category-id}")
@@ -198,5 +200,12 @@ public class PlaceController {
         Page<PlaceDto.Response> hosting = placeService.getPlaceMypage(memberId, pageable);
         List<PlaceDto.Response> place = hosting.getContent();
         return new ResponseEntity(new MultiResponseDto<>(place, hosting), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/place/{place-id}")
+    public ResponseEntity deleteHosting(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
+                                        @PathVariable("place-id") Long placeId) {
+        placeService.deleteHosting(refreshToken, placeId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
