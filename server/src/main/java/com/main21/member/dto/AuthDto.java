@@ -30,14 +30,12 @@ public class AuthDto {
 
     @Getter
     public static class Response {
-        private final String accessToken;
         private final String nickname;
         private final String email;
 
 
         @Builder
-        public Response(String accessToken, String nickname, String email) {
-            this.accessToken = accessToken;
+        public Response(String nickname, String email) {
             this.nickname = nickname;
             this.email = email;
         }

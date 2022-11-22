@@ -12,6 +12,7 @@ public enum ExceptionCode {
     COOKIE_NOT_FOUND(504, "쿠키를 찾을 수 없습니다."),
 
     INVALID_ACCESS(403, "유효하지 않은 접근입니다."),
+    INVALID_MEMBER(403, "회원 정보를 다시 확인하세요."),
 
     //토큰
     INVALID_REFRESH_TOKEN(400, "리프레시 토큰이 유효하지 않습니다"),

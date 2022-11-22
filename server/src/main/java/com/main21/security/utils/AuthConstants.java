@@ -6,7 +6,7 @@ public class AuthConstants {
     public static final String BEARER = "Bearer ";
     public static final String MEMBER_ID = "memberId";
     public static final String USERNAME = "username";
-    public static final String SET_COOKIE = "Set-Cookie";
+    public static final String ROLES = "roles";
     public static final long MAX_AGE_SECOND = 7 * 24 * 60 * 60;
 
 }
