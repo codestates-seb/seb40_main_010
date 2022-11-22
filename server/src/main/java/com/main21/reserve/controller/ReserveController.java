@@ -39,7 +39,7 @@ public class ReserveController {
     @PostMapping("/place/{place-id}/reserve")
     public ResponseEntity postReserve(@PathVariable("place-id") Long placeId,
                                       @RequestBody ReserveDto.Post post,
-                                      @RequestHeader(REFRESH_TOKEN) String refreshToken) throws ParseException {
+                                      @RequestHeader(REFRESH_TOKEN) String refreshToken) {
         reserveService.createReserve(post, placeId, refreshToken);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

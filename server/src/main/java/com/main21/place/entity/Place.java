@@ -48,6 +48,9 @@ public class Place {
     // 공간 - 회원 간접 참
     private Long memberId;
 
+    // 영엉 마감 시간
+    private Integer endTIme;
+
     // 공간 - 공간 카테고리 1:N
     @OneToMany(mappedBy = "place")
     private List<PlaceCategory> placeCategories = new ArrayList<>();
@@ -63,7 +66,16 @@ public class Place {
 
     // createPlace 생성자
     @Builder
-    public Place(String title, String detailInfo, int maxCapacity, String address, int charge, Long memberId, double score, int view, Integer maxSpace){
+    public Place(String title,
+                 String detailInfo,
+                 int maxCapacity,
+                 String address,
+                 int charge,
+                 Long memberId,
+                 double score,
+                 int view,
+                 Integer maxSpace,
+                 Integer endTime){
         this.title = title;
         this.detailInfo = detailInfo;
         this.maxCapacity = maxCapacity;
@@ -73,6 +85,7 @@ public class Place {
         this.score = score;
         this.view = view;
         this.maxSpace = maxSpace;
+        this.endTIme = endTime;
     }
 
     public void addPlaceCategory(PlaceCategory placeCategory) {

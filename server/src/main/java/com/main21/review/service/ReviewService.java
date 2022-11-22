@@ -123,7 +123,7 @@ public class ReviewService {
         return reviewRepository.getReviewsMypage(memberId, pageable);
     }
 
-    private void modifyScore(Place findPlace, Double totalScore, Long placeId) {
+    public void modifyScore(Place findPlace, Double totalScore, Long placeId) {
         Long reviewer = reviewRepository.countByPlaceId(placeId);
         String str = String.format("%.2f", totalScore / reviewer);
         double score = Double.parseDouble(str);

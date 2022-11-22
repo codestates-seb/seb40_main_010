@@ -28,4 +28,6 @@ public class PlacePostDto {
     private String detailInfo;
     @NotBlank
     private int charge;
+    @NotBlank
+    private Integer endTime;
 }
