@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 
 import Nav from '../components/Nav';
 
-// TODO onSubmit 함수 완료하기
 export default function LogIn() {
   const {
     register,
@@ -13,7 +13,15 @@ export default function LogIn() {
     formState: { isSubmitting, errors },
   } = useForm({ mode: 'onChange' });
 
-  const onSubmit = data => console.log(data);
+  // eslint-disable-next-line consistent-return
+  const onSubmit = async data => {
+    try {
+      const response = await axios.post(`http://localhost:3001/login`, data);
+      return response.data;
+    } catch (err) {
+      console.log('Error >>', err);
+    }
+  };
 
   return (
     <>
@@ -73,9 +81,10 @@ const Container = styled.div`
   align-items: center;
 
   .login-container {
-    width: 400px;
+    margin-top: 70px;
+    width: 22rem;
     height: flex;
-    padding: 60px 0px;
+    padding: 3rem 0rem;
     background-color: #ffffff;
     border-radius: 20px;
     display: flex;
@@ -101,8 +110,8 @@ const Container = styled.div`
   }
 
   .submit-button {
-    width: 300px;
-    height: 55px;
+    width: 15rem;
+    height: 3rem;
     margin-top: 15px;
     margin-bottom: 15px;
     background-color: #96c2ff;
@@ -132,6 +141,7 @@ const Container = styled.div`
   .alert {
     margin-top: 10px;
     color: #eb7470;
+    font-size: 0.8rem;
     font-weight: 500;
   }
 `;

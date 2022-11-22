@@ -6,6 +6,18 @@
       "mbti": "INFJ"
     }
   ],
+  "login": [
+    {
+      "email": "code@gmail.com",
+      "password": "sdf456",
+      "id": 1
+    },
+    {
+      "email": "code@gmail.cpm",
+      "password": "sdfwesfd",
+      "id": 2
+    }
+  ],
   "place": [
     {
       "id": 1,
@@ -30,6 +42,11 @@
       "image": "https://picsum.photos/203",
       "charge": 106000,
       "score": 2.7
+    },
+    {
+      "email": "code@gmail.com",
+      "password": "sdf456",
+      "id": 4
     }
   ],
   "reserve": [
@@ -92,85 +109,90 @@
       "createdAt": "2022.11.03"
     }
   ],
-  
-  "detaildata":[
+  "detaildata": [
     {
       "id": 1,
-      "nickname" : "jenney",
-      "phoneNumber" : "010-1234-5678",
-      "title" : "히든 헤이븐 - 수영장과 바다 전망을 즐길 수 있는 5베드 빌라",
-      "isBookmark" : false,
-      "category" : ["바다 근처", "파티룸"],
-      "capacity" : 5,
-      "address" : "대전 동구 판교 1길 3",
-      "detailInfo" : "후트베이 해변이 내려다보이는 이 평화로운 5베드룸 저택에서 온 가족이 함께 휴식을 취해보세요. 침실 5개 – 욕실 3개 침실 5개를 자랑하는 넓고 현대적인 가족 숙소입니다. 메인 침실 (욕실이 딸린 욕실) 에는 킹사이즈 침대가 있고, 나머지 4개의 침실에는 퀸사이즈 침대가 있습니다. 산이 내려다보이는 벽난로가 있는 개방형 주방과 라운지 공간. 주방에는 시설이 완비되어 있습니다. 야외 피자 오븐, 바비큐 그릴, 대형 정원과 수영장이 있습니다. 바다 전망 - 산 전망",
-      "image" : ["https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/dfe9fd1e-a010-43c9-b546-0bbc7d59f7f3.jpeg?im_w=960", "https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/0e074fc5-2d13-422d-bc5a-af14595f2f38.jpeg?im_w=480", "https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/5a06ec14-3591-459f-86ec-dfe5be7c203c.jpeg?im_w=480"],
-      "charge" : 80000,
-      "bookmark" : ["1"],
-      "score" : 4.5
-     }
+      "nickname": "jenney",
+      "phoneNumber": "010-1234-5678",
+      "title": "히든 헤이븐 - 수영장과 바다 전망을 즐길 수 있는 5베드 빌라",
+      "isBookmark": false,
+      "category": [
+        "바다 근처",
+        "파티룸"
+      ],
+      "capacity": 5,
+      "address": "대전 동구 판교 1길 3",
+      "detailInfo": "후트베이 해변이 내려다보이는 이 평화로운 5베드룸 저택에서 온 가족이 함께 휴식을 취해보세요. 침실 5개 – 욕실 3개 침실 5개를 자랑하는 넓고 현대적인 가족 숙소입니다. 메인 침실 (욕실이 딸린 욕실) 에는 킹사이즈 침대가 있고, 나머지 4개의 침실에는 퀸사이즈 침대가 있습니다. 산이 내려다보이는 벽난로가 있는 개방형 주방과 라운지 공간. 주방에는 시설이 완비되어 있습니다. 야외 피자 오븐, 바비큐 그릴, 대형 정원과 수영장이 있습니다. 바다 전망 - 산 전망",
+      "image": [
+        "https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/dfe9fd1e-a010-43c9-b546-0bbc7d59f7f3.jpeg?im_w=960",
+        "https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/0e074fc5-2d13-422d-bc5a-af14595f2f38.jpeg?im_w=480",
+        "https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/5a06ec14-3591-459f-86ec-dfe5be7c203c.jpeg?im_w=480"
+      ],
+      "charge": 80000,
+      "bookmark": [
+        "1"
+      ],
+      "score": 4.5
+    }
   ],
-
-
-  "maindata":[
-
-{    "data" : [
-   {
-    "placeId" : "1",
-    "title" : "애월읍, 제주시, 한국",
-    "charge" : "27600",
-    "image" : "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
-    "score" : "5",
-    "address" : "제주특별자치도 서귀포시 가가로 15" 
-   },
-   {
-    "placeId" : "2",
-    "title" : "애월읍제주시제주제주제주제주제주",
-    "charge" : "37600",
-    "image" : "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
-    "score" : "5",
-    "address" : "제주특별자치도 서귀포시 가가로 15" 
-   },
-   {
-    "placeId" : "3",
-    "title" : "애월읍, 제주시",
-    "charge" : "47600",
-    "image" : "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
-    "score" : "5",
-    "address" : "제주특별자치도 서귀포시 가가로 15" 
-   },
-   {
-    "placeId" : "4",
-    "title" : "애월읍",
-    "charge" : "57600",
-    "image" : "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
-    "score" : "5",
-    "address" : "제주특별자치도 서귀포시 가가로 15" 
-   },
-   {
-    "placeId" : "5",
-    "title" : "애월읍, 제주시, 제주",
-    "charge" : "67600",
-    "image" : "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
-    "score" : "5",
-    "address" : "제주특별자치도 서귀포시 가가로 15" 
-   },
-   {
-    "placeId" : "6",
-    "title" : "애월읍, 제주시, 제주",
-    "charge" : "77600",
-    "image" : "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
-    "score" : "5",
-    "address" : "제주특별자치도 서귀포시 가가로 15" 
-   }
-  ],
-   
-   "pageInfo": {
-           "page": "1",
-           "size": "10",
-           "totalElements": "100",
-           "totalPages": "10"
-       }}
+  "maindata": [
+    {
+      "data": [
+        {
+          "placeId": "1",
+          "title": "애월읍, 제주시, 한국",
+          "charge": "27600",
+          "image": "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
+          "score": "5",
+          "address": "제주특별자치도 서귀포시 가가로 15"
+        },
+        {
+          "placeId": "2",
+          "title": "애월읍제주시제주제주제주제주제주",
+          "charge": "37600",
+          "image": "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
+          "score": "5",
+          "address": "제주특별자치도 서귀포시 가가로 15"
+        },
+        {
+          "placeId": "3",
+          "title": "애월읍, 제주시",
+          "charge": "47600",
+          "image": "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
+          "score": "5",
+          "address": "제주특별자치도 서귀포시 가가로 15"
+        },
+        {
+          "placeId": "4",
+          "title": "애월읍",
+          "charge": "57600",
+          "image": "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
+          "score": "5",
+          "address": "제주특별자치도 서귀포시 가가로 15"
+        },
+        {
+          "placeId": "5",
+          "title": "애월읍, 제주시, 제주",
+          "charge": "67600",
+          "image": "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
+          "score": "5",
+          "address": "제주특별자치도 서귀포시 가가로 15"
+        },
+        {
+          "placeId": "6",
+          "title": "애월읍, 제주시, 제주",
+          "charge": "77600",
+          "image": "https://a0.muscache.com/im/pictures/miso/Hosting-45760329/original/c2153623-4ce3-4fcb-a099-b7a99b31b148.jpeg?im_w=720",
+          "score": "5",
+          "address": "제주특별자치도 서귀포시 가가로 15"
+        }
+      ],
+      "pageInfo": {
+        "page": "1",
+        "size": "10",
+        "totalElements": "100",
+        "totalPages": "10"
+      }
+    }
   ]
-   
 }
