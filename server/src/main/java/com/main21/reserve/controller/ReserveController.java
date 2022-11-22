@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import static com.main21.member.utils.AuthConstant.REFRESH_TOKEN;
 import static com.main21.reserve.utils.ReserveConstants.*;
 
 @RestController
@@ -176,9 +177,9 @@ public class ReserveController {
      * @author LeeGoh
      */
     @GetMapping("/reserve")
-    public ResponseEntity getReservations(@CookieValue(name = "memberId") Long memberId,
+    public ResponseEntity getReservations(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                           Pageable pageable) {
-        Page<ReserveDto.Response> pageReservations = reserveService.getReservation(memberId, pageable);
+        Page<ReserveDto.Response> pageReservations = reserveService.getReservation(refreshToken, pageable);
         List<ReserveDto.Response> reservations = pageReservations.getContent();
         return new ResponseEntity(new MultiResponseDto<>(reservations, pageReservations), HttpStatus.OK);
     }
@@ -193,9 +194,9 @@ public class ReserveController {
      */
     @DeleteMapping("/reserve/{reserve-id}")
     public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId,
-                                        @CookieValue(name = "memberId") Long memberId,
+                                        @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                         @RequestBody(required = false) ReserveDto.Cancel cancel) {
-        reserveService.deleteReserve(cancel, reserveId, memberId);
+        reserveService.deleteReserve(cancel, reserveId, refreshToken);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
