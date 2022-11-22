@@ -33,7 +33,6 @@ public class MemberController {
     @PostMapping("/join")
     public ResponseEntity postMember(@RequestBody MemberDto.Post post) {
         memberService.createMember(post);
-        log.info("post : {}", post);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 

@@ -1,44 +1,42 @@
 package com.main21.security.utils;
 
-import com.main21.exception.BusinessLogicException;
-import com.main21.exception.ExceptionCode;
 import com.main21.member.entity.Member;
-import com.main21.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.main21.security.utils.AuthConstants.*;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtTokenUtils {
 
     @Getter
-    @Value("${JWT_SECRET_KEY}")
-    private String secretKey;
+    private final String secretKey;
 
     @Getter
-    @Value("${jwt.access-token-expiration-minutes}")
-    private int accessTokenExpirationMinutes;
+    private final int accessTokenExpirationMinutes;
 
     @Getter
-    @Value("${jwt.refresh-token-expiration-minutes}")
-    private int refreshTokenExpirationMinutes;
+    private final int refreshTokenExpirationMinutes;
 
-    private final MemberRepository memberRepository;
+
+    public JwtTokenUtils(@Value("${JWT_SECRET_KEY}") String secretKey,
+                         @Value("${jwt.access-token-expiration-minutes}") int accessTokenExpirationMinutes,
+                         @Value("${jwt.refresh-token-expiration-minutes}") int refreshTokenExpirationMinutes) {
+        this.secretKey = secretKey;
+        this.accessTokenExpirationMinutes = accessTokenExpirationMinutes;
+        this.refreshTokenExpirationMinutes = refreshTokenExpirationMinutes;
+    }
 
 
     /**
@@ -107,11 +105,11 @@ public class JwtTokenUtils {
      * 검증 후 Jws(Claims) 정보를 반환해주는 메서드
      *
      * @param jws                    시그니처 정보
-     * @param base64EncodedSecretKey base64 인코딩된 키
      * @return Map
      * @author mozzi327
      */
-    public Map<String, Object> getClaims(String jws, String base64EncodedSecretKey) {
+    public Map<String, Object> getClaims(String jws) {
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         return Jwts.parserBuilder()
@@ -169,24 +167,6 @@ public class JwtTokenUtils {
 
 
     /**
-     * 인증 성공 시 사용되는 사용자 정보(엔티티)를 반환하는 메서드<br>
-     * - save를 한번 하는 이유는 최근 로그인 날짜를 갱신하기 위함
-     *
-     * @param email 사용자 이메일
-     * @return 사용자 정보
-     * @author mozzi327
-     */
-    public Member findMemberByEmail(String email) {
-        Member findMember = memberRepository
-                .findMemberByEmail(email)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        findMember.setLastModifiedAt(LocalDateTime.now()); // 마지막 로그인 날짜
-        memberRepository.save(findMember);
-        return findMember;
-    }
-
-
-    /**
      * 토큰 정보를 검증하는 메서드
      *
      * @param token 토큰 정보
@@ -202,7 +182,7 @@ public class JwtTokenUtils {
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
-            return true;
+            return false;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
@@ -212,7 +192,7 @@ public class JwtTokenUtils {
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
         }
-        return false;
+        return true;
     }
 
 

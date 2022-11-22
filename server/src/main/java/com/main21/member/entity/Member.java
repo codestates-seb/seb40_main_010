@@ -6,6 +6,7 @@ import com.main21.reserve.entity.Reserve;
 import com.main21.review.entity.Review;
 import com.main21.util.Auditable;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -121,5 +122,10 @@ public class Member extends Auditable {
             memberImage.setMember(this);
         }
         this.memberImage = memberImage;
+    }
+
+    public boolean comparePasswordWithMember(PasswordEncoder passwordEncoder,
+                                           String comparePassword) {
+        return passwordEncoder.encode(comparePassword).equals(this.password);
     }
 }

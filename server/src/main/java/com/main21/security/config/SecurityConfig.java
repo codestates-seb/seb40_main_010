@@ -1,12 +1,9 @@
 package com.main21.security.config;
 
-import com.main21.security.filter.JwtAuthenticationFilter;
 import com.main21.security.filter.JwtVerificationFilter;
 import com.main21.security.handler.MemberAccessDeniedHandler;
 import com.main21.security.handler.MemberAuthenticationEntryPoint;
-import com.main21.security.handler.MemberAuthenticationFailureHandler;
-import com.main21.security.handler.MemberAuthenticationSuccessHandler;
-import com.main21.security.utils.CustomAuthorityUtils;
+import com.main21.security.provider.JwtAuthenticationProvider;
 import com.main21.security.utils.JwtTokenUtils;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -30,15 +29,13 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
-    private final CustomAuthorityUtils authorityUtils;
     private final RedisUtils redisUtils;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
 
     /**
@@ -60,21 +57,22 @@ public class SecurityConfig {
                 .addFilterBefore(encodingFilter, CsrfFilter.class)
                 .headers().frameOptions().disable()
                 .and()
-                .cors(withDefaults())
+//                .cors(withDefaults())
+                .cors().disable()
                 .csrf().disable()
                 .httpBasic().disable()
                 .formLogin().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
-                .accessDeniedHandler(new MemberAccessDeniedHandler())
-                .and()
                 .apply(new CustomFilterConfig())
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(HttpMethod.POST, "/member/join").permitAll()
                 .antMatchers(HttpMethod.GET, "/h2/**").permitAll()
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler());
 
         return http.build();
     }
@@ -114,18 +112,14 @@ public class SecurityConfig {
         public void configure(HttpSecurity builder) {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter
-                    = new JwtAuthenticationFilter(authenticationManager, jwtTokenUtils, redisUtils);
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
-            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
-
             JwtVerificationFilter jwtVerificationFilter
-                    = new JwtVerificationFilter(jwtTokenUtils, authorityUtils, redisUtils);
+                    = new JwtVerificationFilter(authenticationManager, jwtTokenUtils, redisUtils);
+
+            SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
 
             builder
-                    .addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+                    .addFilterBefore(jwtVerificationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .authenticationProvider(jwtAuthenticationProvider);
         }
     }
 }

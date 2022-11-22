@@ -13,7 +13,6 @@ public class SecurityTestConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         return http
                 .httpBasic().disable()
                 .formLogin().disable()
