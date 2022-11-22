@@ -91,12 +91,13 @@ public class ReserveService {
      *
      * @param post     예약 등록 정보
      * @param placeId  장소 식별자
-     * @param memberId 사용자 식별자
+     * @param refreshToken
      * @author LimJaeminZ
      */
 
     @Transactional
-    public void createReserve(ReserveDto.Post post, Long placeId, Long memberId) throws ParseException {
+    public void createReserve(ReserveDto.Post post, Long placeId, String refreshToken) throws ParseException {
+        Long memberId = redisUtils.getId(refreshToken);
 
         //공간 확인
         Place findPlace = placeRepository.findById(placeId).orElseThrow(() ->
@@ -183,19 +184,21 @@ public class ReserveService {
      * 예약 프로세스 2 - 결제 URL 요청 메서드
      *
      * @param reserveId  예약 식별자
-     * @param memberId   사용자 식별자
+     * @param refreshToken
      * @param requestUrl 요청 URL
      * @return URL(결제 페이지)
      * @author mozzi327
      */
     @Transactional
     public String getKaKaoPayUrl(Long reserveId,
-                                 Long memberId,
+                                 String refreshToken,
                                  String requestUrl) {
 
         /*
             Todo : 예약 가능한지 확인하는 이벤트 처리
         */
+
+        Long memberId = redisUtils.getId(refreshToken);
 
         // 헤더에 정보 추가
         HttpHeaders headers = new HttpHeaders();
@@ -332,7 +335,9 @@ public class ReserveService {
 
     /**
      * 예약 전체 조회 메서드
+     *
      * @return List
+     * @Param refreshToken
      * @author LeeGoh
      */
     public Page<ReserveDto.Response> getReservation(String refreshToken, Pageable pageable) {
@@ -345,7 +350,9 @@ public class ReserveService {
      * 예약 삭제 메서드
      * 예약 삭제 시 취소 사유 작성
      * 예약 취소 시 mbtiCount -1, spaceCount -1
+     *
      * @param reserveId 예약 식별자
+     * @param refreshToken
      * @author LeeGoh
      */
     public void deleteReserve(ReserveDto.Cancel cancel, Long reserveId, String refreshToken) {
@@ -413,10 +420,11 @@ public class ReserveService {
      *
      * @param patch     에약 수정 정보
      * @param reserveId 예약 식별자
-     * @param memberId  사용자 식별자
+     * @param refreshToken
      * @author Quartz614
      */
-    public void updateReserve(ReserveDto.Patch patch, Long reserveId, Long memberId) {
+    public void updateReserve(ReserveDto.Patch patch, Long reserveId, String refreshToken) {
+        Long memberId = redisUtils.getId(refreshToken);
         Reserve findReserve = reserveRepository
                 .findById(reserveId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 추후 수정

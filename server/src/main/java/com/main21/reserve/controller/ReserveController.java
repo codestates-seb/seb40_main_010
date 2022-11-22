@@ -32,15 +32,15 @@ public class ReserveController {
      *
      * @param placeId  장소 식별자
      * @param post     예약 등록 정보
-     * @param memberId 사용자 식별자
+     * @param refreshToken
      * @return ResonseEntity
      * @author LeeGoh
      */
     @PostMapping("/place/{place-id}/reserve")
     public ResponseEntity postReserve(@PathVariable("place-id") Long placeId,
                                       @RequestBody ReserveDto.Post post,
-                                      @CookieValue(name = "memberId") Long memberId) throws ParseException {
-        reserveService.createReserve(post, placeId, memberId);
+                                      @RequestHeader(REFRESH_TOKEN) String refreshToken) throws ParseException {
+        reserveService.createReserve(post, placeId, refreshToken);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -49,19 +49,19 @@ public class ReserveController {
      * 예약 프로세스 2 - 사용자 결제 화면 전송 컨트롤러 메서드
      *
      * @param reserveId 예약 식별자
-     * @param memberId  사용자 식별자
+     * @param refreshToken
      * @param req       요청
      * @return Message
      * @author mozzi327
      */
     @GetMapping("/place/reserve/{reserve-id}/payment")
     public ResponseEntity<Message> orderAction(@PathVariable(name = "reserve-id") Long reserveId,
-                                               @CookieValue(name = "memberId") Long memberId,
+                                               @RequestHeader(REFRESH_TOKEN) String refreshToken,
                                                HttpServletRequest req) {
         String requestUrl = req.getRequestURL()
                 .toString()
                 .replace(req.getRequestURI(), "");
-        String url = reserveService.getKaKaoPayUrl(reserveId, memberId, requestUrl);
+        String url = reserveService.getKaKaoPayUrl(reserveId, refreshToken, requestUrl);
 
         if (url == null) getFailedPayMessage();
 
@@ -115,6 +115,7 @@ public class ReserveController {
 
     /**
      * 예약 프로세스 5 - 결제 실패 시 발생되는 컨트롤러 메서드
+     *
      * @return ResponseEntity
      * @author mozzi327
      */
@@ -139,15 +140,6 @@ public class ReserveController {
     }
 
 
-
-
-
-
-
-
-
-
-
     /* ------------------------------------ 일단 예외 -------------------------------------*/
 
 
@@ -156,15 +148,15 @@ public class ReserveController {
      *
      * @param reserveId 예약 식별자
      * @param patch     예약 수정 정보
-     * @param memberId  사용자 식별자
+     * @param refreshToken
      * @return ResponseEntity
      * @author Quartz614
      */
     @PatchMapping("place/reserve/{reserve-id}/edit") // 유저 테이블 생성 시 유저 추가
     public ResponseEntity patchReserve(@PathVariable("reserve-id") Long reserveId,
                                        @RequestBody ReserveDto.Patch patch,
-                                       @CookieValue(name = "memberId") Long memberId) {
-        reserveService.updateReserve(patch, reserveId, memberId);
+                                       @RequestHeader(REFRESH_TOKEN) String refreshToken) {
+        reserveService.updateReserve(patch, reserveId, refreshToken);
         return ResponseEntity.ok().build();
     }
 
@@ -172,7 +164,7 @@ public class ReserveController {
     /**
      * 사용자 예약 내역 조회 컨트롤러 메서드
      *
-     * @param memberId 사용자 식별자
+     * @param refreshToken
      * @return ResponseEntity
      * @author LeeGoh
      */
@@ -188,7 +180,9 @@ public class ReserveController {
     /**
      * 예약 내역 삭제 컨트롤러 메서드
      * 예약 내역 상태 변경 및 예약 취소 사유 저장
+     *
      * @param reserveId 예약 식별자
+     * @param refreshToken
      * @return ResponseEntity
      * @author LeeGoh
      */
