@@ -17,52 +17,35 @@ import static com.main21.security.utils.AuthConstants.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final JwtTokenUtils jwtTokenUtils;
 
     /**
      * 사용자 로그아웃을 위한 컨트롤러 호출 메서드(레디스용)
      *
-     * @param accessToken 액세스 토큰
+     * @param accessToken  액세스 토큰
      * @param refreshToken 리프레시 토큰
      * @author mozzi327
      */
     @DeleteMapping("/logout")
     public ResponseEntity logoutMember(@RequestHeader(AUTHORIZATION) String accessToken,
-                             @RequestHeader(REFRESH_TOKEN) String refreshToken) {
+                                       @RequestHeader(REFRESH_TOKEN) String refreshToken) {
         authService.logoutMember(accessToken, refreshToken);
         return ResponseEntity.ok().build();
     }
 
 
     /**
-     * 사용자 로그아웃을 위한 컨트롤러 호출 메서드(임시)
-     *
-     * @param memberId     사용자 식별자
+     * 사용자 액세스 토큰 리이슈를 위한 컨트롤러 호출 메서드
+     * @param accessToken 액세스 토큰
      * @param refreshToken 리프레시 토큰
-     * @param res          HttpServletResponse
+     * @return ResponseEntity
      * @author mozzi327
      */
-    @DeleteMapping("/logout/bydb")
-    public void logoutMemberByDb(@CookieValue(name = MEMBER_ID) Long memberId,
-                                 @CookieValue(name = REFRESH_TOKEN) String refreshToken,
-                                 HttpServletResponse res) {
-        authService.logoutMemberByDb(memberId, refreshToken, res);
-    }
-
-
     @GetMapping("/re-issue")
-    public ResponseEntity reIssueToken(@CookieValue(name = MEMBER_ID) Long memberId,
-                                       @CookieValue(name = REFRESH_TOKEN) String refreshToken) {
+    public ResponseEntity reIssueToken(@RequestHeader(AUTHORIZATION) String accessToken,
+                                       @RequestHeader(REFRESH_TOKEN) String refreshToken,
+                                       HttpServletResponse res) {
 
-        AuthDto.Response response = authService.reIssueToken(memberId, refreshToken);
+        AuthDto.Response response = authService.reIssueToken(accessToken, refreshToken, res);
         return ResponseEntity.ok(response);
-    }
-
-
-    @GetMapping("/test")
-    public ResponseEntity authenticateForMember(HttpServletRequest request) {
-        String accessToken = request.getHeader(AUTHORIZATION);
-        String email = jwtTokenUtils.getEmail(accessToken);
-        return ResponseEntity.ok(email);
     }
 }

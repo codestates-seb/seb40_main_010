@@ -6,7 +6,6 @@ import com.main21.security.handler.MemberAccessDeniedHandler;
 import com.main21.security.handler.MemberAuthenticationEntryPoint;
 import com.main21.security.handler.MemberAuthenticationFailureHandler;
 import com.main21.security.handler.MemberAuthenticationSuccessHandler;
-import com.main21.security.utils.CookieUtils;
 import com.main21.security.utils.CustomAuthorityUtils;
 import com.main21.security.utils.JwtTokenUtils;
 import com.main21.security.utils.RedisUtils;
@@ -27,7 +26,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.multipart.MultipartResolver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +38,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomAuthorityUtils authorityUtils;
-    private final CookieUtils cookieUtils;
     private final RedisUtils redisUtils;
 
 
@@ -118,13 +115,13 @@ public class SecurityConfig {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             JwtAuthenticationFilter jwtAuthenticationFilter
-                    = new JwtAuthenticationFilter(authenticationManager, jwtTokenUtils, cookieUtils, redisUtils);
+                    = new JwtAuthenticationFilter(authenticationManager, jwtTokenUtils, redisUtils);
             jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
             JwtVerificationFilter jwtVerificationFilter
-                    = new JwtVerificationFilter(jwtTokenUtils, authorityUtils, cookieUtils, redisUtils);
+                    = new JwtVerificationFilter(jwtTokenUtils, authorityUtils, redisUtils);
 
             builder
                     .addFilter(jwtAuthenticationFilter)

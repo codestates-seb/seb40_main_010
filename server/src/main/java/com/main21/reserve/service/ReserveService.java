@@ -148,11 +148,10 @@ public class ReserveService {
                 } else {
                     if (!findTimeStatus.isFull()) {
                         findTimeStatus.addSpaceCount();
-                        timeStatusRepository.save(findTimeStatus);
                         if (findTimeStatus.getSpaceCount().equals(findPlace.getMaxSpace())) {
                             findTimeStatus.setIsFull();
-                            timeStatusRepository.save(findTimeStatus);
                         }
+                        timeStatusRepository.save(findTimeStatus);
                     } else {
                         throw new IllegalAccessError("Full space");
                     }
@@ -178,6 +177,7 @@ public class ReserveService {
             mbtiCountRepository.save(findMBTICount);
         }
     }
+
 
     /**
      * 예약 프로세스 2 - 결제 URL 요청 메서드

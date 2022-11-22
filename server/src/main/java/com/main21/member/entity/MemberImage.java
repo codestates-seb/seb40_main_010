@@ -34,4 +34,8 @@ public class MemberImage {
         this.filePath = filePath;
         this.fileSize = fileSize;
     }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }

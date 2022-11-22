@@ -3,9 +3,7 @@ package com.main21.security.utils;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.member.entity.Member;
-import com.main21.member.entity.Token;
 import com.main21.member.repository.MemberRepository;
-import com.main21.member.repository.TokenRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -16,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.LocalDateTime;
@@ -41,9 +38,7 @@ public class JwtTokenUtils {
     @Value("${jwt.refresh-token-expiration-minutes}")
     private int refreshTokenExpirationMinutes;
 
-    //    private final RedisUtils redisUtils;
     private final MemberRepository memberRepository;
-    private final TokenRepository tokenRepository;
 
 
     /**
@@ -113,27 +108,15 @@ public class JwtTokenUtils {
      *
      * @param jws                    시그니처 정보
      * @param base64EncodedSecretKey base64 인코딩된 키
-     * @return jws
+     * @return Map
      * @author mozzi327
      */
-    public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
+    public Map<String, Object> getClaims(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         return Jwts.parserBuilder()
                 .setSigningKey(key)
-                .build().parseClaimsJws(jws);
-    }
-
-    public String getEmail(String accessToken) {
-        if (accessToken.startsWith(BEARER)) {
-            accessToken = accessToken.split(" ")[1];
-        }
-
-        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
-        Jws<Claims> claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build().parseClaimsJws(accessToken);
-        return (String) claims.getBody().get(USERNAME);
+                .build().parseClaimsJws(jws).getBody();
     }
 
 
@@ -151,10 +134,17 @@ public class JwtTokenUtils {
     }
 
 
+    /**
+     * 액세스 토큰을 통해 만료 시간을 계산해주는 메서드
+     * @param accessToken 액세스 토큰
+     * @return Long
+     * @author mozzi327
+     */
     public Long getExpiration(String accessToken) {
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
         // accessToken 남은 유효시간
         Date expiration = Jwts.parserBuilder()
-                .setSigningKey(getKeyFromBase64EncodedKey(getSecretKey()))
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(accessToken)
                 .getBody()
@@ -179,18 +169,6 @@ public class JwtTokenUtils {
 
 
     /**
-     * 리프레시 토큰이 데이터베이스에 존재하는지 유무를 확인하는 메서드 (임시)<br>
-     * - 리프레시 토큰 값이 같은지도 확인한다.
-     *
-     * @param refreshToken 리프레시 토큰
-     * @author mozzi327
-     */
-    public void verifiedExistRefresh(String refreshToken) {
-
-    }
-
-
-    /**
      * 인증 성공 시 사용되는 사용자 정보(엔티티)를 반환하는 메서드<br>
      * - save를 한번 하는 이유는 최근 로그인 날짜를 갱신하기 위함
      *
@@ -209,26 +187,6 @@ public class JwtTokenUtils {
 
 
     /**
-     * 리프레시 토큰은 데이터베이스에 저장하는 메서드<br>
-     * - 데이터베이스에 리프레시 토큰이 존재하는지 확인하고, 존재한다면 삭제후 저장
-     *
-     * @param refreshToken 리프레시 토큰
-     * @param email        사용자 이메일
-     * @param memberId     사용자 식별자
-     * @author mozzi327
-     */
-    public void savedRefreshToken(String refreshToken, String email, Long memberId) {
-        Optional<Token> findRefreshToken = tokenRepository.findTokenByMemberId(memberId);
-        findRefreshToken.ifPresent(tokenRepository::delete);
-        tokenRepository.save(Token.builder()
-                .memberId(memberId)
-                .memberEmail(email)
-                .refreshToken(refreshToken)
-                .build());
-    }
-
-
-    /**
      * 토큰 정보를 검증하는 메서드
      *
      * @param token 토큰 정보
@@ -236,9 +194,12 @@ public class JwtTokenUtils {
      * @author mozzi327
      */
     public boolean validateToken(String token) {
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey)))
+                    .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
             return true;
@@ -252,5 +213,18 @@ public class JwtTokenUtils {
             log.info("JWT claims string is empty.", e);
         }
         return false;
+    }
+
+
+    /**
+     * 액세스 토큰의 Prefix(Bearer )를 제거해주는 메서드
+     * @param accessToken 액세스 토큰
+     * @return String(액세스 토큰)
+     * @author mozzi327
+     */
+    public String parseAccessToken(String accessToken) {
+        if (accessToken.startsWith(BEARER))
+            return accessToken.split(" ")[1];
+        return accessToken;
     }
 }
