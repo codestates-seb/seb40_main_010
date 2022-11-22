@@ -71,7 +71,7 @@ function Nav({ navColor, buttonColor }) {
 
   const onClickLogOutButton = async () => {
     if (!isLogIn) return null;
-    if (location.pathname !== '/mypage') return null;
+    if (location.pathname !== '/my-page') return null;
 
     await localStorage.removeItem('Access_token');
     return null;
@@ -97,27 +97,27 @@ function Nav({ navColor, buttonColor }) {
         </SearchContainer>
         <ButtonContainer>
           {location.pathname === '/register' ||
-          location.pathname === '/login' ? null : (
-            <Link to={isLogIn ? '/register' : '/login'}>
+          location.pathname === '/log-in' ? null : (
+            <Link to={isLogIn ? '/register' : '/log-in'}>
               <NavLeftButton buttonColor={buttonColor}>
                 {isLogIn ? '장소 등록' : 'Log In'}
               </NavLeftButton>
             </Link>
           )}
-          {location.pathname === '/signup' ? null : (
+          {location.pathname === '/sign-up' ? null : (
             <Link
               to={
                 !isLogIn
-                  ? '/signup'
-                  : location.pathname === '/mypage'
+                  ? '/sign-up'
+                  : location.pathname === '/my-page'
                   ? '/'
-                  : '/mypage'
+                  : '/my-page'
               }
             >
               <NavRightButton onClick={onClickLogOutButton}>
                 {!isLogIn ? (
                   'Sign Up'
-                ) : location.pathname === '/mypage' ? (
+                ) : location.pathname === '/my-page' ? (
                   'Log Out'
                 ) : (
                   <MyPageDiv>

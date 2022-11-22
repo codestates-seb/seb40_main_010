@@ -9,7 +9,7 @@ import MainCompo from '../components/MainCompo';
 import { mainDataState } from '../atoms';
 
 // ToDo : Mbti 컴포넌트 위치, 요청
-function Places() {
+export default function Places() {
   const [mainPlaceData, setMainPlaceData] = useRecoilState(mainDataState);
 
   useEffect(() => {
@@ -41,8 +41,6 @@ function Places() {
     </MainContainer>
   );
 }
-
-export default Places;
 
 const DisplayComponentDiv = styled.div`
   display: flex;
