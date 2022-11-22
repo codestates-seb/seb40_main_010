@@ -7,6 +7,7 @@ import com.main21.place.repository.PlaceRepository;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
 import com.main21.review.repository.ReviewRepository;
+import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,17 +22,19 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PlaceRepository placeRepository;
+    private final RedisUtils redisUtils;
 
     /**
      * 리뷰 등록 로직
-     * @param post
-     * @param memberId
-     * @param placeId
+     * @param post 등록
+     * @param refreshToken 리프래시 토큰
+     * @param placeId 장소 식별자
      * @author Quartz614
      */
     public void createReview(ReviewDto.Post post,
-                             Long memberId,
+                             String refreshToken,
                              Long placeId) {
+        Long memberId = redisUtils.getId(refreshToken);
         Review review = Review.builder()
                 .score(post.getScore())
                 .comment(post.getComment())
@@ -46,12 +49,13 @@ public class ReviewService {
 
     /**
      * 리뷰 수정 로직
-     * @param reviewId
-     * @param patch
-     * @param memberId
+     * @param reviewId 리뷰 식별자
+     * @param patch 수정
+     * @param refreshToken 리프래시 토큰
      * @author Quartz614
      */
-    public void updateReview (Long reviewId, ReviewDto.Patch patch, Long memberId){
+    public void updateReview (Long reviewId, ReviewDto.Patch patch, String refreshToken){
+        Long memberId = redisUtils.getId(refreshToken);
         Review findReview = reviewRepository
                 .findById(reviewId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
@@ -82,11 +86,12 @@ public class ReviewService {
 
     /**
      * 리뷰 삭제 로직
-     * @param reviewId
-     * @param memberId
+     * @param reviewId 리뷰 식별자
+     * @param refreshToken 리프래시 토큰
      * @author Quartz614
      */
-    public void deleteReview (Long reviewId, Long memberId) {
+    public void deleteReview (Long reviewId, String refreshToken) {
+        Long memberId = redisUtils.getId(refreshToken);
         Review findReview = reviewRepository
                 .findById(reviewId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
@@ -107,13 +112,14 @@ public class ReviewService {
 
     /**
      * 마이페이지에서 등록한 리뷰 조회
-     * @param memberId
-     * @param pageable
+     * @param refreshToken 리프래시 토큰
+     * @param pageable 페이징 처리
      * @return
      * @author Quartz614
      */
 
-    public Page<ReviewDto.MyPage> getReviewsMypage(Long memberId, Pageable pageable) {
+    public Page<ReviewDto.MyPage> getReviewsMypage(String refreshToken, Pageable pageable) {
+        Long memberId = redisUtils.getId(refreshToken);
         return reviewRepository.getReviewsMypage(memberId, pageable);
     }
 

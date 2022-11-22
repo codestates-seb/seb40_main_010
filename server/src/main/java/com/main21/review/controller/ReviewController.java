@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.main21.member.utils.AuthConstant.REFRESH_TOKEN;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
@@ -21,47 +23,47 @@ public class ReviewController {
 
     /**
      * 리뷰 등록
-     * @param placeId
-     * @param post
-     * @param memberId
+     * @param placeId 장소 식별자
+     * @param post 등록
+     * @param refreshToken 리프래시 토큰
      * @return
      * @author Quartz614
      */
     @PostMapping("/{place-id}")
     public ResponseEntity postReview(@PathVariable("place-id") Long placeId,
                                      @RequestBody ReviewDto.Post post,
-                                     @CookieValue(name = "memberId") Long memberId) {
-        reviewService.createReview(post, memberId, placeId);
+                                     @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
+        reviewService.createReview(post, refreshToken, placeId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     /**
      * 리뷰 등록 수정
-     * @param reviewId
-     * @param patch
-     * @param memberId
+     * @param reviewId 리뷰 식별자
+     * @param patch 수정
+     * @param refreshToken 리프래시 토큰
      * @return
      * @author Quartz614
      */
     @PatchMapping("/{review-id}/edit")
     public ResponseEntity patchReview(@PathVariable("review-id") Long reviewId,
                                       @RequestBody ReviewDto.Patch patch,
-                                      @CookieValue(name = "memberId") Long memberId) {
-        reviewService.updateReview(reviewId, patch, memberId);
+                                      @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
+        reviewService.updateReview(reviewId, patch, refreshToken);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      * 리뷰 삭제
-     * @param reviewId
-     * @param memberId
+     * @param reviewId 리뷰 식별자
+     * @param refreshToken 리프래시 토큰
      * @return
      * @author Quartz614
      */
     @DeleteMapping("/{review-id}")
     public ResponseEntity deleteReview(@PathVariable("review-id") Long reviewId,
-                                       @CookieValue(name = "memberId") Long memberId) {
-        reviewService.deleteReview(reviewId, memberId);
+                                       @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
+        reviewService.deleteReview(reviewId, refreshToken);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -72,7 +74,7 @@ public class ReviewController {
      * @author Quartz614
      */
     @GetMapping("/{place-id}")
-    public ResponseEntity getReserve(@PathVariable("place-id") Long placeId, Pageable pageable) {
+    public ResponseEntity getReview(@PathVariable("place-id") Long placeId, Pageable pageable) {
         Page<ReviewDto.Response> getReview = reviewService.getPlaceReviews(placeId, pageable);
         List<ReviewDto.Response> reviews = getReview.getContent();
 
@@ -80,16 +82,16 @@ public class ReviewController {
     }
 
     /**
-     * 마이페이지에서 등록한 리뷰 조회
-     * @param pageable
+     *
+     * @param refreshToken 리프래시 토큰
+     * @param pageable 페이징 처리
      * @return
-     * @author Quartz614
      */
 
-    @GetMapping // 마이페이지에서 placeId, placeTitle 추가해야하고
-    public ResponseEntity getReviewsMypage(@CookieValue(name = "memberId") Long memberId,
+    @GetMapping
+    public ResponseEntity getReviewsMypage(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                           Pageable pageable) {
-        Page<ReviewDto.MyPage> getReview = reviewService.getReviewsMypage(memberId, pageable);
+        Page<ReviewDto.MyPage> getReview = reviewService.getReviewsMypage(refreshToken, pageable);
         List<ReviewDto.MyPage> reviews = getReview.getContent();
 
         return new ResponseEntity(new MultiResponseDto<>(reviews, getReview), HttpStatus.OK);
