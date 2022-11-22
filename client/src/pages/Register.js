@@ -38,7 +38,7 @@ export default function Register() {
   const [images, setImages] = useRecoilState(registerFormImage);
 
   const [editData, setEditData] = useRecoilState(reservationEditData);
-  console.log(editData);
+  // console.log(editData);
 
   const handleTitleEdit = e => {
     setEditData({ ...editData, title: e.target.value });
@@ -220,7 +220,7 @@ export default function Register() {
               <Textarea
                 type="text"
                 onChange={handleChange}
-                name="detailInformation"
+                name="detailedInformation"
               />
             )}
           </Wrapper>
