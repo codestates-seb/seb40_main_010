@@ -3,17 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 // import axios from 'axios';
 // import { useRecoilValue } from 'recoil';
+
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Nav';
 import View from '../components/View';
 // import { PlaceIDState } from '../atoms';
 
-const DetailContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
-const DetailViewContainer = styled.div``;
 function Detail() {
   // const [detailInformation, setDetailInformation] =
   //   useRecoilState(DetailInformation);
@@ -37,3 +32,10 @@ function Detail() {
 }
 
 export default Detail;
+
+const DetailContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+const DetailViewContainer = styled.div``;

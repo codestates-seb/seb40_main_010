@@ -1,19 +1,139 @@
-/*
-+ 한글 마지막 글자가 중복되는 현상 한글 외에는 괜찮음 > keydown이벤트를 keypress로 변경하면서 수정됨 > 한글이 구성되는 시간이 걸려서 생기는 문제
-추가할 사항 
-3. ui 요소
-4. 완료시 console.log 없애기, 변수명 정리
-*/
-
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useSetRecoilState } from 'recoil';
+import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { SlHome } from 'react-icons/sl';
 import { BsFillPersonFill } from 'react-icons/bs';
-import { useSetRecoilState } from 'recoil';
+
 import { navSearchValue, categoryFocus } from '../atoms';
+
+function Nav({ navColor, buttonColor }) {
+  const [currentSearch, setCurrentSearch] = useState('');
+  const setSearch = useSetRecoilState(navSearchValue);
+  const setFocusCategoryID = useSetRecoilState(categoryFocus);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isLogIn = localStorage.getItem('Access_token');
+
+  const onChangeSearch = e => {
+    setCurrentSearch(e.target.value);
+  };
+
+  const onSubmit = async event => {
+    event.preventDefault();
+
+    const trimmedSearch = currentSearch.trim();
+    const replacedSearch = trimmedSearch.replace(/ +(?= )/g, '');
+
+    setSearch(replacedSearch);
+
+    if (trimmedSearch) {
+      try {
+        const response = await axios.get(
+          `{{BACKEND}}/search/${encodeURI(replacedSearch)}`,
+        );
+        response.then(
+          setFocusCategoryID(0),
+          setCurrentSearch(''),
+          navigate('/'),
+        );
+      } catch (Error) {
+        console.error(Error);
+        setCurrentSearch('');
+      }
+      // .then(res => console.log(res))
+      // .then(setFocusCategoryID(0), setCurrentSearch(''), navigate('/'))
+      // .catch(err => console.log(err));
+    } else {
+      setCurrentSearch('');
+    }
+  };
+
+  const onClickSearch = () => {
+    const trimmedSearch = currentSearch.trim();
+    const replacedSearch = trimmedSearch.replace(/ +(?= )/g, '');
+
+    setSearch(replacedSearch);
+
+    if (trimmedSearch) {
+      axios
+        .get(`{{BACKEND}}/search/${encodeURI(replacedSearch)}`)
+        .then(res => console.log(res))
+        .then(setFocusCategoryID(0), setCurrentSearch(''), navigate('/'));
+    } else {
+      setCurrentSearch('');
+    }
+  };
+
+  const onClickLogOutButton = async () => {
+    if (!isLogIn) return null;
+    if (location.pathname !== '/mypage') return null;
+
+    await localStorage.removeItem('Access_token');
+    return null;
+  };
+
+  const onClickHomeIcon = () => {
+    axios
+      .get('{{backend}}/')
+      .then(res => console.log(res), setFocusCategoryID(0), setSearch(''))
+      .catch(err => console.log(err));
+  };
+
+  return (
+    <NavContainer>
+      <NavBackground navColor={navColor}>
+        <Link to="/">
+          <SlHome onClick={onClickHomeIcon} className="NavLogo" />
+          <div />
+        </Link>
+        <SearchContainer onSubmit={onSubmit}>
+          <SearchInput value={currentSearch} onChange={onChangeSearch} />
+          <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />
+        </SearchContainer>
+        <ButtonContainer>
+          {location.pathname === '/register' ||
+          location.pathname === '/login' ? null : (
+            <Link to={isLogIn ? '/register' : '/login'}>
+              <NavLeftButton buttonColor={buttonColor}>
+                {isLogIn ? '장소 등록' : 'Log In'}
+              </NavLeftButton>
+            </Link>
+          )}
+          {location.pathname === '/signup' ? null : (
+            <Link
+              to={
+                !isLogIn
+                  ? '/signup'
+                  : location.pathname === '/mypage'
+                  ? '/'
+                  : '/mypage'
+              }
+            >
+              <NavRightButton onClick={onClickLogOutButton}>
+                {!isLogIn ? (
+                  'Sign Up'
+                ) : location.pathname === '/mypage' ? (
+                  'Log Out'
+                ) : (
+                  <MyPageDiv>
+                    <BsFillPersonFill />
+                  </MyPageDiv>
+                )}
+              </NavRightButton>
+            </Link>
+          )}
+        </ButtonContainer>
+      </NavBackground>
+    </NavContainer>
+  );
+}
+
+export default Nav;
 
 const NavContainer = styled.div`
   position: relative;
@@ -49,7 +169,7 @@ const NavBackground = styled.div`
   }
 `;
 
-const SearchContainer = styled.div`
+const SearchContainer = styled.form`
   width: 40%;
   display: flex;
   justify-content: row;
@@ -125,133 +245,3 @@ const NavRightButton = styled(NavLeftButton)`
 const MyPageDiv = styled.div`
   border-radius: 50%;
 `;
-
-function Nav({ navColor, buttonColor }) {
-  const [temporarySearchValue, setTemporarySearchValue] = useState('');
-  const setSearchValue = useSetRecoilState(navSearchValue);
-  const setFocusCategoryID = useSetRecoilState(categoryFocus);
-
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  window.localStorage.setItem('Access_token', 'test');
-  // window.localStorage.removeItem('Access_token');
-  // window.sessionStorage.setItem('Access_token', 'test');
-
-  const isLogIn = window.localStorage.getItem('Access_token');
-
-  const onChangeSearch = e => {
-    setTemporarySearchValue(e.target.value);
-  };
-
-  const onKeypress = e => {
-    if (e.key === 'Enter') {
-      setSearchValue(temporarySearchValue.trim().replace(/ +(?= )/g, ''));
-      if (temporarySearchValue.trim()) {
-        axios
-          .get(
-            `{{BACKEND}}/search/${encodeURI(
-              temporarySearchValue.trim().replace(/ +(?= )/g, ''),
-            )}`,
-          )
-          .then(res => console.log(res))
-          .then(
-            setFocusCategoryID(0),
-            setTemporarySearchValue(''),
-            navigate('/'),
-          );
-      } else {
-        setTemporarySearchValue('');
-      }
-    }
-  };
-  const onClickSearch = () => {
-    setSearchValue(temporarySearchValue.trim().replace(/ +(?= )/g, ''));
-    if (temporarySearchValue.trim()) {
-      axios
-        .get(
-          `{{BACKEND}}/search/${encodeURI(
-            temporarySearchValue.trim(' ').replace(/ +(?= )/g, ''),
-          )}`,
-        )
-        .then(res => console.log(res))
-        .then(
-          setFocusCategoryID(0),
-          setTemporarySearchValue(''),
-          navigate('/'),
-        );
-    } else {
-      setTemporarySearchValue('');
-    }
-  };
-
-  const onClickLogOutButton = () => {
-    window.localStorage.removeItem('Access_token');
-  };
-
-  const onClickHomeIcon = () => {
-    axios
-      .get('{{backend}}/')
-      .then(res => console.log(res), setFocusCategoryID(0), setSearchValue(''))
-      .catch(err => console.log(err));
-  };
-  return (
-    <NavContainer>
-      <NavBackground navColor={navColor}>
-        <Link to="/">
-          <SlHome onClick={onClickHomeIcon} className="NavLogo" />
-          <div />
-        </Link>
-        <SearchContainer>
-          <SearchInput
-            value={temporarySearchValue}
-            onChange={e => onChangeSearch(e)}
-            onKeyPress={onKeypress}
-          />
-          <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />
-        </SearchContainer>
-        <ButtonContainer>
-          {location.pathname === '/register' ||
-          location.pathname === '/login' ? null : (
-            <Link to={isLogIn ? '/register' : '/login'}>
-              <NavLeftButton buttonColor={buttonColor}>
-                {isLogIn ? '장소 등록' : 'Log In'}
-              </NavLeftButton>
-            </Link>
-          )}
-          {location.pathname === '/signup' ? null : (
-            <Link
-              to={
-                !isLogIn
-                  ? '/signup'
-                  : location.pathname === '/mypage'
-                  ? '/'
-                  : '/mypage'
-              }
-            >
-              <NavRightButton
-                onClick={
-                  location.pathname === '/mypage' && isLogIn
-                    ? onClickLogOutButton
-                    : null
-                }
-              >
-                {!isLogIn ? (
-                  'Sign Up'
-                ) : location.pathname === '/mypage' ? (
-                  'Log Out'
-                ) : (
-                  <MyPageDiv>
-                    <BsFillPersonFill />
-                  </MyPageDiv>
-                )}
-              </NavRightButton>
-            </Link>
-          )}
-        </ButtonContainer>
-      </NavBackground>
-    </NavContainer>
-  );
-}
-
-export default Nav;
