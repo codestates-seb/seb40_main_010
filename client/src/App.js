@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Main from './pages/Main';
+import Places from './pages/Places';
 import Detail from './pages/Detail';
 import LogIn from './pages/LogIn';
 import MyPage from './pages/MyPage';
@@ -11,10 +11,10 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<Places />} />
         <Route path="/detail" element={<Detail />} />
-        <Route path="/login" element={<LogIn />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/log-in" element={<LogIn />} />
+        <Route path="/my-page" element={<MyPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/sign-up" element={<SignUp />} />
       </Routes>
