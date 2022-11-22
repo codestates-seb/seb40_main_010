@@ -10,12 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.main21.member.utils.AuthConstant.REFRESH_TOKEN;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,15 +24,16 @@ public class BookmarkController {
     /**
      * Pagination 적용
      * 회원별 북마크 전체 조회
-     * @param memberId
+     *
+     * @param refreshToken
      * @param pageable
      * @return
      */
     @GetMapping("/bookmark")
-    public ResponseEntity getBookmark(@CookieValue( name = "memberId") Long memberId,
+    public ResponseEntity getBookmark(@RequestHeader(REFRESH_TOKEN) String refreshToken,
                                       Pageable pageable) {
 
-        Page<BookmarkDto.Response> pageBookmark = bookmarkService.getBookmark(memberId, pageable);
+        Page<BookmarkDto.Response> pageBookmark = bookmarkService.getBookmark(refreshToken, pageable);
         List<BookmarkDto.Response> bookmark = pageBookmark.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(bookmark, pageBookmark), HttpStatus.OK);
     }
@@ -43,14 +43,15 @@ public class BookmarkController {
      * 북마크 추가 및 삭제
      * memberId, PlaceId로 Bookmark 가져오기 Query
      * 북마크가 존재하면 북마크에서 삭제하고, 북마크가 존재하지 않으면 북마크에 추가하기
+     *
      * @param placeId
-     * @param memberId
+     * @param refreshToken
      * @return
      */
     @GetMapping("/bookmark/{place-id}")
     public ResponseEntity createBookmark(@PathVariable("place-id") Long placeId,
-                                         @CookieValue(name = "memberId") Long memberId) {
-        bookmarkService.createBookmark(placeId, memberId);
+                                         @RequestHeader(REFRESH_TOKEN) String refreshToken) {
+        bookmarkService.createBookmark(placeId, refreshToken);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
