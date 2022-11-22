@@ -1,110 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import Select from 'react-select';
 import { BiTimeFive, BiPencil } from 'react-icons/bi';
 import { CgMenuRound } from 'react-icons/cg';
 import { IoHeartCircleOutline } from 'react-icons/io5';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
-import axios from 'axios';
-import Select from 'react-select';
 import MyPageCategoryList from './MyPageCategoryList';
-
-// 할 것
-// 1. 프로필사진 업로드
-// 2. 카테고리 클릭시 색 유지되게 (후순위)
-// 3. 글 수정 기능
-// 4. 리뷰 수정 기능
-// 5. 예약내역 날짜 기준 취소하기/리뷰쓰기 구분 (후순위)
-// 6. 북마크 클릭시 아이콘 상태 관리
-// 7. 내역 클릭시 해당 글로 이동
+import useMyPage from './useMyPage';
 
 function MyPageComponent() {
-  const [myPageCategory, setMyPageCategory] = useState('등록내역');
-  const [memberData, setMemberData] = useState([]);
-  const [listData, setListData] = useState([]);
-  const [userNickName, setUserNickName] = useState('');
-  const [userMBTI, setUserMBTI] = useState('');
-  const [editStatus, setEditStatus] = useState(false);
-
-  const changeCategory = e => {
-    setMyPageCategory(e.target.textContent);
-  };
-
-  const callRegistrationList = async () => {
-    // const data = {
-    //   headers: {
-    //     // refresh 토큰
-    //     // access 토큰
-    //   },
-    // };
-    await axios.get(`http://localhost:3001/place`).then(res => {
-      setListData([...res.data]);
-    });
-  };
-
-  const reservationList = async () => {
-    // const data = {
-    //   headers: {
-    //     // refresh 토큰
-    //     // access 토큰
-    //   },
-    // };
-    await axios.get(`http://localhost:3001/reserve`).then(res => {
-      setListData([...res.data]);
-    });
-  };
-
-  const bookmarkList = async () => {
-    // const data = {
-    //   headers: {
-    //     // refresh 토큰
-    //     // access 토큰
-    //   },
-    // };
-    await axios.get(`http://localhost:3001/bookmark`).then(res => {
-      setListData([...res.data]);
-    });
-  };
-
-  const reviewList = async () => {
-    // const data = {
-    //   headers: {
-    //     // refresh 토큰
-    //     // access 토큰
-    //   },
-    // };
-    await axios.get(`http://localhost:3001/review`).then(res => {
-      setListData([...res.data]);
-    });
-  };
-
-  const callUserData = async () => {
-    await axios.get('http://localhost:3001/member').then(res => {
-      setMemberData(...res.data);
-      setUserNickName(res.data[0].nickname);
-      setUserMBTI(res.data[0].mbti);
-    });
-  };
-
-  const editStatusChange = () => {
-    setEditStatus(!editStatus);
-  };
-
-  const userDataEdit = async () => {
-    await axios
-      .patch(`http://localhost:3001/member/edit`, {
-        nickname: userNickName,
-        mbti: userMBTI,
-      })
-      .then(() => {
-        callUserData();
-      })
-      .catch(() =>
-        console.log({
-          nickname: userNickName,
-          mbti: userMBTI,
-        }),
-      );
-  };
+  const {
+    callRegistrationList,
+    callUserData,
+    editStatus,
+    editStatusChange,
+    listData,
+    mbti,
+    myPageCategory,
+    nickname,
+    profileImage,
+    userDataEdit,
+    userMBTI,
+    userNickName,
+    onChange,
+    onClickCancel,
+    onClickCategory,
+    onChangeNickName,
+  } = useMyPage();
 
   useEffect(() => {
     callUserData();
@@ -133,77 +55,42 @@ function MyPageComponent() {
 
   return (
     <MyPageComponentContainer>
-      <MyProfileImage src={memberData.profileImage} />
+      <MyProfileImage src={profileImage} />
       <NameAndEditIconContainer>
-        {!editStatus && <MyNickName>{memberData.nickname}</MyNickName>}
+        {!editStatus && <MyNickName>{nickname}</MyNickName>}
         {editStatus && (
           <UserNickNameChange
-            onChange={e => {
-              e.stopPropagation();
-              setUserNickName(e.target.value);
-            }}
+            onChange={onChangeNickName}
             placeholder={userNickName}
           />
         )}
         {!editStatus && <BiPencil onClick={editStatusChange} size="24" />}
         {editStatus && <EditText onClick={userDataEdit}>수정하기</EditText>}
-        {editStatus && (
-          <EditText
-            onClick={() => {
-              editStatusChange();
-              setUserNickName(memberData.nickname);
-              setUserMBTI(memberData.mbti);
-            }}
-          >
-            취소
-          </EditText>
-        )}
+        {editStatus && <EditText onClick={onClickCancel}>취소</EditText>}
       </NameAndEditIconContainer>
-      {!editStatus && <MyMBTI>{memberData.mbti}</MyMBTI>}
+      {!editStatus && <MyMBTI>{mbti}</MyMBTI>}
       {editStatus && (
         <MbtiSelect
           classNamePrefix="Select"
           options={mbtiList}
           placeholder={userMBTI}
-          onChange={e => {
-            setUserMBTI(e.value);
-          }}
+          onChange={onChange}
         />
       )}
       <MyPageContentCategory>
-        <MyPageCategoryItem
-          onClick={e => {
-            changeCategory(e);
-            callRegistrationList();
-          }}
-        >
+        <MyPageCategoryItem onClick={onClickCategory} value="register">
           <AiOutlineDollarCircle size="35" />
           등록내역
         </MyPageCategoryItem>
-        <MyPageCategoryItem
-          onClick={e => {
-            changeCategory(e);
-            reservationList();
-          }}
-        >
+        <MyPageCategoryItem onClick={onClickCategory} value="reservation">
           <BiTimeFive size="35" />
           예약내역
         </MyPageCategoryItem>
-        <MyPageCategoryItem
-          onClick={e => {
-            changeCategory(e);
-            bookmarkList();
-          }}
-        >
+        <MyPageCategoryItem onClick={onClickCategory} value="bookmark">
           <IoHeartCircleOutline size="35" />
           관심장소
         </MyPageCategoryItem>
-        <MyPageCategoryItem
-          onClick={e => {
-            changeCategory(e);
-            reviewList();
-          }}
-        >
+        <MyPageCategoryItem onClick={onClickCategory} value="review">
           <CgMenuRound size="35" />
           리뷰내역
         </MyPageCategoryItem>
