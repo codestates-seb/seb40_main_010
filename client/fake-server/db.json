@@ -18,6 +18,18 @@
       "id": 2
     }
   ],
+
+  "signup": [
+    {
+      "email": "code@gmail.com",
+      "password": "code123!!",
+      "confirm_password": "code123!!",
+      "userName": "as",
+      "phoneNumber": "01012345678",
+      "mbti": "ISTJ",
+      "id": 1
+    }
+  ],
   "place": [
     {
       "id": 1,
@@ -42,11 +54,6 @@
       "image": "https://picsum.photos/203",
       "charge": 106000,
       "score": 2.7
-    },
-    {
-      "email": "code@gmail.com",
-      "password": "sdf456",
-      "id": 4
     }
   ],
   "reserve": [
@@ -116,10 +123,7 @@
       "phoneNumber": "010-1234-5678",
       "title": "히든 헤이븐 - 수영장과 바다 전망을 즐길 수 있는 5베드 빌라",
       "isBookmark": false,
-      "category": [
-        "바다 근처",
-        "파티룸"
-      ],
+      "category": ["바다 근처", "파티룸"],
       "capacity": 5,
       "address": "대전 동구 판교 1길 3",
       "detailInfo": "후트베이 해변이 내려다보이는 이 평화로운 5베드룸 저택에서 온 가족이 함께 휴식을 취해보세요. 침실 5개 – 욕실 3개 침실 5개를 자랑하는 넓고 현대적인 가족 숙소입니다. 메인 침실 (욕실이 딸린 욕실) 에는 킹사이즈 침대가 있고, 나머지 4개의 침실에는 퀸사이즈 침대가 있습니다. 산이 내려다보이는 벽난로가 있는 개방형 주방과 라운지 공간. 주방에는 시설이 완비되어 있습니다. 야외 피자 오븐, 바비큐 그릴, 대형 정원과 수영장이 있습니다. 바다 전망 - 산 전망",
@@ -129,9 +133,7 @@
         "https://a0.muscache.com/im/pictures/miso/Hosting-717134404264905813/original/5a06ec14-3591-459f-86ec-dfe5be7c203c.jpeg?im_w=480"
       ],
       "charge": 80000,
-      "bookmark": [
-        "1"
-      ],
+      "bookmark": ["1"],
       "score": 4.5
     }
   ],

@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-import Select from 'react-select';
-import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import axios from 'axios';
+import { useForm, Controller } from 'react-hook-form';
+import Select from 'react-select';
+
 import Nav from '../components/Nav';
 
-// TODO
-// onSubmit 함수 완성하기
 function SignUp() {
   const {
     register,
@@ -16,8 +16,14 @@ function SignUp() {
     formState: { isSubmitting, errors },
   } = useForm({ mode: 'onChange' });
 
-  const onSubmit = data => console.log(data);
-  console.log(isSubmitting);
+  const onSubmit = async data => {
+    try {
+      const response = await axios.post(`http://localhost:3001/signup`, data);
+      return response.data;
+    } catch (err) {
+      return console.log('Error >>', err);
+    }
+  };
 
   const mbtiList = [
     { value: 'null', label: '없음' },
@@ -40,163 +46,168 @@ function SignUp() {
   ];
 
   return (
-    <Container>
+    <div className="test">
       <Nav navColor="#FFDA77" buttonColor="#89BBFF" />
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-        <div className="signup-container">
-          <div className="wrapper">
-            <div className="title">Email</div>
-            <Input
-              type="email"
-              placeholder="code@gmail.com"
-              {...register('email', {
-                required: '필수 정보입니다.',
-                pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: '이메일 형식에 맞지 않습니다.',
-                },
-              })}
-            />
-            {errors.email && (
-              <div className="alert">{errors.email.message}</div>
-            )}
-          </div>
-          <div className="wrapper">
-            <div className="title">Password</div>
-            <Input
-              placeholder="8자 이상 영문, 숫자, 특수문자를 사용하세요."
-              {...register('password', {
-                required: '필수 정보입니다.',
-                minLength: {
-                  value: 8,
-                  message: '8자리 이상 비밀번호를 사용하세요.',
-                },
-                validate: {
-                  numcheck: value =>
-                    (value && /[0-9]/g.test(value)) || '숫자를 추가해주세요',
-                  lettercheck: value =>
-                    (value && /[a-z]/gi.test(value)) || '영어를 추가해주세요',
-                  specialcheck: value =>
-                    (value && /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi.test(value)) ||
-                    '특수문자를 추가해주세요',
-                },
-              })}
-            />
-            {errors.password && errors.password.type === 'required' && (
-              <div className="alert">{errors.password.message}</div>
-            )}
-            {errors.password && errors.password.type === 'minLength' && (
-              <div className="alert">{errors.password.message}</div>
-            )}
-            {errors.password && errors.password.type === 'numcheck' && (
-              <div className="alert">{errors.password.message}</div>
-            )}
-            {errors.password && errors.password.type === 'lettercheck' && (
-              <div className="alert">{errors.password.message}</div>
-            )}
-            {errors.password && errors.password.type === 'specialcheck' && (
-              <div className="alert">{errors.password.message}</div>
-            )}
-          </div>
-          <div className="wrapper">
-            <div className="title">Re-Enter Password</div>
-            <Input
-              placeholder="비밀번호를 다시 입력해주세요."
-              {...register('confirm_password', {
-                required: '필수 정보입니다.',
-                validate: val => {
-                  if (watch('password') !== val) {
-                    return '비밀번호가 정확하지 않습니다.';
-                  }
-                  return null;
-                },
-              })}
-            />
-            {errors.confirm_password && (
-              <div className="alert">{errors.confirm_password.message}</div>
-            )}
-          </div>
-          <div className="wrapper">
-            <div className="title">Username</div>
-            <Input
-              placeholder="1자 이상의 한글, 영문, 숫자만 사용할 수 있습니다"
-              {...register('userName', {
-                required: '필수 정보입니다.',
-                pattern: {
-                  value: /[0-9]|[a-z]|[A-Z]|[가-힣]/,
-                  message: '이름 형식에 맞지 않습니다.',
-                },
-              })}
-            />
-            {errors.userName && (
-              <div className="alert">{errors.userName.message}</div>
-            )}
-          </div>
-          <div className="wrapper">
-            <div className="title">Phone number</div>
-            <Input
-              placeholder="010-1234-5678"
-              {...register('phoneNumber', {
-                required: '필수 정보입니다.',
-                pattern: {
-                  value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
-                  message: '전화번호 형식에 맞지 않습니다.',
-                },
-              })}
-            />
-            {errors.phoneNumber && (
-              <div className="alert">{errors.phoneNumber.message}</div>
-            )}
-          </div>
-          <div className="wrapper">
-            <div className="title">MBTI</div>
-            <Controller
-              control={control}
-              name="mbti"
-              rules={{ required: '필수 정보입니다.' }}
-              render={({ field: { onChange, value, ref } }) => (
-                <MbtiSelect
-                  inputRef={ref}
-                  classNamePrefix="Select"
-                  options={mbtiList}
-                  placeholder="mbti"
-                  value={mbtiList.find(c => c.value === value)}
-                  onChange={val => onChange(val.value)}
-                />
+      <Container>
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <div className="signup-container">
+            <div className="wrapper">
+              <div className="title">Email</div>
+              <Input
+                type="email"
+                placeholder="code@gmail.com"
+                {...register('email', {
+                  required: '필수 정보입니다.',
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: '이메일 형식에 맞지 않습니다.',
+                  },
+                })}
+              />
+              {errors.email && (
+                <div className="alert">{errors.email.message}</div>
               )}
-            />
-            {errors.mbti && <div className="alert">{errors.mbti.message}</div>}
+            </div>
+            <div className="wrapper">
+              <div className="title">Password</div>
+              <Input
+                placeholder="8자 이상 영문, 숫자, 특수문자를 사용하세요."
+                type="password"
+                {...register('password', {
+                  required: '필수 정보입니다.',
+                  minLength: {
+                    value: 8,
+                    message: '8자리 이상 비밀번호를 사용하세요.',
+                  },
+                  validate: {
+                    numcheck: value =>
+                      (value && /[0-9]/g.test(value)) || '숫자를 추가해주세요',
+                    lettercheck: value =>
+                      (value && /[a-z]/gi.test(value)) || '영어를 추가해주세요',
+                    specialcheck: value =>
+                      (value && /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi.test(value)) ||
+                      '특수문자를 추가해주세요',
+                  },
+                })}
+              />
+              {errors.password && errors.password.type === 'required' && (
+                <div className="alert">{errors.password.message}</div>
+              )}
+              {errors.password && errors.password.type === 'minLength' && (
+                <div className="alert">{errors.password.message}</div>
+              )}
+              {errors.password && errors.password.type === 'numcheck' && (
+                <div className="alert">{errors.password.message}</div>
+              )}
+              {errors.password && errors.password.type === 'lettercheck' && (
+                <div className="alert">{errors.password.message}</div>
+              )}
+              {errors.password && errors.password.type === 'specialcheck' && (
+                <div className="alert">{errors.password.message}</div>
+              )}
+            </div>
+            <div className="wrapper">
+              <div className="title">Re-Enter Password</div>
+              <Input
+                placeholder="비밀번호를 다시 입력해주세요."
+                type="password"
+                {...register('confirmPassword', {
+                  required: '필수 정보입니다.',
+                  validate: val => {
+                    if (watch('password') !== val) {
+                      return '비밀번호가 정확하지 않습니다.';
+                    }
+                    return null;
+                  },
+                })}
+              />
+              {errors.confirmPassword && (
+                <div className="alert">{errors.confirmPassword.message}</div>
+              )}
+            </div>
+            <div className="wrapper">
+              <div className="title">Nickname</div>
+              <Input
+                placeholder="1자 이상의 한글, 영문, 숫자만 사용할 수 있습니다"
+                {...register('userName', {
+                  required: '필수 정보입니다.',
+                  pattern: {
+                    value: /[0-9]|[a-z]|[A-Z]|[가-힣]/,
+                    message: '이름 형식에 맞지 않습니다.',
+                  },
+                })}
+              />
+              {errors.userName && (
+                <div className="alert">{errors.userName.message}</div>
+              )}
+            </div>
+            <div className="wrapper">
+              <div className="title">Phone number</div>
+              <Input
+                placeholder="010-1234-5678"
+                {...register('phoneNumber', {
+                  required: '필수 정보입니다.',
+                  pattern: {
+                    value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
+                    message: '전화번호 형식에 맞지 않습니다.',
+                  },
+                })}
+              />
+              {errors.phoneNumber && (
+                <div className="alert">{errors.phoneNumber.message}</div>
+              )}
+            </div>
+            <div className="wrapper">
+              <div className="title">MBTI</div>
+              <Controller
+                control={control}
+                name="mbti"
+                rules={{ required: '필수 정보입니다.' }}
+                render={({ field: { onChange, value, ref } }) => (
+                  <MbtiSelect
+                    inputRef={ref}
+                    classNamePrefix="Select"
+                    options={mbtiList}
+                    placeholder="mbti"
+                    value={mbtiList.find(c => c.value === value)}
+                    onChange={val => onChange(val.value)}
+                  />
+                )}
+              />
+              {errors.mbti && (
+                <div className="alert">{errors.mbti.message}</div>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={isSubmitting}
+            >
+              Sign Up
+            </button>
+            <LogInLink to="/login">Log In</LogInLink>
           </div>
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={isSubmitting}
-          >
-            Sign Up
-          </button>
-          <LogInLink to="/login">Log In</LogInLink>
-        </div>
-      </form>
-    </Container>
+        </form>
+      </Container>
+    </div>
   );
 }
 
 export default SignUp;
 
 const Container = styled.div`
-  margin-top: 70px;
   width: 100vw;
-  height: 100vh;
+  height: 800px;
   background-color: #96c2ff;
   display: flex;
   justify-content: center;
+  align-items: center;
 
   .signup-container {
-    position: sticky;
-    top: 20%;
-    width: 700px;
+    margin-top: 30px;
+    width: 33rem;
     height: flex;
-    padding: 60px 0px;
+    padding: 50px 0px;
     background-color: #ffffff;
     border-radius: 20px;
     display: flex;
@@ -206,22 +217,22 @@ const Container = styled.div`
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
   .wrapper {
-    width: 65%;
+    width: 70%;
     height: fit-content;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
 
   .title {
     width: 100%;
     height: fit-content;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     color: #2b2b2b;
     margin-bottom: 10px;
   }
 
   .submit-button {
-    width: 300px;
+    width: 15rem;
     height: 55px;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -253,6 +264,7 @@ const Container = styled.div`
   .alert {
     margin-top: 10px;
     color: #eb7470;
+    font-size: 0.8rem;
     font-weight: 500;
   }
 `;
@@ -260,7 +272,7 @@ const Container = styled.div`
 const Input = styled.input`
   width: 99%;
   height: fit-content;
-  font-size: 1rem;
+  font-size: 0.85rem;
   outline: none;
   border: none;
   border-bottom: 2px solid #96c2ff;
@@ -268,11 +280,11 @@ const Input = styled.input`
 `;
 
 const MbtiSelect = styled(Select)`
-  font-size: 1rem;
+  font-size: 0.85rem;
   width: 100%;
 
   .Select__control {
-    height: 40px;
+    height: 30px;
     width: 100%;
     border: 2px solid #96c2ff;
     border-radius: 5px;

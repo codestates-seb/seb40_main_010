@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+
 import { useForm } from 'react-hook-form';
 
 import Nav from '../components/Nav';
@@ -13,13 +14,12 @@ export default function LogIn() {
     formState: { isSubmitting, errors },
   } = useForm({ mode: 'onChange' });
 
-  // eslint-disable-next-line consistent-return
   const onSubmit = async data => {
     try {
       const response = await axios.post(`http://localhost:3001/login`, data);
       return response.data;
     } catch (err) {
-      console.log('Error >>', err);
+      return console.log('Error >>', err);
     }
   };
 
