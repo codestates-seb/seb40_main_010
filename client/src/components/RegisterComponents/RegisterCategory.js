@@ -14,15 +14,14 @@ const categories = [
   { id: 9, place: '공연장' },
 ];
 
-// TODO
-// 변수명 바꾸기
-// onChange 함수 바꾸기
 function RegisterCategory({ checkedList, setCheckedList }) {
-  const handleCategory = (isChecked, item) => {
-    if (isChecked) {
-      setCheckedList([...checkedList, item]);
-    } else if (!isChecked) {
-      setCheckedList(checkedList.filter(el => el !== item));
+  const handleCategory = event => {
+    const isCategoryChecked = event.target.checked;
+    const category = event.target.value;
+    if (isCategoryChecked) {
+      setCheckedList([...checkedList, category]);
+    } else if (!isCategoryChecked) {
+      setCheckedList(checkedList.filter(item => item !== category));
     }
   };
 
@@ -34,10 +33,7 @@ function RegisterCategory({ checkedList, setCheckedList }) {
             type="checkbox"
             id={category.id}
             value={category.place}
-            checked={checkedList.includes(category.place)}
-            onChange={event =>
-              handleCategory(event.target.checked, event.target.value)
-            }
+            onChange={handleCategory}
           />
           <Label htmlFor={category.id}>{category.place}</Label>
         </Category>
