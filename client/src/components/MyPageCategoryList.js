@@ -69,37 +69,32 @@ function MyPageCategoryList({ listData, type }) {
   // 아래 함수 3개 await async 형태로 변경하기
 
   const reviewDelete = async () => {
-    await axios
-      .delete(`http://localhost:3001/review/${listData.reviewId}`)
-      .then(() => {
-        navigate('/MyPage');
-      })
-      .catch(() => {
-        showModal();
-      });
+    try {
+      await axios.delete(`http://localhost:3001/review/${listData.reviewId}`);
+      navigate('/MyPage');
+    } catch (err) {
+      showModal();
+    }
   };
 
   const bookMarkStatusChange = async () => {
-    await axios
-      .get(`http://localhost:3001/bookmark/${listData.bookmarkId}`)
-      .then(() => {
-        // 북마크 아이콘 색상 변화 등
-      })
-      .catch(() => {
-        navigate('/MyPage');
-      });
+    try {
+      await axios.get(`http://localhost:3001/bookmark/${listData.bookmarkId}`);
+      // 북마크 아이콘 색상 변화 등
+    } catch (err) {
+      navigate('/MyPage');
+    }
   };
 
   const registerEditDataSend = async () => {
     // id를 인자로 받아서 /place/id로 조회해야되는데 현재 api랑 연동안되므로 detaildata로 임시 작성
-    await axios
-      .get(`http://localhost:3001/detaildata`)
-      .then(res => {
-        setReservationData(res.data[0]);
-      })
-      .then(() => {
-        navigate('/register');
-      });
+    try {
+      const response = await axios.get(`http://localhost:3001/detaildata`);
+      setReservationData(response.data[0]);
+      navigate('/register');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

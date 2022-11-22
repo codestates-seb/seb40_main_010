@@ -9,8 +9,8 @@ const useMyPage = () => {
   const [userMBTI, setUserMBTI] = useState('');
   const [editStatus, setEditStatus] = useState(false);
 
-  const changeCategory = e => {
-    setMyPageCategory(e.target.textContent);
+  const changeCategory = event => {
+    setMyPageCategory(event.target.textContent);
   };
 
   // 아래 4개 함수 하나로 합쳐서 관리하기
@@ -22,9 +22,12 @@ const useMyPage = () => {
     //     // access 토큰
     //   },
     // };
-    await axios.get(`http://localhost:3001/place`).then(res => {
-      setListData([...res.data]);
-    });
+    try {
+      const response = await axios.get(`http://localhost:3001/reserve`);
+      setListData([...response.data]);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const reservationList = async () => {
@@ -34,9 +37,12 @@ const useMyPage = () => {
     //     // access 토큰
     //   },
     // };
-    await axios.get(`http://localhost:3001/reserve`).then(res => {
-      setListData([...res.data]);
-    });
+    try {
+      const response = await axios.get(`http://localhost:3001/reserve`);
+      setListData([...response.data]);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const bookmarkList = async () => {
@@ -46,9 +52,12 @@ const useMyPage = () => {
     //     // access 토큰
     //   },
     // };
-    await axios.get(`http://localhost:3001/bookmark`).then(res => {
-      setListData([...res.data]);
-    });
+    try {
+      const response = await axios.get(`http://localhost:3001/bookmark`);
+      setListData([...response.data]);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const reviewList = async () => {
@@ -58,17 +67,32 @@ const useMyPage = () => {
     //     // access 토큰
     //   },
     // };
-    await axios.get(`http://localhost:3001/review`).then(res => {
-      setListData([...res.data]);
-    });
+    try {
+      const response = await axios.get(`http://localhost:3001/review`);
+      setListData([...response.data]);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  // const callUserData = async () => {
+  //   await axios.get('http://localhost:3001/member').then(res => {
+  //     setMemberData(...res.data);
+  //     setUserNickName(res.data[0].nickname);
+  //     setUserMBTI(res.data[0].mbti);
+  //   });
+  // };
+
   const callUserData = async () => {
-    await axios.get('http://localhost:3001/member').then(res => {
-      setMemberData(...res.data);
-      setUserNickName(res.data[0].nickname);
-      setUserMBTI(res.data[0].mbti);
-    });
+    try {
+      const response = await axios.get('http://localhost:3001/member');
+      console.log(response);
+      setMemberData(...response.data);
+      setUserNickName(response.data[0].nickname);
+      setUserMBTI(response.data[0].mbti);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const editStatusChange = () => {
@@ -76,20 +100,15 @@ const useMyPage = () => {
   };
 
   const userDataEdit = async () => {
-    await axios
-      .patch(`http://localhost:3001/member/edit`, {
+    try {
+      await axios.patch(`http://localhost:3001/member/edit`, {
         nickname: userNickName,
         mbti: userMBTI,
-      })
-      .then(() => {
-        callUserData();
-      })
-      .catch(() =>
-        console.log({
-          nickname: userNickName,
-          mbti: userMBTI,
-        }),
-      );
+      });
+      callUserData();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onChange = event => {

@@ -38,7 +38,6 @@ export default function Register() {
   const [images, setImages] = useRecoilState(registerFormImage);
 
   const [editData, setEditData] = useRecoilState(reservationEditData);
-  // console.log(editData);
 
   const handler = {
     title: setTitle,

@@ -10,36 +10,13 @@ function ReviewWrite({
   reviewComment,
   reviewScore,
 }) {
-  // 모달창 여닫는 상태
+  const [score, setScore] = useState(null);
+  const [reviewText, setReviewText] = useState('');
+
   const showReviewModal = () => {
     setReviewModalOpen(!reviewModalOpen);
   };
-
-  // TODO: 별점 관리 for문 없애고 코드 정리하기
-  const ratings = [0, 1, 2, 3, 4];
-
-  const [ratedStars, setRatedStars] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
-
   const today = new Date();
-
-  const handleStarClick = index => {
-    const clickStates = [...ratedStars];
-    for (let i = 0; i < 5; i += 1) {
-      clickStates[i] = i <= index;
-    }
-    setRatedStars(clickStates);
-  };
-
-  const score = ratedStars.filter(Boolean).length;
-
-  // TODO : 작성 내용 상태로 저장해서 등록 클릭시 데이터 담아서 보내는 것까지 구현하기
-  const [reviewText, setReviewText] = useState('');
 
   const changeReviewText = e => {
     setReviewText(e.target.value);
@@ -55,7 +32,7 @@ function ReviewWrite({
 
   useEffect(() => {
     setReviewText(reviewComment);
-    handleStarClick(reviewScore - 1);
+    setScore(reviewScore);
   }, []);
 
   return (
@@ -69,11 +46,14 @@ function ReviewWrite({
             </TextDateContainer>
             <PlaceName>{placeName}</PlaceName>
             <RatingBox>
-              {ratings.map(el => (
+              {[1, 2, 3, 4, 5].map(el => (
                 <ImStarFull
+                  className={score >= el && 'black'}
                   key={el}
-                  onClick={() => handleStarClick(el)}
-                  className={ratedStars[el] && 'black'}
+                  id={el}
+                  onClick={() => {
+                    setScore(el);
+                  }}
                   size="35"
                 />
               ))}
