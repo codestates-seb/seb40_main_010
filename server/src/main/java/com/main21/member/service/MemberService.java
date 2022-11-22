@@ -1,5 +1,6 @@
 package com.main21.member.service;
 
+import com.main21.common.CommonService;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.file.FileHandler;
@@ -26,13 +27,13 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final CustomAuthorityUtils authorityUtils;
-    private final FileHandler fileHandler;
-    private final MemberImageRepository memberImageRepository;
-    private final RedisUtils redisUtils;
+
     private final S3Upload s3Upload;
+    private final FileHandler fileHandler;
+    private final CommonService commonService;
+    private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
+    private final CustomAuthorityUtils authorityUtils;
 
 
     /**
@@ -41,7 +42,7 @@ public class MemberService {
      * @author Quartz614
      */
     public void createMember(MemberDto.Post post) {
-        verifyEmail(post);
+        commonService.verifyEmail(post);
         List<String> roles = authorityUtils.createRoles(post.getEmail());
 
         Member member = Member.builder()
@@ -64,9 +65,8 @@ public class MemberService {
      * @author Quartz614
      */
     public void updateMember(String refreshToken, MemberDto.Patch patch) {
-        Long memberId = redisUtils.getId(refreshToken);
-
-        Member findMember = findVerifyMember(memberId);
+        Long memberId = commonService.getIdForRefresh(refreshToken);
+        Member findMember = commonService.ifExistsReturnMember(memberId);
         findMember.editMember(patch.getNickname(), patch.getMbti());
         memberRepository.save(findMember);
     }
@@ -79,39 +79,14 @@ public class MemberService {
      * @author Quartz614
      */
     public MemberDto.Info getMember(String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
-
-        Member findMember = findVerifyMember(memberId);
+        Long memberId = commonService.getIdForRefresh(refreshToken);
+        Member findMember = commonService.ifExistsReturnMember(memberId);
 
         return MemberDto.Info.builder()
-                //.profileImage(findMember.getMemberImage().getFilePath()) // 추후 수정
+                .profileImage(findMember.getMemberImage().getFilePath())
                 .nickname(findMember.getNickname())
                 .mbti(findMember.getMbti())
                 .build();
-    }
-
-
-    /**
-     * 회원 조회 메서드
-     * @param memberId 사용자 식별자
-     * @return Member
-     * @author Quartz614
-     */
-    public Member findVerifyMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 멤버로 수정해야함
-    }
-
-
-    /**
-     * 이메일 중복 검사 메서드
-     * @param post 회원가입 정보
-     * @author Quartz614
-     */
-    public void verifyEmail(MemberDto.Post post) {
-        if (memberRepository.findByEmail(post.getEmail()).isPresent()) {
-            throw new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND); // 멤버로 바꿔야 ㅍ
-        }
     }
 
 
@@ -125,9 +100,8 @@ public class MemberService {
     @SneakyThrows
     public void createProfile(String refreshToken,
                               List<MultipartFile> multipartFiles) {
-
-        Long memberId = redisUtils.getId(refreshToken);
-        Member findMember = findVerifyMember(memberId);
+        Long memberId = commonService.getIdForRefresh(refreshToken);
+        Member findMember = commonService.ifExistsReturnMember(memberId);
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(multipartFiles);
         List<MemberImage> memberImageList = new ArrayList<>();
@@ -162,8 +136,8 @@ public class MemberService {
     @SneakyThrows
     public void createProfileS3(String refreshToken,
                                 MultipartFile file) {
-        Long memberId = redisUtils.getId(refreshToken);
-        Member findMember = findVerifyMember(memberId);
+        Long memberId = commonService.getIdForRefresh(refreshToken);
+        Member findMember = commonService.ifExistsReturnMember(memberId);
 
         String dir = "memberImage";
 
