@@ -1,5 +1,6 @@
 package com.main21.member.service;
 
+import com.main21.common.CommonService;
 import com.main21.exception.ExceptionCode;
 import com.main21.member.dto.AuthDto;
 import com.main21.member.entity.Member;
@@ -24,15 +25,24 @@ import static com.main21.security.utils.AuthConstants.REFRESH_TOKEN;
 @Transactional
 @RequiredArgsConstructor
 public class AuthService {
-    private final JwtTokenUtils jwtTokenUtils;
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+
     private final RedisUtils redisUtils;
+    private final CommonService commonService;
+    private final JwtTokenUtils jwtTokenUtils;
+    private final PasswordEncoder passwordEncoder;
 
 
+    /**
+     * 사용자 로그인 메서드
+     * @param login 로그인 정보
+     * @param res 응답
+     * @return AuthDto.Response
+     * @author mozzi327
+     */
     public AuthDto.Response loginMember(LoginDto login,
                                         HttpServletResponse res) {
-        Member findMember = ifExistMemberByEmail(login.getEmail());
+        Member findMember = commonService.ifExistMemberByEmail(login.getEmail());
+
         if (!passwordEncoder.matches(login.getPassword(), findMember.getPassword())) {
             throw new AuthException(ExceptionCode.INVALID_MEMBER);
         }
@@ -104,8 +114,8 @@ public class AuthService {
         Long memberId = redisUtils.getId(refreshToken);
 
         // 액세스 토큰 발행
-        Member findMember = ifExistMember(memberId);
-        String generateToken = createReIssueToken(findMember);
+        Member findMember = commonService.ifExistsReturnMember(memberId);
+        String generateToken = jwtTokenUtils.generateAccessToken(findMember);
 
         res.addHeader(AUTHORIZATION, generateToken);
         res.addHeader(REFRESH_TOKEN, refreshToken);
@@ -114,44 +124,5 @@ public class AuthService {
                 .nickname(findMember.getNickname())
                 .email(findMember.getEmail())
                 .build();
-    }
-
-
-    /**
-     * 토큰 Response 생성 메서드
-     *
-     * @param findMember 사용자 정보
-     * @return AuthDto.Token(액세스 토큰, 리프레시 토큰)
-     * @author mozzi327
-     */
-    private String createReIssueToken(Member findMember) {
-        return jwtTokenUtils.generateAccessToken(findMember);
-    }
-
-
-    /**
-     * 사용자 정보 조회 메서드
-     *
-     * @param memberId 사용자 식별자
-     * @return Member
-     * @author mozzi327
-     */
-    public Member ifExistMember(Long memberId) {
-        return memberRepository
-                .findById(memberId)
-                .orElseThrow(() -> new AuthException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
-
-    /**
-     * 사용자 정보 조회 메서드(이메일)
-     * @param email 사용자 이메일
-     * @return Member
-     * @author mozzi327
-     */
-    public Member ifExistMemberByEmail(String email) {
-        return memberRepository
-                .findMemberByEmail(email)
-                .orElseThrow(() -> new AuthException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 }

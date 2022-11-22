@@ -19,6 +19,14 @@ import static com.main21.security.utils.AuthConstants.*;
 public class AuthController {
     private final AuthService authService;
 
+
+    /**
+     * 사용자 로그인을 위한 컨트롤러 호출 메서드
+     * @param loginDto 로그인 정보
+     * @param res 응답
+     * @return ResponseEntity
+     * @author mozzi327
+     */
     @PostMapping("/login")
     public ResponseEntity loginMember(@RequestBody LoginDto loginDto,
                                       HttpServletResponse res) {
@@ -26,6 +34,7 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
+    
     /**
      * 사용자 로그아웃을 위한 컨트롤러 호출 메서드(레디스용)
      *
