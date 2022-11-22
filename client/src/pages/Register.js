@@ -14,6 +14,7 @@ import {
   registerFormCharge,
   registerFormItemsCheckedState,
   registerFormImage,
+  reservationEditData,
 } from '../atoms';
 
 import Nav from '../components/Nav';
@@ -35,6 +36,38 @@ export default function Register() {
     registerFormItemsCheckedState,
   );
   const [images, setImages] = useRecoilState(registerFormImage);
+
+  const [editData, setEditData] = useRecoilState(reservationEditData);
+  console.log(editData);
+
+  const handleTitleEdit = e => {
+    setEditData({ ...editData, title: e.target.value });
+  };
+
+  const handleDetailedInformationEdit = e => {
+    setEditData({ ...editData, detailInfo: e.target.value });
+  };
+
+  const handleChargeEdit = e => {
+    setEditData({ ...editData, charge: e.target.value });
+  };
+
+  const addressEdit = e => {
+    setEditData({ ...editData, address: e.target.value });
+  };
+
+  const handleMaxCapacityEdit = e => {
+    setEditData({ ...editData, capacity: e.target.value });
+  };
+
+  const plusCapacityEdit = () => {
+    setEditData({ ...editData, capacity: editData.capacity + 1 });
+  };
+
+  const minusCapacityEdit = () => {
+    if (editData.capacity > 1)
+      setEditData({ ...editData, capacity: editData.capacity - 1 });
+  };
 
   const handler = {
     title: setTitle,
@@ -62,6 +95,14 @@ export default function Register() {
       setAddress(data.address);
     },
   };
+
+  const postConfigEdit = {
+    onComplete: data => {
+      setEditData({ ...editData, address: data.address });
+    },
+  };
+
+  const postCodeEdit = ReactDaumPost(postConfigEdit);
 
   const postCode = ReactDaumPost(postConfig);
 
@@ -93,48 +134,95 @@ export default function Register() {
         <FormContainer>
           <Wrapper>
             <Title>제목</Title>
-            <Input onChange={handleChange} name="title" />
+            {editData ? (
+              <Input onChange={handleTitleEdit} value={editData.title} />
+            ) : (
+              <Input onChange={handleChange} name="title" />
+            )}
           </Wrapper>
           <Wrapper>
             <Title>카테고리</Title>
-            <RegisterCategory
-              checkedList={checkedList}
-              setCheckedList={setCheckedList}
-            />
+            {editData ? (
+              <RegisterCategory
+                checkedList={editData.category}
+                setCheckedList={setCheckedList}
+              />
+            ) : (
+              <RegisterCategory
+                checkedList={checkedList}
+                setCheckedList={setCheckedList}
+              />
+            )}
           </Wrapper>
           <Wrapper>
             <Title>최대 인원</Title>
             <div className="capacity-wrapper">
-              <LeftIcon onClick={minusCapacity} />
-              <SmallInput
-                width="20px"
-                type="number"
-                onChange={handleChange}
-                name="maxCapacity"
-                value={maxCapacity}
-                readOnly
-              />
-              <RightIcon onClick={plusCapacity} />
+              {editData ? (
+                <LeftIcon onClick={minusCapacityEdit} />
+              ) : (
+                <LeftIcon onClick={minusCapacity} />
+              )}
+              {editData ? (
+                <SmallInput
+                  width="20px"
+                  type="number"
+                  onChange={handleMaxCapacityEdit}
+                  value={editData.capacity}
+                  readOnly
+                />
+              ) : (
+                <SmallInput
+                  width="20px"
+                  type="number"
+                  onChange={handleChange}
+                  name="maxCapacity"
+                  value={maxCapacity}
+                  readOnly
+                />
+              )}
+              {editData ? (
+                <RightIcon onClick={plusCapacityEdit} />
+              ) : (
+                <RightIcon onClick={plusCapacity} />
+              )}
             </div>
           </Wrapper>
           <Wrapper>
             <Title>주소</Title>
-            <Input
-              type="text"
-              onClick={() => postCode()}
-              value={address}
-              readOnly
-            />
+            {editData ? (
+              <Input
+                type="text"
+                onClick={() => postCodeEdit()}
+                value={editData.address}
+                onChange={addressEdit}
+                readOnly
+              />
+            ) : (
+              <Input
+                type="text"
+                onClick={() => postCode()}
+                value={address}
+                readOnly
+              />
+            )}
             <Title marginTop="20px">상세주소</Title>
             <Input type="text" onChange={handleChange} name="detailedAddress" />
           </Wrapper>
           <Wrapper>
             <Title>상세정보</Title>
-            <Textarea
-              type="text"
-              onChange={handleChange}
-              name="detailInformation"
-            />
+            {editData ? (
+              <Textarea
+                type="text"
+                onChange={handleDetailedInformationEdit}
+                value={editData.detailInfo}
+              />
+            ) : (
+              <Textarea
+                type="text"
+                onChange={handleChange}
+                name="detailInformation"
+              />
+            )}
           </Wrapper>
           <Wrapper>
             <Title>사진</Title>
@@ -144,12 +232,21 @@ export default function Register() {
             <Title>금액 설정</Title>
             <div className="set-charge">
               <div className="hour-description">1시간 / </div>
-              <SmallInput
-                type="number"
-                width="100px"
-                onChange={handleChange}
-                name="charge"
-              />
+              {editData ? (
+                <SmallInput
+                  type="number"
+                  width="100px"
+                  onChange={handleChargeEdit}
+                  value={editData.charge}
+                />
+              ) : (
+                <SmallInput
+                  type="number"
+                  width="100px"
+                  onChange={handleChange}
+                  name="charge"
+                />
+              )}
               <div className="hour-description">원</div>
             </div>
           </Wrapper>

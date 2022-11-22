@@ -1,35 +1,37 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useRecoilState } from 'recoil';
 import { ImStarFull } from 'react-icons/im';
 import { BsFillBookmarkFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useRecoilState } from 'recoil';
 import Modal from './Modal';
 import ReviewWrite from './ReviewWrite';
 import { reservationEditData } from '../atoms';
 
 const chargeComponent = (listData, type) => {
-  const totalCharge = Number(listData.totalCharge)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-  const charge = Number(listData.charge)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
   if (type === 'reviews') {
     return null;
   }
+
   if (type === 'reservation') {
-    return <PlaceCharge>{totalCharge}원</PlaceCharge>;
+    return (
+      <PlaceCharge>
+        {new Intl.NumberFormat('ko-KR').format(listData.totalCharge)}원
+      </PlaceCharge>
+    );
   }
-  return <PlaceCharge>{charge}원</PlaceCharge>;
+  return (
+    <PlaceCharge>
+      {new Intl.NumberFormat('ko-KR').format(listData.charge)}원
+    </PlaceCharge>
+  );
 };
 
 function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [, setReservationData] = useRecoilState(reservationEditData);
 
   const navigate = useNavigate();
 
@@ -42,29 +44,29 @@ function MyPageCategoryList({ listData, type }) {
   };
 
   const handleDate = createdAt => {
-    if (createdAt !== undefined) {
-      let date = new Date(createdAt);
-      const month = date.getMonth() + 1;
-      const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
-      const KR_TIME_DIFF = 9 * 60 * 60 * 1000; // 한국 시간(KST)은 UTC시간보다 9시간 더 빠르므로 9시간을 밀리초 단위로 변환.
-      const krCurr = utc + KR_TIME_DIFF;
+    if (createdAt === undefined) return null;
 
-      date = new Date(krCurr).toString();
+    let date = new Date(createdAt);
+    const month = date.getMonth() + 1;
+    const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
+    const KR_TIME_DIFF = 9 * 60 * 60 * 1000; // 한국 시간(KST)은 UTC시간보다 9시간 더 빠르므로 9시간을 밀리초 단위로 변환.
+    const krCurr = utc + KR_TIME_DIFF;
 
-      const splitDate = date.split(' ');
-      const day = splitDate[2];
-      const year = splitDate[3].slice(2);
-      let time = splitDate[4].slice(0, 2);
+    date = new Date(krCurr).toString();
 
-      if (time > 12) {
-        time -= 12;
-        return `${year}.${month}.${day} ${time}PM`;
-      }
+    const splitDate = date.split(' ');
+    const day = splitDate[2];
+    const year = splitDate[3].slice(2);
+    let time = splitDate[4].slice(0, 2);
 
-      return `${year}.${month}.${day} ${time}AM`;
+    if (time > 12) {
+      time -= 12;
+      return `${year}.${month}.${day} ${time}PM`;
     }
-    return '';
+    return `${year}.${month}.${day} ${time}AM`;
   };
+
+  // 아래 함수 3개 await async 형태로 변경하기
 
   const reviewDelete = async () => {
     await axios
@@ -88,13 +90,12 @@ function MyPageCategoryList({ listData, type }) {
       });
   };
 
-  const [, setReservationData] = useRecoilState(reservationEditData);
-
-  const registerEditDataSend = async id => {
+  const registerEditDataSend = async () => {
+    // id를 인자로 받아서 /place/id로 조회해야되는데 현재 api랑 연동안되므로 detaildata로 임시 작성
     await axios
-      .get(`http://localhost:3001/place/${id}`)
+      .get(`http://localhost:3001/detaildata`)
       .then(res => {
-        setReservationData(res.data);
+        setReservationData(res.data[0]);
       })
       .then(() => {
         navigate('/register');
@@ -137,13 +138,7 @@ function MyPageCategoryList({ listData, type }) {
           )}
           {type === 'reservation' && (
             <>
-              <CategoryButton
-                onClick={() => {
-                  showModal();
-                }}
-              >
-                취소하기
-              </CategoryButton>
+              <CategoryButton onClick={showModal}>취소하기</CategoryButton>
               {modalOpen && (
                 <Modal
                   modalOpen={modalOpen}
@@ -153,11 +148,7 @@ function MyPageCategoryList({ listData, type }) {
                   modalAction="취소하는 함수 만들어서 넣기"
                 />
               )}
-              <CategoryButton
-                onClick={() => {
-                  showReviewModal();
-                }}
-              >
+              <CategoryButton onClick={showReviewModal}>
                 리뷰쓰기
               </CategoryButton>
             </>

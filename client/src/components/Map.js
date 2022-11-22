@@ -2,13 +2,9 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
-const MapContainer = styled.div`
-  width: 600px;
-  height: 300px;
-  margin-left: 20px;
-`;
 function Location({ address }) {
   const { kakao } = window;
+
   useEffect(() => {
     const mapContainer = document.getElementById('map');
     const mapOption = {
@@ -17,6 +13,7 @@ function Location({ address }) {
     };
     const map = new kakao.maps.Map(mapContainer, mapOption);
     const geocoder = new kakao.maps.services.Geocoder();
+
     if (address) {
       geocoder.addressSearch(address, function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
@@ -25,6 +22,7 @@ function Location({ address }) {
             map,
             position: coords,
           });
+
           marker.setMap(map);
           map.setCenter(coords);
         }
@@ -40,3 +38,9 @@ function Location({ address }) {
 }
 
 export default Location;
+
+const MapContainer = styled.div`
+  width: 600px;
+  height: 300px;
+  margin-left: 20px;
+`;
