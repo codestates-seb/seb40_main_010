@@ -5,14 +5,11 @@ import com.google.gson.Gson;
 import com.main21.member.dto.AuthDto;
 import com.main21.member.entity.Member;
 import com.main21.security.dto.LoginDto;
-import com.main21.security.utils.CookieUtils;
 import com.main21.security.utils.JwtTokenUtils;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,9 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
 
 import static com.main21.security.utils.AuthConstants.*;
 
@@ -36,12 +30,7 @@ import static com.main21.security.utils.AuthConstants.*;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtils jwtTokenUtils;
-    private final CookieUtils cookieUtils;
     private final RedisUtils redisUtils;
-
-    /* ----------------- Redis 토큰 전용 로직 --------------------
-
-       ----------------- Redis 토큰 전용 로직 -------------------- */
 
 
     /**
@@ -85,37 +74,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Member findMember = jwtTokenUtils.findMemberByEmail(email);
         String accessToken = jwtTokenUtils.generateAccessToken(findMember);
         String refreshToken = jwtTokenUtils.generateRefreshToken(findMember);
-        /* ----------------- 테스트용 토큰 전용 로직 -------------------- */
-        jwtTokenUtils.savedRefreshToken(refreshToken, email, findMember.getId());
-        /* ----------------- 테스트용 토큰 전용 로직 -------------------- */
 
+        res.setHeader(AUTHORIZATION, accessToken);
+        res.setHeader(REFRESH_TOKEN, refreshToken);
 
-
-
-/*  ----------------- Redis 토큰 전용 로직 --------------------
-    redisUtils.setData(refreshToken, findMember.getId(), jwtTokenUtils.getRefreshTokenExpirationMinutes());
-    ----------------- Redis 토큰 전용 로직 -------------------- */
-
-        // ***.***.*** 형식 전달을 위한 리프레시 토큰 인코딩
-        String encodedRefresh = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8);
-
-        // refreshToken 쿠키 추가
-        ResponseCookie refCookie = cookieUtils
-                .createCookie(REFRESH_TOKEN, encodedRefresh, MAX_AGE_SECOND);
-
-        res.setHeader(SET_COOKIE, refCookie.toString());
-
-        // memberId 쿠키 추가
-        ResponseCookie memberCookie = cookieUtils
-                .createCookie(MEMBER_ID, findMember.getId().toString(), MAX_AGE_SECOND);
-
-        res.addHeader(SET_COOKIE, memberCookie.toString());
+        // 레디스에 리프레시 토큰 저장
+        redisUtils.setData(refreshToken, findMember.getId(), jwtTokenUtils.getRefreshTokenExpirationMinutes());
 
         AuthDto.Response response = AuthDto.Response.builder()
-                .accessToken(accessToken)
                 .nickname(findMember.getNickname())
                 .email(email)
                 .build();
+
 
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
         res.getWriter().write(gson.toJson(response, AuthDto.Response.class));

@@ -1,13 +1,8 @@
 package com.main21.security.filter;
 
-import com.main21.exception.ExceptionCode;
-import com.main21.security.exception.AuthException;
-import com.main21.security.utils.CookieUtils;
 import com.main21.security.utils.CustomAuthorityUtils;
 import com.main21.security.utils.JwtTokenUtils;
 import com.main21.security.utils.RedisUtils;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +10,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -32,13 +26,12 @@ import static com.main21.security.utils.AuthConstants.*;
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomAuthorityUtils authorityUtils;
-    private final CookieUtils cookieUtils;
     private final RedisUtils redisUtils;
 
 
     /**
      * 사용자 요청에 대한 권한 인증 메서드<br>
-     * - 쿠키에 저장된 리프레시 토큰을 가져와 데이터베이스에 리프레시 토큰이 존재하는지 확인하고,<br>
+     * - 헤더에 저장된 리프레시 토큰을 가져와 레디스에 리프레시 토큰이 존재하는지 확인하고,<br>
      * 액세스 토큰이 유효한지 확인한다.
      *
      * @param req         요청
@@ -51,35 +44,19 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain filterChain) {
-// ----------------- Redis 토큰 전용 로직 --------------------
 
-/*        String accessToken = req.getHeader(AUTHORIZATION);
+        // 액세스 토큰 파싱
+        String accessToken = jwtTokenUtils.parseAccessToken(req.getHeader(AUTHORIZATION));
+
         if (accessToken != null && jwtTokenUtils.validateToken(accessToken)) {
-            String isLogout = (String) redisUtils.getData(accessToken);
-            if (ObjectUtils.isEmpty(isLogout)) {
-                Map<String, Object> claims = verifyJws(req);
+            String isLogout = redisUtils.isBlackList(accessToken);
+            if (isLogout == null) {
+                Map<String, Object> claims = verifyJws(accessToken);
                 setAuthenticationToContext(claims);
             }
         }
 
-        filterChain.doFilter(req, res);*/
-//   ----------------- Redis 토큰 전용 로직 --------------------
-
-        try {
-            String refreshToken = cookieUtils.isExistRefresh(req.getCookies());
-            jwtTokenUtils.verifiedExistRefresh(refreshToken);
-            Map<String, Object> claims = verifyJws(req);
-            setAuthenticationToContext(claims);
-        } catch (SignatureException se) {
-            req.setAttribute("exception", se);
-        } catch (ExpiredJwtException ee) {
-            req.setAttribute("exception", ee);
-        } catch (Exception e) {
-            req.setAttribute("exception", e);
-        }
-
         filterChain.doFilter(req, res);
-
     }
 
 
@@ -100,19 +77,16 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     /**
      * 요청에서 claims 정보를 추출하는 메서드
      *
-     * @param req 요청
+     * @param jws JWS 정보
      * @return Map(String, Object) - claims 정보
      * @author mozzi327
      */
-    private Map<String, Object> verifyJws(HttpServletRequest req) {
-        String jws = req
-                .getHeader(AUTHORIZATION)
-                .replace(BEARER, "");
+    private Map<String, Object> verifyJws(String jws) {
+
         String base64EncodedSecretKey = jwtTokenUtils
                 .encodeBase64SecretKey(jwtTokenUtils.getSecretKey());
         return jwtTokenUtils
-                .getClaims(jws, base64EncodedSecretKey)
-                .getBody();
+                .getClaims(jws, base64EncodedSecretKey);
     }
 
 

@@ -1,5 +1,7 @@
 package com.main21.security.utils;
 
+import com.main21.exception.ExceptionCode;
+import com.main21.security.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -11,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class RedisUtils {
-    private StringRedisTemplate stringRedisTemplate;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisTemplate<String, Object> redisBlackListTemplate;
 
@@ -45,7 +46,7 @@ public class RedisUtils {
      * @author mozzi327
      */
     public void deleteData(String key) {
-        stringRedisTemplate.delete(key);
+        redisTemplate.delete(key);
     }
 
 
@@ -55,7 +56,19 @@ public class RedisUtils {
      * @param setTime 만료시간(분)
      * @author mozzi327
      */
-    public void setBlackList(String key, Long setTime) {
-        redisBlackListTemplate.opsForValue().set(key, "Logout", setTime, TimeUnit.MINUTES);
+    public void setBlackList(String key, Object o, Long setTime) {
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(o.getClass()));
+        redisBlackListTemplate.opsForValue().set(key, o, setTime, TimeUnit.MILLISECONDS);
+    }
+
+    public String isBlackList(String key) {
+        return (String) redisBlackListTemplate.opsForValue().get(key);
+    }
+
+
+    public Long getId(String refreshToken) {
+        Long memberId = (Long) redisTemplate.opsForValue().get(refreshToken);
+        if (memberId == null) throw new AuthException(ExceptionCode.REFRESH_TOKEN_NOT_FOUND);
+        return memberId;
     }
 }

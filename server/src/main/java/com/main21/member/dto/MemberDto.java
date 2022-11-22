@@ -7,6 +7,7 @@ import lombok.Getter;
 public class MemberDto {
 
     @Getter
+    @Builder
     @AllArgsConstructor
     public static class Post {
         private String email;

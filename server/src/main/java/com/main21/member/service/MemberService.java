@@ -11,7 +11,9 @@ import com.main21.member.entity.MemberImage;
 import com.main21.member.repository.MemberImageRepository;
 import com.main21.member.repository.MemberRepository;
 import com.main21.security.utils.CustomAuthorityUtils;
+import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,11 +31,15 @@ public class MemberService {
     private final CustomAuthorityUtils authorityUtils;
     private final FileHandler fileHandler;
     private final MemberImageRepository memberImageRepository;
+    private final RedisUtils redisUtils;
+    private final S3Upload s3Upload;
 
-    @Autowired
-    private S3Upload s3Upload;
 
-
+    /**
+     * 회원가입 메서드
+     * @param post 회원가입 정보
+     * @author Quartz614
+     */
     public void createMember(MemberDto.Post post) {
         verifyEmail(post);
         List<String> roles = authorityUtils.createRoles(post.getEmail());
@@ -47,41 +53,81 @@ public class MemberService {
                 .mbti(post.getMbti())
                 .build();
 
-
         memberRepository.save(member);
     }
-    public void updateMember(Long memberId, MemberDto.Patch patch) {
+
+
+    /**
+     * 회원정보 수정 메서드
+     * @param refreshToken 리프레시 토큰
+     * @param patch 회원 수정 정보
+     * @author Quartz614
+     */
+    public void updateMember(String refreshToken, MemberDto.Patch patch) {
+        Long memberId = redisUtils.getId(refreshToken);
+
         Member findMember = findVerifyMember(memberId);
         findMember.editMember(patch.getNickname(), patch.getMbti());
         memberRepository.save(findMember);
     }
 
-    public MemberDto.Info getMember(Long memberId) {
+
+    /**
+     * 회원정보 조회 메서드
+     * @param refreshToken 리프레시 토큰
+     * @return MemberDto.Info
+     * @author Quartz614
+     */
+    public MemberDto.Info getMember(String refreshToken) {
+        Long memberId = redisUtils.getId(refreshToken);
+
         Member findMember = findVerifyMember(memberId);
-        MemberDto.Info memberInfo = MemberDto.Info.builder()
+
+        return MemberDto.Info.builder()
                 //.profileImage(findMember.getMemberImage().getFilePath()) // 추후 수정
                 .nickname(findMember.getNickname())
                 .mbti(findMember.getMbti())
                 .build();
-
-        return memberInfo;
     }
 
-    // 이미 존재하는 회원 파악
+
+    /**
+     * 회원 조회 메서드
+     * @param memberId 사용자 식별자
+     * @return Member
+     * @author Quartz614
+     */
     public Member findVerifyMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 멤버로 수정해야함
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 멤버로 수정해야함
     }
 
+
+    /**
+     * 이메일 중복 검사 메서드
+     * @param post 회원가입 정보
+     * @author Quartz614
+     */
     public void verifyEmail(MemberDto.Post post) {
         if (memberRepository.findByEmail(post.getEmail()).isPresent()) {
             throw new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND); // 멤버로 바꿔야 ㅍ
         }
     }
 
+
     /**
-     * 회원 프로필 사진 업로드 Local (유저검증 필요)
+     * 프로필 사진 업로드 메서드(Deprecated)
+     * @param refreshToken 리프레시 토큰
+     * @param multipartFiles 사진 정보
+     * @author LimJaeminZ
      */
-    public void createProfile(List<MultipartFile> multipartFiles) throws Exception {
+    @Deprecated
+    @SneakyThrows
+    public void createProfile(String refreshToken,
+                              List<MultipartFile> multipartFiles) {
+
+        Long memberId = redisUtils.getId(refreshToken);
+        Member findMember = findVerifyMember(memberId);
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(multipartFiles);
         List<MemberImage> memberImageList = new ArrayList<>();
@@ -96,20 +142,29 @@ public class MemberService {
             memberImageList.add(memberImage);
         });
 
-        if(!memberImageList.isEmpty()) {
+        if (!memberImageList.isEmpty()) {
             for (MemberImage memberImage : memberImageList) {
                 //유저 FK 저장 관계 필요
 
                 //파일 DB 저장
-                memberImageRepository.save(memberImage);
+//                memberImageRepository.save(memberImage);
             }
         }
     }
 
+
     /**
-     * 회원 프로필 사진 업로드 S3 (유저검증 필요)
+     * 회원 프로필 사진 업로드 S3 메서드
+     * @param refreshToken 리프레시 토큰
+     * @param file 사진 정보
+     * @author LimJaeMinZ
      */
-    public void createProfileS3(MultipartFile file) throws Exception {
+    @SneakyThrows
+    public void createProfileS3(String refreshToken,
+                                MultipartFile file) {
+        Long memberId = redisUtils.getId(refreshToken);
+        Member findMember = findVerifyMember(memberId);
+
         String dir = "memberImage";
 
         UploadFile uploadFile = s3Upload.uploadfile(file, dir);
@@ -121,6 +176,7 @@ public class MemberService {
                 .fileSize(uploadFile.getFileSize())
                 .build();
 
-        memberImageRepository.save(memberImage);
+        findMember.addMemberImage(memberImage);
+        memberRepository.save(findMember);
     }
 }
