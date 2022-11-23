@@ -7,7 +7,11 @@ import { ko } from 'date-fns/esm/locale';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { reservationStartDateChangedState } from '../../atoms';
+import {
+  reservationStartDateChangedState,
+  startCalendarClick,
+  endCalendarClick,
+} from '../../atoms';
 
 // TODO
 // day js 사용하기
@@ -20,15 +24,92 @@ export default function ReservationCalendar({
   const [isStartDateSelected, setIsStartDateSelected] = useRecoilState(
     reservationStartDateChangedState,
   );
+  const [isStartCalendarClicked, setIsStartCalendarClicked] =
+    useRecoilState(startCalendarClick);
+
+  const [isEndCalendarClicked, setIsEndCalendarClicked] =
+    useRecoilState(endCalendarClick);
 
   const maxEndDate = new Date(startDate).setDate(
     new Date(startDate).getDate() + 1,
   );
 
   const handleStartDate = time => {
+    const clickedTime = new Date(time);
+    const now = new Date();
+
+    if (
+      isStartCalendarClicked === 0 &&
+      clickedTime.getDate() === now.getDate()
+    ) {
+      clickedTime.setHours(now.getHours() + 1);
+      setIsStartCalendarClicked(1);
+      setStartDate(clickedTime);
+    }
+
+    if (isStartCalendarClicked === 1) {
+      setStartDate(time);
+    }
+
+    if (clickedTime.getDate() !== now.getDate()) {
+      setIsStartCalendarClicked(2);
+      setStartDate(time);
+    }
+
+    if (
+      isStartCalendarClicked === 2 &&
+      clickedTime.getDate() === now.getDate()
+    ) {
+      clickedTime.setHours(now.getHours() + 1);
+      setIsStartCalendarClicked(1);
+      setStartDate(clickedTime);
+    }
+
     setIsStartDateSelected(time);
-    setStartDate(time);
     setEndDate(false);
+  };
+
+  const handleEndDate = time => {
+    const clickedTime = new Date(time);
+    const startTime = new Date(startDate);
+
+    if (
+      isEndCalendarClicked === 0 &&
+      clickedTime.getDate() === startTime.getDate()
+    ) {
+      clickedTime.setHours(startTime.getHours() + 1);
+      setIsEndCalendarClicked(1);
+      setEndDate(clickedTime);
+    }
+
+    if (isEndCalendarClicked === 1) {
+      setEndDate(time);
+    }
+
+    if (
+      clickedTime.getDate() !== startTime.getDate() &&
+      clickedTime.getHours() > startTime.getHours()
+    ) {
+      setIsEndCalendarClicked(2);
+      clickedTime.setHours(startTime.getHours());
+      setEndDate(clickedTime);
+    }
+
+    if (
+      isEndCalendarClicked === 2 &&
+      clickedTime.getDate() === startTime.getDate()
+    ) {
+      clickedTime.setHours(startTime.getHours() + 1);
+      setIsEndCalendarClicked(1);
+      setEndDate(clickedTime);
+    }
+
+    if (
+      isEndCalendarClicked === 2 &&
+      clickedTime.getDate() !== startTime.getDate()
+    ) {
+      setEndDate(clickedTime);
+    }
   };
 
   const slots = [
@@ -123,7 +204,7 @@ export default function ReservationCalendar({
           selectsEnd
           showTimeSelect
           selected={endDate}
-          onChange={date => setEndDate(date)}
+          onChange={handleEndDate}
           startDate={startDate}
           endDate={endDate}
           minDate={startDate}
