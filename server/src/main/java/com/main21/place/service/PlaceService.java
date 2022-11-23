@@ -1,6 +1,7 @@
 package com.main21.place.service;
 
 import com.main21.bookmark.repository.BookmarkRepository;
+import com.main21.common.CommonService;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.file.FileHandler;
@@ -40,6 +41,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -55,13 +57,13 @@ public class PlaceService {
     private final ReviewRepository reviewRepository;
     private final ReserveRepository reserveRepository;
     private final BookmarkRepository bookmarkRepository;
-    private final ReviewService reviewService;
     private final MemberRepository memberRepository;
     private final MbtiCountRepository mbtiCountRepository;
     private final HostingTimeRepository hostingTimeRepository;
     private final TimeStatusRepository timeStatusRepository;
     private final PlaceImageService placeImageService;
     private final PlaceCategoryService placeCategoryService;
+    private final CommonService commonService;
 
     @Autowired
     private S3Upload s3Upload;
@@ -70,8 +72,9 @@ public class PlaceService {
      * 장소 + S3이미지 저장 메서드
      */
     @Transactional
-    public void createPlaceS3(PlacePostDto placePostDto, List<MultipartFile> files) throws Exception {
+    public void createPlaceS3(PlacePostDto placePostDto,String refreshToken, List<MultipartFile> files) throws Exception {
         //유저 확인 필요
+        Long memberId = commonService.getIdForRefresh(refreshToken);
         String dir = "placeImage";
 
         Place place = Place.builder()
@@ -166,9 +169,9 @@ public class PlaceService {
      * 장소 저장 메서드 (Local)
      */
     @Transactional
-    public void createPlace(PlacePostDto placePostDto, List<MultipartFile> files, Long memberId) throws Exception {
+    public void createPlace(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) throws Exception {
         //유저 확인 필요
-
+        Long memberId = commonService.getIdForRefresh(refreshToken);
         Place place = Place.builder()
                 .title(placePostDto.getTitle())
                 .detailInfo(placePostDto.getDetailInfo())
@@ -237,11 +240,14 @@ public class PlaceService {
     /**
      * 장소 수정
      */
-    public void updatePlace(Long placeId, PlacePatchDto placePatchDto, List<MultipartFile> files) throws Exception {
-
+    public void updatePlace(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) throws Exception {
+        Long memberId = commonService.getIdForRefresh(refreshToken);
         Place updatePlace = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
+        if(!Objects.equals(updatePlace.getMemberId(), memberId)) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
         updatePlace.setTitle(placePatchDto.getTitle());
         updatePlace.setDetailInfo(placePatchDto.getDetailInfo());
         updatePlace.setAddress(placePatchDto.getAddress());
@@ -490,7 +496,8 @@ public class PlaceService {
      * @author quartz614
      */
     @Transactional
-    public Page<PlaceDto.Response> getPlaceMypage(Long memberId, Pageable pageable) {
+    public Page<PlaceDto.Response> getPlaceMypage(String refreshToken, Pageable pageable) {
+        Long memberId = commonService.getIdForRefresh(refreshToken);
         return placeRepository.getPlaceMypage(memberId, pageable);
     }
 
