@@ -23,7 +23,7 @@ const useMyPage = () => {
     //   },
     // };
     try {
-      const response = await axios.get(`http://localhost:3001/reserve`);
+      const response = await axios.get(`http://localhost:3001/place`);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
