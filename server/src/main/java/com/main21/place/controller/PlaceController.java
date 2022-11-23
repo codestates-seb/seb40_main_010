@@ -56,11 +56,15 @@ public class PlaceController {
 
     /**
      * 장소 상세 조회
+     * @param placeId
+     * @param refreshToken
+     * @return
      */
     @GetMapping("/place/{place-id}")
-    public PlaceResponseDto getPlace(@PathVariable("place-id") Long placeId) {
+    public PlaceResponseDto getPlace(@PathVariable("place-id") Long placeId,
+                                     @RequestHeader(value = REFRESH_TOKEN, required = false) String refreshToken) {
 
-        return placeService.searchPlace(placeId);
+        return placeService.searchPlace(placeId, refreshToken);
     }
 
     /**
@@ -85,7 +89,7 @@ public class PlaceController {
      * @return
      * @author LeeGoh
      */
-    @GetMapping("/")
+    @GetMapping("/home")
     public ResponseEntity getPlacesPage(Pageable pageable) {
         Page<PlaceDto.Response> pagePlace = placeService.getPlacesPage(pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();

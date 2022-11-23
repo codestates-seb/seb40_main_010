@@ -28,6 +28,7 @@ public class BookmarkController {
      * @param refreshToken
      * @param pageable
      * @return
+     * @author LeeGoh
      */
     @GetMapping("/bookmark")
     public ResponseEntity getBookmark(@RequestHeader(REFRESH_TOKEN) String refreshToken,
@@ -47,6 +48,7 @@ public class BookmarkController {
      * @param placeId
      * @param refreshToken
      * @return
+      @author LeeGoh
      */
     @GetMapping("/bookmark/{place-id}")
     public ResponseEntity createBookmark(@PathVariable("place-id") Long placeId,
