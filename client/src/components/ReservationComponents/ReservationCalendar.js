@@ -9,12 +9,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import {
   reservationStartDateChangedState,
-  startCalendarClick,
-  endCalendarClick,
+  reservationStartCalendarSelectedDay,
+  reservationEndCalendarSelectedDay,
 } from '../../atoms';
 
-// TODO
-// day js 사용하기
 export default function ReservationCalendar({
   startDate,
   setStartDate,
@@ -24,11 +22,12 @@ export default function ReservationCalendar({
   const [isStartDateSelected, setIsStartDateSelected] = useRecoilState(
     reservationStartDateChangedState,
   );
-  const [isStartCalendarClicked, setIsStartCalendarClicked] =
-    useRecoilState(startCalendarClick);
+  const [startCalendarSelectedDay, setStartCalendarSelectedDay] =
+    useRecoilState(reservationStartCalendarSelectedDay);
 
-  const [isEndCalendarClicked, setIsEndCalendarClicked] =
-    useRecoilState(endCalendarClick);
+  const [isEndCalendarClicked, setIsEndCalendarClicked] = useRecoilState(
+    reservationEndCalendarSelectedDay,
+  );
 
   const maxEndDate = new Date(startDate).setDate(
     new Date(startDate).getDate() + 1,
@@ -39,30 +38,30 @@ export default function ReservationCalendar({
     const now = new Date();
 
     if (
-      isStartCalendarClicked === 0 &&
+      startCalendarSelectedDay === false &&
       clickedTime.getDate() === now.getDate()
     ) {
       clickedTime.setHours(now.getHours() + 1);
-      setIsStartCalendarClicked(1);
       setStartDate(clickedTime);
+      setStartCalendarSelectedDay('today');
     }
 
-    if (isStartCalendarClicked === 1) {
+    if (startCalendarSelectedDay === 'today') {
       setStartDate(time);
     }
 
     if (clickedTime.getDate() !== now.getDate()) {
-      setIsStartCalendarClicked(2);
+      setStartCalendarSelectedDay('future');
       setStartDate(time);
     }
 
     if (
-      isStartCalendarClicked === 2 &&
+      startCalendarSelectedDay === 'future' &&
       clickedTime.getDate() === now.getDate()
     ) {
       clickedTime.setHours(now.getHours() + 1);
-      setIsStartCalendarClicked(1);
       setStartDate(clickedTime);
+      setStartCalendarSelectedDay('today');
     }
 
     setIsStartDateSelected(time);
