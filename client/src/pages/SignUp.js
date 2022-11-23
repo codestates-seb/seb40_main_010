@@ -18,15 +18,19 @@ function SignUp() {
 
   const onSubmit = async data => {
     try {
-      const response = await axios.post(`http://localhost:3001/signup`, data);
+      const response = await axios.post(`/member/join`, data);
       return response.data;
     } catch (err) {
       return console.log('Error >>', err);
     }
+    // axios
+    //   .post(`/member/join`, data)
+    //   .then(res => console.log(res))
+    //   .catch(err => console.log(err));
   };
 
   const mbtiList = [
-    { value: 'null', label: '없음' },
+    { value: 'NONE', label: '없음' },
     { value: 'ISTJ', label: 'ISTJ' },
     { value: 'ISFJ', label: 'ISFJ' },
     { value: 'INFJ', label: 'INFJ' },
@@ -129,7 +133,7 @@ function SignUp() {
               <div className="title">Nickname</div>
               <Input
                 placeholder="1자 이상의 한글, 영문, 숫자만 사용할 수 있습니다"
-                {...register('userName', {
+                {...register('nickname', {
                   required: '필수 정보입니다.',
                   pattern: {
                     value: /[0-9]|[a-z]|[A-Z]|[가-힣]/,

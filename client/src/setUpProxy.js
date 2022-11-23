@@ -15,8 +15,7 @@ module.exports = function (app) {
     ],
     createProxyMiddleware({
       // 서버주소 바꿔줄 것
-      target:
-        'http://ec2-15-164-93-71.ap-northeast-2.compute.amazonaws.com:8080',
+      target: 'https://f971-182-226-233-7.jp.ngrok.io',
       changeOrigin: true,
     }),
   );

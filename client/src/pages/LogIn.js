@@ -16,10 +16,11 @@ export default function LogIn() {
 
   const onSubmit = async data => {
     try {
-      const response = await axios.post(`http://localhost:3001/login`, data);
-      return response.data;
+      const response = await axios.post(`/auth/login`, data);
+      localStorage.setItem('ACCESS', response.headers.authorization);
+      localStorage.setItem('REFRESH', response.headers.refreshtoken);
     } catch (err) {
-      return console.log('Error >>', err);
+      console.log('Error >>', err);
     }
   };
 
