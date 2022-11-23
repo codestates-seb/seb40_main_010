@@ -71,7 +71,7 @@ function MyPageCategoryList({ listData, type }) {
   const reviewDelete = async () => {
     try {
       await axios.delete(`http://localhost:3001/review/${listData.reviewId}`);
-      navigate('/MyPage');
+      navigate('/my-page');
     } catch (err) {
       showModal();
     }
@@ -82,7 +82,7 @@ function MyPageCategoryList({ listData, type }) {
       await axios.get(`http://localhost:3001/bookmark/${listData.bookmarkId}`);
       // 북마크 아이콘 색상 변화 등
     } catch (err) {
-      navigate('/MyPage');
+      navigate('/my-page');
     }
   };
 
