@@ -11,6 +11,8 @@ import com.main21.reserve.entity.MbtiCount;
 import com.main21.reserve.entity.Reserve;
 import com.main21.reserve.repository.MbtiCountRepository;
 import com.main21.reserve.repository.ReserveRepository;
+import com.main21.review.entity.Review;
+import com.main21.review.repository.ReviewRepository;
 import com.main21.security.exception.AuthException;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,7 @@ public class CommonService {
     private final MemberRepository memberRepository;
     private final ReserveRepository reserveRepository;
     private final MbtiCountRepository mbtiCountRepository;
+    private final ReviewRepository reviewRepository;
 
     /**
      * 예약 정보 조회 메서드
@@ -72,6 +75,18 @@ public class CommonService {
     public Place ifExistsReturnPlace(Long placeId) {
         return placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+    }
+
+    /**
+     * 리뷰 정보 조회 메서드
+     *
+     * @param reviewId 리뷰 식별자
+     * @return Review
+     * @author Quartz614
+     */
+    public Review ifExistsReturnReview(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
     }
 
 
