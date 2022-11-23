@@ -44,10 +44,10 @@ public class PlaceController {
     @PostMapping(value = "/place/postS3", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void createS3(HttpServletRequest request,
                          @RequestPart(value = "key") PlacePostDto placePostDto,
-                         @CookieValue (name = "memberId") Long memberId,
+                         @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
-        placeService.createPlaceS3(placePostDto, files);
+        placeService.createPlaceS3(placePostDto, refreshToken, files);
     }
 
     /**
@@ -55,10 +55,10 @@ public class PlaceController {
      */
     @PostMapping(value = "/place/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void createPlace(@RequestPart(value = "key") PlacePostDto placePostDto,
-                            @CookieValue (name = "memberId") Long memberId,
+                            @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                             @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
-        placeService.createPlace(placePostDto, files, memberId);
+        placeService.createPlace(placePostDto,  refreshToken, files);
     }
 
     /**
@@ -76,9 +76,10 @@ public class PlaceController {
     @PatchMapping(value = "/place/{place-id}/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void patchPlace(@PathVariable("place-id") Long placeId,
                            @RequestPart(value = "key") PlacePatchDto placePatchDto,
+                           @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
-        placeService.updatePlace(placeId, placePatchDto, files);
+        placeService.updatePlace(placeId, placePatchDto, refreshToken, files);
     }
 
 
@@ -90,8 +91,7 @@ public class PlaceController {
      * @author LeeGoh
      */
     @GetMapping("/")
-    public ResponseEntity getPlacesPage(@CookieValue(name = "memberId", required = false) Long memberId,
-                                        Pageable pageable) {
+    public ResponseEntity getPlacesPage(Pageable pageable) {
         Page<PlaceDto.Response> pagePlace = placeService.getPlacesPage(pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
@@ -200,13 +200,19 @@ public class PlaceController {
      * @return
      */
     @GetMapping("/place")
-    public ResponseEntity getPlaceMypage(@CookieValue(name = "memberId") Long memberId,
+    public ResponseEntity getPlaceMypage(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                          Pageable pageable) {
-        Page<PlaceDto.Response> hosting = placeService.getPlaceMypage(memberId, pageable);
+        Page<PlaceDto.Response> hosting = placeService.getPlaceMypage(refreshToken, pageable);
         List<PlaceDto.Response> place = hosting.getContent();
         return new ResponseEntity(new MultiResponseDto<>(place, hosting), HttpStatus.OK);
     }
 
+    /**
+     * 호스팅 삭제
+     * @param refreshToken 리프래시 토큰
+     * @param placeId 장소 식별자
+     * @return
+     */
     @DeleteMapping("/place/{place-id}")
     public ResponseEntity deleteHosting(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                         @PathVariable("place-id") Long placeId) {
