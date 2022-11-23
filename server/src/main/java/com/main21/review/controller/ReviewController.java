@@ -29,11 +29,12 @@ public class ReviewController {
      * @return
      * @author Quartz614
      */
-    @PostMapping("/{place-id}")
+    @PostMapping("/{place-id}/reserve/{reserve-id}")
     public ResponseEntity postReview(@PathVariable("place-id") Long placeId,
+                                     @PathVariable("reserve-id") Long reserveId,
                                      @RequestBody ReviewDto.Post post,
                                      @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
-        reviewService.createReview(post, refreshToken, placeId);
+        reviewService.createReview(post, refreshToken, placeId, reserveId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
