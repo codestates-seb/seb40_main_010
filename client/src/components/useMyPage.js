@@ -23,7 +23,7 @@ const useMyPage = () => {
     //   },
     // };
     try {
-      const response = await axios.get(`http://localhost:3001/place`);
+      const response = await axios.get(`/place`);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
@@ -38,7 +38,7 @@ const useMyPage = () => {
     //   },
     // };
     try {
-      const response = await axios.get(`http://localhost:3001/reserve`);
+      const response = await axios.get(`/reserve`);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
@@ -53,7 +53,7 @@ const useMyPage = () => {
     //   },
     // };
     try {
-      const response = await axios.get(`http://localhost:3001/bookmark`);
+      const response = await axios.get(`/bookmark`);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
@@ -68,7 +68,7 @@ const useMyPage = () => {
     //   },
     // };
     try {
-      const response = await axios.get(`http://localhost:3001/review`);
+      const response = await axios.get(`/review`);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
@@ -85,7 +85,7 @@ const useMyPage = () => {
 
   const callUserData = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/member');
+      const response = await axios.get('/member');
       console.log(response);
       setMemberData(...response.data);
       setUserNickName(response.data[0].nickname);
@@ -101,7 +101,7 @@ const useMyPage = () => {
 
   const userDataEdit = async () => {
     try {
-      await axios.patch(`http://localhost:3001/member/edit`, {
+      await axios.patch(`/member/edit`, {
         nickname: userNickName,
         mbti: userMBTI,
       });
