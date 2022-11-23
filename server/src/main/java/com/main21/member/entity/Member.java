@@ -43,7 +43,7 @@ public class Member extends Auditable {
     private MemberStatus memberStatus;
 
 
-    private String profileImage;
+    //private String profileImage;
 
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -60,8 +60,9 @@ public class Member extends Auditable {
                   String mbti,
                   String password,
                   String phoneNumber,
-                  List<String> roles,
-                  String profileImage) {
+                  List<String> roles
+                  //String profileImage
+                  ) {
         this.email = email;
         this.nickname = nickname;
         this.mbti = mbti;
@@ -69,7 +70,7 @@ public class Member extends Auditable {
         this.phoneNumber = phoneNumber;
         this.memberStatus = MemberStatus.MEMBER_ACTIVE;
         this.roles = roles;
-        this.profileImage = profileImage;
+        //this.profileImage = profileImage;
     }
 
 

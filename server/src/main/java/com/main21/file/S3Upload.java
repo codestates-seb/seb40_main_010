@@ -1,7 +1,9 @@
 package com.main21.file;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -35,54 +37,10 @@ public class S3Upload {
     private String bucket;
 
     private final AmazonS3Client amazonS3Client;
-
-    public List<PlaceImage> uploadList(List<MultipartFile> multipartFiles, String dir) {
-        List<PlaceImage> fileList = new ArrayList<>();
-        if(multipartFiles.isEmpty()) {
-            return fileList;
-        }
-
-        multipartFiles.forEach(file -> {
-            String fileName = createFileName(file.getOriginalFilename());
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
-
-            try(InputStream inputStream = file.getInputStream()) {
-                amazonS3Client.putObject(new PutObjectRequest(bucket, dir + "/" + fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-
-                // 파일 DTO 생성
-                PlaceImageDto placeImageDto =
-                        PlaceImageDto.builder()
-                                .originFileName(file.getOriginalFilename())
-                                .fileName(fileName)
-                                .filePath(amazonS3Client.getUrl(bucket, fileName).toString())
-                                .fileSize(file.getSize())
-                                .build();
-
-                //파일 DTO 이용하여 PlaceImage 엔티티 생성
-                PlaceImage placeImage = new PlaceImage(
-                        placeImageDto.getOriginFileName(),
-                        placeImageDto.getFileName(),
-                        placeImageDto.getFilePath(),
-                        placeImageDto.getFileSize()
-                );
-                //생성 후 리스트에 추가
-                fileList.add(placeImage);
-            } catch (IOException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 실패");
-            }
-        });
-        return fileList;
-    }
-
-    /**
-     * 파일 업로드 테스트 2022.11.22
-     */
+    
     public List<UploadFile> uploadFileList(List<MultipartFile> multipartFiles, String dir) {
         List<UploadFile> fileList = new ArrayList<>();
-        if(multipartFiles.isEmpty()) {
+        if (multipartFiles.isEmpty()) {
             return fileList;
         }
 
@@ -92,7 +50,7 @@ public class S3Upload {
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setContentType(file.getContentType());
 
-            try(InputStream inputStream = file.getInputStream()) {
+            try (InputStream inputStream = file.getInputStream()) {
                 amazonS3Client.putObject(new PutObjectRequest(bucket, dir + "/" + fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
 
@@ -143,13 +101,11 @@ public class S3Upload {
         }
     }
 
-    public void delete(List<String> filePathList) {
-        filePathList.forEach(
-                filePath -> {
-                    amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, filePath));
-                }
-        );
+    public void delete(String fileName, String dir) {
+        String Key = dir + "/" + fileName;
+        amazonS3Client.deleteObject(bucket, Key);
     }
+
 
 
 

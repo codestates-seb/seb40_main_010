@@ -118,10 +118,11 @@ public class MemberService {
 
         if (!memberImageList.isEmpty()) {
             for (MemberImage memberImage : memberImageList) {
-                //유저 FK 저장 관계 필요
-
+                //유저 FK 저장 관계
+                findMember.addMemberImage(memberImage);
                 //파일 DB 저장
-//                memberImageRepository.save(memberImage);
+                memberRepository.save(findMember);
+                break;
             }
         }
     }
