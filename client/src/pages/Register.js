@@ -108,6 +108,8 @@ export default function Register() {
     });
   };
 
+  console.log(charge);
+
   return (
     <>
       <Nav />
@@ -122,7 +124,12 @@ export default function Register() {
                 name="title"
               />
             ) : (
-              <Input onChange={handleChange} name="title" />
+              <>
+                <Input onChange={handleChange} name="title" />
+                {title.length > 20 && (
+                  <Validation>제목을 20글자 이내로 줄여주세요</Validation>
+                )}
+              </>
             )}
           </Wrapper>
           <Wrapper>
@@ -131,6 +138,9 @@ export default function Register() {
               checkedList={checkedList}
               setCheckedList={setCheckedList}
             />
+            {checkedList.length < 1 && (
+              <Validation>1개 이상 선택해주세요</Validation>
+            )}
           </Wrapper>
           <Wrapper>
             <Title>최대 인원</Title>
@@ -178,12 +188,15 @@ export default function Register() {
                 name="address"
               />
             ) : (
-              <Input
-                type="text"
-                onClick={() => postCode()}
-                value={address}
-                readOnly
-              />
+              <>
+                <Input
+                  type="text"
+                  onClick={() => postCode()}
+                  value={address}
+                  readOnly
+                />
+                {!address && <Validation>주소를 입력해주세요</Validation>}
+              </>
             )}
             <Title marginTop="20px">상세주소</Title>
             <Input type="text" onChange={handleChange} name="detailedAddress" />
@@ -208,6 +221,9 @@ export default function Register() {
           <Wrapper>
             <Title>사진</Title>
             <RegisterImages images={images} setImages={setImages} />
+            {images.length < 1 && (
+              <Validation>이미지를 업로드해주세요</Validation>
+            )}
           </Wrapper>
           <Wrapper>
             <Title>금액 설정</Title>
@@ -231,12 +247,20 @@ export default function Register() {
               )}
               <div className="hour-description">원</div>
             </div>
+            {charge < 1 && <Validation>금액을 설정해주세요</Validation>}
           </Wrapper>
           <ButtonWrapper>
             <button
               type="submit"
               className="form-register-button"
               onClick={handleSubmit}
+              disabled={
+                title.length < 20 &&
+                checkedList.length > 1 &&
+                address &&
+                images.length >= 1 &&
+                charge > 0
+              }
             >
               등록하기
             </button>
@@ -333,6 +357,14 @@ const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const Validation = styled.div`
+  width: 95%;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #eb7470;
+  margin-top: 6px;
 `;
 
 const Input = styled.input`
