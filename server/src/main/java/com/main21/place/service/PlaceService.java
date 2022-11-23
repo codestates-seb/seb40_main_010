@@ -1,5 +1,6 @@
 package com.main21.place.service;
 
+import com.main21.bookmark.entity.Bookmark;
 import com.main21.bookmark.repository.BookmarkRepository;
 import com.main21.common.CommonService;
 import com.main21.exception.BusinessLogicException;
@@ -42,6 +43,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -178,13 +180,18 @@ public class PlaceService {
     }
 
     /**
-     * 장소 상세조회
+     * 장소 상세 조회 메서드
+     * @param placeId
+     * @param refreshToken
+     * @return
      */
     @Transactional
-    public PlaceResponseDto searchPlace(Long placeId) {//, List<String> filePath, List<String> categoryList) {
+    public PlaceResponseDto searchPlace(Long placeId, String refreshToken) {//, List<String> filePath, List<String> categoryList) {
 
         Place place = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+        Optional<Bookmark> findBookmark = bookmarkRepository.findBookmarkByMemberIdAndPlaceId(place.getMemberId(), placeId);
+        Optional<Member> findMember = memberRepository.findById(place.getMemberId());
 
         List<PlaceImageResponseDto> placeImageResponseDtoList = placeImageService.findAllByPlaceImagePath(placeId);
         List<String> categoryList = placeCategoryService.findByAllPlaceCategoryList(placeId);
@@ -193,7 +200,20 @@ public class PlaceService {
         for (PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
             filePath.add(placeImageResponseDto.getFilePath());
 
-        return new PlaceResponseDto(place, filePath, categoryList);
+        boolean isBookmark = false;
+
+        // if -> refreshToken이 존재하지 않으면 무조건 false 반환,
+        // else -> refreshToken와 bookmark의 memberId가 같고 bookmark가 존재하면 true 반환
+        if (refreshToken == null) {
+            isBookmark = false;
+        }else {
+            Long memberId = redisUtils.getId(refreshToken);
+            if (findBookmark.isPresent() && memberId.equals(findBookmark.get().getMemberId())) {
+                isBookmark = true;
+            }
+        }
+
+        return new PlaceResponseDto(place, filePath, categoryList, findMember.get(), isBookmark);
     }
 
     /**
