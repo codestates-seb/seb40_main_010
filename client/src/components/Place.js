@@ -3,12 +3,15 @@ import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+
 import { PlaceIDState } from '../atoms';
 
-function MainCompo({ placeData }) {
+function Place({ placeData }) {
   const setFocusPlaceID = useSetRecoilState(PlaceIDState);
 
   const { address, charge, image, score, title, placeId } = placeData;
+
+  const slicedTitle = title.slice(0, 15);
 
   const onClickPlaceComponent = () => {
     setFocusPlaceID(placeId);
@@ -20,7 +23,7 @@ function MainCompo({ placeData }) {
         <MainComponent onClick={onClickPlaceComponent}>
           <Image src={image} />
           <TitleContainer>
-            <PlaceName>{title.slice(0, 15)}</PlaceName>
+            <PlaceName>{slicedTitle}</PlaceName>
             <ImStarFull className="starIcon" />
             <PlaceScore>{score}</PlaceScore>
           </TitleContainer>
@@ -95,4 +98,4 @@ const PlaceCharge = styled.div`
   font-weight: bold;
 `;
 
-export default MainCompo;
+export default Place;
