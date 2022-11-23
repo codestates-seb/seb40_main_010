@@ -2,6 +2,7 @@ package com.main21.file;
 
 
 import com.main21.file.UploadFile;
+import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceImage;
 import com.main21.place.dto.PlaceImageDto;
 import org.springframework.stereotype.Component;

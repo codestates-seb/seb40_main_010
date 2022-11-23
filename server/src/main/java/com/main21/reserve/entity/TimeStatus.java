@@ -1,12 +1,10 @@
 package com.main21.reserve.entity;
 
-import com.main21.place.entity.Category;
-import com.main21.place.entity.Place;
+
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.Optional;
 
 @Getter
 @Entity
@@ -52,7 +50,7 @@ public class TimeStatus {
         isFull = true;
     }
 
-    public void setIsFullFalse() {
+    public void setIsNotFull() {
         isFull = false;
     }
 
