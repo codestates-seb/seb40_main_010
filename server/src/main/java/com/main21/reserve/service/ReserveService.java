@@ -1,5 +1,6 @@
 package com.main21.reserve.service;
 
+import com.main21.common.CommonService;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.member.entity.Member;
@@ -85,6 +86,7 @@ public class ReserveService {
     private boolean exceptionFlag = true;
     private final HostingTimeRepository hostingTimeRepository;
     private final TimeStatusRepository timeStatusRepository;
+    private final CommonService commonService;
 
     /**
      * 예약 프로세스 1 - 예약 등록 메서드
@@ -97,17 +99,14 @@ public class ReserveService {
 
     @Transactional
     public void createReserve(ReserveDto.Post post, Long placeId, String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
+        Long memberId = commonService.getIdForRefresh(refreshToken);
 
         //공간 확인
-        Place findPlace = placeRepository.findById(placeId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+        Place findPlace = commonService.ifExistsReturnPlace(placeId);
 
-        Member findMember = memberRepository.findById(memberId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        // 유저 확인
+        Member findMember = commonService.ifExistsReturnMember(memberId);
 
-
-        //유저확인
         Reserve reserve = Reserve.builder()
                 .capacity(post.getCapacity())
                 .startTime(post.getStartTime())
@@ -165,7 +164,7 @@ public class ReserveService {
         } else reserveRepository.save(reserve);
 
         // mbti count 로직(결제 성공 시)
-        MbtiCount findMBTICount = ifExistsReturnMBTICount(findMember.getMbti(), placeId);
+        MbtiCount findMBTICount = commonService.ifExistsReturnMBTICount(findMember.getMbti(), placeId);
         if (findMBTICount == null) { // 없을 경우 새로 생성
             MbtiCount saveNewMBTICount = MbtiCount.builder()
                     .mbti(findMember.getMbti())
@@ -372,7 +371,7 @@ public class ReserveService {
         }
 
         // mbtiCount -1
-        MbtiCount findMBTICount = ifExistsReturnMBTICount(findMember.getMbti(), findReserve.getPlaceId());
+        MbtiCount findMBTICount = commonService.ifExistsReturnMBTICount(findMember.getMbti(), findReserve.getPlaceId());
         findMBTICount.reduceOneMbti();
         mbtiCountRepository.save(findMBTICount);
 
@@ -525,20 +524,6 @@ public class ReserveService {
     private Place ifExistsReturnPlace(Long placeId) {
         return placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
-    }
-
-
-    /**
-     * MBTICount 정보 조회 메서드
-     *
-     * @param mbti    MBTI
-     * @param placeId 장소 식별자
-     * @return MBTICount
-     * @author mozzi327
-     */
-    private MbtiCount ifExistsReturnMBTICount(String mbti, Long placeId) {
-        return mbtiCountRepository.findMbtiCountByMbtiAndPlaceId(mbti, placeId)
-                .orElse(null);
     }
 }
 
