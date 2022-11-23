@@ -4,6 +4,8 @@ import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.place.entity.Place;
 import com.main21.place.repository.PlaceRepository;
+import com.main21.reserve.entity.Reserve;
+import com.main21.reserve.repository.ReserveRepository;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
 import com.main21.review.repository.ReviewRepository;
@@ -15,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
+
+import static com.main21.reserve.entity.Reserve.ReserveStatus.PAY_IN_PROGRESS;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PlaceRepository placeRepository;
     private final RedisUtils redisUtils;
+    private final ReserveRepository reserveRepository;
 
     /**
      * 리뷰 등록 로직
@@ -33,8 +39,15 @@ public class ReviewService {
      */
     public void createReview(ReviewDto.Post post,
                              String refreshToken,
-                             Long placeId) {
+                             Long placeId,
+                             Long reserveId) {
         Long memberId = redisUtils.getId(refreshToken);
+        Optional<Reserve> findReserve = reserveRepository.findById(reserveId);
+
+        // 예약 상태가 결제 진행중이 아니라면 리뷰 달지 못함
+        if (!findReserve.get().getStatus().equals(PAY_IN_PROGRESS)) {
+            throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
+        }
         Review review = Review.builder()
                 .score(post.getScore())
                 .comment(post.getComment())

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ReserveRepository extends JpaRepository<Reserve, Long>, CustomReserveRepository {
     List<Reserve> findAllByPlaceId(Long placeId);
+    Reserve findByPlaceId(Long placeId);
 }
