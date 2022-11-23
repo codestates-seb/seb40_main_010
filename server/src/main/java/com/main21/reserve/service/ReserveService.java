@@ -392,7 +392,7 @@ public class ReserveService {
 
             // spaceCount의 값과 maxSpace의 값이 같지 않으면 isFull = false
             if (!findTimeStatus.getSpaceCount().equals(findPlace.getMaxSpace())) {
-                findTimeStatus.setIsFullFalse();
+                findTimeStatus.setIsNotFull();
             }
 
             timeStatusRepository.save(findTimeStatus);

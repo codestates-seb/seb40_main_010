@@ -35,12 +35,26 @@ public class PlaceImageService {
     /**
      * 이미지 전체 조회
      * */
-    public List<PlaceImageResponseDto> findAllByPlaceImage(Long placeId) {
+    public List<PlaceImageResponseDto> findAllByPlaceImagePath(Long placeId) {
 
         List<PlaceImage> placeImageList = placeImageRepository.findAllByPlaceId(placeId);
 
         return placeImageList.stream()
                 .map(PlaceImageResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<PlaceImage> findAllByPlaceImage(Long placeId) {
+
+        List<PlaceImage> placeImageList = placeImageRepository.findAllByPlaceId(placeId);
+
+        return placeImageList;
+    }
+
+    /**
+     * 이미지 삭제
+     */
+    public void delete(Long Id) {
+        placeImageRepository.deleteById(Id);
     }
 }

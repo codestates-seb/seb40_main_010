@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 public class PlaceCategoryDto {
 
     @Getter
-    @NoArgsConstructor
+    @Builder
     public static class Search {
         private Long categoryId;
         private String categoryName;
 
-        public Search(PlaceCategory placeCategory) {
+/*        public Search(PlaceCategory placeCategory) {
             this.categoryId = placeCategory.getId();
             this.categoryName = placeCategory.getCategoryName();
-        }
+        }*/
     }
 
     @Getter

@@ -77,16 +77,40 @@ public class S3Upload {
         return fileList;
     }
 
-    private String createFileName(String fileName) {
-        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
-    }
-
-    private String getFileExtension(String fileName) {
-        try {
-            return fileName.substring(fileName.lastIndexOf("."));
-        } catch (StringIndexOutOfBoundsException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ")");
+    /**
+     * 파일 업로드 테스트 2022.11.22
+     */
+    public List<UploadFile> uploadFileList(List<MultipartFile> multipartFiles, String dir) {
+        List<UploadFile> fileList = new ArrayList<>();
+        if(multipartFiles.isEmpty()) {
+            return fileList;
         }
+
+        multipartFiles.forEach(file -> {
+            String fileName = createFileName(file.getOriginalFilename());
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(file.getSize());
+            objectMetadata.setContentType(file.getContentType());
+
+            try(InputStream inputStream = file.getInputStream()) {
+                amazonS3Client.putObject(new PutObjectRequest(bucket, dir + "/" + fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+
+                //파일 DTO 생성
+                UploadFile uploadFile = UploadFile.builder()
+                        .originFileName(file.getOriginalFilename())
+                        .fileName(fileName)
+                        .filePath(amazonS3Client.getUrl(bucket, fileName).toString())
+                        .fileSize(file.getSize())
+                        .build();
+
+                //생성 후 리스트에 추가
+                fileList.add(uploadFile);
+            } catch (IOException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 실패");
+            }
+        });
+        return fileList;
     }
 
     public UploadFile uploadfile(MultipartFile multipartFile, String dir) throws IOException {
@@ -107,10 +131,30 @@ public class S3Upload {
         return uploadFile;
     }
 
+    private String createFileName(String fileName) {
+        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
+    }
+
+    private String getFileExtension(String fileName) {
+        try {
+            return fileName.substring(fileName.lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ")");
+        }
+    }
+
+    public void delete(List<String> filePathList) {
+        filePathList.forEach(
+                filePath -> {
+                    amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, filePath));
+                }
+        );
+    }
 
 
 
 
+    /*----------------------------------- 테스트용 -----------------------------------*/
 
     // MulitpartFile을 전달받아 File로 전환 후 S3에 업로드
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {

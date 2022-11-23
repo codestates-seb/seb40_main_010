@@ -5,6 +5,7 @@ import com.main21.file.S3Upload;
 import com.main21.place.dto.*;
 
 import com.main21.place.entity.Place;
+import com.main21.place.entity.PlaceCategory;
 import com.main21.place.entity.PlaceImage;
 import com.main21.place.repository.PlaceCategoryRepository;
 import com.main21.place.service.PlaceCategoryService;
@@ -17,12 +18,14 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.main21.member.utils.AuthConstant.REFRESH_TOKEN;
@@ -39,8 +42,6 @@ public class PlaceController {
      * 장소 + S3이미지 업로드
      */
     @PostMapping(value = "/place/postS3", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-
-
     public void createS3(HttpServletRequest request,
                          @RequestPart(value = "key") PlacePostDto placePostDto,
                          @CookieValue (name = "memberId") Long memberId,
@@ -66,16 +67,20 @@ public class PlaceController {
     @GetMapping("/place/{place-id}")
     public PlaceResponseDto getPlace(@PathVariable("place-id") Long placeId) {
 
-        List<PlaceImageResponseDto> placeImageResponseDtoList = placeImageService.findAllByPlaceImage(placeId);
-
-        List<String> categoryList = placeCategoryService.findByAllPlaceCategoryList(placeId);
-
-        List<String> filePath = new ArrayList<>();
-        for(PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
-            filePath.add(placeImageResponseDto.getFilePath());
-
-        return placeService.searchPlace(placeId, filePath, categoryList);
+        return placeService.searchPlace(placeId);
     }
+
+    /**
+     * 장소 수정
+     */
+    @PatchMapping(value = "/place/{place-id}/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void patchPlace(@PathVariable("place-id") Long placeId,
+                           @RequestPart(value = "key") PlacePatchDto placePatchDto,
+                           @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
+
+        placeService.updatePlace(placeId, placePatchDto, files);
+    }
+
 
     /**
      * Pagination 메인페이지 공간 전체 조회
