@@ -100,12 +100,12 @@ export const DetailInformation = atom({
   default: [],
 });
 
-export const startCalendarClick = atom({
-  key: 'startCalendarClick',
-  default: 0,
+export const reservationStartCalendarSelectedDay = atom({
+  key: 'reservationStartCalendarSelectedDay',
+  default: false,
 });
 
-export const endCalendarClick = atom({
-  key: 'endCalendarClick',
-  default: 0,
+export const reservationEndCalendarSelectedDay = atom({
+  key: 'reservationEndCalendarSelectedDay',
+  default: false,
 });
