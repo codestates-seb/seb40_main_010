@@ -39,27 +39,20 @@ public class PlaceController {
     private final PlaceCategoryService placeCategoryService;
 
     /**
-     * 장소 + S3이미지 업로드
-     */
-    @PostMapping(value = "/place/postS3", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createS3(HttpServletRequest request,
-                         @RequestPart(value = "key") PlacePostDto placePostDto,
-                         @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
-                         @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
-
-        placeService.createPlaceS3(placePostDto, refreshToken, files);
-    }
-
-    /**
-     * 장소 생성 (Local)
+     * 장소 생성
      */
     @PostMapping(value = "/place/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void createPlace(@RequestPart(value = "key") PlacePostDto placePostDto,
-                            @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
-                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
+                         @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
+                         @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
+        /** 로컬 환경 */
         placeService.createPlace(placePostDto,  refreshToken, files);
+
+        /** S3 환경 */
+        //placeService.createPlaceS3(placePostDto, refreshToken, files);
     }
+
 
     /**
      * 장소 상세 조회
@@ -78,14 +71,16 @@ public class PlaceController {
                            @RequestPart(value = "key") PlacePatchDto placePatchDto,
                            @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
-
+        /** 로컬 환경 */
         placeService.updatePlace(placeId, placePatchDto, refreshToken, files);
+
+        /** S3 환경 */
+        //placeService.updatePlaceS3(placeId, placePatchDto, refreshToken, files);
     }
 
 
     /**
      * Pagination 메인페이지 공간 전체 조회
-     * @param memberId
      * @param pageable
      * @return
      * @author LeeGoh
@@ -195,7 +190,6 @@ public class PlaceController {
 
     /**
      * 마이페이지 호스팅 조회
-     * @param memberId
      * @param pageable
      * @return
      */

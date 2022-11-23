@@ -28,9 +28,8 @@ public enum ExceptionCode {
 
     NO_IMAGE(504, "이미지가 비어있습니다."),
     UPLOAD_FAILED(504, "업로드가 실패했습니다."),
-
+    INVALID_UPDATE(403, "수정 권한이 없습니다."),
     RESERVATION_MAX_CAPACITY_OVER(504, "최대 수용 인원을 초과했습니다.");
-
     @Getter
     private final int status;
 

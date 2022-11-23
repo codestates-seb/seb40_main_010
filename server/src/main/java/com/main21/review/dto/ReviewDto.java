@@ -31,7 +31,7 @@ public class ReviewDto {
     public static class Response {
         private final Long reviewId;
 
-        private final String profileImage;
+        //private final String profileImage;
 
         private final String nickname;
 
@@ -47,7 +47,7 @@ public class ReviewDto {
         @QueryProjection
         public Response(Review review, Member member) {
             this.reviewId = review.getId();
-            this.profileImage = member.getProfileImage();
+            //this.profileImage = member.getProfileImage();
             this.nickname = member.getNickname();
             this.score = review.getScore();
             this.comment = review.getComment();

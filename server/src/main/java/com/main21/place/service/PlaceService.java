@@ -69,10 +69,10 @@ public class PlaceService {
     private S3Upload s3Upload;
 
     /**
-     * 장소 + S3이미지 저장 메서드
+     * 장소 저장 (S3)
      */
     @Transactional
-    public void createPlaceS3(PlacePostDto placePostDto,String refreshToken, List<MultipartFile> files) throws Exception {
+    public void createPlaceS3(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) {
         //유저 확인 필요
         Long memberId = commonService.getIdForRefresh(refreshToken);
         String dir = "placeImage";
@@ -84,55 +84,14 @@ public class PlaceService {
                 .maxSpace(placePostDto.getMaxSpace())
                 .address(placePostDto.getAddress())
                 .charge(placePostDto.getCharge())
-                .memberId(placePostDto.getMemberId())
+                .memberId(memberId)
                 .score(placePostDto.getScore())
                 .view(placePostDto.getView())
                 .endTime(placePostDto.getEndTime())
                 .build();
 
 
-        List<PlaceImage> placeImageList = s3Upload.uploadList(files, dir);
-        //파일이 존재할 때 처리
-        if(!placeImageList.isEmpty()) {
-            for(PlaceImage placeImage : placeImageList) {
-                //파일 DB 저장
-                place.addPlaceImage(placeImageRepository.save(placeImage));
-            }
-        }
-
-        Long placeId = placeRepository.save(place).getId();
-
-        List<String> categoryList = placePostDto.getCategoryList();
-        categoryList.forEach(
-                s -> {
-                    Category category = categoryRepository.findByCategoryName(s);
-                    PlaceCategory placeCategory = new PlaceCategory(place, s, category);
-                    placeCategoryRepository.save(placeCategory);
-                }
-        );
-    }
-
-    /**
-     * 파일 업로드 테스트 2022.11.22
-     */
-    @Transactional
-    public void createPlaceS3Test(PlacePostDto placePostDto, List<MultipartFile> files) throws Exception {
-        //유저 확인 필요
-        String dir = "placeImage";
-
-        Place place = Place.builder()
-                .title(placePostDto.getTitle())
-                .detailInfo(placePostDto.getDetailInfo())
-                .maxCapacity(placePostDto.getMaxCapacity())
-                .maxSpace(placePostDto.getMaxSpace())
-                .address(placePostDto.getAddress())
-                .charge(placePostDto.getCharge())
-                .memberId(placePostDto.getMemberId())
-                .score(placePostDto.getScore())
-                .view(placePostDto.getView())
-                .build();
-
-        List<UploadFile> uploadFileList = s3Upload.uploadFileList(files,dir);
+        List<UploadFile> uploadFileList = s3Upload.uploadFileList(files, dir);
         List<PlaceImage> placeImageList = new ArrayList<>();
 
         uploadFileList.forEach(uploadFile -> {
@@ -153,7 +112,7 @@ public class PlaceService {
             }
         }
 
-        Long placeId = placeRepository.save(place).getId();
+        placeRepository.save(place);
 
         List<String> categoryList = placePostDto.getCategoryList();
         categoryList.forEach(
@@ -166,7 +125,7 @@ public class PlaceService {
     }
 
     /**
-     * 장소 저장 메서드 (Local)
+     * 장소 저장 (Local)
      */
     @Transactional
     public void createPlace(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) throws Exception {
@@ -206,7 +165,7 @@ public class PlaceService {
             }
         }
 
-        Long placeId = placeRepository.save(place).getId();
+        placeRepository.save(place);
 
         List<String> categoryList = placePostDto.getCategoryList();
         categoryList.forEach(
@@ -231,22 +190,89 @@ public class PlaceService {
         List<String> categoryList = placeCategoryService.findByAllPlaceCategoryList(placeId);
         List<String> filePath = new ArrayList<>();
 
-        for(PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
+        for (PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
             filePath.add(placeImageResponseDto.getFilePath());
 
         return new PlaceResponseDto(place, filePath, categoryList);
     }
 
     /**
-     * 장소 수정
+     * 장소 수정 (S3)
+     */
+    public void updatePlaceS3(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) {
+        Long memberId = commonService.getIdForRefresh(refreshToken);
+        Place updatePlace = placeRepository.findById(placeId).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+
+        if (!Objects.equals(updatePlace.getMemberId(), memberId)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_UPDATE);
+        }
+
+        updatePlace.setTitle(placePatchDto.getTitle());
+        updatePlace.setDetailInfo(placePatchDto.getDetailInfo());
+        updatePlace.setAddress(placePatchDto.getAddress());
+        updatePlace.setCharge(placePatchDto.getCharge());
+        updatePlace.setMaxCapacity(placePatchDto.getMaxCapacity());
+        updatePlace.setMaxSpace(placePatchDto.getMaxSpace());
+
+        List<PlaceCategory> dbCategoryList = placeCategoryService.findByAllPlaceCategoryList2(placeId); // db 저장 카테고리 목록
+        List<String> categoryList = placePatchDto.getCategoryList(); // 전달되어온 카테고리 목록
+        List<String> addCategoryList; // 새롭게 전달되어 온 카테고리를 저장할 List
+
+        // 장소카테고리 수정
+        addCategoryList = getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
+
+        List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 목록
+        List<MultipartFile> multipartFileList = files; //placePatchDto.getMultipartFiles(); // 전달되어온 파일 목록
+        List<MultipartFile> addFileList; // 새롭게 전달되어온 파일들의 목록을 저장할 List
+
+        // 파일 업로드 수정
+        String dir = "placeImage";
+        addFileList = getAddFileList(dbPlaceImageList, multipartFileList, dir);
+
+        List<UploadFile> uploadFileList = s3Upload.uploadFileList(addFileList, dir);
+        List<PlaceImage> placeImageList = new ArrayList<>();
+
+        uploadFileList.forEach(uploadFile -> {
+            PlaceImage placeImage = PlaceImage.builder()
+                    .originFileName(uploadFile.getOriginFileName())
+                    .fileName(uploadFile.getFileName())
+                    .filePath(uploadFile.getFilePath())
+                    .fileSize(uploadFile.getFileSize())
+                    .build();
+            placeImageList.add(placeImage);
+        });
+
+        //파일이 존재할 때 처리
+        if (!placeImageList.isEmpty()) {
+            for (PlaceImage placeImage : placeImageList) {
+                //파일 DB 저장
+                updatePlace.addPlaceImage(placeImageRepository.save(placeImage));
+            }
+        }
+
+        placeRepository.save(updatePlace);
+
+        addCategoryList.forEach(
+                s -> {
+                    Category category = categoryRepository.findByCategoryName(s);
+                    PlaceCategory placeCategory = new PlaceCategory(updatePlace, s, category);
+                    placeCategoryRepository.save(placeCategory);
+                }
+        );
+    }
+
+
+    /**
+     * 장소 수정 (Local)
      */
     public void updatePlace(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) throws Exception {
         Long memberId = commonService.getIdForRefresh(refreshToken);
         Place updatePlace = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
-        if(!Objects.equals(updatePlace.getMemberId(), memberId)) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        if (!Objects.equals(updatePlace.getMemberId(), memberId)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_UPDATE);
         }
         updatePlace.setTitle(placePatchDto.getTitle());
         updatePlace.setDetailInfo(placePatchDto.getDetailInfo());
@@ -257,73 +283,18 @@ public class PlaceService {
 
         List<PlaceCategory> dbCategoryList = placeCategoryService.findByAllPlaceCategoryList2(placeId); // db 저장 카테고리 목록
         List<String> categoryList = placePatchDto.getCategoryList(); // 전달되어온 카테고리 목록
-        List<String> addCategoryList = new ArrayList<>(); // 새롭게 전달되어 온 카테고리를 저장할 List
+        List<String> addCategoryList; // 새롭게 전달되어 온 카테고리를 저장할 List
 
-        // 카테고리 수정
-        if(!CollectionUtils.isEmpty(categoryList)) {
-            List<String> categoryNameList = new ArrayList<>();
+        // 장소카테고리 수정
+        addCategoryList = getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
 
-            for(PlaceCategory placeCategory : dbCategoryList) {
-                PlaceCategoryDto.Search placeCategoryDto = placeCategoryService.findByPlaceCategoryId(placeCategory.getId());
-                String categoryName = placeCategoryDto.getCategoryName();
-
-                if(!categoryList.contains(categoryName)) {
-                    placeCategoryService.deletePlaceCategory(placeCategory.getId());
-                }
-                else {
-                    categoryNameList.add(categoryName);
-                }
-            }
-
-            for(String s : categoryList) {
-                if(!categoryNameList.contains(s)) {
-                    addCategoryList.add(s);
-                }
-            }
-        }
+        List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 목록
+        List<MultipartFile> multipartFileList = files; //placePatchDto.getMultipartFiles(); // 전달되어온 파일 목록
+        List<MultipartFile> addFileList; // 새롭게 전달되어온 파일들의 목록을 저장할 List
 
         // 파일 업로드 수정
-        List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 불러오기
-        List<MultipartFile> multipartFileList = files; //placePatchDto.getMultipartFiles(); // 전달되어온 파일
-        List<MultipartFile> addFileList = new ArrayList<>(); // 새롭게 전달되어온 파일들의 목록을 저장할 List
-
-        if(CollectionUtils.isEmpty(dbPlaceImageList)) { // db 존재 x
-            if(!CollectionUtils.isEmpty(multipartFileList)) { // 전달된 파일 한장 이상
-                multipartFileList.forEach(
-                        multipartFile -> {
-                            addFileList.add(multipartFile); // 저장 파일 목록에 추가
-                        }
-                );
-            }
-        } else { // db에 한장 이상 존재
-            if(CollectionUtils.isEmpty(multipartFileList)) { // 전달된 파일 x
-                dbPlaceImageList.forEach(
-                        placeImage -> {
-                            placeImageService.delete(placeImage.getId());
-                        }
-                );
-            } else { // 전달된 파일 한장 이상
-                List<String> dbOriginFileNameList = new ArrayList<>();
-
-                for(PlaceImage placeImage : dbPlaceImageList) {
-                    PlaceImageDto dbPlaceImageDto = placeImageService.findByFiledId(placeImage.getId());
-                    String dbOriginFileName = dbPlaceImageDto.getOriginFileName();
-
-                    if(!multipartFileList.contains(dbOriginFileName)) {
-                        placeImageService.delete(placeImage.getId());
-                    }
-                    else {
-                        dbOriginFileNameList.add(dbOriginFileName);
-                    }
-                }
-                for(MultipartFile multipartFile : multipartFileList) {
-                    String multipartOriginName = multipartFile.getOriginalFilename();
-                    if(!dbOriginFileNameList.contains(multipartOriginName)) {
-                        addFileList.add(multipartFile);
-                    }
-                }
-            }
-        }
+        String dir = "Local";
+        addFileList = getAddFileList(dbPlaceImageList, multipartFileList, dir);
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(addFileList);
         List<PlaceImage> placeImageList = new ArrayList<>();
@@ -339,8 +310,8 @@ public class PlaceService {
         });
 
         //파일이 존재할 때 처리
-        if(!placeImageList.isEmpty()) {
-            for(PlaceImage placeImage : placeImageList) {
+        if (!placeImageList.isEmpty()) {
+            for (PlaceImage placeImage : placeImageList) {
                 //파일 DB 저장
                 updatePlace.addPlaceImage(placeImageRepository.save(placeImage));
             }
@@ -361,12 +332,12 @@ public class PlaceService {
 
         List<HostingTime> findHostingTimes = hostingTimeRepository.findByPlaceIdAndReserveDateGreaterThanEqual(placeId, currentDate);
 
-        if(!CollectionUtils.isEmpty(findHostingTimes)) {
+        if (!CollectionUtils.isEmpty(findHostingTimes)) {
             findHostingTimes.forEach(
                     findHostingTime -> {
                         findHostingTime.getTimeStatuses().forEach(
                                 timeStatus -> {
-                                    if(timeStatus.isFull() && updatePlace.getMaxSpace() > timeStatus.getSpaceCount()) {
+                                    if (timeStatus.isFull() && updatePlace.getMaxSpace() > timeStatus.getSpaceCount()) {
                                         timeStatus.setIsNotFull();
                                         timeStatusRepository.save(timeStatus);
                                     }
@@ -545,5 +516,90 @@ public class PlaceService {
         placeCategoryRepository.deleteAllByPlaceId(placeId);
         placeRepository.delete(findPlace);
     }
+
+
+    private List<String> getAddCategoryList(Long placeId, List<PlaceCategory> dbCategoryList, List<String> categoryList) {
+        // 새롭게 전달되어 온 카테고리를 저장할 List
+        List<String> addCategoryList = new ArrayList<>();
+
+        // 카테고리 수정
+        if (!CollectionUtils.isEmpty(categoryList)) {
+            List<String> categoryNameList = new ArrayList<>();
+
+            for (PlaceCategory placeCategory : dbCategoryList) {
+                PlaceCategoryDto.Search placeCategoryDto = placeCategoryService.findByPlaceCategoryId(placeCategory.getId());
+                String categoryName = placeCategoryDto.getCategoryName();
+
+                if (!categoryList.contains(categoryName)) {
+                    placeCategoryService.deletePlaceCategory(placeCategory.getId());
+                } else {
+                    categoryNameList.add(categoryName);
+                }
+            }
+
+            for (String s : categoryList) {
+                if (!categoryNameList.contains(s)) {
+                    addCategoryList.add(s);
+                }
+            }
+        }
+        return addCategoryList;
+    }
+
+    private List<MultipartFile> getAddFileList(List<PlaceImage> dbPlaceImageList, List<MultipartFile> multipartFileList, String dir) {
+        List<MultipartFile> addFileList = new ArrayList<>(); // 새롭게 전달되어온 파일들의 목록을 저장할 List
+
+        if (CollectionUtils.isEmpty(dbPlaceImageList)) { // db 존재 x
+            if (!CollectionUtils.isEmpty(multipartFileList)) { // 전달된 파일 한장 이상
+                multipartFileList.forEach(
+                        multipartFile -> {
+                            addFileList.add(multipartFile); // 저장 파일 목록에 추가
+                        }
+                );
+            }
+        } else { // db에 한장 이상 존재
+            if (CollectionUtils.isEmpty(multipartFileList)) { // 전달된 파일 x
+                dbPlaceImageList.forEach(
+                        placeImage -> {
+                            if(dir.equals("Local")) {
+                                placeImageService.delete(placeImage.getId());
+                            }
+                            else {
+                                placeImageService.delete(placeImage.getId());
+                                s3Upload.delete(placeImage.getFileName(), dir);
+                            }
+                        }
+                );
+            } else { // 전달된 파일 한장 이상
+                List<String> dbOriginFileNameList = new ArrayList<>();
+
+                for (PlaceImage placeImage : dbPlaceImageList) {
+                    PlaceImageDto dbPlaceImageDto = placeImageService.findByFiledId(placeImage.getId());
+                    String dbOriginFileName = dbPlaceImageDto.getOriginFileName();
+
+                    if (!multipartFileList.contains(dbOriginFileName)) {
+                        if(dir.equals("Local")) {
+                            placeImageService.delete(placeImage.getId());
+                        }
+                        else {
+                            placeImageService.delete(placeImage.getId());
+                            s3Upload.delete(placeImage.getFileName(), dir);
+                        }
+                    } else {
+                        dbOriginFileNameList.add(dbOriginFileName);
+                    }
+                }
+                for (MultipartFile multipartFile : multipartFileList) {
+                    String multipartOriginName = multipartFile.getOriginalFilename();
+                    if (!dbOriginFileNameList.contains(multipartOriginName)) {
+                        addFileList.add(multipartFile);
+                    }
+                }
+            }
+        }
+        return addFileList;
+    }
 }
+
+
 
