@@ -99,3 +99,13 @@ export const DetailInformation = atom({
   key: 'DetailInformation',
   default: [],
 });
+
+export const startCalendarClick = atom({
+  key: 'startCalendarClick',
+  default: 0,
+});
+
+export const endCalendarClick = atom({
+  key: 'endCalendarClick',
+  default: 0,
+});
