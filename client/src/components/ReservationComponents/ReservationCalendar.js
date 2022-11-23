@@ -25,7 +25,7 @@ export default function ReservationCalendar({
   const [startCalendarSelectedDay, setStartCalendarSelectedDay] =
     useRecoilState(reservationStartCalendarSelectedDay);
 
-  const [isEndCalendarClicked, setIsEndCalendarClicked] = useRecoilState(
+  const [endCalendarSelectedDay, setEndCalendarSelectedDay] = useRecoilState(
     reservationEndCalendarSelectedDay,
   );
 
@@ -43,6 +43,7 @@ export default function ReservationCalendar({
     ) {
       clickedTime.setHours(now.getHours() + 1);
       setStartDate(clickedTime);
+
       setStartCalendarSelectedDay('today');
     }
 
@@ -51,8 +52,9 @@ export default function ReservationCalendar({
     }
 
     if (clickedTime.getDate() !== now.getDate()) {
-      setStartCalendarSelectedDay('future');
       setStartDate(time);
+
+      setStartCalendarSelectedDay('future');
     }
 
     if (
@@ -61,6 +63,7 @@ export default function ReservationCalendar({
     ) {
       clickedTime.setHours(now.getHours() + 1);
       setStartDate(clickedTime);
+
       setStartCalendarSelectedDay('today');
     }
 
@@ -73,15 +76,16 @@ export default function ReservationCalendar({
     const startTime = new Date(startDate);
 
     if (
-      isEndCalendarClicked === 0 &&
+      endCalendarSelectedDay === false &&
       clickedTime.getDate() === startTime.getDate()
     ) {
       clickedTime.setHours(startTime.getHours() + 1);
-      setIsEndCalendarClicked(1);
       setEndDate(clickedTime);
+
+      setEndCalendarSelectedDay('today');
     }
 
-    if (isEndCalendarClicked === 1) {
+    if (endCalendarSelectedDay === 'today') {
       setEndDate(time);
     }
 
@@ -89,22 +93,24 @@ export default function ReservationCalendar({
       clickedTime.getDate() !== startTime.getDate() &&
       clickedTime.getHours() > startTime.getHours()
     ) {
-      setIsEndCalendarClicked(2);
       clickedTime.setHours(startTime.getHours());
       setEndDate(clickedTime);
+
+      setEndCalendarSelectedDay('nextDay');
     }
 
     if (
-      isEndCalendarClicked === 2 &&
+      endCalendarSelectedDay === 'nextDay' &&
       clickedTime.getDate() === startTime.getDate()
     ) {
       clickedTime.setHours(startTime.getHours() + 1);
-      setIsEndCalendarClicked(1);
       setEndDate(clickedTime);
+
+      setEndCalendarSelectedDay('today');
     }
 
     if (
-      isEndCalendarClicked === 2 &&
+      endCalendarSelectedDay === 'nextDay' &&
       clickedTime.getDate() !== startTime.getDate()
     ) {
       setEndDate(clickedTime);
