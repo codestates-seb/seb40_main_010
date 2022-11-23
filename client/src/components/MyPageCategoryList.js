@@ -70,7 +70,7 @@ function MyPageCategoryList({ listData, type }) {
 
   const reviewDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3001/review/${listData.reviewId}`);
+      await axios.delete(`/review/${listData.reviewId}`);
       navigate('/my-page');
     } catch (err) {
       showModal();
@@ -79,7 +79,7 @@ function MyPageCategoryList({ listData, type }) {
 
   const bookMarkStatusChange = async () => {
     try {
-      await axios.get(`http://localhost:3001/bookmark/${listData.bookmarkId}`);
+      await axios.get(`/bookmark/${listData.bookmarkId}`);
       // 북마크 아이콘 색상 변화 등
     } catch (err) {
       navigate('/my-page');
@@ -89,7 +89,7 @@ function MyPageCategoryList({ listData, type }) {
   const registerEditDataSend = async () => {
     // id를 인자로 받아서 /place/id로 조회해야되는데 현재 api랑 연동안되므로 detaildata로 임시 작성
     try {
-      const response = await axios.get(`http://localhost:3001/detaildata`);
+      const response = await axios.get(`/place/${listData.placeId}`);
       setReservationData(response.data[0]);
       navigate('/register');
     } catch (err) {
