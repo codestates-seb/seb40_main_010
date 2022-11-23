@@ -1,11 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+
 import Places from './pages/Places';
 import Detail from './pages/Detail';
 import LogIn from './pages/LogIn';
 import MyPage from './pages/MyPage';
 import Register from './pages/Register';
 import SignUp from './pages/SignUp';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

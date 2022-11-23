@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { SlHome } from 'react-icons/sl';
-import { BsFillPersonFill } from 'react-icons/bs';
 
 import { navSearchValue, categoryFocus } from '../atoms';
+import { NavLeftButtonContainer, NavRightButtonContainer } from './NavButton';
 
 function Nav({ navColor, buttonColor }) {
   const [currentSearch, setCurrentSearch] = useState('');
   const setSearch = useSetRecoilState(navSearchValue);
   const setFocusCategoryID = useSetRecoilState(categoryFocus);
 
-  const location = useLocation();
   const navigate = useNavigate();
-
-  const isLogIn = localStorage.getItem('Access_token');
 
   const onChangeSearch = e => {
     setCurrentSearch(e.target.value);
   };
 
+  // eslint-disable-next-line consistent-return
   const onSubmit = async event => {
     event.preventDefault();
 
@@ -36,18 +34,20 @@ function Nav({ navColor, buttonColor }) {
         const response = await axios.get(
           `{{BACKEND}}/search/${encodeURI(replacedSearch)}`,
         );
-        response.then(
-          setFocusCategoryID(0),
-          setCurrentSearch(''),
-          navigate('/'),
-        );
-      } catch (Error) {
-        console.error(Error);
+
+        setFocusCategoryID(0);
         setCurrentSearch('');
+        navigate('/');
+
+        return response;
+      } catch (error) {
+        setCurrentSearch('');
+        setFocusCategoryID(0);
+        setCurrentSearch('');
+        navigate('/');
+
+        alert('검색 error');
       }
-      // .then(res => console.log(res))
-      // .then(setFocusCategoryID(0), setCurrentSearch(''), navigate('/'))
-      // .catch(err => console.log(err));
     } else {
       setCurrentSearch('');
     }
@@ -69,14 +69,6 @@ function Nav({ navColor, buttonColor }) {
     }
   };
 
-  const onClickLogOutButton = async () => {
-    if (!isLogIn) return null;
-    if (location.pathname !== '/my-page') return null;
-
-    await localStorage.removeItem('Access_token');
-    return null;
-  };
-
   const onClickHomeIcon = () => {
     axios
       .get('{{backend}}/')
@@ -96,37 +88,8 @@ function Nav({ navColor, buttonColor }) {
           <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />
         </SearchContainer>
         <ButtonContainer>
-          {location.pathname === '/register' ||
-          location.pathname === '/log-in' ? null : (
-            <Link to={isLogIn ? '/register' : '/log-in'}>
-              <NavLeftButton buttonColor={buttonColor}>
-                {isLogIn ? '장소 등록' : 'Log In'}
-              </NavLeftButton>
-            </Link>
-          )}
-          {location.pathname === '/sign-up' ? null : (
-            <Link
-              to={
-                !isLogIn
-                  ? '/sign-up'
-                  : location.pathname === '/my-page'
-                  ? '/'
-                  : '/my-page'
-              }
-            >
-              <NavRightButton onClick={onClickLogOutButton}>
-                {!isLogIn ? (
-                  'Sign Up'
-                ) : location.pathname === '/my-page' ? (
-                  'Log Out'
-                ) : (
-                  <MyPageDiv>
-                    <BsFillPersonFill />
-                  </MyPageDiv>
-                )}
-              </NavRightButton>
-            </Link>
-          )}
+          <NavLeftButtonContainer buttonColor={buttonColor} />
+          <NavRightButtonContainer />
         </ButtonContainer>
       </NavBackground>
     </NavContainer>
@@ -213,35 +176,4 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-right: 20px;
-`;
-
-const NavLeftButton = styled.button`
-  width: 80px;
-  margin: 10px 7px;
-  padding: 8px;
-  border-radius: 20px;
-  border: none;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  background-color: ${props => props.buttonColor || '#ffda77'};
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 20px;
-  text-align: center;
-  color: #2b2b2b;
-  &:hover {
-    background-color: #fff9eb;
-    transition: 0.7s;
-    cursor: pointer;
-  }
-`;
-
-const NavRightButton = styled(NavLeftButton)`
-  &:hover {
-    background-color: #eb7470;
-    transition: 0.5s;
-  }
-`;
-
-const MyPageDiv = styled.div`
-  border-radius: 50%;
 `;
