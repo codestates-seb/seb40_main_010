@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 
-import Nav from '../components/Navigation.js/Nav';
+import Nav from '../components/Navigation/Nav';
 
 function SignUp() {
   const navigator = useNavigate();
