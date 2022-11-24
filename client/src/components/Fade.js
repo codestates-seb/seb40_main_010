@@ -56,8 +56,8 @@ const StyledSlide = styled(Slider)`
   ul {
     width: 200px;
     position: absolute;
-    right: 160px;
-    top: 470px;
+    bottom: 3%;
+    right: 32%;
   }
 
   .slick-dots li button:before {

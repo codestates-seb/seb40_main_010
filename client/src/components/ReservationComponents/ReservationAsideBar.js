@@ -16,7 +16,7 @@ import ReservationBottomButtons from './ReservationBottomButtons';
 
 // TODO
 // 23~32까지 파일로 빼기
-function ReservationAsideBar() {
+function ReservationAsideBar({ charge }) {
   const [startDate, setStartDate] = useRecoilState(reservationStartDate);
   const [endDate, setEndDate] = useRecoilState(reservationEndDate);
   const [capacity, setCapacity] = useRecoilState(reservationMaxCapacity);
@@ -24,7 +24,7 @@ function ReservationAsideBar() {
 
   const timeDiff = new Date(endDate).getTime() - new Date(startDate).getTime();
   const reservedTimeRange = timeDiff / (1000 * 60 * 60);
-  const chargePerHour = 79000;
+  const chargePerHour = charge;
   const chargePerHourString = chargePerHour
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
