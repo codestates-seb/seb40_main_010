@@ -28,7 +28,9 @@ function Place({ placeData }) {
             <PlaceScore>{score}</PlaceScore>
           </TitleContainer>
           <PlaceAddress>{address}</PlaceAddress>
-          <PlaceCharge>{charge}원</PlaceCharge>
+          <PlaceCharge>
+            {new Intl.NumberFormat('ko-KR').format(charge)}원
+          </PlaceCharge>
         </MainComponent>
       </Link>
     </MainContainer>
