@@ -1,40 +1,13 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+// import axios from 'axios';
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue } from 'recoil';
+// import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { DetailInformation, PlaceIDState } from '../atoms';
+// import { DetailInformation, PlaceIDState } from '../atoms';
 import FadeCarousel from './Fade';
 import Location from './Map';
 
-function View() {
-  const [detailInformation, setDetailInformation] =
-    useRecoilState(DetailInformation);
-  const placeId = useRecoilValue(PlaceIDState);
-  const header = {
-    headers: {
-      'ngrok-skip-browser-warning': '010',
-    },
-  };
-
-  const callDetailData = async () => {
-    try {
-      const response = await axios.get(`/place/${placeId}`, header);
-      setDetailInformation(response.data);
-      // const { title, filePath, category, detailInfo, address, phoneNumber } =
-      //   detailInformation;
-      // console.log(response.data);
-      // return [title, filePath, category, detailInfo, address, phoneNumber];
-    } catch (error) {
-      // return console.log(error);
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    callDetailData();
-  }, []);
-
+function View({ detailInformation }) {
   return (
     <ViewContainer>
       <InformationContainer>

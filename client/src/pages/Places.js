@@ -23,7 +23,7 @@ export default function Places() {
   const get = async () => {
     try {
       const result = await axios.get('/home', header);
-      // console.log(result.data.data);
+      console.log(result.data.data);
       setMainPlaceData(result.data.data);
     } catch (error) {
       console.log(error);
@@ -74,6 +74,7 @@ const DisplayComponentDiv = styled.div`
   align-items: center;
 `;
 const MainComponentContainer = styled.div`
+  overflow-y: scroll;
   margin: 1 auto;
   width: 1200px;
   flex-wrap: wrap;
