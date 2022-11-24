@@ -1,10 +1,9 @@
 package com.main21.reserve.service;
 
-import com.main21.common.CommonService;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.member.entity.Member;
-import com.main21.member.repository.MemberRepository;
+import com.main21.member.service.MemberDbService;
 import com.main21.place.entity.Place;
 import com.main21.place.repository.PlaceRepository;
 import com.main21.reserve.dto.PayApprovalDto;
@@ -14,7 +13,6 @@ import com.main21.reserve.entity.*;
 import com.main21.reserve.event.OutBoxEventBuilder;
 import com.main21.reserve.event.ReserveCreated;
 import com.main21.reserve.feign.KaKaoFeignClient;
-import com.main21.reserve.repository.*;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,14 +70,14 @@ public class ReserveService {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final OutBoxEventBuilder<ReserveCreated> outBoxEventBuilder;
-    private final MemberRepository memberRepository;
-    private final ReserveRepository reserveRepository;
-    private final PlaceRepository placeRepository;
-    private final MbtiCountRepository mbtiCountRepository;
-    private final CancelReasonRepository cancelReasonRepository;
     private KaKaoFeignClient kaKaoFeignClient;
 
     private final RedisUtils redisUtils;
+    private final ReserveDbService reserveDbService;
+    private final MemberDbService memberDbService;
+    private final MbtiCountService mbtiCountService;
+
+    private final PlaceRepository placeRepository;
 
     private PayReadyDto payReadyDto;
     private RestTemplate restTemplate;
@@ -88,9 +86,6 @@ public class ReserveService {
     private String itemName;
     private Long totalAmount;
     private boolean exceptionFlag = true;
-    private final HostingTimeRepository hostingTimeRepository;
-    private final TimeStatusRepository timeStatusRepository;
-    private final CommonService commonService;
 
     /**
      * 예약 프로세스 1 - 예약 등록 메서드
@@ -103,13 +98,13 @@ public class ReserveService {
 
     @Transactional
     public void createReserve(ReserveDto.Post post, Long placeId, String refreshToken) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
+        Long memberId = redisUtils.getId(refreshToken);
 
         //공간 확인
-        Place findPlace = commonService.ifExistsReturnPlace(placeId);
+        Place findPlace = ifExistsReturnPlace(placeId);
 
         // 유저 확인
-        Member findMember = commonService.ifExistsReturnMember(memberId);
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         Reserve reserve = Reserve.builder()
                 .capacity(post.getCapacity())
@@ -120,66 +115,8 @@ public class ReserveService {
                 .totalCharge(((post.getEndTime().getTime() - post.getStartTime().getTime()) / 3600000) * findPlace.getCharge())
                 .build();
 
-
-        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd");
-        String reserveDay = fDate.format(reserve.getStartTime());
-
-        Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getStartTime()));
-        Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(reserve.getEndTime()));
-
-        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByPlaceIdAndReserveDate(placeId, reserveDay);
-
-        if (!findHostingTime.isPresent()) {
-            HostingTime hostingTime = HostingTime.builder()
-                    .reserveDate(reserveDay)
-                    .placeId(reserve.getPlaceId())
-                    .build();
-            hostingTimeRepository.save(hostingTime);
-
-            for (int i = reserveStartHH; i < reserveEndHH; i++) {
-                TimeStatus timeStatus = new TimeStatus(hostingTime, i, i + 1);
-                timeStatus.addSpaceCount();
-                timeStatusRepository.save(timeStatus);
-            }
-
-        } else {
-            for (int i = reserveStartHH; i < reserveEndHH; i++) {
-                TimeStatus findTimeStatus = timeStatusRepository.findByHostingTimeIdAndStartTime(findHostingTime.get().getId(), i);
-                if (findTimeStatus == null) {
-                    TimeStatus timeStatus = new TimeStatus(findHostingTime.get(), i, i + 1);
-                    timeStatus.addSpaceCount();
-                    timeStatusRepository.save(timeStatus);
-                } else {
-                    if (!findTimeStatus.isFull()) {
-                        findTimeStatus.addSpaceCount();
-                        if (findTimeStatus.getSpaceCount().equals(findPlace.getMaxSpace())) {
-                            findTimeStatus.setIsFull();
-                        }
-                        timeStatusRepository.save(findTimeStatus);
-                    } else {
-                        throw new IllegalAccessError("Full space");
-                    }
-                }
-            }
-        }
-
-        if (reserve.getCapacity() > findPlace.getMaxCapacity()) {
-            throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
-        } else reserveRepository.save(reserve);
-
-        // mbti count 로직(결제 성공 시)
-        MbtiCount findMBTICount = commonService.ifExistsReturnMBTICount(findMember.getMbti(), placeId);
-        if (findMBTICount == null) { // 없을 경우 새로 생성
-            MbtiCount saveNewMBTICount = MbtiCount.builder()
-                    .mbti(findMember.getMbti())
-                    .placeId(placeId)
-                    .totalCount(1)
-                    .build();
-            mbtiCountRepository.save(saveNewMBTICount);
-        } else { // 있을 경우 count를 +1해준다.
-            findMBTICount.addOneMbti();
-            mbtiCountRepository.save(findMBTICount);
-        }
+        reserveDbService.saveReserve(reserve);
+        mbtiCountService.addMbtiCount(findMember, placeId);
     }
 
 
@@ -209,8 +146,8 @@ public class ReserveService {
         setHeaders(headers);
 
         // 사용자, 예약, 호스트 정보 조회
-        Member findMember = ifExistsReturnMember(memberId);
-        Reserve findReserve = ifExistsReturnReserve(reserveId);
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
         Place findPlace = ifExistsReturnPlace(findReserve.getPlaceId());
         orderId = findReserve.getId() + "/" + findMember.getId() + "/" + findPlace.getTitle();
         userId = findMember.getId().toString();
@@ -271,9 +208,9 @@ public class ReserveService {
         String reserveId = orderInfoList[1];
 
         approvalDto.setOrderStatus(ORDER_APPROVED);
-        Reserve findReserve = ifExistsReturnReserve(Long.valueOf(reserveId));
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(Long.valueOf(reserveId));
         findReserve.setStatus(Reserve.ReserveStatus.PAY_SUCCESS);
-        reserveRepository.save(findReserve);
+        reserveDbService.saveReserve(findReserve);
 
         try {
             return approvalDto;
@@ -292,9 +229,9 @@ public class ReserveService {
      */
     public void setCanceledStatus() {
         String reserveId = parseOrderInfo(orderId)[1];
-        Reserve findReserve = ifExistsReturnReserve(Long.valueOf(reserveId));
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(Long.valueOf(reserveId));
         findReserve.setStatus(Reserve.ReserveStatus.PAY_CANCELED);
-        reserveRepository.save(findReserve);
+        reserveDbService.saveReserve(findReserve);
     }
 
 
@@ -305,9 +242,9 @@ public class ReserveService {
      */
     public void setFailedStatus() {
         String reserveId = parseOrderInfo(orderId)[1];
-        Reserve findReserve = ifExistsReturnReserve(Long.valueOf(reserveId));
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(Long.valueOf(reserveId));
         findReserve.setStatus(Reserve.ReserveStatus.PAY_FAILED);
-        reserveRepository.save(findReserve);
+        reserveDbService.saveReserve(findReserve);
     }
 
 
@@ -361,7 +298,7 @@ public class ReserveService {
      */
     public Page<ReserveDto.Response> getReservation(String refreshToken, Pageable pageable) {
         Long memberId = redisUtils.getId(refreshToken);
-        return reserveRepository.getReservation(memberId, pageable);
+        return reserveDbService.getReservation(memberId, pageable);
     }
 
 
@@ -374,60 +311,25 @@ public class ReserveService {
      * @param refreshToken
      * @author LeeGoh
      */
-    public void deleteReserve(ReserveDto.Cancel cancel, Long reserveId, String refreshToken) {
+    public void deleteReserve(Long reserveId, String refreshToken) {
         Long memberId = redisUtils.getId(refreshToken);
 
         // 예약 조회
-        Reserve findReserve = ifExistsReturnReserve(reserveId);
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
 
         // 회원 조회
-        Member findMember = ifExistsReturnMember(memberId);
-
-        // 공간 조회
-        Place findPlace = ifExistsReturnPlace(findReserve.getPlaceId());
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         if (findReserve.getStatus().equals(Reserve.ReserveStatus.RESERVATION_CANCELED)) {
             throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
         }
 
         // mbtiCount -1
-        MbtiCount findMBTICount = commonService.ifExistsReturnMBTICount(findMember.getMbti(), findReserve.getPlaceId());
-        findMBTICount.reduceOneMbti();
-        mbtiCountRepository.save(findMBTICount);
-
-        // spaceCount -1
-        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd");
-        String reserveDay = fDate.format(findReserve.getStartTime());
-
-        Integer reserveStartHH = Integer.parseInt(new SimpleDateFormat("HH").format(findReserve.getStartTime()));
-        Integer reserveEndHH = Integer.parseInt(new SimpleDateFormat("HH").format(findReserve.getEndTime()));
-
-        Optional<HostingTime> findHostingTime = hostingTimeRepository.findByPlaceIdAndReserveDate(findPlace.getId(), reserveDay);
-
-        for (int i = reserveStartHH; i < reserveEndHH; i++) {
-            // 시간대마다 spaceCount -1
-            TimeStatus findTimeStatus = timeStatusRepository.findByHostingTimeIdAndStartTime(findHostingTime.get().getId(), i);
-            findTimeStatus.reduceSpaceCount();
-
-            // spaceCount의 값과 maxSpace의 값이 같지 않으면 isFull = false
-            if (!findTimeStatus.getSpaceCount().equals(findPlace.getMaxSpace())) {
-                findTimeStatus.setIsNotFull();
-            }
-
-            timeStatusRepository.save(findTimeStatus);
-        }
+        mbtiCountService.reduceMbtiCount(findMember, findReserve.getPlaceId());
 
         // 예약 상태 변경 ... -> RESERVATION_CANCELED
         findReserve.setStatus(Reserve.ReserveStatus.RESERVATION_CANCELED);
-        reserveRepository.save(findReserve);
-
-        // 예약 취소 사유 입력
-        CancelReason cancelReason = CancelReason.builder()
-                .reason(cancel.getReason())
-                .reserveId(reserveId)
-                .memberId(memberId)
-                .build();
-        cancelReasonRepository.save(cancelReason);
+        reserveDbService.saveReserve(findReserve);
     }
 
 
@@ -444,14 +346,12 @@ public class ReserveService {
      */
     public void updateReserve(ReserveDto.Patch patch, Long reserveId, String refreshToken) {
         Long memberId = redisUtils.getId(refreshToken);
-        Reserve findReserve = reserveRepository
-                .findById(reserveId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND)); // 추후 수정
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId); // 추후 수정
         if (!memberId.equals(findReserve.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
         findReserve.editReserve(patch.getCapacity(), patch.getStartTime(), patch.getEndTime());
-        reserveRepository.save(findReserve);
+        reserveDbService.saveReserve(findReserve);
     }
 
 
@@ -507,33 +407,6 @@ public class ReserveService {
 
 
     /* ------------------------------------ find Method --------------------------------------*/
-
-
-    /**
-     * 예약 정보 조회 메서드
-     *
-     * @param reserveId 예약 식별자
-     * @return Reserve
-     * @author mozzi327
-     */
-    private Reserve ifExistsReturnReserve(Long reserveId) {
-        return reserveRepository.findById(reserveId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND));
-    }
-
-
-    /**
-     * 사용자 정보 조회 메서드
-     *
-     * @param memberId 사용자 식별자
-     * @return Member
-     * @author mozzi327
-     */
-    private Member ifExistsReturnMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
 
     /**
      * 호스팅 정보 조회 메서드

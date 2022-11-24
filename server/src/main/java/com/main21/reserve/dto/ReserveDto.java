@@ -50,11 +50,6 @@ public class ReserveDto {
     }
 
     @Getter
-    public static class Cancel {
-        private String reason;
-    }
-
-    @Getter
     public static class Response implements Comparable<Response>{
 
         private Long reserveId;
