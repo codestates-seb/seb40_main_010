@@ -95,6 +95,8 @@ function SignUp() {
                     specialCheck: value =>
                       (value && /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi.test(value)) ||
                       '특수문자를 추가해주세요',
+                    spacecheck: value =>
+                      (value && /\s/gi.test(value)) || '공백을 제거해주세요',
                   },
                 })}
               />

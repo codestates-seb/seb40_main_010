@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
 import ReactDaumPost from 'react-daumpost-hook';
@@ -27,9 +27,10 @@ export default function Register() {
   const [title, setTitle] = useRecoilState(registerFormTitle);
   const [maxCapacity, setMaxCapacity] = useRecoilState(registerFormMaxCapacity);
   const [address, setAddress] = useRecoilState(registerFormAddress);
-  const [detailedAddress, setDetailedAddress] = useRecoilState(
-    registerFormDetailedAddress,
-  );
+  // const [detailedAddress, setDetailedAddress] = useRecoilState(
+  //   registerFormDetailedAddress,
+  // );
+  const setDetailedAddress = useSetRecoilState(registerFormDetailedAddress);
   const [detailedInformation, setDetailedInformation] = useRecoilState(
     registerFormDetailedInformation,
   );
@@ -89,6 +90,13 @@ export default function Register() {
 
   const postCode = ReactDaumPost(postConfig);
 
+  // formData.append('title', title);
+  // formData.append('category', checkedList);
+  // formData.append('maxCapacity', maxCapacity);
+  // formData.append('address', address);
+  // formData.append('detailedAddress', detailedAddress);
+  // formData.append('detailInfo', detailedInformation);
+  // formData.append('charge', charge);
   const handleSubmit = async () => {
     const json = JSON.stringify({
       title,

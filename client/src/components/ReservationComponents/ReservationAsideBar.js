@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -7,6 +7,7 @@ import {
   reservationStartDate,
   reservationEndDate,
   reservationMaxCapacity,
+  PlaceIDState,
 } from '../../atoms';
 
 import ReservationCalendar from './ReservationCalendar';
@@ -19,6 +20,7 @@ function ReservationAsideBar() {
   const [startDate, setStartDate] = useRecoilState(reservationStartDate);
   const [endDate, setEndDate] = useRecoilState(reservationEndDate);
   const [capacity, setCapacity] = useRecoilState(reservationMaxCapacity);
+  const placeId = useRecoilValue(PlaceIDState);
 
   const timeDiff = new Date(endDate).getTime() - new Date(startDate).getTime();
   const reservedTimeRange = timeDiff / (1000 * 60 * 60);
@@ -31,18 +33,40 @@ function ReservationAsideBar() {
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-  const handleSubmit = () => {
-    const article = {
+  const handleSubmit = async event => {
+    event.preventDefault();
+    // const header = {
+    //   headers: {
+    //     Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+    //     RefreshToken: localStorage.getItem('REFRESH'),
+    //   },
+    // };
+    const reservationInformation = {
       startTime: startDate,
       endTime: endDate,
       capacity,
     };
-    axios.post('http://localhost:3001/reserve', article);
-    alert('결제하시겠습니까?');
+    try {
+      const response = await axios.post(
+        `/place/${placeId}/reserve`,
+        reservationInformation,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+            RefreshToken: localStorage.getItem('REFRESH'),
+          },
+        },
+      );
+      console.log(response);
+      // localStorage.setItem('ACCESS', response.headers.authorization);
+      // localStorage.setItem('REFRESH', response.headers.refreshtoken);
+    } catch (err) {
+      console.log('Error >>', err);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <Container>
         <OuterWrapper display="flex" alignItems="flex-end">
           <div className="hour-charge">{chargePerHourString}원</div>
@@ -79,6 +103,7 @@ function ReservationAsideBar() {
           </>
         ) : null}
         <button
+          onClick={handleSubmit}
           type="submit"
           className="reservation-button"
           disabled={!(startDate && endDate)}
@@ -104,6 +129,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0px 30px;
+  margin-bottom: 10px;
 
   .hour-charge {
     display: flex;

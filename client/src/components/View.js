@@ -11,11 +11,17 @@ function View() {
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
   const placeId = useRecoilValue(PlaceIDState);
+  const header = {
+    headers: {
+      'ngrok-skip-browser-warning': '010',
+    },
+  };
+
   const callDetailData = async () => {
     try {
-      const response = await axios.get(`/place/${placeId}`);
+      const response = await axios.get(`/place/${placeId}`, header);
       setDetailInformation(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -33,15 +39,15 @@ function View() {
           <FadeCarousel />
         </CarouselImageContainer>
         <InformationMiniImageContainer>
-          {/* {detailInformation.image &&
-            detailInformation.image.map(placeImage => {
+          {detailInformation.filePath &&
+            detailInformation.filePath.map(placeImage => {
               return <InformationMiniImage key={placeImage} src={placeImage} />;
-            })} */}
+            })}
 
-          <InformationMiniImage
+          {/* <InformationMiniImage
             key={detailInformation.placeImage}
             src={detailInformation.placeImage}
-          />
+          /> */}
         </InformationMiniImageContainer>
         <DetailTitle>상세 정보</DetailTitle>
         <DetailTagContainer>
@@ -67,7 +73,7 @@ const ViewContainer = styled.div`
   margin: auto;
   width: 720px;
   border-bottom: 2px solid #89bbff;
-  margin-bottom: 10px;
+  padding-bottom: 10px;
 `;
 
 const InformationContainer = styled.div`

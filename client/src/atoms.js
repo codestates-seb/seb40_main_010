@@ -1,4 +1,7 @@
 import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
+
+const { persistAtom } = recoilPersist();
 
 export const registerFormTitle = atom({
   key: 'registerFormTitle',
@@ -93,6 +96,7 @@ export const mainDataState = atom({
 export const PlaceIDState = atom({
   key: 'PlaceIDState',
   default: '',
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const DetailInformation = atom({
@@ -108,4 +112,9 @@ export const reservationStartCalendarSelectedDay = atom({
 export const reservationEndCalendarSelectedDay = atom({
   key: 'reservationEndCalendarSelectedDay',
   default: false,
+});
+
+export const mbtiPlaceDataState = atom({
+  key: 'mbtiPlaceDataState',
+  default: [],
 });

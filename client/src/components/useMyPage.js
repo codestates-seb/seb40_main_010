@@ -11,6 +11,7 @@ const useMyPage = () => {
 
   const header = {
     headers: {
+      'ngrok-skip-browser-warning': '010',
       Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
       RefreshToken: localStorage.getItem('REFRESH'),
     },
@@ -89,8 +90,8 @@ const useMyPage = () => {
       const response = await axios.get('/member', header);
       console.log(response.data);
       setMemberData(response.data);
-      setUserNickName(response.data[0].nickname);
-      setUserMBTI(response.data[0].mbti);
+      setUserNickName(response.data.nickname);
+      setUserMBTI(response.data.mbti);
     } catch (err) {
       console.log(err);
     }

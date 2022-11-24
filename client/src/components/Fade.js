@@ -32,8 +32,8 @@ function Fade() {
   return (
     <div>
       <StyledSlide {...settings}>
-        {detailInformation.image &&
-          detailInformation.image.map(el => {
+        {detailInformation.filePath &&
+          detailInformation.filePath.map(el => {
             return (
               <SlickImageContainer key={el}>
                 <SlickImage src={el} />
@@ -48,8 +48,8 @@ function Fade() {
 export default Fade;
 
 const StyledSlide = styled(Slider)`
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   .slick-slider {
     z-index: -1;
   }
@@ -86,8 +86,8 @@ const StyledSlide = styled(Slider)`
     color: #89bbff;
   }
   .slick-list {
-    width: 500px;
-    height: 500px;
+    width: 600px;
+    height: 600px;
     margin-top: 20px;
     overflow: hidden;
   }
@@ -123,8 +123,8 @@ const NextTo = styled.div`
 `;
 
 const SlickImage = styled.img`
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 `;
