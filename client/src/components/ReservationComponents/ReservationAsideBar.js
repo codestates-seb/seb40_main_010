@@ -24,14 +24,12 @@ function ReservationAsideBar({ charge }) {
 
   const timeDiff = new Date(endDate).getTime() - new Date(startDate).getTime();
   const reservedTimeRange = timeDiff / (1000 * 60 * 60);
+
   const chargePerHour = charge;
-  const chargePerHourString = chargePerHour
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const chargePerHourString = new Intl.NumberFormat('ko-KR').format(charge);
+
   const totalCharge = reservedTimeRange * chargePerHour;
-  const totalChargeString = totalCharge
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const totalChargeString = new Intl.NumberFormat('ko-KR').format(totalCharge);
 
   const handleSubmit = async event => {
     event.preventDefault();
