@@ -86,11 +86,13 @@ function SignUp() {
                     message: '8자리 이상 비밀번호를 사용하세요.',
                   },
                   validate: {
-                    numcheck: value =>
+                    spaceCheck: value =>
+                      (value && value.search(/\s/) === -1) || '공백이 있습니다',
+                    numCheck: value =>
                       (value && /[0-9]/g.test(value)) || '숫자를 추가해주세요',
-                    lettercheck: value =>
+                    letterCheck: value =>
                       (value && /[a-z]/gi.test(value)) || '영어를 추가해주세요',
-                    specialcheck: value =>
+                    specialCheck: value =>
                       (value && /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi.test(value)) ||
                       '특수문자를 추가해주세요',
                   },
@@ -102,13 +104,16 @@ function SignUp() {
               {errors.password && errors.password.type === 'minLength' && (
                 <div className="alert">{errors.password.message}</div>
               )}
-              {errors.password && errors.password.type === 'numcheck' && (
+              {errors.password && errors.password.type === 'numCheck' && (
                 <div className="alert">{errors.password.message}</div>
               )}
-              {errors.password && errors.password.type === 'lettercheck' && (
+              {errors.password && errors.password.type === 'letterCheck' && (
                 <div className="alert">{errors.password.message}</div>
               )}
-              {errors.password && errors.password.type === 'specialcheck' && (
+              {errors.password && errors.password.type === 'specialCheck' && (
+                <div className="alert">{errors.password.message}</div>
+              )}
+              {errors.password && errors.password.type === 'spaceCheck' && (
                 <div className="alert">{errors.password.message}</div>
               )}
             </div>
@@ -143,8 +148,8 @@ function SignUp() {
                   },
                 })}
               />
-              {errors.userName && (
-                <div className="alert">{errors.userName.message}</div>
+              {errors.nickname && (
+                <div className="alert">{errors.nickname.message}</div>
               )}
             </div>
             <div className="wrapper">
