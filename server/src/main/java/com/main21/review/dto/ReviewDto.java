@@ -2,6 +2,7 @@ package com.main21.review.dto;
 
 import com.main21.member.entity.Member;
 import com.main21.place.entity.Place;
+import com.main21.place.entity.PlaceImage;
 import com.main21.review.entity.Review;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
@@ -65,6 +66,7 @@ public class ReviewDto {
         private final LocalDateTime createdAt;
 
         private final Long placeId;
+        private final String filePath;
 
         @Builder
         @QueryProjection
@@ -75,6 +77,7 @@ public class ReviewDto {
             this.comment = review.getComment();
             this.createdAt = review.getCreatedAt();
             this.placeId = place.getId();
+            this.filePath = place.getPlaceImages().get(0).getFilePath();
         }
     }
 }
