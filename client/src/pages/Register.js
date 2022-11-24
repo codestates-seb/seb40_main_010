@@ -90,29 +90,34 @@ export default function Register() {
   const postCode = ReactDaumPost(postConfig);
 
   const handleSubmit = async () => {
+    const json = JSON.stringify({
+      title,
+      maxCapacity,
+      categoryList: checkedList,
+      address,
+      detailInfo: detailedInformation,
+      charge,
+    });
+    const blob = new Blob([json], { type: 'application/json' });
+
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('category', checkedList);
-    formData.append('maxCapacity', maxCapacity);
-    formData.append('address', address);
-    formData.append('detailedAddress', detailedAddress);
-    formData.append('detailInfo', detailedInformation);
-    formData.append('charge', charge);
+    formData.append('key', blob);
     images.forEach(file => {
-      formData.append('image', file, file.name);
+      formData.append('file', file, file.name);
     });
 
     try {
       await axios.post(`/place/post`, formData, {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-        RefreshToken: localStorage.getItem('REFRESH'),
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+          RefreshToken: localStorage.getItem('REFRESH'),
+        },
       });
     } catch (err) {
       console.log('Error >>', err);
     }
   };
-
   return (
     <>
       <Nav />
@@ -137,7 +142,7 @@ export default function Register() {
                 {title.length > 20 && (
                   <Validation>제목을 20글자 이내로 작성해주세요</Validation>
                 )}
-                {title.length < 1 && (
+                {title.trim().length < 1 && (
                   <Validation>제목을 작성해주세요</Validation>
                 )}
               </>
