@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Nav';
 import View from '../components/View';
+import ReviewContainer from '../components/ReviewContainer';
 // import { PlaceIDState } from '../atoms';
 
 function Detail() {
@@ -22,13 +23,16 @@ function Detail() {
   // }, []); // > 실제 api
 
   return (
-    <DetailContainer>
-      <DetailViewContainer>
-        <Nav />
-        <View />
-      </DetailViewContainer>
-      <ReservationAsideBar />
-    </DetailContainer>
+    <DetailReviewContainer>
+      <DetailContainer>
+        <DetailViewContainer>
+          <Nav />
+          <View />
+        </DetailViewContainer>
+        <ReservationAsideBar />
+      </DetailContainer>
+      <ReviewContainer />
+    </DetailReviewContainer>
   );
 }
 
@@ -40,3 +44,10 @@ const DetailContainer = styled.div`
   justify-content: center;
 `;
 const DetailViewContainer = styled.div``;
+
+const DetailReviewContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+`;
