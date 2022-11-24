@@ -2,12 +2,13 @@ import React from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { BsFillPersonFill } from 'react-icons/bs';
 import styled from 'styled-components';
+import axios from 'axios';
 
 export function NavLeftButtonContainer({ buttonColor }) {
   const logInUrl = useMatch('/log-in');
   const registerUrl = useMatch('/register');
 
-  const isLogIn = localStorage.getItem('AccessToken');
+  const isLogIn = localStorage.getItem('ACCESS');
 
   if (registerUrl || logInUrl) return null;
 
@@ -29,10 +30,17 @@ export function NavRightButtonContainer() {
   const signUpUrl = useMatch('/sign-up');
   const myPageUrl = useMatch('/my-page');
 
-  const isLogIn = localStorage.getItem('AccessToken');
+  const isLogIn = localStorage.getItem('ACCESS');
 
-  const onClickLogOutButton = () => {
-    localStorage.removeItem('AccessToken');
+  const onClickLogOutButton = async () => {
+    await axios.delete('/auth/logout', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+        RefreshToken: `${localStorage.getItem('REFRESH')}`,
+      },
+    });
+    localStorage.removeItem('ACCESS');
+    localStorage.removeItem('REFRESH');
   };
 
   if (signUpUrl) return null;

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { SlHome } from 'react-icons/sl';
 
-import { navSearchValue, categoryFocus } from '../atoms';
+import { navSearchValue, categoryFocus } from '../../atoms';
 import { NavLeftButtonContainer, NavRightButtonContainer } from './NavButton';
 
 function Nav({ navColor, buttonColor }) {
@@ -81,7 +81,7 @@ function Nav({ navColor, buttonColor }) {
       <NavBackground navColor={navColor}>
         <Link to="/">
           <SlHome onClick={onClickHomeIcon} className="NavLogo" />
-          <div />
+          <div className="structure" />
         </Link>
         <SearchContainer onSubmit={onSubmit}>
           <SearchInput value={currentSearch} onChange={onChangeSearch} />
@@ -116,9 +116,10 @@ const NavBackground = styled.div`
   background-color: ${props => props.navColor || '#89bbff'};
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
-  & > div {
-    margin-left: 136px;
+  .structure {
+    width: 116px;
   }
+
   .NavLogo {
     font-size: 2rem;
     padding-right: 20px;
@@ -176,4 +177,5 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-right: 20px;
+  margin-left: 20px;
 `;

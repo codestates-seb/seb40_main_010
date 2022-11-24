@@ -5,13 +5,15 @@ import styled from 'styled-components';
 // import { useRecoilValue } from 'recoil';
 
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
-import Nav from '../components/Nav';
+import Nav from '../components/Navigation.js/Nav';
 import View from '../components/View';
 import ReviewContainer from '../components/ReviewContainer';
 // import { PlaceIDState } from '../atoms';
 
+// ToDo api 3개 불러오기
 function Detail() {
   // ToDo : 예약, 북마크, 상세정보 get
+
   // const [detailInformation, setDetailInformation] =
   //   useRecoilState(DetailInformation);
   // const placeId = useRecoilValue(PlaceIDState);

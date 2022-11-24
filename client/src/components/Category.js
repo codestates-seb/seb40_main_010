@@ -3,10 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { navSearchValue, categoryFocus } from '../atoms';
+import { navSearchValue, categoryFocus, mainDataState } from '../atoms';
 
 function Category() {
   const [focusCategoryID, setFocusCategoryID] = useRecoilState(categoryFocus);
+  const [mainPlaceData, setMainPlaceData] = useRecoilState(mainDataState);
+
   const searchState = useRecoilValue(navSearchValue);
 
   const categories = [
@@ -23,32 +25,36 @@ function Category() {
     { categoryId: 10, name: '공연장', icon: 'fa-solid fa-microphone' },
   ];
 
-  const onClickCategoryButton = (e, idx) => {
+  const onClickCategoryButton = async (e, idx) => {
     // console.log(typeof idx);
     setFocusCategoryID(idx);
 
     const getURL = (index, search) => {
       if (index === 0 && search) {
-        return `{{BACKEND}}/search/${encodeURI(search)}`;
+        return `/search/${encodeURI(search)}`;
       }
       if (index === 0 && !search) {
-        return `{{BACKEND}}/`;
+        return `/home`;
       }
       if (index !== 0 && search) {
-        return `{{BACKEND}}/category/${index}/search/${encodeURI(search)}`;
+        return `/category/${index}/search/${encodeURI(search)}`;
       }
       if (index !== 0 && !search) {
-        return `{{BACKEND}}/category/${index}/search`;
+        return `/category/${index}/search`;
       }
       return '';
     };
 
     const url = getURL(idx, searchState);
 
-    axios
-      .get(url)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+    try {
+      const response = await axios.get(url);
+      console.log(response);
+      setMainPlaceData(response.data.data);
+      console.log(mainPlaceData);
+    } catch (error) {
+      console.log('Error', error);
+    }
   };
 
   return (
