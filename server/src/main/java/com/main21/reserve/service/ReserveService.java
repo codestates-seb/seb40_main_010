@@ -13,6 +13,7 @@ import com.main21.reserve.dto.ReserveDto;
 import com.main21.reserve.entity.*;
 import com.main21.reserve.event.OutBoxEventBuilder;
 import com.main21.reserve.event.ReserveCreated;
+import com.main21.reserve.feign.KaKaoFeignClient;
 import com.main21.reserve.repository.*;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 import static com.main21.reserve.utils.PayConstants.*;
@@ -74,6 +77,7 @@ public class ReserveService {
     private final PlaceRepository placeRepository;
     private final MbtiCountRepository mbtiCountRepository;
     private final CancelReasonRepository cancelReasonRepository;
+    private KaKaoFeignClient kaKaoFeignClient;
 
     private final RedisUtils redisUtils;
 
@@ -201,6 +205,7 @@ public class ReserveService {
 
         // 헤더에 정보 추가
         HttpHeaders headers = new HttpHeaders();
+
         setHeaders(headers);
 
         // 사용자, 예약, 호스트 정보 조회
@@ -219,8 +224,9 @@ public class ReserveService {
         params.add(PARTNER_ORDER_ID, orderId);
         params.add(PARTNER_USER_ID, userId);
         params.add(ITEM_NAME, itemName);
-        params.add(QUANTITY, Long.toString(quantity));
+        params.add(QUANTITY, String.valueOf(quantity));
         params.add(TOTAL_AMOUNT, totalAmount.toString());
+        params.add(VAL_AMOUNT, String.valueOf(findPlace.getCharge()));
         params.add(TAX_FREE_AMOUNT, String.valueOf(taxFreeAmount));
 
         /*
@@ -313,11 +319,25 @@ public class ReserveService {
      * @return payReadyDto.getNextRedirectPcUrl() or null
      * @author mozzi327
      */
-    private String getPayUrl(HttpHeaders headers,
+    private String getPayUrl(MultiValueMap<String, String> headers,
                              MultiValueMap<String, String> params) {
+
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<>(params, headers);
 
         try {
+//            payReadyDto = kaKaoFeignClient.readyForPayment(
+//                    params.get(CID).toString(),
+//                    params.get(PARTNER_ORDER_ID).toString(),
+//                    params.get(PARTNER_USER_ID).toString(),
+//                    params.get(ITEM_NAME).toString(),
+//                    params.get(QUANTITY).toString(),
+//                    params.get(TOTAL_AMOUNT).toString(),
+//                    params.get(VAL_AMOUNT).toString(),
+//                    params.get(TAX_FREE_AMOUNT).toString(),
+//                    params.get(APPROVAL_URL).toString(),
+//                    params.get(FAIL_URL).toString(),
+//                    params.get(CANCEL_URL).toString());
+
             payReadyDto = restTemplate.postForObject(host + kakaoPayReady,
                     body, PayReadyDto.class);
 
@@ -464,9 +484,10 @@ public class ReserveService {
         restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
-        headers.add(AUTHORIZATION, KAKAO_AK + adminKey);
         headers.add(ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        headers.add(AUTHORIZATION, KAKAO_AK + adminKey);
         headers.add(CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE + UTF_8);
+
     }
 
 

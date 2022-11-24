@@ -5,6 +5,7 @@ public class PayConstants {
     public static final String PARTNER_ORDER_ID = "partner_order_id";
     public static final String PARTNER_USER_ID = "partner_user_id";
     public static final String TOTAL_AMOUNT = "total_amount";
+    public static final String VAL_AMOUNT = "val_amount";
     public static final String ITEM_NAME = "item_name";
     public static final String ITEM_CODE = "item_code";
     public static final String QUANTITY = "quantity";
