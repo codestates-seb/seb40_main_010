@@ -25,7 +25,7 @@ function RegisterImages({ images, setImages }) {
   // eslint-disable-next-line consistent-return
   async function handleImageCompress(file) {
     const options = {
-      maxSizeMB: 0.01,
+      maxSizeMB: 0.1,
       maxWidthOrHeight: 1000,
     };
     try {

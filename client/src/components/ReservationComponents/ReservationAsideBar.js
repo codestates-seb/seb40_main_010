@@ -35,12 +35,7 @@ function ReservationAsideBar() {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    // const header = {
-    //   headers: {
-    //     Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-    //     RefreshToken: localStorage.getItem('REFRESH'),
-    //   },
-    // };
+
     const reservationInformation = {
       startTime: startDate,
       endTime: endDate,
@@ -58,8 +53,8 @@ function ReservationAsideBar() {
         },
       );
       console.log(response);
-      // localStorage.setItem('ACCESS', response.headers.authorization);
-      // localStorage.setItem('REFRESH', response.headers.refreshtoken);
+      setStartDate(false);
+      setEndDate(false);
     } catch (err) {
       console.log('Error >>', err);
     }
