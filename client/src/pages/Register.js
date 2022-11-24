@@ -87,7 +87,7 @@ export default function Register() {
 
   const postCode = ReactDaumPost(postConfig);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('category', checkedList);
@@ -100,15 +100,16 @@ export default function Register() {
       formData.append('image', file, file.name);
     });
 
-    axios({
-      method: 'post',
-      url: `http://localhost:3001/place`,
-      data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    try {
+      await axios.post(`/place/post`, formData, {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+        RefreshToken: localStorage.getItem('REFRESH'),
+      });
+    } catch (err) {
+      console.log('Error >>', err);
+    }
   };
-
-  console.log(charge);
 
   return (
     <>
@@ -118,16 +119,24 @@ export default function Register() {
           <Wrapper>
             <Title>제목</Title>
             {editData ? (
-              <Input
-                onChange={editHandleChange}
-                value={editData.title}
-                name="title"
-              />
+              <>
+                <Input
+                  onChange={editHandleChange}
+                  value={editData.title}
+                  name="title"
+                />
+                {editData.title.length > 20 && (
+                  <Validation>제목을 20글자 이내로 작성해주세요</Validation>
+                )}
+              </>
             ) : (
               <>
                 <Input onChange={handleChange} name="title" />
                 {title.length > 20 && (
-                  <Validation>제목을 20글자 이내로 줄여주세요</Validation>
+                  <Validation>제목을 20글자 이내로 작성해주세요</Validation>
+                )}
+                {title.length < 1 && (
+                  <Validation>제목을 작성해주세요</Validation>
                 )}
               </>
             )}
@@ -179,14 +188,19 @@ export default function Register() {
           <Wrapper>
             <Title>주소</Title>
             {editData ? (
-              <Input
-                type="text"
-                onClick={() => postCodeEdit()}
-                value={editData.address}
-                onChange={editHandleChange}
-                readOnly
-                name="address"
-              />
+              <>
+                <Input
+                  type="text"
+                  onClick={() => postCodeEdit()}
+                  value={editData.address}
+                  onChange={editHandleChange}
+                  readOnly
+                  name="address"
+                />
+                {!editData.address && (
+                  <Validation>주소를 입력해주세요</Validation>
+                )}
+              </>
             ) : (
               <>
                 <Input
@@ -230,13 +244,16 @@ export default function Register() {
             <div className="set-charge">
               <div className="hour-description">1시간 / </div>
               {editData ? (
-                <SmallInput
-                  type="number"
-                  width="100px"
-                  onChange={editHandleChange}
-                  value={editData.charge}
-                  name="charge"
-                />
+                <>
+                  <SmallInput
+                    type="number"
+                    width="100px"
+                    onChange={editHandleChange}
+                    value={editData.charge}
+                    name="charge"
+                  />
+                  {charge < 1 && <Validation>금액을 설정해주세요</Validation>}
+                </>
               ) : (
                 <SmallInput
                   type="number"
@@ -255,11 +272,13 @@ export default function Register() {
               className="form-register-button"
               onClick={handleSubmit}
               disabled={
-                title.length < 20 &&
-                checkedList.length > 1 &&
-                address &&
-                images.length >= 1 &&
-                charge > 0
+                !(
+                  title.length < 20 &&
+                  checkedList.length > 0 &&
+                  address &&
+                  images.length > 0 &&
+                  charge > 0
+                )
               }
             >
               등록하기
@@ -300,7 +319,7 @@ const Container = styled.div`
     :disabled {
       cursor: not-allowed;
       opacity: 0.7;
-      box-shadow: none;
+      box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
     }
   }
 
@@ -403,7 +422,7 @@ const SmallInput = styled.input`
 const Textarea = styled.textarea`
   width: 94%;
   height: 200px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   outline: none;
   border: 3px solid #96c2ff;
   border-radius: 5px;
