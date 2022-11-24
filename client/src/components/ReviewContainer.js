@@ -49,25 +49,29 @@ function ReviewContainer(placeId) {
 
   return (
     <ReviewsContainer>
-      <ReviewHeadContainer>
-        <ReviewCount>리뷰 {reviews.length}개</ReviewCount>
-        <ReviewFilter>≡</ReviewFilter>
-      </ReviewHeadContainer>
-      {reviews.map(el => {
-        return <Review reviewData={el} key={el.reviewId} />;
-      })}
+      <ReviewBorder>
+        <ReviewHeadContainer>
+          <ReviewCount>리뷰 {reviews.length}개</ReviewCount>
+          <ReviewFilter>≡</ReviewFilter>
+        </ReviewHeadContainer>
+        {reviews.map(el => {
+          return <Review reviewData={el} key={el.reviewId} />;
+        })}
+      </ReviewBorder>
     </ReviewsContainer>
   );
 }
 
 const ReviewsContainer = styled.div`
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   background-color: #ffffff;
   flex-direction: column;
-  border: 1px solid red;
-  width: 1000px;
+  width: 1070px;
+  padding-left: 35px;
+  margin-bottom: 3rem;
 `;
 
 const ReviewHeadContainer = styled.div`
@@ -75,6 +79,8 @@ const ReviewHeadContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
 `;
 
 const ReviewCount = styled.p`
@@ -85,7 +91,13 @@ const ReviewFilter = styled.div`
   cursor: pointer;
   font-size: 24px;
   font-weight: bold;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
+`;
+
+const ReviewBorder = styled.div`
+  width: 100%;
+  border-top: 2px solid #89bbff;
+  border-bottom: 2px solid #89bbff;
 `;
 
 export default ReviewContainer;
