@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
 import ReactDaumPost from 'react-daumpost-hook';
@@ -15,6 +15,7 @@ import {
   registerFormCharge,
   registerFormItemsCheckedState,
   registerFormImage,
+  registerFormPreviewImage,
   reservationEditData,
 } from '../atoms';
 
@@ -39,6 +40,7 @@ export default function Register() {
     registerFormItemsCheckedState,
   );
   const [images, setImages] = useRecoilState(registerFormImage);
+  const setPreviewImages = useSetRecoilState(registerFormPreviewImage);
 
   const [editData, setEditData] = useRecoilState(reservationEditData);
 
@@ -90,13 +92,6 @@ export default function Register() {
 
   const postCode = ReactDaumPost(postConfig);
 
-  // formData.append('title', title);
-  // formData.append('category', checkedList);
-  // formData.append('maxCapacity', maxCapacity);
-  // formData.append('address', address);
-  // formData.append('detailedAddress', detailedAddress);
-  // formData.append('detailInfo', detailedInformation);
-  // formData.append('charge', charge);
   const handleSubmit = async () => {
     const json = JSON.stringify({
       title,
@@ -123,11 +118,17 @@ export default function Register() {
           RefreshToken: localStorage.getItem('REFRESH'),
         },
       });
+      setCheckedList([]);
+      setAddress('');
+      setImages([]);
+      setPreviewImages([]);
       navigator('/');
     } catch (err) {
       console.log('Error >>', err);
     }
   };
+
+  console.log(checkedList);
   return (
     <>
       <Nav />

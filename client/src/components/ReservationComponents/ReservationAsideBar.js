@@ -54,7 +54,7 @@ function ReservationAsideBar() {
         JSON.stringify(reservationInformation),
         header,
       );
-      console.log(response);
+      // console.log(response);
       setStartDate(false);
       setEndDate(false);
     } catch (err) {
