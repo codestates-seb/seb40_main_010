@@ -72,7 +72,6 @@ const ViewContainer = styled.div`
   margin-top: 80px;
   margin: auto;
   width: 720px;
-  border-bottom: 2px solid #89bbff;
   padding-bottom: 10px;
 `;
 
