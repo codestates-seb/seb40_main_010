@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
 import ReactDaumPost from 'react-daumpost-hook';
@@ -27,10 +27,9 @@ export default function Register() {
   const [title, setTitle] = useRecoilState(registerFormTitle);
   const [maxCapacity, setMaxCapacity] = useRecoilState(registerFormMaxCapacity);
   const [address, setAddress] = useRecoilState(registerFormAddress);
-  // const [detailedAddress, setDetailedAddress] = useRecoilState(
-  //   registerFormDetailedAddress,
-  // );
-  const setDetailedAddress = useSetRecoilState(registerFormDetailedAddress);
+  const [detailedAddress, setDetailedAddress] = useRecoilState(
+    registerFormDetailedAddress,
+  );
   const [detailedInformation, setDetailedInformation] = useRecoilState(
     registerFormDetailedInformation,
   );
@@ -103,6 +102,7 @@ export default function Register() {
       maxCapacity,
       categoryList: checkedList,
       address,
+      detailedAddress,
       detailInfo: detailedInformation,
       charge,
     });
