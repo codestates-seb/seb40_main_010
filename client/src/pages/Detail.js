@@ -5,7 +5,7 @@ import styled from 'styled-components';
 // import { useRecoilValue } from 'recoil';
 
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
-import Nav from '../components/Navigation.js/Nav';
+import Nav from '../components/Navigation/Nav';
 import View from '../components/View';
 import ReviewContainer from '../components/ReviewContainer';
 // import { PlaceIDState } from '../atoms';
