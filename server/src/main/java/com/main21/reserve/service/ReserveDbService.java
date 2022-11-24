@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ReserveDbService {
@@ -48,5 +50,16 @@ public class ReserveDbService {
      */
     public Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable) {
         return reserveRepository.getReservation(memberId, pageable);
+    }
+
+    /**
+     * 예약 정보 전체 조회 메서드
+     *
+     * @param placeId
+     * @return
+     * @author LeeGoh
+     */
+    public List<Reserve> findAllByReserves(Long placeId) {
+        return reserveRepository.findAllByPlaceId(placeId);
     }
 }

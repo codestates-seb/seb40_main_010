@@ -1,8 +1,10 @@
 package com.main21.place.dto;
 
 import com.main21.place.entity.PlaceImage;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;

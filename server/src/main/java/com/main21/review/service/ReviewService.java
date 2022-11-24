@@ -1,12 +1,10 @@
 package com.main21.review.service;
 
-import com.main21.common.CommonService;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.place.entity.Place;
-import com.main21.place.repository.PlaceRepository;
+import com.main21.place.service.PlaceDbService;
 import com.main21.reserve.entity.Reserve;
-import com.main21.reserve.repository.ReserveRepository;
 import com.main21.reserve.service.ReserveDbService;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
@@ -17,18 +15,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
-
 import static com.main21.reserve.entity.Reserve.ReserveStatus.PAY_IN_PROGRESS;
 
 @Service
 @RequiredArgsConstructor
 
 public class ReviewService {
-    private final ReviewRepository reviewRepository;
-    private final PlaceRepository placeRepository;
+    private final PlaceDbService placeDbService;
     private final RedisUtils redisUtils;
     private final ReserveDbService  reserveDbService;
     private final ReviewDbService reviewDbService;
@@ -57,8 +50,8 @@ public class ReviewService {
                 .comment(post.getComment())
                 .memberId(memberId)
                 .placeId(placeId).build();
-        reviewRepository.save(review);
-        Place findPlace = commonService.ifExistsReturnPlace(placeId);
+        reviewDbService.saveReview(review);
+        Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
         modifyScore(findPlace, findPlace.getTotalScore() + review.getScore(), placeId);
     }
@@ -78,14 +71,13 @@ public class ReviewService {
         if (!memberId.equals(findReview.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
-        Place findPlace = placeRepository.findById(findReview.getPlaceId())
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+        Place findPlace = placeDbService.ifExistsReturnPlace(findReview.getPlaceId());
 
         findPlace.setTotalScore(findPlace.getTotalScore() - findReview.getScore());
-        placeRepository.save(findPlace);
+        placeDbService.savePlace(findPlace);
 
         findReview.editReview(patch.getScore(), patch.getComment());
-        reviewRepository.save(findReview);
+        reviewDbService.saveReview(findReview);
 
         modifyScore(findPlace, findPlace.getTotalScore() + findReview.getScore(), findReview.getPlaceId());
     }
@@ -98,7 +90,7 @@ public class ReviewService {
      * @author Quartz614
      */
     public Page<ReviewDto.Response> getPlaceReviews(Long placeId, Pageable pageable) {
-        return reviewRepository.getReviews(placeId, pageable);
+        return reviewDbService.getReviews(placeId, pageable);
     }
 
     /**
@@ -115,12 +107,11 @@ public class ReviewService {
         if (!memberId.equals(findReview.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
-        Place findPlace = placeRepository.findById(findReview.getPlaceId())
-                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+        Place findPlace = placeDbService.ifExistsReturnPlace(findReview.getPlaceId());
         findPlace.setTotalScore(findPlace.getTotalScore() - findReview.getScore());
 
-        placeRepository.save(findPlace);
-        reviewRepository.deleteById(reviewId);
+        placeDbService.savePlace(findPlace);
+        reviewDbService.deleteReview(reviewId);
 
         modifyScore(findPlace, findPlace.getTotalScore(), findPlace.getId());
 
@@ -137,16 +128,16 @@ public class ReviewService {
 
     public Page<ReviewDto.MyPage> getReviewsMypage(String refreshToken, Pageable pageable) {
         Long memberId = redisUtils.getId(refreshToken);
-        return reviewRepository.getReviewsMypage(memberId, pageable);
+        return reviewDbService.getReviewsMypage(memberId, pageable);
     }
 
     public void modifyScore(Place findPlace, Double totalScore, Long placeId) {
-        Long reviewer = reviewRepository.countByPlaceId(placeId);
+        Long reviewer = reviewDbService.countByPlaceId(placeId);
         String str = String.format("%.2f", totalScore / reviewer);
         double score = Double.parseDouble(str);
         findPlace.setTotalScore(totalScore);
         findPlace.setScore(score);
-        placeRepository.save(findPlace);
+        placeDbService.savePlace(findPlace);
     }
 }
 

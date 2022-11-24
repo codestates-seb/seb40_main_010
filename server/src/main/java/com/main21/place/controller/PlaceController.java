@@ -9,6 +9,7 @@ import com.main21.place.entity.PlaceCategory;
 import com.main21.place.entity.PlaceImage;
 import com.main21.place.repository.PlaceCategoryRepository;
 import com.main21.place.service.PlaceCategoryService;
+import com.main21.place.service.PlaceDbService;
 import com.main21.place.service.PlaceImageService;
 import com.main21.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +36,7 @@ import static com.main21.member.utils.AuthConstant.REFRESH_TOKEN;
 public class PlaceController {
 
     private final PlaceService placeService;
-    private final PlaceImageService placeImageService;
-    private final PlaceCategoryService placeCategoryService;
+    private final PlaceDbService placeDbService;
 
     /**
      * 장소 생성
@@ -91,7 +91,7 @@ public class PlaceController {
      */
     @GetMapping("/home")
     public ResponseEntity getPlacesPage(Pageable pageable) {
-        Page<PlaceDto.Response> pagePlace = placeService.getPlacesPage(pageable);
+        Page<PlaceDto.Response> pagePlace = placeDbService.getPlacesPage(pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
@@ -107,7 +107,7 @@ public class PlaceController {
     @GetMapping("/slice")
     public ResponseEntity getPlacesSlice(@CookieValue(name = "memberId", required = false) Long memberId,
                                          Pageable pageable) {
-        Slice<PlaceDto.Response> place = placeService.getPlacesSlice(pageable);
+        Slice<PlaceDto.Response> place = placeDbService.getPlacesSlice(pageable);
         return new ResponseEntity<>(place, HttpStatus.OK);
     }
      */
@@ -123,7 +123,7 @@ public class PlaceController {
     public ResponseEntity getCategoryPage(@PathVariable("category-id") Long categoryId,
                                           Pageable pageable) {
 
-        Page<PlaceCategoryDto.Response> pagePlace = placeService.getCategoryPage(categoryId, pageable);
+        Page<PlaceCategoryDto.Response> pagePlace = placeDbService.getCategoryPage(categoryId, pageable);
         List<PlaceCategoryDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
@@ -155,7 +155,7 @@ public class PlaceController {
     public ResponseEntity searchDetail(@RequestBody PlaceDto.SearchDetail searchDetail,
                                        Pageable pageable) {
 
-        Page<PlaceDto.Response> pagePlace = placeService.searchDetail(searchDetail, pageable);
+        Page<PlaceDto.Response> pagePlace = placeDbService.searchDetail(searchDetail, pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
@@ -170,7 +170,7 @@ public class PlaceController {
     @GetMapping("/search/{title:.+}")
     public ResponseEntity searchTitleAll(@PathVariable("title") String title,
                                          Pageable pageable) {
-        Page<PlaceDto.Response> pagePlace = placeService.searchTitleAll(title, pageable);
+        Page<PlaceDto.Response> pagePlace = placeDbService.searchTitleAll(title, pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
@@ -187,7 +187,7 @@ public class PlaceController {
     public ResponseEntity searchTitleCategory(@PathVariable("category-id") Long categoryId,
                                               @PathVariable("title") String title,
                                               Pageable pageable) {
-        Page<PlaceCategoryDto.Response> pagePlace = placeService.searchTitleCategory(categoryId, title, pageable);
+        Page<PlaceCategoryDto.Response> pagePlace = placeDbService.searchTitleCategory(categoryId, title, pageable);
         List<PlaceCategoryDto.Response> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
@@ -200,7 +200,7 @@ public class PlaceController {
     @GetMapping("/place")
     public ResponseEntity getPlaceMypage(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                          Pageable pageable) {
-        Page<PlaceDto.Response> hosting = placeService.getPlaceMypage(refreshToken, pageable);
+        Page<PlaceDto.Response> hosting = placeDbService.getPlaceMypage(refreshToken, pageable);
         List<PlaceDto.Response> place = hosting.getContent();
         return new ResponseEntity(new MultiResponseDto<>(place, hosting), HttpStatus.OK);
     }

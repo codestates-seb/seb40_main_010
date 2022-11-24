@@ -1,19 +1,12 @@
 package com.main21.reserve.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.main21.bookmark.dto.BookmarkDto;
-import com.main21.member.entity.Member;
 import com.main21.place.entity.Place;
 import com.main21.reserve.entity.Reserve;
-import com.main21.review.dto.ReviewDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class ReserveDto {
 
@@ -21,17 +14,12 @@ public class ReserveDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Post {
-        private Long id;
         @NotBlank
         private int capacity;
-        @CreatedDate
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-        private Date startTime;
-        @CreatedDate
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-        private Date endTime;
+
+        private LocalDateTime startTime;
+
+        private LocalDateTime endTime;
     }
     @Getter
     @NoArgsConstructor
@@ -39,14 +27,10 @@ public class ReserveDto {
     public static class Patch {
         @NotBlank
         private int capacity;
-        @CreatedDate
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-        private Date startTime;
-        @CreatedDate
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-        private Date endTime;
+
+        private LocalDateTime startTime;
+
+        private LocalDateTime endTime;
     }
 
     @Getter
@@ -60,13 +44,9 @@ public class ReserveDto {
         private String image;
         private int capacity;
 
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-        private Date startTime;
+        private LocalDateTime startTime;
 
-        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-        private Date endTime;
+        private LocalDateTime endTime;
 
         private Long totalCharge;
 

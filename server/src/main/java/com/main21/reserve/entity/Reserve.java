@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -23,13 +24,10 @@ public class Reserve {
     private Long id;
 
     private int capacity;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
+
+    private LocalDateTime startTime;
    
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+    private LocalDateTime endTime;
 
     private Long placeId;
 
@@ -47,8 +45,8 @@ public class Reserve {
 
     @Builder
     public Reserve(int capacity,
-                   Date startTime,
-                   Date endTime,
+                   LocalDateTime startTime,
+                   LocalDateTime endTime,
                    Long placeId,
                    Long memberId,
                    Long totalCharge) {
@@ -62,8 +60,8 @@ public class Reserve {
 
 
     public void editReserve(int capacity,
-                            Date startTime,
-                            Date endTime){
+                            LocalDateTime startTime,
+                            LocalDateTime endTime){
         this.capacity = capacity;
         this. startTime = startTime;
         this. endTime = endTime;
