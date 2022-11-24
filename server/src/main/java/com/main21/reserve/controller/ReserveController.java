@@ -188,9 +188,8 @@ public class ReserveController {
      */
     @DeleteMapping("/reserve/{reserve-id}")
     public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId,
-                                        @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
-                                        @RequestBody(required = false) ReserveDto.Cancel cancel) {
-        reserveService.deleteReserve(cancel, reserveId, refreshToken);
+                                        @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
+        reserveService.deleteReserve(reserveId, refreshToken);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
