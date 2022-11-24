@@ -8,29 +8,19 @@ import com.main21.file.FileHandler;
 import com.main21.file.S3Upload;
 import com.main21.file.UploadFile;
 import com.main21.member.entity.Member;
-import com.main21.member.repository.MemberRepository;
 import com.main21.member.service.MemberDbService;
 import com.main21.place.dto.*;
 
 import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceCategory;
 import com.main21.place.entity.PlaceImage;
-import com.main21.place.repository.PlaceCategoryRepository;
-import com.main21.place.repository.PlaceImageRepository;
-import com.main21.place.repository.PlaceRepository;
 import com.main21.reserve.entity.*;
-import com.main21.reserve.repository.HostingTimeRepository;
-import com.main21.reserve.repository.MbtiCountRepository;
-import com.main21.reserve.repository.ReserveRepository;
 import com.main21.reserve.service.MbtiCountService;
 import com.main21.reserve.service.ReserveDbService;
-import com.main21.review.repository.ReviewRepository;
 import com.main21.review.service.ReviewDbService;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,12 +69,10 @@ public class PlaceService {
                 .title(placePostDto.getTitle())
                 .detailInfo(placePostDto.getDetailInfo())
                 .maxCapacity(placePostDto.getMaxCapacity())
-                .maxSpace(placePostDto.getMaxSpace())
                 .address(placePostDto.getAddress())
                 .charge(placePostDto.getCharge())
                 .memberId(memberId)
                 .score(placePostDto.getScore())
-                .view(placePostDto.getView())
                 .endTime(placePostDto.getEndTime())
                 .build();
 
@@ -131,12 +119,10 @@ public class PlaceService {
                 .title(placePostDto.getTitle())
                 .detailInfo(placePostDto.getDetailInfo())
                 .maxCapacity(placePostDto.getMaxCapacity())
-                .maxSpace(placePostDto.getMaxSpace())
                 .address(placePostDto.getAddress())
                 .charge(placePostDto.getCharge())
                 .memberId(memberId)
                 .score(placePostDto.getScore())
-                .view(placePostDto.getView())
                 .endTime(placePostDto.getEndTime())
                 .build();
 
@@ -224,7 +210,6 @@ public class PlaceService {
         updatePlace.setAddress(placePatchDto.getAddress());
         updatePlace.setCharge(placePatchDto.getCharge());
         updatePlace.setMaxCapacity(placePatchDto.getMaxCapacity());
-        updatePlace.setMaxSpace(placePatchDto.getMaxSpace());
 
         List<PlaceCategory> dbCategoryList = placeCategoryService.findByAllPlaceCategoryList2(placeId); // db 저장 카테고리 목록
         List<String> categoryList = placePatchDto.getCategoryList(); // 전달되어온 카테고리 목록
@@ -288,7 +273,6 @@ public class PlaceService {
         updatePlace.setAddress(placePatchDto.getAddress());
         updatePlace.setCharge(placePatchDto.getCharge());
         updatePlace.setMaxCapacity(placePatchDto.getMaxCapacity());
-        updatePlace.setMaxSpace(placePatchDto.getMaxSpace());
 
         List<PlaceCategory> dbCategoryList = placeCategoryService.findByAllPlaceCategoryList2(placeId); // db 저장 카테고리 목록
         List<String> categoryList = placePatchDto.getCategoryList(); // 전달되어온 카테고리 목록

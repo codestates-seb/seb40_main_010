@@ -112,7 +112,12 @@ public class ReserveService {
                 .totalCharge((long) (((post.getEndTime().getHour() - post.getStartTime().getHour())) * findPlace.getCharge()))
                 .build();
 
-        reserveDbService.saveReserve(reserve);
+
+        // 최대 수용인원 초과 예약 금지
+        if (reserve.getCapacity() > findPlace.getMaxCapacity()) {
+            throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
+        } else reserveDbService.saveReserve(reserve);
+
         mbtiCountService.addMbtiCount(findMember, placeId);
     }
 

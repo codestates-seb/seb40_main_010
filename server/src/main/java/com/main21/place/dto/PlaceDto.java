@@ -1,8 +1,6 @@
 package com.main21.place.dto;
 
 import com.main21.place.entity.Place;
-import com.main21.place.entity.PlaceCategory;
-import com.main21.place.entity.PlaceImage;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +9,7 @@ import java.util.List;
 
 public class PlaceDto {
 
+    /*
     @Getter
     public static class Post {
         private String title;
@@ -21,6 +20,7 @@ public class PlaceDto {
         //        private List<PlaceImage> placeImages;
         private int charge;
     }
+    */
 
     @Getter
     public static class SearchDetail {
