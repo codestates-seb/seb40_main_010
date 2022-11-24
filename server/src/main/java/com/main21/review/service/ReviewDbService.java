@@ -2,12 +2,14 @@ package com.main21.review.service;
 
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
+import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
 import com.main21.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import javax.transaction.Transactional;
 
@@ -28,5 +30,70 @@ public class ReviewDbService {
     public Review ifExistsReturnReview(Long reviewId) {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.REVIEW_NOT_FOUND));
+    }
+
+    /**
+     * 호스트 페이지에서 리뷰 조회 로직
+     *
+     * @param placeId
+     * @param pageable
+     * @return
+     * @author Quartz614
+     */
+    public Page<ReviewDto.Response> getReviews(Long placeId, Pageable pageable) {
+        return reviewRepository.getReviews(placeId, pageable);
+    }
+
+    /**
+     * 마이페이지에서 등록한 리뷰 조회
+     *
+     * @param memberId
+     * @param pageable
+     * @return
+     * @author Quartz614
+     */
+    public Page<ReviewDto.MyPage> getReviewsMypage(Long memberId, Pageable pageable) {
+        return reviewRepository.getReviewsMypage(memberId, pageable);
+    }
+
+    /**
+     * 리뷰 저장 메서드
+     *
+     * @param review
+     * @author quartz614
+     */
+    public void saveReview(Review review) {
+        reviewRepository.save(review);
+    }
+
+    /**
+     * 리뷰 삭제 메서드
+     *
+     * @param reviewId
+     * @author quartz614
+     */
+    public void deleteReview(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
+    }
+
+    /**
+     * 리뷰 전체 삭제 메서드
+     *
+     * @param placeId
+     * @author quartz614
+     */
+    public void deleteAllByReviews(Long placeId) {
+        reviewRepository.deleteAllByPlaceId(placeId);
+    }
+
+    /**
+     * 리뷰 작성한 회원 수 메서드
+     *
+     * @param placeId
+     * @return
+     * @author
+     */
+    public Long countByPlaceId(Long placeId) {
+        return reviewRepository.countByPlaceId(placeId);
     }
 }

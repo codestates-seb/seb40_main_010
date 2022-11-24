@@ -9,6 +9,7 @@ import com.main21.file.S3Upload;
 import com.main21.file.UploadFile;
 import com.main21.member.entity.Member;
 import com.main21.member.repository.MemberRepository;
+import com.main21.member.service.MemberDbService;
 import com.main21.place.dto.*;
 
 import com.main21.place.entity.Place;
@@ -21,7 +22,10 @@ import com.main21.reserve.entity.*;
 import com.main21.reserve.repository.HostingTimeRepository;
 import com.main21.reserve.repository.MbtiCountRepository;
 import com.main21.reserve.repository.ReserveRepository;
+import com.main21.reserve.service.MbtiCountService;
+import com.main21.reserve.service.ReserveDbService;
 import com.main21.review.repository.ReviewRepository;
+import com.main21.review.service.ReviewDbService;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,25 +41,25 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.main21.reserve.entity.Reserve.ReserveStatus.RESERVATION_CANCELED;
+
 
 @Service
 @RequiredArgsConstructor
 public class PlaceService {
 
-    private final PlaceRepository placeRepository;
-    private final PlaceImageRepository placeImageRepository;
-    private final FileHandler fileHandler;
-    private final PlaceCategoryRepository placeCategoryRepository;
     private final RedisUtils redisUtils;
-    private final ReviewRepository reviewRepository;
-    private final ReserveRepository reserveRepository;
-    private final BookmarkRepository bookmarkRepository;
-    private final MemberRepository memberRepository;
-    private final MbtiCountRepository mbtiCountRepository;
-    private final HostingTimeRepository hostingTimeRepository;
+    private final PlaceDbService placeDbService;
+    private final ReserveDbService reserveDbService;
+    private final MemberDbService memberDbService;
+    private final ReviewDbService reviewDbService;
+
+    private final FileHandler fileHandler;
+
+    private final MbtiCountService mbtiCountService;
     private final PlaceImageService placeImageService;
     private final PlaceCategoryService placeCategoryService;
-    //private final TimeStatusService timeStatusService;
+    private final BookmarkRepository bookmarkRepository;
 
     @Autowired
     private S3Upload s3Upload;
@@ -105,7 +109,7 @@ public class PlaceService {
                 place.addPlaceImage(placeImage);
             }
         }
-        placeRepository.save(place);
+        placeDbService.savePlace(place);
 
         List<String> categoryList = placePostDto.getCategoryList();
         placeCategoryService.saveCategoryList(categoryList, place);
@@ -156,7 +160,7 @@ public class PlaceService {
                 place.addPlaceImage(placeImage);
             }
         }
-        placeRepository.save(place);
+        placeDbService.savePlace(place);
 
         List<String> categoryList = placePostDto.getCategoryList();
         placeCategoryService.saveCategoryList(categoryList, place);
@@ -171,10 +175,9 @@ public class PlaceService {
     @Transactional
     public PlaceResponseDto searchPlace(Long placeId, String refreshToken) {//, List<String> filePath, List<String> categoryList) {
 
-        Place place = placeRepository.findById(placeId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+        Place place = placeDbService.ifExistsReturnPlace(placeId);
         Optional<Bookmark> findBookmark = bookmarkRepository.findBookmarkByMemberIdAndPlaceId(place.getMemberId(), placeId);
-        Optional<Member> findMember = memberRepository.findById(place.getMemberId());
+        Member findMember = memberDbService.ifExistsReturnMember(place.getMemberId());
 
         List<PlaceImageResponseDto> placeImageResponseDtoList = placeImageService.findAllByPlaceImagePath(placeId);
         List<String> categoryList = placeCategoryService.findByAllPlaceCategoryList(placeId);
@@ -185,9 +188,9 @@ public class PlaceService {
 
         boolean isBookmark = false;
 
-        // if -> refreshToken이 존재하지 않으면 무조건 false 반환,
+        // if -> refreshToken이 존재하지 않거나 공백이면 false 반환,
         // else -> refreshToken와 bookmark의 memberId가 같고 bookmark가 존재하면 true 반환
-        if (refreshToken == null) {
+        if (refreshToken == null || refreshToken.equals("")) {
             isBookmark = false;
         }else {
             Long memberId = redisUtils.getId(refreshToken);
@@ -196,7 +199,7 @@ public class PlaceService {
             }
         }
 
-        return new PlaceResponseDto(place, filePath, categoryList, findMember.get(), isBookmark);
+        return new PlaceResponseDto(place, filePath, categoryList, findMember, isBookmark);
     }
 
     /**
@@ -210,8 +213,7 @@ public class PlaceService {
         //유저 확인
         Long memberId = redisUtils.getId(refreshToken);
 
-        Place updatePlace = placeRepository.findById(placeId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+        Place updatePlace = placeDbService.ifExistsReturnPlace(placeId);
 
         if (!Objects.equals(updatePlace.getMemberId(), memberId)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_UPDATE);
@@ -256,10 +258,10 @@ public class PlaceService {
         if (!placeImageList.isEmpty()) {
             for (PlaceImage placeImage : placeImageList) {
                 //파일 DB 저장
-                updatePlace.addPlaceImage(placeImageRepository.save(placeImage));
+                updatePlace.addPlaceImage(placeDbService.savePlaceImage(placeImage));
             }
         }
-        placeRepository.save(updatePlace);
+        placeDbService.savePlace(updatePlace);
         placeCategoryService.saveCategoryList(addCategoryList, updatePlace);
     }
 
@@ -276,8 +278,7 @@ public class PlaceService {
         //유저 확인
         Long memberId = redisUtils.getId(refreshToken);
 
-        Place updatePlace = placeRepository.findById(placeId).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
+        Place updatePlace = placeDbService.ifExistsReturnPlace(placeId);
 
         if (!Objects.equals(updatePlace.getMemberId(), memberId)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_UPDATE);
@@ -324,181 +325,43 @@ public class PlaceService {
                 updatePlace.addPlaceImage(placeImage);
             }
         }
-        placeRepository.save(updatePlace);
+        placeDbService.savePlace(updatePlace);
         placeCategoryService.saveCategoryList(addCategoryList, updatePlace);
 
         // 수정 날짜 이후 maxSpace update
         // timeStatusService.updateIsFull(updatePlace);
     }
 
-
-    /**
-     * Pagination 적용한 공간 전체 조회 메서드
-     *
-     * @param pageable
-     * @return
-     * @author LeeGoh
-     */
-    @Transactional
-    public Page<PlaceDto.Response> getPlacesPage(Pageable pageable) {
-        return placeRepository.getPlacesPage(pageable);
-    }
-
-
-    /**
-     * Slice 무한스크롤 공간 전체 조회 메서드
-     * @param pageable
-     * @return
-     @author LeeGoh
-     */
-    /*
-    @Transactional
-    public Slice<PlaceDto.Response> getPlacesSlice(Pageable pageable) {
-        return placeRepository.getPlacesSlice(pageable);
-    }
-     */
-
-    /**
-     * Pagination 적용한 카테고리별 공간 조회 메서드
-     *
-     * @param categoryId
-     * @param pageable
-     * @return
-     * @author LeeGoh
-     */
-    @Transactional
-    public Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable) {
-        return placeRepository.getCategoryPage(categoryId, pageable);
-    }
-
-    /**
-     * Slice 무한스크롤 카테고리별 공간 조회 메서드
-     * @param categoryId
-     * @param pageable
-     * @return
-     @author LeeGoh
-     */
-    /*
-    @Transactional
-    public Slice<PlaceCategoryDto.Response> getCategorySlice(Long categoryId, Pageable pageable) {
-        return placeRepository.getCategorySlice(categoryId, pageable);
-    }
-     */
-
-
-    /**
-     * 공간 최소 가격, 최대 가격, 인원수별 상세 검색 메서드
-     *
-     * @param searchDetail
-     * @param pageable
-     * @return
-     * @author LeeGoh
-     */
-    @Transactional
-    public Page<PlaceDto.Response> searchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
-        return placeRepository.searchDetail(searchDetail, pageable);
-    }
-
-    /**
-     * 공간 전체 타이틀 검색 메서드
-     *
-     * @param title
-     * @param pageable
-     * @return
-     * @author LeeGoh
-     */
-    @Transactional
-    public Page<PlaceDto.Response> searchTitleAll(String title, Pageable pageable) {
-        return placeRepository.searchTitle(split(title), pageable);
-    }
-
-    /**
-     * 공간 카테고리별 타이틀 검색 메서드
-     *
-     * @param categoryId
-     * @param title
-     * @param pageable
-     * @return
-     * @author LeeGoh
-     */
-    @Transactional
-    public Page<PlaceCategoryDto.Response> searchTitleCategory(Long categoryId, String title, Pageable pageable) {
-        return placeRepository.searchCategoryTitle(categoryId, split(title), pageable);
-    }
-
-    /**
-     * Stirng 검색어 공백을 기준으로 분리하여 List에 담는 메서드
-     *
-     * @param title
-     * @return
-     * @author LeeGoh
-     */
-    public List<String> split(String title) {
-        List<String> titles = new ArrayList<>();
-        String[] list = title.split(" ");
-        for (int i = 0; i < list.length; i++) {
-            titles.add(list[i]);
-        }
-        return titles;
-    }
-
-    /**
-     * getPlaceMypage
-     *
-     * @param pageable
-     * @return
-     * @author quartz614
-     */
-    @Transactional
-    public Page<PlaceDto.Response> getPlaceMypage(String refreshToken, Pageable pageable) {
-        //유저 확인
-        Long memberId = redisUtils.getId(refreshToken);
-        return placeRepository.getPlaceMypage(memberId, pageable);
-    }
-
     @Transactional
     public void deleteHosting(String refreshToken, Long placeId) {
         Long memberId = redisUtils.getId(refreshToken);
-        Member findMember = memberRepository
-                .findById(memberId)
-                .orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        Place findPlace = placeRepository
-                .findById(placeId)
-                .orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
-        List<Reserve> findReserve = reserveRepository
-                .findAllByPlaceId(placeId);
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
+        List<Reserve> findReserve = reserveDbService.findAllByReserves(placeId);
 
         // 리뷰 삭제
-        reviewRepository.deleteAllByPlaceId(placeId);
+        reviewDbService.deleteAllByReviews(placeId);
 
         // 북마크 삭제
         bookmarkRepository.deleteAllByPlaceId(placeId);
 
-        // 호스팅 타임 삭제
-        hostingTimeRepository.deleteAllByPlaceId(placeId);
-
         // 예약 취소 후 상태 변경
         for (int i = 0; i < findReserve.size(); i++) {
-            if (findReserve.get(i).getStatus().equals(Reserve.ReserveStatus.RESERVATION_CANCELED)) {
+            if (findReserve.get(i).getStatus().equals(RESERVATION_CANCELED)) {
                 throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
             }
 
             // mbtiCount -1
-            MbtiCount findMBTICount = mbtiCountRepository.findMbtiCountByMbtiAndPlaceId(findMember.getMbti(), placeId)
-                    .orElse(null);
-            findMBTICount.reduceOneMbti();
-            mbtiCountRepository.save(findMBTICount);
+            mbtiCountService.reduceMbtiCount(findMember, placeId);
 
             // 예약 상태 변경 ... -> RESERVATION_CANCELED
-            findReserve.get(i).setStatus(Reserve.ReserveStatus.RESERVATION_CANCELED);
-            reserveRepository.save(findReserve.get(i));
+            findReserve.get(i).setStatus(RESERVATION_CANCELED);
+            reserveDbService.saveReserve(findReserve.get(i));
         }
 
         // 장소 카테고리 & 호스팅 삭제
-        placeCategoryRepository.deleteAllByPlaceId(placeId);
-        placeRepository.delete(findPlace);
+        placeDbService.deletePlaceCategory(placeId);
+        placeDbService.deletePlace(findPlace);
     }
 
     private List<MultipartFile> getAddFileList(List<PlaceImage> dbPlaceImageList, List<MultipartFile> multipartFileList, String dir) {

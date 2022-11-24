@@ -119,7 +119,9 @@ public class HostingTimeService {
 
     /**
      * 수정 날짜 이후 maxSpace update 메서드
+     *
      * @param place
+     * @author
      */
     public void updateIsFull(Place place) {
         String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -138,6 +140,16 @@ public class HostingTimeService {
                     }
             );
         }
+    }
+
+    /**
+     *
+     *
+     * @param placeId
+     * @author LeeGoh
+     */
+    public void deleteAllHostingTime(Long placeId) {
+        hostingTimeRepository.deleteAllByPlaceId(placeId);
     }
 
 }

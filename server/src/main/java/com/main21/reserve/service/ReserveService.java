@@ -5,7 +5,7 @@ import com.main21.exception.ExceptionCode;
 import com.main21.member.entity.Member;
 import com.main21.member.service.MemberDbService;
 import com.main21.place.entity.Place;
-import com.main21.place.repository.PlaceRepository;
+import com.main21.place.service.PlaceDbService;
 import com.main21.reserve.dto.PayApprovalDto;
 import com.main21.reserve.dto.PayReadyDto;
 import com.main21.reserve.dto.ReserveDto;
@@ -33,9 +33,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 import static com.main21.reserve.utils.PayConstants.*;
@@ -77,7 +74,7 @@ public class ReserveService {
     private final MemberDbService memberDbService;
     private final MbtiCountService mbtiCountService;
 
-    private final PlaceRepository placeRepository;
+    private final PlaceDbService placeDbService;
 
     private PayReadyDto payReadyDto;
     private RestTemplate restTemplate;
@@ -101,7 +98,7 @@ public class ReserveService {
         Long memberId = redisUtils.getId(refreshToken);
 
         //공간 확인
-        Place findPlace = ifExistsReturnPlace(placeId);
+        Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
         // 유저 확인
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
@@ -112,7 +109,7 @@ public class ReserveService {
                 .endTime(post.getEndTime())
                 .placeId(findPlace.getId())
                 .memberId(memberId)
-                .totalCharge(((post.getEndTime().getTime() - post.getStartTime().getTime()) / 3600000) * findPlace.getCharge())
+                .totalCharge((long) (((post.getEndTime().getHour() - post.getStartTime().getHour())) * findPlace.getCharge()))
                 .build();
 
         reserveDbService.saveReserve(reserve);
@@ -148,12 +145,12 @@ public class ReserveService {
         // 사용자, 예약, 호스트 정보 조회
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
-        Place findPlace = ifExistsReturnPlace(findReserve.getPlaceId());
+        Place findPlace = placeDbService.ifExistsReturnPlace(findReserve.getPlaceId());
         orderId = findReserve.getId() + "/" + findMember.getId() + "/" + findPlace.getTitle();
         userId = findMember.getId().toString();
         itemName = findPlace.getTitle();
         totalAmount = findReserve.getTotalCharge();
-        long quantity = (findReserve.getEndTime().getTime() - findReserve.getStartTime().getTime()) / 3600000;
+        long quantity = (findReserve.getEndTime().getHour() - findReserve.getStartTime().getHour());
 
         // 카카오 서버에 보내기 위한 params Map 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -403,21 +400,5 @@ public class ReserveService {
     }
 
 
-
-
-
-    /* ------------------------------------ find Method --------------------------------------*/
-
-    /**
-     * 호스팅 정보 조회 메서드
-     *
-     * @param placeId 장소 식별자
-     * @return Place
-     * @author mozzi327
-     */
-    private Place ifExistsReturnPlace(Long placeId) {
-        return placeRepository.findById(placeId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
-    }
 }
 
