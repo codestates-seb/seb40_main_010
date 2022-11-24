@@ -1,13 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 
-import Nav from '../components/Nav';
+import Nav from '../components/Navigation.js/Nav';
 
 function SignUp() {
+  const navigator = useNavigate();
   const {
     register,
     handleSubmit,
@@ -19,6 +20,7 @@ function SignUp() {
   const onSubmit = async data => {
     try {
       const response = await axios.post(`/member/join`, data);
+      navigator('/log-in');
       return response.data;
     } catch (err) {
       return console.log('Error >>', err);

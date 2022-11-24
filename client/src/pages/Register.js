@@ -17,11 +17,13 @@ import {
   reservationEditData,
 } from '../atoms';
 
-import Nav from '../components/Nav';
+import Nav from '../components/Navigation.js/Nav';
 import RegisterImages from '../components/RegisterComponents/RegisterImages';
 import RegisterCategory from '../components/RegisterComponents/RegisterCategory';
 
 export default function Register() {
+  // const ACCESS = localStorage.getItem('ACCESS');
+
   const [title, setTitle] = useRecoilState(registerFormTitle);
   const [maxCapacity, setMaxCapacity] = useRecoilState(registerFormMaxCapacity);
   const [address, setAddress] = useRecoilState(registerFormAddress);

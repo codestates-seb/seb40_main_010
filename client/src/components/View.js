@@ -1,23 +1,24 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { DetailInformation } from '../atoms';
+import { DetailInformation, PlaceIDState } from '../atoms';
 import FadeCarousel from './Fade';
 import Location from './Map';
 
 function View() {
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
-
+  const placeId = useRecoilValue(PlaceIDState);
   const callDetailData = async () => {
-    await axios
-      .get('http://localhost:3001/detaildata')
-      .then(res => {
-        setDetailInformation(...res.data);
-      })
-      .catch(err => console.log(err));
+    try {
+      const response = await axios.get(`/place/${placeId}`);
+      setDetailInformation(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -32,10 +33,15 @@ function View() {
           <FadeCarousel />
         </CarouselImageContainer>
         <InformationMiniImageContainer>
-          {detailInformation.image &&
+          {/* {detailInformation.image &&
             detailInformation.image.map(placeImage => {
               return <InformationMiniImage key={placeImage} src={placeImage} />;
-            })}
+            })} */}
+
+          <InformationMiniImage
+            key={detailInformation.placeImage}
+            src={detailInformation.placeImage}
+          />
         </InformationMiniImageContainer>
         <DetailTitle>상세 정보</DetailTitle>
         <DetailTagContainer>

@@ -1,13 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 
 import { useForm } from 'react-hook-form';
 
-import Nav from '../components/Nav';
+import Nav from '../components/Navigation.js/Nav';
 
 export default function LogIn() {
+  const navigator = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -19,6 +21,7 @@ export default function LogIn() {
       const response = await axios.post(`/auth/login`, data);
       localStorage.setItem('ACCESS', response.headers.authorization);
       localStorage.setItem('REFRESH', response.headers.refreshtoken);
+      navigator('/');
     } catch (err) {
       console.log('Error >>', err);
     }

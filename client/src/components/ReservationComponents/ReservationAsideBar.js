@@ -38,6 +38,7 @@ function ReservationAsideBar() {
       capacity,
     };
     axios.post('http://localhost:3001/reserve', article);
+    alert('결제하시겠습니까?');
   };
 
   return (

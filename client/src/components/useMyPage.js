@@ -9,6 +9,13 @@ const useMyPage = () => {
   const [userMBTI, setUserMBTI] = useState('');
   const [editStatus, setEditStatus] = useState(false);
 
+  const header = {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+      RefreshToken: localStorage.getItem('REFRESH'),
+    },
+  };
+
   const changeCategory = event => {
     setMyPageCategory(event.target.textContent);
   };
@@ -23,7 +30,7 @@ const useMyPage = () => {
     //   },
     // };
     try {
-      const response = await axios.get(`/place`);
+      const response = await axios.get(`/place`, header);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
@@ -38,7 +45,7 @@ const useMyPage = () => {
     //   },
     // };
     try {
-      const response = await axios.get(`/reserve`);
+      const response = await axios.get(`/reserve`, header);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
@@ -53,7 +60,7 @@ const useMyPage = () => {
     //   },
     // };
     try {
-      const response = await axios.get(`/bookmark`);
+      const response = await axios.get(`/bookmark`, header);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
@@ -61,14 +68,8 @@ const useMyPage = () => {
   };
 
   const reviewList = async () => {
-    // const data = {
-    //   headers: {
-    //     // refresh 토큰
-    //     // access 토큰
-    //   },
-    // };
     try {
-      const response = await axios.get(`/review`);
+      const response = await axios.get(`/review`, header);
       setListData([...response.data]);
     } catch (err) {
       console.log(err);
@@ -85,9 +86,9 @@ const useMyPage = () => {
 
   const callUserData = async () => {
     try {
-      const response = await axios.get('/member');
-      console.log(response);
-      setMemberData(...response.data);
+      const response = await axios.get('/member', header);
+      console.log(response.data);
+      setMemberData(response.data);
       setUserNickName(response.data[0].nickname);
       setUserMBTI(response.data[0].mbti);
     } catch (err) {
@@ -101,10 +102,14 @@ const useMyPage = () => {
 
   const userDataEdit = async () => {
     try {
-      await axios.patch(`/member/edit`, {
-        nickname: userNickName,
-        mbti: userMBTI,
-      });
+      await axios.patch(
+        `/member/edit`,
+        {
+          nickname: userNickName,
+          mbti: userMBTI,
+        },
+        header,
+      );
       callUserData();
     } catch (err) {
       console.log(err);
