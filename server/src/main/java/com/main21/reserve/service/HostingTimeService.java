@@ -10,8 +10,12 @@ import com.main21.reserve.repository.HostingTimeRepository;
 import com.main21.reserve.repository.TimeStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -113,5 +117,27 @@ public class HostingTimeService {
         }
     }
 
+    /**
+     * 수정 날짜 이후 maxSpace update 메서드
+     * @param place
+     */
+    public void updateIsFull(Place place) {
+        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        List<HostingTime> findHostingTimes = hostingTimeRepository.findByPlaceIdAndReserveDateGreaterThanEqual(place.getId(), currentDate);
+
+        if (!CollectionUtils.isEmpty(findHostingTimes)) {
+            findHostingTimes.forEach(
+                    findHostingTime -> {findHostingTime.getTimeStatuses().forEach(
+                            timeStatus -> {
+                                if (timeStatus.isFull() && place.getMaxSpace() > timeStatus.getSpaceCount()) {
+                                    timeStatus.setIsNotFull();
+                                    timeStatusRepository.save(timeStatus);
+                                }
+                            });
+                    }
+            );
+        }
+    }
 
 }
