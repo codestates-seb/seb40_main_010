@@ -117,6 +117,8 @@ dependencies {
     // feign client
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation group: 'io.github.openfeign', name: 'feign-gson', version: '11.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 
