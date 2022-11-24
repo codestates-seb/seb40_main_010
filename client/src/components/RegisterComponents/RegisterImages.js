@@ -64,7 +64,7 @@ function RegisterImages({ images, setImages }) {
       return;
     }
 
-    for (let i = 0; i < maxImages.length; i += 1) {
+    for (let i = 0; i < maxImages; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const compressedImage = await handleImageCompress(selectedImages[i]);
       // eslint-disable-next-line no-await-in-loop
@@ -131,6 +131,7 @@ const Wrapper = styled.div`
     border: none;
     box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
     padding: 0px 10px;
+    margin-bottom: 5px;
 
     :active {
       box-shadow: none;
