@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Nav from '../components/Navigation.js/Nav';
+import Nav from '../components/Navigation/Nav';
 import MyPageComponent from '../components/MyPageComponent';
 
 function MyPage() {

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import axios from 'axios';
 import Category from '../components/Category';
-import Nav from '../components/Navigation.js/Nav';
+import Nav from '../components/Navigation/Nav';
 // import Place from '../components/Place';
 // import { mainDataState } from '../atoms';
 // import { getAllPlaces } from '../hooks/getAllPlaces';
