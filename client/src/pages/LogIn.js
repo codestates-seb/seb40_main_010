@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { useForm } from 'react-hook-form';
 
-import Nav from '../components/Navigation.js/Nav';
+import Nav from '../components/Navigation/Nav';
 
 export default function LogIn() {
   const navigator = useNavigate();
