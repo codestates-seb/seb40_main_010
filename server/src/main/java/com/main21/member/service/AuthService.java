@@ -25,11 +25,9 @@ import static com.main21.security.utils.AuthConstants.REFRESH_TOKEN;
 @Transactional
 @RequiredArgsConstructor
 public class AuthService {
-
     private final RedisUtils redisUtils;
-    private final CommonService commonService;
     private final JwtTokenUtils jwtTokenUtils;
-    private final PasswordEncoder passwordEncoder;
+    private final MemberDbService memberDbService;
 
 
     /**
@@ -41,11 +39,9 @@ public class AuthService {
      */
     public AuthDto.Response loginMember(LoginDto login,
                                         HttpServletResponse res) {
-        Member findMember = commonService.ifExistMemberByEmail(login.getEmail());
+        Member findMember = memberDbService.ifExistMemberByEmail(login.getEmail());
 
-        if (!passwordEncoder.matches(login.getPassword(), findMember.getPassword())) {
-            throw new AuthException(ExceptionCode.INVALID_MEMBER);
-        }
+        memberDbService.isValid(findMember, login.getPassword());
 
         String generateAccessToken = jwtTokenUtils.generateAccessToken(findMember);
         String generateRefreshToken = jwtTokenUtils.generateRefreshToken(findMember);
@@ -114,7 +110,7 @@ public class AuthService {
         Long memberId = redisUtils.getId(refreshToken);
 
         // 액세스 토큰 발행
-        Member findMember = commonService.ifExistsReturnMember(memberId);
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         String generateToken = jwtTokenUtils.generateAccessToken(findMember);
 
         res.addHeader(AUTHORIZATION, generateToken);

@@ -1,38 +1,29 @@
 package com.main21.member.service;
 
-import com.main21.common.CommonService;
-import com.main21.exception.BusinessLogicException;
-import com.main21.exception.ExceptionCode;
 import com.main21.file.FileHandler;
 import com.main21.file.S3Upload;
 import com.main21.file.UploadFile;
 import com.main21.member.dto.MemberDto;
 import com.main21.member.entity.Member;
 import com.main21.member.entity.MemberImage;
-import com.main21.member.repository.MemberImageRepository;
-import com.main21.member.repository.MemberRepository;
 import com.main21.security.utils.CustomAuthorityUtils;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final S3Upload s3Upload;
+    private final RedisUtils redisUtils;
     private final FileHandler fileHandler;
-    private final CommonService commonService;
-    private final PasswordEncoder passwordEncoder;
-    private final MemberRepository memberRepository;
+    private final MemberDbService memberDbService;
     private final CustomAuthorityUtils authorityUtils;
 
 
@@ -42,19 +33,19 @@ public class MemberService {
      * @author Quartz614
      */
     public void createMember(MemberDto.Post post) {
-        commonService.verifyEmail(post);
+        memberDbService.verifyEmail(post);
         List<String> roles = authorityUtils.createRoles(post.getEmail());
 
         Member member = Member.builder()
                 .email(post.getEmail())
-                .password(passwordEncoder.encode(post.getPassword()))
+                .password(memberDbService.encodingPassword(post.getPassword()))
                 .nickname(post.getNickname())
                 .phoneNumber(post.getPhoneNumber())
                 .roles(roles)
                 .mbti(post.getMbti())
                 .build();
 
-        memberRepository.save(member);
+        memberDbService.saveMember(member);
     }
 
 
@@ -65,10 +56,10 @@ public class MemberService {
      * @author Quartz614
      */
     public void updateMember(String refreshToken, MemberDto.Patch patch) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
-        Member findMember = commonService.ifExistsReturnMember(memberId);
+        Long memberId = redisUtils.getId(refreshToken);
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         findMember.editMember(patch.getNickname(), patch.getMbti());
-        memberRepository.save(findMember);
+        memberDbService.saveMember(findMember);
     }
 
 
@@ -79,8 +70,8 @@ public class MemberService {
      * @author Quartz614
      */
     public MemberDto.Info getMember(String refreshToken) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
-        Member findMember = commonService.ifExistsReturnMember(memberId);
+        Long memberId = redisUtils.getId(refreshToken);
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         return MemberDto.Info.builder()
                 .profileImage(findMember.getMemberImage().getFilePath())
@@ -100,8 +91,8 @@ public class MemberService {
     @SneakyThrows
     public void createProfile(String refreshToken,
                               List<MultipartFile> multipartFiles) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
-        Member findMember = commonService.ifExistsReturnMember(memberId);
+        Long memberId = redisUtils.getId(refreshToken);
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(multipartFiles);
         List<MemberImage> memberImageList = new ArrayList<>();
@@ -121,7 +112,7 @@ public class MemberService {
                 //유저 FK 저장 관계
                 findMember.addMemberImage(memberImage);
                 //파일 DB 저장
-                memberRepository.save(findMember);
+                memberDbService.saveMember(findMember);
                 break;
             }
         }
@@ -137,8 +128,8 @@ public class MemberService {
     @SneakyThrows
     public void createProfileS3(String refreshToken,
                                 MultipartFile file) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
-        Member findMember = commonService.ifExistsReturnMember(memberId);
+        Long memberId = redisUtils.getId(refreshToken);
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         String dir = "memberImage";
 
@@ -152,6 +143,6 @@ public class MemberService {
                 .build();
 
         findMember.addMemberImage(memberImage);
-        memberRepository.save(findMember);
+        memberDbService.saveMember(findMember);
     }
 }

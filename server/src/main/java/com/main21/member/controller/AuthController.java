@@ -34,7 +34,7 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
-    
+
     /**
      * 사용자 로그아웃을 위한 컨트롤러 호출 메서드(레디스용)
      *

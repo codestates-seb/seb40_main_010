@@ -52,17 +52,7 @@ public class CommonService {
     }
 
 
-    /**
-     * 사용자 정보 조회 메서드
-     *
-     * @param memberId 사용자 식별자
-     * @return Member
-     * @author mozzi327
-     */
-    public Member ifExistsReturnMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
+
 
 
     /**
@@ -104,30 +94,8 @@ public class CommonService {
     }
 
 
-    /**
-     * 사용자 정보 조회 메서드(이메일)
-     * @param email 사용자 이메일
-     * @return Member
-     * @author mozzi327
-     */
-    public Member ifExistMemberByEmail(String email) {
-        return memberRepository
-                .findMemberByEmail(email)
-                .orElseThrow(() -> new AuthException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
 
 
-
-    /**
-     * 이메일 중복 검사 메서드
-     * @param post 회원가입 정보
-     * @author Quartz614
-     */
-    public void verifyEmail(MemberDto.Post post) {
-        if (memberRepository.findByEmail(post.getEmail()).isPresent()) {
-            throw new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND); // 멤버로 바꿔야 ㅍ
-        }
-    }
 
 
     /**

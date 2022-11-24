@@ -1,9 +1,11 @@
 package com.main21.member.entity;
 
 import com.main21.bookmark.entity.Bookmark;
+import com.main21.exception.ExceptionCode;
 import com.main21.place.entity.Place;
 import com.main21.reserve.entity.Reserve;
 import com.main21.review.entity.Review;
+import com.main21.security.exception.AuthException;
 import com.main21.util.Auditable;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,9 +45,6 @@ public class Member extends Auditable {
     private MemberStatus memberStatus;
 
 
-    //private String profileImage;
-
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
@@ -61,7 +60,6 @@ public class Member extends Auditable {
                   String password,
                   String phoneNumber,
                   List<String> roles
-                  //String profileImage
                   ) {
         this.email = email;
         this.nickname = nickname;
@@ -70,7 +68,6 @@ public class Member extends Auditable {
         this.phoneNumber = phoneNumber;
         this.memberStatus = MemberStatus.MEMBER_ACTIVE;
         this.roles = roles;
-        //this.profileImage = profileImage;
     }
 
 
@@ -119,10 +116,5 @@ public class Member extends Auditable {
             memberImage.setMember(this);
         }
         this.memberImage = memberImage;
-    }
-
-    public boolean comparePasswordWithMember(PasswordEncoder passwordEncoder,
-                                           String comparePassword) {
-        return passwordEncoder.encode(comparePassword).equals(this.password);
     }
 }
