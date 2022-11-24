@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -23,7 +24,7 @@ import RegisterCategory from '../components/RegisterComponents/RegisterCategory'
 
 export default function Register() {
   // const ACCESS = localStorage.getItem('ACCESS');
-
+  const navigator = useNavigate();
   const [title, setTitle] = useRecoilState(registerFormTitle);
   const [maxCapacity, setMaxCapacity] = useRecoilState(registerFormMaxCapacity);
   const [address, setAddress] = useRecoilState(registerFormAddress);
@@ -122,6 +123,7 @@ export default function Register() {
           RefreshToken: localStorage.getItem('REFRESH'),
         },
       });
+      navigator('/');
     } catch (err) {
       console.log('Error >>', err);
     }
