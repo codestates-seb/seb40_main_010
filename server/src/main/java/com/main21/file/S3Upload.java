@@ -58,7 +58,7 @@ public class S3Upload {
                 UploadFile uploadFile = UploadFile.builder()
                         .originFileName(file.getOriginalFilename())
                         .fileName(fileName)
-                        .filePath(amazonS3Client.getUrl(bucket, fileName).toString())
+                        .filePath(amazonS3Client.getUrl(bucket, dir + "/" + fileName).toString())
                         .fileSize(file.getSize())
                         .build();
 
@@ -82,7 +82,7 @@ public class S3Upload {
         UploadFile uploadFile = UploadFile.builder()
                 .originFileName(multipartFile.getOriginalFilename())
                 .fileName(fileName)
-                .filePath(amazonS3Client.getUrl(bucket, fileName).toString())
+                .filePath(amazonS3Client.getUrl(bucket, dir + "/" + fileName).toString())
                 .fileSize(multipartFile.getSize())
                 .build();
 
