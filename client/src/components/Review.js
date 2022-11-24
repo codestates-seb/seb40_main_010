@@ -1,25 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
-import axios from 'axios';
 
 function Review({ reviewData }) {
-  const header = {
-    headers: {
-      'ngrok-skip-browser-warning': '010',
-      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-      RefreshToken: localStorage.getItem('REFRESH'),
-    },
-  };
-
-  const reviewDelete = async () => {
-    try {
-      await axios.get(`/review/${reviewData.reviewId}`, header);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <ReviewContent>
       <UserImage src={reviewData.profileImage} />
@@ -29,7 +12,6 @@ function Review({ reviewData }) {
           <ReviewCreatedDate value={reviewData.createdAt}>
             {reviewData.createdAt}
           </ReviewCreatedDate>
-          <ReviewDelete onClick={reviewDelete}>삭제하기</ReviewDelete>
         </ReviewInfoContainer>
         <ReviewRating>
           {[1, 2, 3, 4, 5].map(el => (
@@ -83,10 +65,6 @@ const UserName = styled.p`
 const ReviewCreatedDate = styled.p`
   flex-grow: 30;
   color: #666666;
-`;
-
-const ReviewDelete = styled.p`
-  cursor: pointer;
 `;
 
 const ReviewRating = styled.div`

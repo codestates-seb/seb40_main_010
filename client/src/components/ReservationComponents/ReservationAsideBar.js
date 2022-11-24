@@ -120,11 +120,11 @@ function ReservationAsideBar() {
 
 const Container = styled.div`
   position: sticky;
-  top: 90px;
+  top: 140px;
   width: 18rem;
   height: flex;
   border-radius: 15px;
-  border: 1px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
