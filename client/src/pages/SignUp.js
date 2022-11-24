@@ -148,6 +148,10 @@ function SignUp() {
                     value: /[0-9]|[a-z]|[A-Z]|[가-힣]/,
                     message: '이름 형식에 맞지 않습니다.',
                   },
+                  validate: {
+                    spaceCheck: value =>
+                      (value && value.search(/\s/) === -1) || '공백이 있습니다',
+                  },
                 })}
               />
               {errors.nickname && (
