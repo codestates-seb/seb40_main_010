@@ -1,11 +1,18 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import axios from 'axios';
 
-import { FaRegBookmark, FaLink } from 'react-icons/fa';
+import { FaRegBookmark, FaLink, FaBookmark } from 'react-icons/fa';
+import { PlaceIDState } from '../../atoms';
+import header from '../../utils/header';
 
 // TODO
 // window를 지원하지 않을 수 있다.
 function ReservationBottomButtons() {
+  const [bookmark, setBookmark] = useState(false);
+  const placeId = useRecoilValue(PlaceIDState);
+
   const copyLinkRef = useRef();
 
   const handleCopyLink = () => {
@@ -20,10 +27,21 @@ function ReservationBottomButtons() {
     return alert('링크를 복사했습니다.');
   };
 
+  const handleBookmark = async () => {
+    try {
+      const response = await axios.get(`/bookmark/${placeId}`, header);
+      setBookmark(!bookmark);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Container>
-      <button type="button" className="button">
-        <BookmarkIcon />
+      <button type="button" className="button" onClick={handleBookmark}>
+        {!bookmark && <EmptyBookmarkIcon />}
+        {bookmark && <FullBookmarkIcon />}
         관심장소
       </button>
       <button type="button" className="button" onClick={handleCopyLink}>
@@ -61,7 +79,17 @@ const Container = styled.div`
   }
 `;
 
-const BookmarkIcon = styled(FaRegBookmark)`
+const EmptyBookmarkIcon = styled(FaRegBookmark)`
+  font-size: 1rem;
+  margin-right: 8px;
+  color: #eb7470;
+
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+const FullBookmarkIcon = styled(FaBookmark)`
   font-size: 1rem;
   margin-right: 8px;
   color: #eb7470;
