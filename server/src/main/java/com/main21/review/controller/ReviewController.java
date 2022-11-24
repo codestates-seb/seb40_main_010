@@ -83,10 +83,11 @@ public class ReviewController {
     }
 
     /**
-     *
+     * 마이페이지에서 작성한 리뷰 조회
      * @param refreshToken 리프래시 토큰
      * @param pageable 페이징 처리
      * @return
+     * @author Quartz614
      */
 
     @GetMapping
