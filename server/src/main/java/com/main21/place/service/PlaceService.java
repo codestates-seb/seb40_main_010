@@ -2,7 +2,6 @@ package com.main21.place.service;
 
 import com.main21.bookmark.entity.Bookmark;
 import com.main21.bookmark.repository.BookmarkRepository;
-import com.main21.common.CommonService;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.file.FileHandler;
@@ -12,11 +11,9 @@ import com.main21.member.entity.Member;
 import com.main21.member.repository.MemberRepository;
 import com.main21.place.dto.*;
 
-import com.main21.place.entity.Category;
 import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceCategory;
 import com.main21.place.entity.PlaceImage;
-import com.main21.place.repository.CategoryRepository;
 import com.main21.place.repository.PlaceCategoryRepository;
 import com.main21.place.repository.PlaceImageRepository;
 import com.main21.place.repository.PlaceRepository;
@@ -24,11 +21,8 @@ import com.main21.reserve.entity.*;
 import com.main21.reserve.repository.HostingTimeRepository;
 import com.main21.reserve.repository.MbtiCountRepository;
 import com.main21.reserve.repository.ReserveRepository;
-import com.main21.reserve.repository.TimeStatusRepository;
 import com.main21.review.repository.ReviewRepository;
-import com.main21.review.service.ReviewService;
 import com.main21.security.utils.RedisUtils;
-import com.main21.reserve.entity.HostingTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,8 +32,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +45,6 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceImageRepository placeImageRepository;
     private final FileHandler fileHandler;
-    private final CategoryRepository categoryRepository;
     private final PlaceCategoryRepository placeCategoryRepository;
     private final RedisUtils redisUtils;
     private final ReviewRepository reviewRepository;
@@ -62,22 +53,23 @@ public class PlaceService {
     private final MemberRepository memberRepository;
     private final MbtiCountRepository mbtiCountRepository;
     private final HostingTimeRepository hostingTimeRepository;
-    private final TimeStatusRepository timeStatusRepository;
     private final PlaceImageService placeImageService;
     private final PlaceCategoryService placeCategoryService;
-    private final CommonService commonService;
+    //private final TimeStatusService timeStatusService;
 
     @Autowired
     private S3Upload s3Upload;
 
     /**
      * 장소 저장 (S3)
+     * @param placePostDto
+     * @param refreshToken
+     * @param files
      */
     @Transactional
     public void createPlaceS3(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) {
-        //유저 확인 필요
-        Long memberId = commonService.getIdForRefresh(refreshToken);
-        String dir = "placeImage";
+        //유저 확인
+        Long memberId = redisUtils.getId(refreshToken);
 
         Place place = Place.builder()
                 .title(placePostDto.getTitle())
@@ -92,7 +84,7 @@ public class PlaceService {
                 .endTime(placePostDto.getEndTime())
                 .build();
 
-
+        String dir = "placeImage";
         List<UploadFile> uploadFileList = s3Upload.uploadFileList(files, dir);
         List<PlaceImage> placeImageList = new ArrayList<>();
 
@@ -110,29 +102,27 @@ public class PlaceService {
         if (!placeImageList.isEmpty()) {
             for (PlaceImage placeImage : placeImageList) {
                 //파일 DB 저장
-                place.addPlaceImage(placeImageRepository.save(placeImage));
+                place.addPlaceImage(placeImage);
             }
         }
-
         placeRepository.save(place);
 
         List<String> categoryList = placePostDto.getCategoryList();
-        categoryList.forEach(
-                s -> {
-                    Category category = categoryRepository.findByCategoryName(s);
-                    PlaceCategory placeCategory = new PlaceCategory(place, s, category);
-                    placeCategoryRepository.save(placeCategory);
-                }
-        );
+        placeCategoryService.saveCategoryList(categoryList, place);
     }
 
     /**
      * 장소 저장 (Local)
+     * @param placePostDto
+     * @param refreshToken
+     * @param files
+     * @throws Exception
      */
     @Transactional
     public void createPlace(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) throws Exception {
-        //유저 확인 필요
-        Long memberId = commonService.getIdForRefresh(refreshToken);
+        //유저 확인
+        Long memberId = redisUtils.getId(refreshToken);
+
         Place place = Place.builder()
                 .title(placePostDto.getTitle())
                 .detailInfo(placePostDto.getDetailInfo())
@@ -163,20 +153,13 @@ public class PlaceService {
         if (!placeImageList.isEmpty()) {
             for (PlaceImage placeImage : placeImageList) {
                 //파일 DB 저장
-                place.addPlaceImage(placeImageRepository.save(placeImage));
+                place.addPlaceImage(placeImage);
             }
         }
-
         placeRepository.save(place);
 
         List<String> categoryList = placePostDto.getCategoryList();
-        categoryList.forEach(
-                s -> {
-                    Category category = categoryRepository.findByCategoryName(s);
-                    PlaceCategory placeCategory = new PlaceCategory(place, s, category);
-                    placeCategoryRepository.save(placeCategory);
-                }
-        );
+        placeCategoryService.saveCategoryList(categoryList, place);
     }
 
     /**
@@ -218,9 +201,15 @@ public class PlaceService {
 
     /**
      * 장소 수정 (S3)
+     * @param placeId
+     * @param placePatchDto
+     * @param refreshToken
+     * @param files
      */
     public void updatePlaceS3(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
+        //유저 확인
+        Long memberId = redisUtils.getId(refreshToken);
+
         Place updatePlace = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
@@ -240,7 +229,7 @@ public class PlaceService {
         List<String> addCategoryList; // 새롭게 전달되어 온 카테고리를 저장할 List
 
         // 장소카테고리 수정
-        addCategoryList = getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
+        addCategoryList = placeCategoryService.getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
 
         List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 목록
         List<MultipartFile> multipartFileList = files; //placePatchDto.getMultipartFiles(); // 전달되어온 파일 목록
@@ -270,24 +259,23 @@ public class PlaceService {
                 updatePlace.addPlaceImage(placeImageRepository.save(placeImage));
             }
         }
-
         placeRepository.save(updatePlace);
-
-        addCategoryList.forEach(
-                s -> {
-                    Category category = categoryRepository.findByCategoryName(s);
-                    PlaceCategory placeCategory = new PlaceCategory(updatePlace, s, category);
-                    placeCategoryRepository.save(placeCategory);
-                }
-        );
+        placeCategoryService.saveCategoryList(addCategoryList, updatePlace);
     }
 
 
     /**
      * 장소 수정 (Local)
+     * @param placeId
+     * @param placePatchDto
+     * @param refreshToken
+     * @param files
+     * @throws Exception
      */
     public void updatePlace(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) throws Exception {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
+        //유저 확인
+        Long memberId = redisUtils.getId(refreshToken);
+
         Place updatePlace = placeRepository.findById(placeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
@@ -306,7 +294,7 @@ public class PlaceService {
         List<String> addCategoryList; // 새롭게 전달되어 온 카테고리를 저장할 List
 
         // 장소카테고리 수정
-        addCategoryList = getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
+        addCategoryList = placeCategoryService.getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
 
         List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 목록
         List<MultipartFile> multipartFileList = files; //placePatchDto.getMultipartFiles(); // 전달되어온 파일 목록
@@ -333,39 +321,14 @@ public class PlaceService {
         if (!placeImageList.isEmpty()) {
             for (PlaceImage placeImage : placeImageList) {
                 //파일 DB 저장
-                updatePlace.addPlaceImage(placeImageRepository.save(placeImage));
+                updatePlace.addPlaceImage(placeImage);
             }
         }
-
         placeRepository.save(updatePlace);
+        placeCategoryService.saveCategoryList(addCategoryList, updatePlace);
 
-        addCategoryList.forEach(
-                s -> {
-                    Category category = categoryRepository.findByCategoryName(s);
-                    PlaceCategory placeCategory = new PlaceCategory(updatePlace, s, category);
-                    placeCategoryRepository.save(placeCategory);
-                }
-        );
-
-        // 시간별 예약 정보 수정
-        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        List<HostingTime> findHostingTimes = hostingTimeRepository.findByPlaceIdAndReserveDateGreaterThanEqual(placeId, currentDate);
-
-        if (!CollectionUtils.isEmpty(findHostingTimes)) {
-            findHostingTimes.forEach(
-                    findHostingTime -> {
-                        findHostingTime.getTimeStatuses().forEach(
-                                timeStatus -> {
-                                    if (timeStatus.isFull() && updatePlace.getMaxSpace() > timeStatus.getSpaceCount()) {
-                                        timeStatus.setIsNotFull();
-                                        timeStatusRepository.save(timeStatus);
-                                    }
-                                }
-                        );
-                    }
-            );
-        }
+        // 수정 날짜 이후 maxSpace update
+        // timeStatusService.updateIsFull(updatePlace);
     }
 
 
@@ -488,7 +451,8 @@ public class PlaceService {
      */
     @Transactional
     public Page<PlaceDto.Response> getPlaceMypage(String refreshToken, Pageable pageable) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
+        //유저 확인
+        Long memberId = redisUtils.getId(refreshToken);
         return placeRepository.getPlaceMypage(memberId, pageable);
     }
 
@@ -535,35 +499,6 @@ public class PlaceService {
         // 장소 카테고리 & 호스팅 삭제
         placeCategoryRepository.deleteAllByPlaceId(placeId);
         placeRepository.delete(findPlace);
-    }
-
-
-    private List<String> getAddCategoryList(Long placeId, List<PlaceCategory> dbCategoryList, List<String> categoryList) {
-        // 새롭게 전달되어 온 카테고리를 저장할 List
-        List<String> addCategoryList = new ArrayList<>();
-
-        // 카테고리 수정
-        if (!CollectionUtils.isEmpty(categoryList)) {
-            List<String> categoryNameList = new ArrayList<>();
-
-            for (PlaceCategory placeCategory : dbCategoryList) {
-                PlaceCategoryDto.Search placeCategoryDto = placeCategoryService.findByPlaceCategoryId(placeCategory.getId());
-                String categoryName = placeCategoryDto.getCategoryName();
-
-                if (!categoryList.contains(categoryName)) {
-                    placeCategoryService.deletePlaceCategory(placeCategory.getId());
-                } else {
-                    categoryNameList.add(categoryName);
-                }
-            }
-
-            for (String s : categoryList) {
-                if (!categoryNameList.contains(s)) {
-                    addCategoryList.add(s);
-                }
-            }
-        }
-        return addCategoryList;
     }
 
     private List<MultipartFile> getAddFileList(List<PlaceImage> dbPlaceImageList, List<MultipartFile> multipartFileList, String dir) {
