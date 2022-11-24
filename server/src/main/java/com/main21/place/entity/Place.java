@@ -38,11 +38,10 @@ public class Place {
     // 평점
     private double score;
 
+    // 평점 합
     private double totalScore;
 
-    // 조회수
-    private int view;
-
+    // 최대 방 개수
     private Integer maxSpace;
 
     // 공간 - 회원 간접 참
@@ -60,10 +59,6 @@ public class Place {
     private List<PlaceImage> placeImages = new ArrayList<>();
 
 
-    // 공간 - MBTI Count 1:N
-//    @OneToMany(mappedBy = "place")
-//    private List<MBTICount> mbtiCounts = new ArrayList<>();
-
     // createPlace 생성자
     @Builder
     public Place(String title,
@@ -73,8 +68,6 @@ public class Place {
                  int charge,
                  Long memberId,
                  double score,
-                 int view,
-                 Integer maxSpace,
                  Integer endTime){
         this.title = title;
         this.detailInfo = detailInfo;
@@ -83,8 +76,7 @@ public class Place {
         this.charge = charge;
         this.memberId = memberId;
         this.score = score;
-        this.view = view;
-        this.maxSpace = maxSpace;
+        this.maxSpace = 1;
         this.endTIme = endTime;
     }
 
@@ -94,7 +86,6 @@ public class Place {
             placeCategory.setPlace(this);
         }
     }
-
 
     public void addPlaceImage(PlaceImage placeImage) {
         this.placeImages.add(placeImage);

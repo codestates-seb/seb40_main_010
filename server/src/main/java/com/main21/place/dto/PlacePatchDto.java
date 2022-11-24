@@ -12,11 +12,9 @@ public class PlacePatchDto {
     private Long memberId;
     private Long reserveId;
     private double score;
-    private int view;
     private String title;
     private List<String> categoryList;
     private int maxCapacity;
-    private Integer maxSpace;
     private String address;
     private String detailInfo;
     private int charge;

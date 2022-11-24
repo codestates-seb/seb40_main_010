@@ -1,7 +1,5 @@
 package com.main21.reserve.service;
 
-import com.main21.exception.BusinessLogicException;
-import com.main21.exception.ExceptionCode;
 import com.main21.place.entity.Place;
 import com.main21.reserve.entity.HostingTime;
 import com.main21.reserve.entity.Reserve;
@@ -22,7 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class HostingTimeService {
 
-    private final ReserveDbService reserveDbService;
     private final HostingTimeRepository hostingTimeRepository;
     private final TimeStatusRepository timeStatusRepository;
 
@@ -79,10 +76,6 @@ public class HostingTimeService {
                 }
             }
         }
-
-        if (reserve.getCapacity() > place.getMaxCapacity()) {
-            throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
-        } else reserveDbService.saveReserve(reserve);
     }
 
     /**
