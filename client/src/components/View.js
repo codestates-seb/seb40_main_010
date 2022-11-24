@@ -21,8 +21,12 @@ function View() {
     try {
       const response = await axios.get(`/place/${placeId}`, header);
       setDetailInformation(response.data);
+      // const { title, filePath, category, detailInfo, address, phoneNumber } =
+      //   detailInformation;
       // console.log(response.data);
+      // return [title, filePath, category, detailInfo, address, phoneNumber];
     } catch (error) {
+      // return console.log(error);
       console.log(error);
     }
   };
@@ -43,11 +47,6 @@ function View() {
             detailInformation.filePath.map(placeImage => {
               return <InformationMiniImage key={placeImage} src={placeImage} />;
             })}
-
-          {/* <InformationMiniImage
-            key={detailInformation.placeImage}
-            src={detailInformation.placeImage}
-          /> */}
         </InformationMiniImageContainer>
         <DetailTitle>상세 정보</DetailTitle>
         <DetailTagContainer>
@@ -84,7 +83,7 @@ const InformationContainer = styled.div`
 `;
 
 const InformationTitle = styled.div`
-  font-size: 1.3rem;
+  font-size: 2rem;
   font-weight: 600;
 `;
 
@@ -109,7 +108,7 @@ const CarouselImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 500px;
+  width: 600px;
   margin-left: 20px;
   padding: 0px;
   flex-direction: row;
@@ -132,11 +131,14 @@ const DetailTagContainer = styled.div`
   margin-left: 20px;
   width: 600px;
   display: flex;
+  flex-wrap: wrap;
+  display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
 const DetailTag = styled.div`
+  white-space: nowrap;
   text-align: center;
   margin-right: 10px;
   width: auto;

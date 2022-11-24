@@ -6,18 +6,24 @@ import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { SlHome } from 'react-icons/sl';
 
-import { navSearchValue, categoryFocus } from '../../atoms';
+import { navSearchValue, categoryFocus, mainDataState } from '../../atoms';
 import { NavLeftButtonContainer, NavRightButtonContainer } from './NavButton';
-
+// ToDo : async await 수정
 function Nav({ navColor, buttonColor }) {
   const [currentSearch, setCurrentSearch] = useState('');
   const setSearch = useSetRecoilState(navSearchValue);
   const setFocusCategoryID = useSetRecoilState(categoryFocus);
+  const setMainPlaceData = useSetRecoilState(mainDataState);
 
   const navigate = useNavigate();
 
   const onChangeSearch = e => {
     setCurrentSearch(e.target.value);
+  };
+  const header = {
+    headers: {
+      'ngrok-skip-browser-warning': '010',
+    },
   };
 
   // eslint-disable-next-line consistent-return
@@ -32,10 +38,12 @@ function Nav({ navColor, buttonColor }) {
     if (trimmedSearch) {
       try {
         const response = await axios.get(
-          `{{BACKEND}}/search/${encodeURI(replacedSearch)}`,
+          `/search/${encodeURI(replacedSearch)}`,
+          header,
         );
-
+        console.log(response.data);
         setFocusCategoryID(0);
+        setMainPlaceData(response.data.data);
         setCurrentSearch('');
         navigate('/');
 
@@ -53,26 +61,28 @@ function Nav({ navColor, buttonColor }) {
     }
   };
 
+  // eslint-disable-next-line consistent-return
   const onClickSearch = () => {
     const trimmedSearch = currentSearch.trim();
     const replacedSearch = trimmedSearch.replace(/ +(?= )/g, '');
 
     setSearch(replacedSearch);
+    if (!trimmedSearch) return setCurrentSearch('');
 
-    if (trimmedSearch) {
-      axios
-        .get(`{{BACKEND}}/search/${encodeURI(replacedSearch)}`)
-        .then(res => console.log(res))
-        .then(setFocusCategoryID(0), setCurrentSearch(''), navigate('/'));
-    } else {
-      setCurrentSearch('');
-    }
+    axios
+      .get(`/search/${encodeURI(replacedSearch)}`, header)
+      .then(res => setMainPlaceData(res.data.data))
+      .then(setFocusCategoryID(0), setCurrentSearch(''), navigate('/'));
   };
 
   const onClickHomeIcon = () => {
     axios
-      .get('{{backend}}/')
-      .then(res => console.log(res), setFocusCategoryID(0), setSearch(''))
+      .get('/home', header)
+      .then(
+        res => setMainPlaceData(res.data.data),
+        setFocusCategoryID(0),
+        setSearch(''),
+      )
       .catch(err => console.log(err));
   };
 

@@ -35,22 +35,24 @@ function ReservationAsideBar() {
 
   const handleSubmit = async event => {
     event.preventDefault();
-
+    const header = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+        RefreshToken: localStorage.getItem('REFRESH'),
+      },
+    };
     const reservationInformation = {
       startTime: startDate,
       endTime: endDate,
       capacity,
     };
+
     try {
-      const response = await axios.post(
+      await axios.post(
         `/place/${placeId}/reserve`,
-        reservationInformation,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-            RefreshToken: localStorage.getItem('REFRESH'),
-          },
-        },
+        JSON.stringify(reservationInformation),
+        header,
       );
       console.log(response);
       setStartDate(false);

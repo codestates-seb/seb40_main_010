@@ -51,14 +51,16 @@ export default function Places() {
       <Category />
       <DisplayComponentDiv>
         <MainComponentContainer>
-          {mbtiPlaceData.map(placeData => {
-            return <Place key={placeData.title} placeData={placeData} />;
-          })}
+          {mbtiPlaceData &&
+            mbtiPlaceData.map(placeData => {
+              return <Place key={placeData.title} placeData={placeData} />;
+            })}
         </MainComponentContainer>
         <MainComponentContainer>
-          {mainPlaceData.map(placeData => {
-            return <Place key={placeData.placeId} placeData={placeData} />;
-          })}
+          {mainPlaceData &&
+            mainPlaceData.map(placeData => {
+              return <Place key={placeData.placeId} placeData={placeData} />;
+            })}
         </MainComponentContainer>
       </DisplayComponentDiv>
     </MainContainer>

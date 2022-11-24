@@ -11,6 +11,12 @@ function Category() {
 
   const searchState = useRecoilValue(navSearchValue);
 
+  const header = {
+    headers: {
+      'ngrok-skip-browser-warning': '010',
+    },
+  };
+
   const categories = [
     { categoryId: 0, name: '전체', icon: 'fa-solid fa-house' },
     { categoryId: 1, name: '공유오피스', icon: 'fa-solid fa-user-group' },
@@ -40,7 +46,7 @@ function Category() {
         return `/category/${index}/search/${encodeURI(search)}`;
       }
       if (index !== 0 && !search) {
-        return `/category/${index}/search`;
+        return `/category/${index}`;
       }
       return '';
     };
@@ -48,7 +54,7 @@ function Category() {
     const url = getURL(idx, searchState);
 
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url, header);
       console.log(response);
       setMainPlaceData(response.data.data);
       console.log(mainPlaceData);
