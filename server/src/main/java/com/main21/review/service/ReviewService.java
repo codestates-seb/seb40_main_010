@@ -7,6 +7,7 @@ import com.main21.place.entity.Place;
 import com.main21.place.repository.PlaceRepository;
 import com.main21.reserve.entity.Reserve;
 import com.main21.reserve.repository.ReserveRepository;
+import com.main21.reserve.service.ReserveDbService;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
 import com.main21.review.repository.ReviewRepository;
@@ -29,8 +30,8 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final PlaceRepository placeRepository;
     private final RedisUtils redisUtils;
-    private final ReserveRepository reserveRepository;
-    private final CommonService commonService;
+    private final ReserveDbService  reserveDbService;
+    private final ReviewDbService reviewDbService;
 
     /**
      * 리뷰 등록 로직
@@ -44,8 +45,8 @@ public class ReviewService {
                              String refreshToken,
                              Long placeId,
                              Long reserveId) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
-        Reserve findReserve = commonService.ifExistsReturnReserve(reserveId);
+        Long memberId = redisUtils.getId(refreshToken);
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
 
         // 예약 상태가 결제 진행중이 아니라면 리뷰 달지 못함
         if (!findReserve.getStatus().equals(PAY_IN_PROGRESS)) {
@@ -71,13 +72,14 @@ public class ReviewService {
      * @author Quartz614
      */
     public void updateReview(Long reviewId, ReviewDto.Patch patch, String refreshToken) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
-        Review findReview = commonService.ifExistsReturnReview(reviewId);
+        Long memberId = redisUtils.getId(refreshToken);
+        Review findReview = reviewDbService.ifExistsReturnReview(reviewId);
 
         if (!memberId.equals(findReview.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
-        Place findPlace = commonService.ifExistsReturnPlace(findReview.getPlaceId());
+        Place findPlace = placeRepository.findById(findReview.getPlaceId())
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
 
         findPlace.setTotalScore(findPlace.getTotalScore() - findReview.getScore());
         placeRepository.save(findPlace);
@@ -107,13 +109,14 @@ public class ReviewService {
      * @author Quartz614
      */
     public void deleteReview(Long reviewId, String refreshToken) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
-        Review findReview = commonService.ifExistsReturnReview(reviewId);
+        Long memberId = redisUtils.getId(refreshToken);
+        Review findReview = reviewDbService.ifExistsReturnReview(reviewId);
 
         if (!memberId.equals(findReview.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
-        Place findPlace = commonService.ifExistsReturnPlace(findReview.getPlaceId());
+        Place findPlace = placeRepository.findById(findReview.getPlaceId())
+                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PLACE_NOT_FOUND));
         findPlace.setTotalScore(findPlace.getTotalScore() - findReview.getScore());
 
         placeRepository.save(findPlace);
@@ -133,7 +136,7 @@ public class ReviewService {
      */
 
     public Page<ReviewDto.MyPage> getReviewsMypage(String refreshToken, Pageable pageable) {
-        Long memberId = commonService.getIdForRefresh(refreshToken);
+        Long memberId = redisUtils.getId(refreshToken);
         return reviewRepository.getReviewsMypage(memberId, pageable);
     }
 
