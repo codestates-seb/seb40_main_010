@@ -124,23 +124,3 @@ export const bookmarkState = atom({
   key: 'bookmarkState',
   default: '',
 });
-
-// export const myPageListData = atom({
-//   key: 'myPageListData',
-//   default: [],
-// });
-
-// export const myPageListData = atom({
-//   key: 'myPageListData',
-//   default: [],
-// });
-
-// export const myPageListData = atom({
-//   key: 'myPageListData',
-//   default: [],
-// });
-
-// export const myPageListData = atom({
-//   key: 'myPageListData',
-//   default: [],
-// });
