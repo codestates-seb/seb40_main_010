@@ -118,3 +118,8 @@ export const mbtiPlaceDataState = atom({
   key: 'mbtiPlaceDataState',
   default: [],
 });
+
+export const bookmarkState = atom({
+  key: 'bookmarkState',
+  default: '',
+});

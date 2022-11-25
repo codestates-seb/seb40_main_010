@@ -4,7 +4,7 @@ import axios from 'axios';
 // import { useRecoilValue } from 'recoil';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { DetailInformation, PlaceIDState } from '../atoms';
+import { DetailInformation, PlaceIDState, bookmarkState } from '../atoms';
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Navigation/Nav';
 import View from '../components/View';
@@ -28,9 +28,12 @@ function Detail() {
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
   const placeId = useRecoilValue(PlaceIDState);
+  const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
   const header = {
     headers: {
       'ngrok-skip-browser-warning': '010',
+      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+      RefreshToken: localStorage.getItem('REFRESH'),
     },
   };
 
@@ -38,6 +41,7 @@ function Detail() {
     try {
       const response = await axios.get(`/place/${placeId}`, header);
       setDetailInformation({ ...response.data });
+      setIsBookmark(response.data.bookmark);
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +49,8 @@ function Detail() {
 
   useEffect(() => {
     callDetailData();
-  }, [placeId, detailInformation.bookmark]);
+    console.log(isBookmark);
+  }, [placeId, isBookmark]);
 
   return (
     <DetailReviewContainer>

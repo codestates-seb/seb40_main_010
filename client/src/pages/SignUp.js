@@ -87,7 +87,8 @@ function SignUp() {
                   },
                   validate: {
                     spaceCheck: value =>
-                      (value && value.search(/\s/) === -1) || '공백이 있습니다',
+                      (value && value.search(/\s/) === -1) ||
+                      '공백을 제거해주세요',
                     numCheck: value =>
                       (value && /[0-9]/g.test(value)) || '숫자를 추가해주세요',
                     letterCheck: value =>
@@ -95,8 +96,8 @@ function SignUp() {
                     specialCheck: value =>
                       (value && /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi.test(value)) ||
                       '특수문자를 추가해주세요',
-                    spacecheck: value =>
-                      (value && /\s/gi.test(value)) || '공백을 제거해주세요',
+                    // spacecheck: value =>
+                    //   (value && /\s/gi.test(value)) || '공백을 제거해주세요',
                   },
                 })}
               />
