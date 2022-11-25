@@ -183,6 +183,8 @@ function MyPageCategoryList({ listData, type }) {
           placeImageURL={listData.image}
           reviewComment={listData.comment}
           reviewScore={listData.score}
+          reserveId={listData.reserveId}
+          placeId={listData.placeId}
         />
       )}
     </CategoryItemList>
@@ -286,6 +288,7 @@ const PlaceCharge = styled.span`
 
 const PlaceImage = styled.img`
   width: 128px;
+  height: 128px;
   border-radius: 15px;
 `;
 

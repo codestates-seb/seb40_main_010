@@ -34,7 +34,8 @@ const useMyPage = () => {
   const callRegistrationList = async () => {
     try {
       const response = await axios.get(`/place`, header);
-      setListData([...response.data]);
+      console.log('place', response.data.data);
+      setListData([...response.data.data]);
     } catch (err) {
       console.log(err);
     }
@@ -43,7 +44,8 @@ const useMyPage = () => {
   const reservationList = async () => {
     try {
       const response = await axios.get(`/reserve`, header);
-      setListData([...response.data]);
+      console.log('reserve', response.data.data);
+      setListData([...response.data.data]);
     } catch (err) {
       console.log(err);
     }
@@ -52,7 +54,8 @@ const useMyPage = () => {
   const bookmarkList = async () => {
     try {
       const response = await axios.get(`/bookmark`, header);
-      setListData([...response.data]);
+      console.log('bookmark', response.data.data);
+      setListData([...response.data.data]);
     } catch (err) {
       console.log(err);
     }
@@ -61,7 +64,8 @@ const useMyPage = () => {
   const reviewList = async () => {
     try {
       const response = await axios.get(`/review`, header);
-      setListData([...response.data]);
+      console.log('review', response);
+      setListData([...response.data.data]);
     } catch (err) {
       console.log(err);
     }
@@ -94,6 +98,7 @@ const useMyPage = () => {
         header,
       );
       callUserData();
+      editStatusChange();
     } catch (err) {
       console.log(err);
     }
