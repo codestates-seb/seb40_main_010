@@ -1,14 +1,7 @@
 package com.main21.member.entity;
 
-import com.main21.bookmark.entity.Bookmark;
-import com.main21.exception.ExceptionCode;
-import com.main21.place.entity.Place;
-import com.main21.reserve.entity.Reserve;
-import com.main21.review.entity.Review;
-import com.main21.security.exception.AuthException;
 import com.main21.util.Auditable;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,34 +17,25 @@ public class Member extends Auditable {
     @Column(name = "MEMBER_ID")
     private Long id;
 
-
     private String email;
-
 
     private String nickname;
 
-
     private String mbti;
-
 
     @Column(length = 500)
     private String password;
 
-
     private String phoneNumber;
-
 
     @Enumerated(value = EnumType.STRING)
     private MemberStatus memberStatus;
 
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private MemberImage memberImage;
-
 
     @Builder
     public Member(String email,
@@ -70,26 +54,21 @@ public class Member extends Auditable {
         this.roles = roles;
     }
 
-
     public void setDetailsId(Long id) {
         this.id = id;
     }
-
 
     public void setDetailsEamil(String email) {
         this.email = email;
     }
 
-
     public void setDetailsPassword(String password) {
         this.password = password;
     }
 
-
     public void setDetailsRoles(List<String> roles) {
         this.roles = roles;
     }
-
 
     public enum MemberStatus {
         MEMBER_ACTIVE("활동중인 회원입니다."),
@@ -103,13 +82,11 @@ public class Member extends Auditable {
         }
     }
 
-
     public void editMember(String nickname,
                            String mbti) {
         this.nickname = nickname;
         this.mbti = mbti;
     }
-
 
     public void addMemberImage(MemberImage memberImage) {
         if (memberImage.getMember() != this) {
