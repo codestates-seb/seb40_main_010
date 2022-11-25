@@ -35,8 +35,10 @@ const useMyPage = () => {
     try {
       const response = await axios.get(`/place`, header);
       console.log('place', response.data.data);
+      setListData([]);
       setListData([...response.data.data]);
     } catch (err) {
+      setListData([]);
       console.log(err);
     }
   };
@@ -45,8 +47,10 @@ const useMyPage = () => {
     try {
       const response = await axios.get(`/reserve`, header);
       console.log('reserve', response.data.data);
+      setListData([]);
       setListData([...response.data.data]);
     } catch (err) {
+      setListData([]);
       console.log(err);
     }
   };
@@ -55,8 +59,10 @@ const useMyPage = () => {
     try {
       const response = await axios.get(`/bookmark`, header);
       console.log('bookmark', response.data.data);
+      setListData([]);
       setListData([...response.data.data]);
     } catch (err) {
+      setListData([]);
       console.log(err);
     }
   };
@@ -64,9 +70,11 @@ const useMyPage = () => {
   const reviewList = async () => {
     try {
       const response = await axios.get(`/review`, header);
-      console.log('review', response);
+      console.log('review', response.data.data);
+      setListData([]);
       setListData([...response.data.data]);
     } catch (err) {
+      setListData([]);
       console.log(err);
     }
   };
