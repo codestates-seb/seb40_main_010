@@ -10,11 +10,10 @@ import com.main21.file.UploadFile;
 import com.main21.member.entity.Member;
 import com.main21.member.service.MemberDbService;
 import com.main21.place.dto.*;
-
 import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceCategory;
 import com.main21.place.entity.PlaceImage;
-import com.main21.reserve.entity.*;
+import com.main21.reserve.entity.Reserve;
 import com.main21.reserve.service.MbtiCountService;
 import com.main21.reserve.service.ReserveDbService;
 import com.main21.review.service.ReviewDbService;
@@ -23,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -55,10 +55,12 @@ public class PlaceService {
     private S3Upload s3Upload;
 
     /**
-     * 장소 저장 (S3)
-     * @param placePostDto
-     * @param refreshToken
-     * @param files
+     * 공간 저장 (S3)
+     *
+     * @param placePostDto 공간 등록 dto
+     * @param refreshToken 리프래시 토큰
+     * @param files 이미지 파일
+     * @author LimJaeminZ
      */
     @Transactional
     public void createPlaceS3(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) {
@@ -104,11 +106,13 @@ public class PlaceService {
     }
 
     /**
-     * 장소 저장 (Local)
-     * @param placePostDto
-     * @param refreshToken
-     * @param files
+     * 공간 저장 (Local)
+     *
+     * @param placePostDto 공간 등록 dto
+     * @param refreshToken 리프래시 토큰
+     * @param files 이미지 파일
      * @throws Exception
+     * @author LimJaeminZ
      */
     @Transactional
     public void createPlace(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) throws Exception {
@@ -153,17 +157,29 @@ public class PlaceService {
     }
 
     /**
-     * 장소 상세 조회 메서드
-     * @param placeId
-     * @param refreshToken
-     * @return
+     * 공간 상세 조회 메서드
+     *
+     * @param placeId 공간 식별자
+     * @param refreshToken 리프래시 토큰
+     * @return PlaceResponseDto
+     * @author LimJaeminZ
      */
     @Transactional
     public PlaceResponseDto searchPlace(Long placeId, String refreshToken) {//, List<String> filePath, List<String> categoryList) {
+        boolean isBookmark = false;
+
+        if (StringUtils.hasText(refreshToken)) {
+            Long memberId = redisUtils.getId(refreshToken);
+            Optional<Bookmark> findBookmark = bookmarkRepository
+                    .findBookmarkByMemberIdAndPlaceId(memberId, placeId);
+            if (findBookmark.isPresent())
+                isBookmark = true;
+        }
+
 
         Place place = placeDbService.ifExistsReturnPlace(placeId);
-        Optional<Bookmark> findBookmark = bookmarkRepository.findBookmarkByMemberIdAndPlaceId(place.getMemberId(), placeId);
         Member findMember = memberDbService.ifExistsReturnMember(place.getMemberId());
+
 
         List<PlaceImageResponseDto> placeImageResponseDtoList = placeImageService.findAllByPlaceImagePath(placeId);
         List<String> categoryList = placeCategoryService.findByAllPlaceCategoryList(placeId);
@@ -172,28 +188,17 @@ public class PlaceService {
         for (PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
             filePath.add(placeImageResponseDto.getFilePath());
 
-        boolean isBookmark = false;
-
-        // if -> refreshToken이 존재하지 않거나 공백이면 false 반환,
-        // else -> refreshToken와 bookmark의 memberId가 같고 bookmark가 존재하면 true 반환
-        if (refreshToken == null || refreshToken.equals("")) {
-            isBookmark = false;
-        }else {
-            Long memberId = redisUtils.getId(refreshToken);
-            if (findBookmark.isPresent() && memberId.equals(findBookmark.get().getMemberId())) {
-                isBookmark = true;
-            }
-        }
-
         return new PlaceResponseDto(place, filePath, categoryList, findMember, isBookmark);
     }
 
     /**
-     * 장소 수정 (S3)
-     * @param placeId
-     * @param placePatchDto
-     * @param refreshToken
-     * @param files
+     * 공간 수정 (S3)
+     *
+     * @param placeId 공간 식별자
+     * @param placePatchDto 공간 수정 dto
+     * @param refreshToken 리프래시 토큰
+     * @param files 이미지 파일
+     * @author LimjaeminZ
      */
     public void updatePlaceS3(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) {
         //유저 확인
@@ -215,7 +220,7 @@ public class PlaceService {
         List<String> categoryList = placePatchDto.getCategoryList(); // 전달되어온 카테고리 목록
         List<String> addCategoryList; // 새롭게 전달되어 온 카테고리를 저장할 List
 
-        // 장소카테고리 수정
+        // 공간 카테고리 수정
         addCategoryList = placeCategoryService.getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
 
         List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 목록
@@ -252,12 +257,14 @@ public class PlaceService {
 
 
     /**
-     * 장소 수정 (Local)
-     * @param placeId
-     * @param placePatchDto
-     * @param refreshToken
-     * @param files
+     * 공간 수정 (Local)
+     *
+     * @param placeId 공간 식별자
+     * @param placePatchDto 공간 수정 dto
+     * @param refreshToken 리프래시 토큰
+     * @param files 이미지 파일
      * @throws Exception
+     * @author LimjaeminZ
      */
     public void updatePlace(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) throws Exception {
         //유저 확인
@@ -278,7 +285,7 @@ public class PlaceService {
         List<String> categoryList = placePatchDto.getCategoryList(); // 전달되어온 카테고리 목록
         List<String> addCategoryList; // 새롭게 전달되어 온 카테고리를 저장할 List
 
-        // 장소카테고리 수정
+        // 공간 카테고리 수정
         addCategoryList = placeCategoryService.getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
 
         List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 목록
@@ -316,6 +323,13 @@ public class PlaceService {
         // timeStatusService.updateIsFull(updatePlace);
     }
 
+    /**
+     * 공간 삭제 메서드
+     *
+     * @param refreshToken 리프래시 토큰
+     * @param placeId 공간 식별자
+     * @author Quartz614
+     */
     @Transactional
     public void deleteHosting(String refreshToken, Long placeId) {
         Long memberId = redisUtils.getId(refreshToken);
@@ -343,11 +357,19 @@ public class PlaceService {
             reserveDbService.saveReserve(findReserve.get(i));
         }
 
-        // 장소 카테고리 & 호스팅 삭제
+        // 공간 카테고리 & 공간 삭제
         placeDbService.deletePlaceCategory(placeId);
         placeDbService.deletePlace(findPlace);
     }
 
+    /**
+     *
+     * @param dbPlaceImageList
+     * @param multipartFileList
+     * @param dir
+     * @return List<MultipartFile>
+     * @author LimJaeminZ
+     */
     private List<MultipartFile> getAddFileList(List<PlaceImage> dbPlaceImageList, List<MultipartFile> multipartFileList, String dir) {
         List<MultipartFile> addFileList = new ArrayList<>(); // 새롭게 전달되어온 파일들의 목록을 저장할 List
 

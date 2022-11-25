@@ -1,10 +1,8 @@
 package com.main21.bookmark.controller;
 
 import com.main21.bookmark.dto.BookmarkDto;
-import com.main21.bookmark.repository.BookmarkRepository;
 import com.main21.bookmark.service.BookmarkService;
 import com.main21.dto.MultiResponseDto;
-import com.main21.dto.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,9 +23,9 @@ public class BookmarkController {
      * Pagination 적용
      * 회원별 북마크 전체 조회
      *
-     * @param refreshToken
-     * @param pageable
-     * @return
+     * @param refreshToken 리프래시 토큰
+     * @param pageable 페이지 정보
+     * @return ResponseEntity
      * @author LeeGoh
      */
     @GetMapping("/bookmark")
@@ -45,15 +43,15 @@ public class BookmarkController {
      * memberId, PlaceId로 Bookmark 가져오기 Query
      * 북마크가 존재하면 북마크에서 삭제하고, 북마크가 존재하지 않으면 북마크에 추가하기
      *
-     * @param placeId
-     * @param refreshToken
-     * @return
-      @author LeeGoh
+     * @param placeId 공간 식별자
+     * @param refreshToken 리프래시 토큰
+     * @return ResponseEntity
+     * @author LeeGoh
      */
     @GetMapping("/bookmark/{place-id}")
     public ResponseEntity createBookmark(@PathVariable("place-id") Long placeId,
                                          @RequestHeader(REFRESH_TOKEN) String refreshToken) {
-        bookmarkService.createBookmark(placeId, refreshToken);
-        return new ResponseEntity<>(HttpStatus.OK);
+        boolean bookmark = bookmarkService.createBookmark(placeId, refreshToken);
+        return ResponseEntity.ok(bookmark);
     }
 }

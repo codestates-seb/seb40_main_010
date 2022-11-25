@@ -154,9 +154,7 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
     @Override
     public Page<PlaceDto.Response> searchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
         List<PlaceDto.Response> results = queryFactory
-                .select(new QPlaceDto_Response(
-                        place
-                ))
+                .select(new QPlaceDto_Response(place))
                 .from(place)
                 .where(place.charge.between(searchDetail.getStartCharge(), searchDetail.getEndCharge())
                         .or(place.maxCapacity.goe(searchDetail.getCapacity())))

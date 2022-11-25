@@ -2,7 +2,6 @@ package com.main21.bookmark.repository;
 
 import com.main21.bookmark.dto.BookmarkDto;
 import com.main21.bookmark.dto.QBookmarkDto_Response;
-import com.main21.bookmark.entity.Bookmark;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,9 +23,11 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository{
 
     /**
      * Pagination 적용
+     *
      * 회원별 북마크 전체 조회 Query
-     * @param memberId
-     * @return
+     * @param memberId 사용자 식별자
+     * @return Page<BookmarkDto.Response>
+     * @author LeeGoh
      */
     @Override
     public Page<BookmarkDto.Response> getBookmark(Long memberId, Pageable pageable) {
@@ -37,9 +38,7 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository{
                 ))
                 .from(bookmark)
                 .leftJoin(place).on(bookmark.placeId.eq(place.id))
-                .where(
-                        bookmark.memberId.eq(memberId)
-                )
+                .where(bookmark.memberId.eq(memberId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(bookmark.id.desc())

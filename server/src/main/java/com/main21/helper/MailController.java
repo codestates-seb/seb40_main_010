@@ -1,6 +1,7 @@
 package com.main21.helper;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,11 +18,14 @@ public class MailController {
 
     private final MailService mailService;
 
-    @GetMapping("/mail")
-    public String dispMail() {
-        return "mail";
-    }
-
+    /**
+     * 예약 확정(결제 완료) 내역 메일 전송
+     *
+     * @param reserveId 예약 식별자
+     * @param refreshToken 리프래시 토큰
+     * @return ResponseEntity
+     * @author LeeGoh
+     */
     @PostMapping("/reserve/{reserve-id}/mail")
     public ResponseEntity execMail(@PathVariable("reserve-id") Long reserveId,
                                    @RequestHeader(REFRESH_TOKEN) String refreshToken) {
