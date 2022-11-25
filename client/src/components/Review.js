@@ -3,6 +3,24 @@ import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 
 function Review({ reviewData }) {
+  const handleDate = createdAt => {
+    if (createdAt === undefined) return null;
+
+    let date = new Date(createdAt);
+    const month = date.getMonth() + 1;
+    const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
+    const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+    const krCurr = utc + KR_TIME_DIFF;
+
+    date = new Date(krCurr).toString();
+
+    const splitDate = date.split(' ');
+    const day = splitDate[2];
+    const year = splitDate[3];
+
+    return `${year}.${month}.${day}`;
+  };
+
   return (
     <ReviewContent>
       <UserImage src={reviewData.profileImage} />
@@ -10,7 +28,7 @@ function Review({ reviewData }) {
         <ReviewInfoContainer>
           <UserName value={reviewData.nickname}>{reviewData.nickname}</UserName>
           <ReviewCreatedDate value={reviewData.createdAt}>
-            {reviewData.createdAt}
+            {handleDate(reviewData.createdAt)}
           </ReviewCreatedDate>
         </ReviewInfoContainer>
         <ReviewRating>
