@@ -1,7 +1,5 @@
 package com.main21.review.entity;
 
-
-import com.main21.member.entity.Member;
 import com.main21.util.Auditable;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,10 +23,10 @@ public class Review extends Auditable {
     @Column(length = 1000)
     private String comment;
 
-
     private Long memberId;
 
     private Long placeId;
+
     @Builder
     public Review(Double score, String comment, Long memberId, Long placeId) {
         this.score = score;
@@ -36,6 +34,7 @@ public class Review extends Auditable {
         this.memberId = memberId;
         this.placeId = placeId;
     }
+
     public void editReview(Double score, String comment) {
         this.score = score;
         this.comment = comment;

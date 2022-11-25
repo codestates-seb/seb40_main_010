@@ -37,7 +37,7 @@ public class ReviewDbService {
      *
      * @param placeId
      * @param pageable
-     * @return
+     * @return Page<ReviewDto.Response>
      * @author Quartz614
      */
     public Page<ReviewDto.Response> getReviews(Long placeId, Pageable pageable) {
@@ -49,7 +49,7 @@ public class ReviewDbService {
      *
      * @param memberId
      * @param pageable
-     * @return
+     * @return Page<ReviewDto.MyPage>
      * @author Quartz614
      */
     public Page<ReviewDto.MyPage> getReviewsMypage(Long memberId, Pageable pageable) {

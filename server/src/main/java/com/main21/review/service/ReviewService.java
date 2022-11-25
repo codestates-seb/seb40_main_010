@@ -8,7 +8,6 @@ import com.main21.reserve.entity.Reserve;
 import com.main21.reserve.service.ReserveDbService;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
-import com.main21.review.repository.ReviewRepository;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -86,7 +85,7 @@ public class ReviewService {
      * 호스트 페이지에서 리뷰 조회 로직
      *
      * @param placeId
-     * @return
+     * @return Page<ReviewDto.Response>
      * @author Quartz614
      */
     public Page<ReviewDto.Response> getPlaceReviews(Long placeId, Pageable pageable) {
@@ -94,7 +93,7 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 삭제 로직
+     * 리뷰 삭제 로직 메서드
      *
      * @param reviewId     리뷰 식별자
      * @param refreshToken 리프래시 토큰
@@ -118,19 +117,25 @@ public class ReviewService {
     }
 
     /**
-     * 마이페이지에서 등록한 리뷰 조회
+     * 마이페이지에서 등록한 리뷰 조회 메서드
      *
      * @param refreshToken 리프래시 토큰
-     * @param pageable     페이징 처리
-     * @return
+     * @param pageable 페이지 정보
+     * @return Page<ReviewDto.MyPage>
      * @author Quartz614
      */
-
     public Page<ReviewDto.MyPage> getReviewsMypage(String refreshToken, Pageable pageable) {
         Long memberId = redisUtils.getId(refreshToken);
         return reviewDbService.getReviewsMypage(memberId, pageable);
     }
 
+    /**
+     *
+     * @param findPlace
+     * @param totalScore
+     * @param placeId
+     * @author LimJaeminZ
+     */
     public void modifyScore(Place findPlace, Double totalScore, Long placeId) {
         Long reviewer = reviewDbService.countByPlaceId(placeId);
         String str = String.format("%.2f", totalScore / reviewer);

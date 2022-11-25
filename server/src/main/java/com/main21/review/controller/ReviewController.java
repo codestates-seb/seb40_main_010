@@ -1,7 +1,6 @@
 package com.main21.review.controller;
 
 import com.main21.dto.MultiResponseDto;
-import com.main21.place.dto.PlaceDto;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +21,12 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     /**
-     * 리뷰 등록
+     * 리뷰 등록 컨트롤러
+     *
      * @param placeId 장소 식별자
      * @param post 등록
      * @param refreshToken 리프래시 토큰
-     * @return
+     * @return ResponseEntity
      * @author Quartz614
      */
     @PostMapping("/{place-id}/reserve/{reserve-id}")
@@ -39,11 +39,12 @@ public class ReviewController {
     }
 
     /**
-     * 리뷰 등록 수정
+     * 리뷰 등록 수정 컨트롤러
+     *
      * @param reviewId 리뷰 식별자
      * @param patch 수정
      * @param refreshToken 리프래시 토큰
-     * @return
+     * @return ResponseEntity
      * @author Quartz614
      */
     @PatchMapping("/{review-id}/edit")
@@ -55,10 +56,11 @@ public class ReviewController {
     }
 
     /**
-     * 리뷰 삭제
+     * 리뷰 삭제 컨트롤러
+     *
      * @param reviewId 리뷰 식별자
      * @param refreshToken 리프래시 토큰
-     * @return
+     * @return ResponseEntity
      * @author Quartz614
      */
     @DeleteMapping("/{review-id}")
@@ -69,9 +71,10 @@ public class ReviewController {
     }
 
     /**
-     * 호스트 페이지에서 리뷰 조회
-     * @param placeId
-     * @return
+     * 호스트 페이지에서 리뷰 조회 컨트롤러
+     *
+     * @param placeId 공간 식별자
+     * @return ResponseEntity
      * @author Quartz614
      */
     @GetMapping("/{place-id}")
@@ -83,13 +86,13 @@ public class ReviewController {
     }
 
     /**
-     * 마이페이지에서 작성한 리뷰 조회
+     * 마이페이지에서 작성한 리뷰 조회 컨트롤러
+     *
      * @param refreshToken 리프래시 토큰
-     * @param pageable 페이징 처리
-     * @return
+     * @param pageable 페이지 정보
+     * @return ResponseEntity
      * @author Quartz614
      */
-
     @GetMapping
     public ResponseEntity getReviewsMypage(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                           Pageable pageable) {

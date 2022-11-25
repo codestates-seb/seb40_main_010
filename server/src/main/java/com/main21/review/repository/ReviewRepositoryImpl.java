@@ -27,13 +27,13 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
 
 
     /**
-     * 상세페이지 리뷰 조회
-     * @param placeId
-     * @param pageable
-     * @return
+     * 상세페이지 리뷰 조회 Query
+     *
+     * @param placeId 공간 식별자
+     * @param pageable 페이지 정보
+     * @return Page<ReviewDto.Response>
      * @author Quartz614
      */
-
     @Override
     public Page<ReviewDto.Response> getReviews(Long placeId, Pageable pageable) {
         List<ReviewDto.Response> result = queryFactory
@@ -56,10 +56,11 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
 
     }
     /**
-     * 마이페이지에서 작성한 리뷰 조회
-     * @param placeId
-     * @param pageable
-     * @return
+     * 마이페이지에서 작성한 리뷰 조회 Query
+     *
+     * @param memberId 회원 식별자
+     * @param pageable 페이지 정보
+     * @return Page<ReviewDto.MyPage>
      * @author Quartz614
      */
     @Override
