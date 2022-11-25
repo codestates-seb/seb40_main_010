@@ -1,18 +1,20 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import axios from 'axios';
 
 import { FaRegBookmark, FaLink, FaBookmark } from 'react-icons/fa';
-import { PlaceIDState } from '../../atoms';
+import { PlaceIDState, DetailInformation } from '../../atoms';
 import header from '../../utils/header';
 
 // TODO
 // window를 지원하지 않을 수 있다.
 function ReservationBottomButtons() {
-  const [bookmark, setBookmark] = useState(false);
   const placeId = useRecoilValue(PlaceIDState);
-
+  const detailInformation = useRecoilValue(DetailInformation);
+  // const [bookmark, setBookmark] = useState(detailInformation.bookmark);
+  const { bookmark } = detailInformation;
+  console.log(bookmark);
   const copyLinkRef = useRef();
 
   const handleCopyLink = () => {
@@ -30,7 +32,6 @@ function ReservationBottomButtons() {
   const handleBookmark = async () => {
     try {
       const response = await axios.get(`/bookmark/${placeId}`, header);
-      setBookmark(!bookmark);
       console.log(response);
     } catch (error) {
       console.log(error);
