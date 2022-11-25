@@ -39,9 +39,9 @@ public class BookmarkController {
 
 
     /**
-     * 북마크 추가 및 삭제
-     * memberId, PlaceId로 Bookmark 가져오기 Query
-     * 북마크가 존재하면 북마크에서 삭제하고, 북마크가 존재하지 않으면 북마크에 추가하기
+     * 북마크 추가 및 삭제<br>
+     * memberId, PlaceId로 Bookmark 가져오기 Query<br>
+     * 북마크가 존재하면 북마크에서 삭제하고, 북마크가 존재하지 않으면 북마크에 추가하기<br>
      *
      * @param placeId 공간 식별자
      * @param refreshToken 리프래시 토큰

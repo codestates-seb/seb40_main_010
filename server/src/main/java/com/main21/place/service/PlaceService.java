@@ -14,7 +14,7 @@ import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceCategory;
 import com.main21.place.entity.PlaceImage;
 import com.main21.reserve.entity.Reserve;
-import com.main21.reserve.service.MbtiCountService;
+import com.main21.batch.service.MbtiCountService;
 import com.main21.reserve.service.ReserveDbService;
 import com.main21.review.service.ReviewDbService;
 import com.main21.security.utils.RedisUtils;
@@ -207,7 +207,7 @@ public class PlaceService {
         Place updatePlace = placeDbService.ifExistsReturnPlace(placeId);
 
         if (!Objects.equals(updatePlace.getMemberId(), memberId)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_UPDATE);
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
         }
 
         updatePlace.setTitle(placePatchDto.getTitle());
@@ -273,7 +273,7 @@ public class PlaceService {
         Place updatePlace = placeDbService.ifExistsReturnPlace(placeId);
 
         if (!Objects.equals(updatePlace.getMemberId(), memberId)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_UPDATE);
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED_FOR_UPDATE);
         }
         updatePlace.setTitle(placePatchDto.getTitle());
         updatePlace.setDetailInfo(placePatchDto.getDetailInfo());

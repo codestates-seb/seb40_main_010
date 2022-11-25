@@ -1,13 +1,14 @@
 package com.main21.batch.repository;
 
-import com.main21.reserve.entity.MbtiCount;
+import com.main21.batch.entity.MbtiCount;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.main21.reserve.entity.QMbtiCount.mbtiCount;
+import static com.main21.batch.entity.QMbtiCount.mbtiCount;
+
 
 public class CustomBestRepositoryImpl implements CustomBestRepository {
     private final JPAQueryFactory queryFactory;

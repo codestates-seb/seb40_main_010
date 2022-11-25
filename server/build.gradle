@@ -115,6 +115,7 @@ dependencies {
 
 
     // feign client
+    compile("io.github.openfeign:feign-httpclient")
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation group: 'io.github.openfeign', name: 'feign-gson', version: '11.0'
 

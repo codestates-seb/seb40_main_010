@@ -1,6 +1,6 @@
 package com.main21.batch.repository;
 
-import com.main21.reserve.entity.MbtiCount;
+import com.main21.batch.entity.MbtiCount;
 
 import java.util.List;
 

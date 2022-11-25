@@ -1,6 +1,6 @@
-package com.main21.reserve.repository;
+package com.main21.batch.repository;
 
-import com.main21.reserve.entity.MbtiCount;
+import com.main21.batch.entity.MbtiCount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

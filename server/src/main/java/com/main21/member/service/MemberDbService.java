@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 중복되는 메서드를 별도의 서비스 클래스로 만들어 관리
+ *
  * @author mozzi327
  */
 
@@ -40,6 +41,7 @@ public class MemberDbService {
 
     /**
      * 사용자 정보 조회 메서드(이메일)
+     *
      * @param email 사용자 이메일
      * @return Member
      * @author mozzi327
@@ -53,6 +55,7 @@ public class MemberDbService {
 
     /**
      * 이메일 중복 검사 메서드
+     *
      * @param post 회원가입 정보
      * @author Quartz614
      */
@@ -65,6 +68,7 @@ public class MemberDbService {
 
     /**
      * 회원 정보 저장 메서드
+     *
      * @param member 사용자 정보
      * @author mozzi327
      */
@@ -75,8 +79,9 @@ public class MemberDbService {
 
     /**
      * 비밀번호 일치 여부 확인 메서드
+     *
      * @param findMember 조회한 사용자 정보
-     * @param password 로그인 시도 비밀번호
+     * @param password   로그인 시도 비밀번호
      * @author mozzi327
      */
     public void isValid(Member findMember, String password) {
@@ -87,11 +92,17 @@ public class MemberDbService {
 
     /**
      * 비밀번호 암호화 메서드
+     *
      * @param password 회원가입 비밀번호
      * @return String(인코딩된 패스워드)
      * @author mozzi327
      */
     public String encodingPassword(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    public void isExistNickname(String nickname) {
+        if (memberRepository.findMemberByNickname(nickname).isPresent())
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_ALREADY_EXIST);
     }
 }

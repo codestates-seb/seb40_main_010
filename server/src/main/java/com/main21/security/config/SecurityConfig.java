@@ -93,7 +93,8 @@ public class SecurityConfig {
 //        configuration.addAllowedOriginPattern("*");
 //        configuration.addAllowedOrigin("https://api.mozzidev.com");
 //        configuration.addAllowedOrigin("https://d184hsf03uyfp2.cloudfront.net");
-//        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedOrigin("https://kapi.kakao.com");
 //        configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH"));
