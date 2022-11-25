@@ -8,7 +8,7 @@ import { PlaceIDState, bookmarkState } from '../../atoms';
 import header from '../../utils/header';
 
 // TODO
-// window를 지원하지 않을 수 있다.
+// window를 지원하지 않을 수 있다..
 function ReservationBottomButtons() {
   const placeId = useRecoilValue(PlaceIDState);
   // const detailInformation = useRecoilValue(DetailInformation);

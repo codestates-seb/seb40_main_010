@@ -23,7 +23,7 @@ function Detail() {
   //     .get(`{{BACKEND}}/place/${placeId}`)
   //     .then(res => console.log(res))
   //     .catch(err => console.log(err));
-  // }, []); // > 실제 api
+  // }, []); // > 실제 api.
 
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);

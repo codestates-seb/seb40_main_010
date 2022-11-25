@@ -25,7 +25,7 @@ function SignUp() {
     } catch (err) {
       return console.log('Error >>', err);
     }
-    // axios
+    // axios.
     //   .post(`/member/join`, data)
     //   .then(res => console.log(res))
     //   .catch(err => console.log(err));

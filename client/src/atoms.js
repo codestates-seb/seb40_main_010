@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+// atom
 
 const { persistAtom } = recoilPersist();
 
