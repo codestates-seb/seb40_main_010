@@ -34,8 +34,10 @@ function ReviewWrite({
 
   const submitReview = async () => {
     const data = {
-      score: reviewStar,
-      comment: reviewText,
+      data: {
+        score: reviewStar,
+        comment: reviewText,
+      },
     };
     try {
       await axios.post(`/review/${placeId}/reserve/${reserveId}`, data, header);

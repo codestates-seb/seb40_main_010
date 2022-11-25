@@ -33,14 +33,14 @@ export function NavRightButtonContainer() {
   const isLogIn = localStorage.getItem('ACCESS');
 
   const onClickLogOutButton = async () => {
+    localStorage.removeItem('ACCESS');
+    localStorage.removeItem('REFRESH');
     await axios.delete('/auth/logout', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
         RefreshToken: `${localStorage.getItem('REFRESH')}`,
       },
     });
-    localStorage.removeItem('ACCESS');
-    localStorage.removeItem('REFRESH');
   };
 
   if (signUpUrl) return null;
