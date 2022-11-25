@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
+import axios from 'axios';
 
 function ReviewWrite({
   reviewModalOpen,
@@ -9,9 +10,18 @@ function ReviewWrite({
   placeImageURL,
   reviewComment,
   reviewScore,
+  reserveId,
+  placeId,
 }) {
-  const [score, setScore] = useState(null);
+  const [reviewStar, setReviewStar] = useState(null);
   const [reviewText, setReviewText] = useState('');
+
+  const header = {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+      RefreshToken: localStorage.getItem('REFRESH'),
+    },
+  };
 
   const showReviewModal = () => {
     setReviewModalOpen(!reviewModalOpen);
@@ -22,17 +32,21 @@ function ReviewWrite({
     setReviewText(e.target.value);
   };
 
-  const submitReview = () => {
+  const submitReview = async () => {
     const data = {
-      score,
+      score: reviewStar,
       comment: reviewText,
     };
-    console.log(data);
+    try {
+      await axios.post(`/review/${placeId}/reserve/${reserveId}`, data, header);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     setReviewText(reviewComment);
-    setScore(reviewScore);
+    setReviewStar(reviewScore);
   }, []);
 
   return (
@@ -48,11 +62,11 @@ function ReviewWrite({
             <RatingBox>
               {[1, 2, 3, 4, 5].map(el => (
                 <ImStarFull
-                  className={score >= el && 'black'}
+                  className={reviewStar >= el && 'black'}
                   key={el}
                   id={el}
                   onClick={() => {
-                    setScore(el);
+                    setReviewStar(el);
                   }}
                   size="35"
                 />

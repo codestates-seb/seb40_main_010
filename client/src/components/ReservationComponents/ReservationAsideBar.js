@@ -55,6 +55,7 @@ function ReservationAsideBar({ charge }) {
       // console.log(response);
       setStartDate(false);
       setEndDate(false);
+      console.log(reservationInformation);
     } catch (err) {
       console.log('Error >>', err);
     }
