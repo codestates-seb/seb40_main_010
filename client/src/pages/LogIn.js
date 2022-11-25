@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -9,6 +9,8 @@ import Nav from '../components/Navigation/Nav';
 
 export default function LogIn() {
   const navigator = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorStatus, setErrorStatus] = useState('');
 
   const {
     register,
@@ -23,7 +25,14 @@ export default function LogIn() {
       localStorage.setItem('REFRESH', response.headers.refreshtoken);
       navigator('/');
     } catch (err) {
-      console.log('Error >>', err);
+      if (err.response.data.status === 403) {
+        setErrorStatus(403);
+        setErrorMessage('비밀번호를 잘못 입력했습니다');
+      }
+      if (err.response.data.status === 504) {
+        setErrorStatus(504);
+        setErrorMessage('존재하지 않는 계정입니다.');
+      }
     }
   };
 
@@ -48,6 +57,9 @@ export default function LogIn() {
               {errors.email && (
                 <div className="alert">{errors.email.message}</div>
               )}
+              {errorMessage && errorStatus === 504 && (
+                <div className="alert">{errorMessage}</div>
+              )}
             </div>
             <div className="wrapper">
               <div className="title">Password</div>
@@ -59,6 +71,9 @@ export default function LogIn() {
               />
               {errors.password && (
                 <div className="alert">{errors.password.message}</div>
+              )}
+              {errorMessage && errorStatus === 403 && (
+                <div className="alert">{errorMessage}</div>
               )}
             </div>
             <button
