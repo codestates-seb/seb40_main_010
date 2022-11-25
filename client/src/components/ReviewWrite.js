@@ -39,6 +39,7 @@ function ReviewWrite({
     };
     try {
       await axios.post(`/review/${placeId}/reserve/${reserveId}`, data, header);
+      console.log(data);
     } catch (err) {
       console.log(err);
     }

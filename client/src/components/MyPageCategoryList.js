@@ -66,11 +66,20 @@ function MyPageCategoryList({ listData, type }) {
     return `${year}.${month}.${day} ${time}AM`;
   };
 
+  const header = {
+    headers: {
+      'ngrok-skip-browser-warning': '010',
+      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+      RefreshToken: localStorage.getItem('REFRESH'),
+    },
+  };
+
   // 아래 함수 3개 await async 형태로 변경하기
 
   const reviewDelete = async () => {
     try {
-      await axios.delete(`/review/${listData.reviewId}`);
+      await axios.delete(`/review/${listData.reviewId}`, header);
+      showModal();
       navigate('/my-page');
     } catch (err) {
       showModal();
@@ -111,7 +120,7 @@ function MyPageCategoryList({ listData, type }) {
                 {handleDate(listData.endTime)}
               </ReservationDate>
             )}
-            <ReservationDate>{listData.createdAt}</ReservationDate>
+            <ReservationDate>{handleDate(listData.createdAt)}</ReservationDate>
           </PlaceBodyContainer>
           {type === 'reservation' ? null : (
             <RatingStarContainer>
