@@ -21,7 +21,7 @@ const useMyPage = () => {
     setMyPageCategory(event.target.textContent);
   };
 
-  // 아래 4개 함수 하나로 합쳐서 관리하기
+  // 아래 4개 함수 하나로 합쳐서 관리하기!
   // const callCategoryList = async value => {
   //   try {
   //     const response = await axios.get(`/${value}`, header);
