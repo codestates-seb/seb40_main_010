@@ -1,7 +1,10 @@
-import React from 'react';
+// import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Modal from '../Modal';
 
 import {
   reservationStartDate,
@@ -13,7 +16,7 @@ import {
 import ReservationCalendar from './ReservationCalendar';
 import ReservationCapacityHandler from './ReservationCapacityHandler';
 import ReservationBottomButtons from './ReservationBottomButtons';
-
+import { onClickPaymentButton } from '../../utils/payment';
 // TODO
 // 23~32까지 파일로 빼기
 function ReservationAsideBar({ charge }) {
@@ -21,6 +24,7 @@ function ReservationAsideBar({ charge }) {
   const [endDate, setEndDate] = useRecoilState(reservationEndDate);
   const [capacity, setCapacity] = useRecoilState(reservationMaxCapacity);
   const placeId = useRecoilValue(PlaceIDState);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const timeDiff = new Date(endDate).getTime() - new Date(startDate).getTime();
   const reservedTimeRange = timeDiff / (1000 * 60 * 60);
@@ -31,8 +35,38 @@ function ReservationAsideBar({ charge }) {
   const totalCharge = reservedTimeRange * chargePerHour;
   const totalChargeString = new Intl.NumberFormat('ko-KR').format(totalCharge);
 
+  const navigator = useNavigate();
+
+  // const paymentUrl = 'https://jaimemin.tistory.com/1449';
+  const reserveId = '?'; // 물어보기
+  const onClickPaymentKaKaoButton = async () => {
+    const response = await axios.get(`/place/reserve/${reserveId}/payment`);
+    const paymentUrl = response.data.data;
+    onClickPaymentButton(paymentUrl);
+    setModalOpen(false);
+  };
+
+  const IsPayment = {
+    modalText: '결제하시겠습니까?',
+    modalActionText: '결제하기',
+    modalAction: onClickPaymentKaKaoButton,
+    modalOpen,
+    setModalOpen,
+  };
+
+  // eslint-disable-next-line consistent-return
   const handleSubmit = async event => {
     event.preventDefault();
+    const isLogIn = localStorage.getItem('ACCESS');
+    if (!isLogIn) {
+      setStartDate(false);
+      setEndDate(false);
+      setCapacity(1);
+      navigator('/log-in');
+    }
+
+    setModalOpen(true);
+
     const header = {
       headers: {
         'Content-Type': 'application/json',
@@ -40,6 +74,7 @@ function ReservationAsideBar({ charge }) {
         RefreshToken: localStorage.getItem('REFRESH'),
       },
     };
+
     const reservationInformation = {
       startTime: startDate,
       endTime: endDate,
@@ -47,12 +82,12 @@ function ReservationAsideBar({ charge }) {
     };
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `/place/${placeId}/reserve`,
         JSON.stringify(reservationInformation),
         header,
       );
-      // console.log(response);
+      console.log(response.data);
       setStartDate(false);
       setEndDate(false);
     } catch (err) {
@@ -105,6 +140,7 @@ function ReservationAsideBar({ charge }) {
         >
           예약하기
         </button>
+        {modalOpen && <Modal {...IsPayment} />}
         <ButtonsWrapper>
           <ReservationBottomButtons />
         </ButtonsWrapper>

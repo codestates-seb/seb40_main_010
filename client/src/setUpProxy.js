@@ -4,6 +4,7 @@ module.exports = function (app) {
   app.use(
     [
       '/home',
+      '/review',
       '/auth',
       '/search',
       '/category',
