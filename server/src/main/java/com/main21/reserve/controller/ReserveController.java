@@ -1,7 +1,7 @@
 package com.main21.reserve.controller;
 
 import com.main21.dto.MultiResponseDto;
-import com.main21.reserve.dto.PayApprovalDto;
+import com.main21.reserve.pay.PayApproveInfo;
 import com.main21.reserve.dto.ReserveDto;
 import com.main21.reserve.response.Message;
 import com.main21.reserve.service.ReserveService;
@@ -14,11 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
 
 import static com.main21.member.utils.AuthConstant.REFRESH_TOKEN;
+import static com.main21.reserve.utils.PayConstants.AUTHORIZATION;
 import static com.main21.reserve.utils.ReserveConstants.*;
 
 @RestController
@@ -56,6 +55,7 @@ public class ReserveController {
      */
     @GetMapping("/place/reserve/{reserve-id}/payment")
     public ResponseEntity<Message> orderAction(@PathVariable(name = "reserve-id") Long reserveId,
+                                               @RequestHeader(AUTHORIZATION) String accessToken,
                                                @RequestHeader(REFRESH_TOKEN) String refreshToken,
                                                HttpServletRequest req) {
         String requestUrl = req.getRequestURL()
@@ -84,7 +84,7 @@ public class ReserveController {
      */
     @GetMapping("/api/order/completed")
     public ResponseEntity<Message> paySuccessAction(@RequestParam("pg_token") String pgToken) {
-        PayApprovalDto payInfo = reserveService.getApprovedKaKaoPayInfo(pgToken);
+        PayApproveInfo payInfo = reserveService.getApprovedKaKaoPayInfo(pgToken);
 
         if (payInfo == null) getFailedPayMessage();
 

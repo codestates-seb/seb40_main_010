@@ -1,24 +1,46 @@
 package com.main21.reserve.feign;
 
-import com.main21.reserve.dto.PayReadyDto;
+import com.main21.reserve.pay.PayApproveInfo;
+import com.main21.reserve.pay.PayReadyInfo;
+import com.main21.reserve.pay.ReadyToPaymentInfo;
+import com.main21.reserve.pay.RequestForReserveInfo;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import static com.main21.reserve.utils.PayConstants.*;
 
-@FeignClient(name = "feign", url = "https://kapi.kakao.com/v1/payment/ready", configuration = FeignConfig.class)
+@FeignClient(value = "kakaopay", url = "https://kapi.kakao.com", configuration = {FeignErrorConfig.class})
 public interface KaKaoFeignClient {
 
-    @PostMapping
-    PayReadyDto readyForPayment(@RequestParam(name = CID) String testCid,
-                                @RequestParam(name = PARTNER_ORDER_ID) String orderId,
-                                @RequestParam(name = PARTNER_USER_ID) String userId,
-                                @RequestParam(name = ITEM_NAME) String itemName,
-                                @RequestParam(name = QUANTITY) String quantity,
-                                @RequestParam(name = TOTAL_AMOUNT) String totalAmount,
-                                @RequestParam(name = VAL_AMOUNT) String valAmount,
-                                @RequestParam(name = TAX_FREE_AMOUNT) String taxFreeAmount,
-                                @RequestParam(name = APPROVAL_URL) String approvalUrl,
-                                @RequestParam(name = FAIL_URL) String failUrl,
-                                @RequestParam(name = CANCEL_URL) String cancelUrl);
+    /**
+     * 카카오페이 결제 URL 요청 인터페이스
+     * @param accept Accept Header
+     * @param contentType Content-Type Header
+     * @param query Query Param 정보
+     * @return PayReadyDto
+     * @author mozzu327
+     */
+    @PostMapping(value = "/v1/payment/ready")
+    PayReadyInfo readyForPayment(
+            @RequestHeader(AUTHORIZATION) String authorization,
+            @RequestHeader(ACCEPT) String accept,
+            @RequestHeader(CONTENT_TYPE) String contentType,
+            @SpringQueryMap ReadyToPaymentInfo query);
+
+
+    /**
+     * 카카오페이 결제 성공 시 발생하는 예약 정보 요청 인터페이스
+     * @param accept Accept Header
+     * @param contentType Content-Type Header
+     * @param query Query Param 정보
+     * @return PayApprovalDto
+     * @author mozzi327
+     */
+    @PostMapping(value = "/v1/payment/approve")
+    PayApproveInfo successForPayment(
+            @RequestHeader(AUTHORIZATION) String authorization,
+            @RequestHeader(ACCEPT) String accept,
+            @RequestHeader(CONTENT_TYPE) String contentType,
+            @SpringQueryMap RequestForReserveInfo query);
 }

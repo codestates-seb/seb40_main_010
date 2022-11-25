@@ -3,6 +3,8 @@ package com.main21.security.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.ReactiveClusterServerCommands;
+import org.springframework.data.redis.connection.RedisClusterCommands;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,7 +18,6 @@ public class RedisConfig {
 
     @Value("${redis.port}")
     private int redisPort;
-
 
     /**
      * RedisTemplate을 이용하여 redis를 Connection하는 메서드<br>
@@ -49,4 +50,5 @@ public class RedisConfig {
 
         return redisTemplate;
     }
+
 }

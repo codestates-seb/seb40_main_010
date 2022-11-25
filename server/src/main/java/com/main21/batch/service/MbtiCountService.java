@@ -1,8 +1,8 @@
-package com.main21.reserve.service;
+package com.main21.batch.service;
 
 import com.main21.member.entity.Member;
-import com.main21.reserve.entity.MbtiCount;
-import com.main21.reserve.repository.MbtiCountRepository;
+import com.main21.batch.entity.MbtiCount;
+import com.main21.batch.repository.MbtiCountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +21,16 @@ public class MbtiCountService {
      */
     public void addMbtiCount(Member member, Long placeId) {
         Optional<MbtiCount> findMBTICount = mbtiCountRepository.findMbtiCountByMbtiAndPlaceId(member.getMbti(), placeId);
-        if (!findMBTICount.isPresent()) { // 없을 경우 새로 생성
+        if (findMBTICount.isPresent()) { // 있을 경우 count를 +1해준다.
+            findMBTICount.get().addOneMbti();
+            mbtiCountRepository.save(findMBTICount.get());
+        } else { // 없을 경우 새로 생성
             MbtiCount saveNewMBTICount = MbtiCount.builder()
                     .mbti(member.getMbti())
                     .placeId(placeId)
                     .totalCount(1)
                     .build();
             mbtiCountRepository.save(saveNewMBTICount);
-        } else { // 있을 경우 count를 +1해준다.
-            findMBTICount.get().addOneMbti();
-            mbtiCountRepository.save(findMBTICount.get());
         }
     }
 

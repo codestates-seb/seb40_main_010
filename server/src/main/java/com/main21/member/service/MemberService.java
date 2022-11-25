@@ -35,6 +35,7 @@ public class MemberService {
     public void createMember(MemberDto.Post post) {
         memberDbService.verifyEmail(post);
         List<String> roles = authorityUtils.createRoles(post.getEmail());
+        memberDbService.isExistNickname(post.getNickname());
 
         Member member = Member.builder()
                 .email(post.getEmail())
@@ -58,6 +59,7 @@ public class MemberService {
     public void updateMember(String refreshToken, MemberDto.Patch patch) {
         Long memberId = redisUtils.getId(refreshToken);
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
+        memberDbService.isExistNickname(patch.getNickname());
         findMember.editMember(patch.getNickname(), patch.getMbti());
         memberDbService.saveMember(findMember);
     }
@@ -73,11 +75,18 @@ public class MemberService {
         Long memberId = redisUtils.getId(refreshToken);
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
-        return MemberDto.Info.builder()
-                .profileImage(findMember.getMemberImage().getFilePath())
-                .nickname(findMember.getNickname())
-                .mbti(findMember.getMbti())
-                .build();
+        if (findMember.getMemberImage() != null) {
+            return MemberDto.Info.builder()
+                    .profileImage(findMember.getMemberImage().getFilePath())
+                    .nickname(findMember.getNickname())
+                    .mbti(findMember.getMbti())
+                    .build();
+        } else {
+            return MemberDto.Info.builder()
+                    .nickname(findMember.getNickname())
+                    .mbti(findMember.getMbti())
+                    .build();
+        }
     }
 
 

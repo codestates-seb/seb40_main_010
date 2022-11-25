@@ -1,4 +1,4 @@
-package com.main21.reserve.dto;
+package com.main21.reserve.pay;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PayApprovalDto {
+public class PayApproveInfo {
     private String aid;
     private String tid;
     private String cid;

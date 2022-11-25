@@ -1,4 +1,4 @@
-package com.main21.reserve.dto;
+package com.main21.reserve.pay;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PayCancelDto {
-    private String tid;
-    private Integer cancelAmount;
-    private Integer cancelTaxFreeAmount;
+public class ReservationInfo {
+    private int quantity;
+    private int itemNumber;
+    private String itemName;
+    private int totalAmount;
 }

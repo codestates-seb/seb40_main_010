@@ -1,4 +1,4 @@
-package com.main21.reserve.dto;
+package com.main21.reserve.pay;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

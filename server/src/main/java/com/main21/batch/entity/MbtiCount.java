@@ -1,4 +1,4 @@
-package com.main21.reserve.entity;
+package com.main21.batch.entity;
 
 import lombok.Builder;
 import lombok.Getter;
