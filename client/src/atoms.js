@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
+// atom
 
 const { persistAtom } = recoilPersist();
 
@@ -117,4 +118,9 @@ export const reservationEndCalendarSelectedDay = atom({
 export const mbtiPlaceDataState = atom({
   key: 'mbtiPlaceDataState',
   default: [],
+});
+
+export const bookmarkState = atom({
+  key: 'bookmarkState',
+  default: '',
 });

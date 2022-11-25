@@ -1,21 +1,24 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
 
 import { FaRegBookmark, FaLink, FaBookmark } from 'react-icons/fa';
-import { PlaceIDState, DetailInformation } from '../../atoms';
+import { PlaceIDState, bookmarkState } from '../../atoms';
 import header from '../../utils/header';
 
 // TODO
-// window를 지원하지 않을 수 있다.
+// window를 지원하지 않을 수 있다..
 function ReservationBottomButtons() {
   const placeId = useRecoilValue(PlaceIDState);
-  const detailInformation = useRecoilValue(DetailInformation);
+  // const detailInformation = useRecoilValue(DetailInformation);
   // const [bookmark, setBookmark] = useState(detailInformation.bookmark);
-  const { bookmark } = detailInformation;
-  console.log(bookmark);
+  // const { bookmark } = detailInformation;
+  // console.log(bookmark);
+  const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
   const copyLinkRef = useRef();
+
+  // let test = bookmark;
 
   const handleCopyLink = () => {
     if (!document.queryCommandSupported('copy')) {
@@ -32,7 +35,11 @@ function ReservationBottomButtons() {
   const handleBookmark = async () => {
     try {
       const response = await axios.get(`/bookmark/${placeId}`, header);
-      console.log(response);
+      // console.log(response);
+      setIsBookmark(response.data);
+      // console.log('북마크', detailInformation);
+      // test = response.data;
+      // console.log(test);
     } catch (error) {
       console.log(error);
     }
@@ -41,8 +48,8 @@ function ReservationBottomButtons() {
   return (
     <Container>
       <button type="button" className="button" onClick={handleBookmark}>
-        {!bookmark && <EmptyBookmarkIcon />}
-        {bookmark && <FullBookmarkIcon />}
+        {!isBookmark && <EmptyBookmarkIcon />}
+        {isBookmark && <FullBookmarkIcon />}
         관심장소
       </button>
       <button type="button" className="button" onClick={handleCopyLink}>
