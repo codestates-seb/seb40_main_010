@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -9,6 +9,10 @@ import Nav from '../components/Navigation/Nav';
 
 function SignUp() {
   const navigator = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
+  const [isEmailDuplicated, setIsEmailDuplicated] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -21,14 +25,18 @@ function SignUp() {
     try {
       const response = await axios.post(`/member/join`, data);
       navigator('/log-in');
-      return response.data;
+      console.log(response.data);
     } catch (err) {
-      return console.log('Error >>', err);
+      console.log('Error >>', err);
+      if (err.response.data.message === '이미 존재하는 닉네임입니다.') {
+        setErrorMessage(err.response.data.message);
+        setIsNicknameDuplicated(true);
+      }
+      if (err.response.data.message === '이미 존재하는 이메일입니다.') {
+        setErrorMessage(err.response.data.message);
+        setIsEmailDuplicated(true);
+      }
     }
-    // axios.
-    //   .post(`/member/join`, data)
-    //   .then(res => console.log(res))
-    //   .catch(err => console.log(err));
   };
 
   const mbtiList = [
@@ -72,6 +80,9 @@ function SignUp() {
               />
               {errors.email && (
                 <div className="alert">{errors.email.message}</div>
+              )}
+              {errorMessage && isEmailDuplicated && (
+                <div className="alert">{errorMessage}</div>
               )}
             </div>
             <div className="wrapper">
@@ -157,6 +168,9 @@ function SignUp() {
               />
               {errors.nickname && (
                 <div className="alert">{errors.nickname.message}</div>
+              )}
+              {errorMessage && isNicknameDuplicated && (
+                <div className="alert">{errorMessage}</div>
               )}
             </div>
             <div className="wrapper">
