@@ -132,7 +132,8 @@ const NavBackground = styled.div`
 
   .NavLogo {
     font-size: 2rem;
-    padding-right: 20px;
+    /* padding-right: 20px; */
+    padding-right: 9vw;
     padding-left: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -169,6 +170,7 @@ const SearchContainer = styled.form`
 `;
 
 const SearchInput = styled.input`
+  font-family: inherit;
   margin: 10px 0;
   padding: 10px 45px 10px 25px;
   width: 100%;

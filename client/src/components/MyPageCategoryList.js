@@ -8,6 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import ReviewWrite from './ReviewWrite';
 import { reservationEditData } from '../atoms';
+import useMyPage from './useMyPage';
+import header from '../utils/header';
+import { onClickPaymentButton } from '../utils/payment';
 
 const chargeComponent = (listData, type) => {
   if (type === 'reviews') {
@@ -32,8 +35,32 @@ function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [, setReservationData] = useRecoilState(reservationEditData);
+  const { bookmarkList } = useMyPage();
 
   const navigate = useNavigate();
+
+  const onClickPaymentKaKaoButton = async () => {
+    const { reserveId } = listData;
+    const response = await axios.get(
+      `/place/reserve/${reserveId}/payment`,
+      header,
+    );
+    const paymentUrl = response.data.data;
+    onClickPaymentButton(paymentUrl);
+    setModalOpen(false);
+  };
+
+  const IsPayment = {
+    modalText: '결제하시겠습니까?',
+    modalActionText: '결제하기',
+    modalAction: onClickPaymentKaKaoButton,
+    modalOpen,
+    setModalOpen,
+  };
+
+  const onClickPayment = () => {
+    setModalOpen(true);
+  };
 
   const showModal = () => {
     setModalOpen(!modalOpen);
@@ -66,21 +93,10 @@ function MyPageCategoryList({ listData, type }) {
     return `${year}.${month}.${day} ${time}AM`;
   };
 
-  const header = {
-    headers: {
-      'ngrok-skip-browser-warning': '010',
-      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-      RefreshToken: localStorage.getItem('REFRESH'),
-    },
-  };
-
-  // 아래 함수 3개 await async 형태로 변경하기
-
   const reviewDelete = async () => {
     try {
       await axios.delete(`/review/${listData.reviewId}`, header);
       showModal();
-      navigate('/my-page');
     } catch (err) {
       showModal();
     }
@@ -88,23 +104,27 @@ function MyPageCategoryList({ listData, type }) {
 
   const bookMarkStatusChange = async () => {
     try {
-      await axios.get(`/bookmark/${listData.bookmarkId}`);
-      // 북마크 아이콘 색상 변화 등
+      await axios.get(`/bookmark/${listData.placeId}`, header);
+      // 삭제 완료시 새로고침이나 상태 즉시 변경
+      console.log('삭제 성공');
+      bookmarkList();
     } catch (err) {
-      navigate('/my-page');
+      console.log(err);
     }
   };
 
   const registerEditDataSend = async () => {
     // id를 인자로 받아서 /place/id로 조회해야되는데 현재 api랑 연동안되므로 detaildata로 임시 작성
     try {
-      const response = await axios.get(`/place/${listData.placeId}`);
-      setReservationData(response.data[0]);
+      const response = await axios.get(`/place/${listData.placeId}`, header);
+      setReservationData(response.data);
       navigate('/register');
     } catch (err) {
       console.log(err);
     }
   };
+
+  const today = new Date();
 
   return (
     <CategoryItemList>
@@ -142,7 +162,13 @@ function MyPageCategoryList({ listData, type }) {
           )}
           {type === 'reservation' && (
             <>
-              <CategoryButton onClick={showModal}>취소하기</CategoryButton>
+              {handleDate(today) < handleDate(listData.startTime) ? (
+                <CategoryButton onClick={showModal}>취소하기</CategoryButton>
+              ) : (
+                <CategoryButton onClick={showReviewModal}>
+                  리뷰쓰기
+                </CategoryButton>
+              )}
               {modalOpen && (
                 <Modal
                   modalOpen={modalOpen}
@@ -152,14 +178,13 @@ function MyPageCategoryList({ listData, type }) {
                   modalAction="취소하는 함수 만들어서 넣기"
                 />
               )}
-              <CategoryButton onClick={showReviewModal}>
-                리뷰쓰기
-              </CategoryButton>
+              <CategoryButton onClick={onClickPayment}>결제하기</CategoryButton>
+              {modalOpen && <Modal {...IsPayment} />}
             </>
           )}
           {type === 'bookmark' && (
-            <CategoryButton>
-              <BsFillBookmarkFill size={24} onClick={bookMarkStatusChange} />
+            <CategoryButton onClick={bookMarkStatusChange}>
+              <BsFillBookmarkFill size={24} />
             </CategoryButton>
           )}
           {type === 'reviews' && (
@@ -194,6 +219,7 @@ function MyPageCategoryList({ listData, type }) {
           reviewScore={listData.score}
           reserveId={listData.reserveId}
           placeId={listData.placeId}
+          reviewId={listData.reviewId}
         />
       )}
     </CategoryItemList>

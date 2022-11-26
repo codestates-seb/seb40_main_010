@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 import { BiTimeFive, BiPencil } from 'react-icons/bi';
@@ -7,6 +7,7 @@ import { IoHeartCircleOutline } from 'react-icons/io5';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import MyPageCategoryList from './MyPageCategoryList';
 import useMyPage from './useMyPage';
+import mbtiList from '../utils/mbtiList';
 
 function MyPageComponent() {
   const {
@@ -18,7 +19,7 @@ function MyPageComponent() {
     mbti,
     myPageCategory,
     nickname,
-    profileImage,
+    // profileImage,
     userDataEdit,
     userMBTI,
     userNickName,
@@ -26,36 +27,24 @@ function MyPageComponent() {
     onClickCancel,
     onClickCategory,
     onChangeNickName,
+    handleUploadImage,
+    previewProfileImage,
   } = useMyPage();
+
+  const hiddenFileInput = useRef(null);
+
+  const handleImageSelect = () => {
+    hiddenFileInput.current.click();
+  };
 
   useEffect(() => {
     callUserData();
     callRegistrationList();
   }, []);
 
-  const mbtiList = [
-    { value: 'null', label: '없음' },
-    { value: 'ISTJ', label: 'ISTJ' },
-    { value: 'ISFJ', label: 'ISFJ' },
-    { value: 'INFJ', label: 'INFJ' },
-    { value: 'INTJ', label: 'INTJ' },
-    { value: 'ISTP', label: 'ISTP' },
-    { value: 'ISFP', label: 'ISFP' },
-    { value: 'INFP', label: 'INFP' },
-    { value: 'INTP', label: 'INTP' },
-    { value: 'ESTJ', label: 'ESTJ' },
-    { value: 'ESFJ', label: 'ESFJ' },
-    { value: 'ENFJ', label: 'ENFJ' },
-    { value: 'ENTJ', label: 'ENTJ' },
-    { value: 'ESTP', label: 'ESTP' },
-    { value: 'ESFP', label: 'ESFP' },
-    { value: 'ENFP', label: 'ENFP' },
-    { value: 'ENTP', label: 'ENTP' },
-  ];
-
   return (
     <MyPageComponentContainer>
-      <MyProfileImage src={profileImage} />
+      <MyProfileImage src={previewProfileImage} onClick={handleImageSelect} />
       <NameAndEditIconContainer>
         {!editStatus && <MyNickName>{nickname}</MyNickName>}
         {editStatus && (
@@ -65,6 +54,15 @@ function MyPageComponent() {
           />
         )}
         {!editStatus && <BiPencil onClick={editStatusChange} size="24" />}
+        {editStatus && (
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            ref={editStatus ? hiddenFileInput : null}
+            onChange={handleUploadImage}
+          />
+        )}
         {editStatus && <EditText onClick={userDataEdit}>수정하기</EditText>}
         {editStatus && <EditText onClick={onClickCancel}>취소</EditText>}
       </NameAndEditIconContainer>
@@ -130,7 +128,11 @@ function MyPageComponent() {
         {myPageCategory === '리뷰내역' &&
           listData.map(el => {
             return (
-              <MyPageCategoryList listData={el} key={el.id} type="reviews" />
+              <MyPageCategoryList
+                listData={el}
+                key={el.reviewId}
+                type="reviews"
+              />
             );
           })}
       </MyPageCategoryItemList>
@@ -148,12 +150,25 @@ const MyPageComponentContainer = styled.div`
   background-color: #ffffff;
   padding: 35px;
   box-sizing: border-box;
+  margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
 `;
 
 const MyProfileImage = styled.img`
+  width: 64px;
   height: 64px;
+  overflow: hidden;
   border-radius: 35px;
   margin-bottom: 8px;
+
+  border: 1px solid red;
+
+  :hover {
+    cursor: pointer;
+  }
+
+  /* border: 1px solid black; */
 `;
 
 const NameAndEditIconContainer = styled.div`

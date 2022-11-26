@@ -1,16 +1,17 @@
 import React, { useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import imageCompression from 'browser-image-compression';
 import styled from 'styled-components';
 
 import { FaTimes } from 'react-icons/fa';
+import {
+  handleImageCompress,
+  handleGetPreviewImagesUrl,
+} from '../../utils/images';
 import { registerFormPreviewImage } from '../../atoms';
 
 // TODO
 // 1. 이미지 업로드 속도가 느림
-// 2. for await 해결 못함
 // 3. 105번째줄 onClick 바꾸기
-// 4. eslint 오류
 function RegisterImages({ images, setImages }) {
   const [previewImages, setPreviewImages] = useRecoilState(
     registerFormPreviewImage,
@@ -18,45 +19,12 @@ function RegisterImages({ images, setImages }) {
 
   const hiddenFileInput = useRef(null);
 
-  const handleImageButtonClick = () => {
+  const handleImageSelect = () => {
     hiddenFileInput.current.click();
   };
 
-  // eslint-disable-next-line consistent-return
-  async function handleImageCompress(file) {
-    const options = {
-      maxSizeMB: 0.1,
-      maxWidthOrHeight: 1000,
-    };
-    try {
-      const compressedFile = await imageCompression(file, options);
-      const resultFile = new File([compressedFile], compressedFile.name, {
-        type: compressedFile.type,
-      });
-      return resultFile;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // eslint-disable-next-line consistent-return
-  async function handleGetPreviewImagesUrl(compressedFile) {
-    // try {
-    //   const url = await imageCompression.getDataUrlFromFile(compressedFile);
-    //   return url;
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    try {
-      const url = URL.createObjectURL(compressedFile);
-      return url;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const handleUploadImage = async e => {
-    const selectedImages = e.target.files;
+  const handleUploadImage = async event => {
+    const selectedImages = event.target.files;
     const maxImages = selectedImages.length > 3 ? 3 : selectedImages.length;
 
     if (images.length + maxImages > 3 || selectedImages.length > 3) {
@@ -75,7 +43,6 @@ function RegisterImages({ images, setImages }) {
       setImages(image => [...image, compressedImage]);
       setPreviewImages(url => [...url, compressedImageUrl]);
     }
-    e.target.value = '';
   };
 
   const handleDeleteImage = id => {
@@ -98,7 +65,7 @@ function RegisterImages({ images, setImages }) {
           className="image-upload-button"
           label="이미지 업로드"
           type="button"
-          onClick={handleImageButtonClick}
+          onClick={handleImageSelect}
         >
           사진 업로드하기
         </button>

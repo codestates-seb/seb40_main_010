@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 
 import Nav from '../components/Navigation/Nav';
+import mbtiList from '../utils/mbtiList';
 
 function SignUp() {
   const navigator = useNavigate();
@@ -38,26 +39,6 @@ function SignUp() {
       }
     }
   };
-
-  const mbtiList = [
-    { value: 'NONE', label: '없음' },
-    { value: 'ISTJ', label: 'ISTJ' },
-    { value: 'ISFJ', label: 'ISFJ' },
-    { value: 'INFJ', label: 'INFJ' },
-    { value: 'INTJ', label: 'INTJ' },
-    { value: 'ISTP', label: 'ISTP' },
-    { value: 'ISFP', label: 'ISFP' },
-    { value: 'INFP', label: 'INFP' },
-    { value: 'INTP', label: 'INTP' },
-    { value: 'ESTJ', label: 'ESTJ' },
-    { value: 'ESFJ', label: 'ESFJ' },
-    { value: 'ENFJ', label: 'ENFJ' },
-    { value: 'ENTJ', label: 'ENTJ' },
-    { value: 'ESTP', label: 'ESTP' },
-    { value: 'ESFP', label: 'ESFP' },
-    { value: 'ENFP', label: 'ENFP' },
-    { value: 'ENTP', label: 'ENTP' },
-  ];
 
   return (
     <div className="test">
@@ -107,8 +88,6 @@ function SignUp() {
                     specialCheck: value =>
                       (value && /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi.test(value)) ||
                       '특수문자를 추가해주세요',
-                    // spacecheck: value =>
-                    //   (value && /\s/gi.test(value)) || '공백을 제거해주세요',
                   },
                 })}
               />
@@ -229,14 +208,15 @@ export default SignUp;
 
 const Container = styled.div`
   width: 100vw;
-  height: 800px;
+  /* height: 800px; */
+  height: 100vh;
   background-color: #96c2ff;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
 
   .signup-container {
-    margin-top: 30px;
+    margin-top: 120px;
     width: 33rem;
     height: flex;
     padding: 50px 0px;
@@ -257,8 +237,8 @@ const Container = styled.div`
   .title {
     width: 100%;
     height: fit-content;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: #2b2b2b;
     margin-bottom: 10px;
   }
@@ -271,7 +251,8 @@ const Container = styled.div`
     background-color: #ffda77;
     border-radius: 40px;
     color: #2b2b2b;
-    font-size: 1.5rem;
+    font: inherit;
+    font-size: 1.3rem;
     font-weight: 600;
     border: none;
     box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
@@ -304,11 +285,13 @@ const Container = styled.div`
 const Input = styled.input`
   width: 99%;
   height: fit-content;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  font: inherit;
   outline: none;
   border: none;
   border-bottom: 2px solid #96c2ff;
   color: #2b2b2b;
+  padding: 3px 0px;
 `;
 
 const MbtiSelect = styled(Select)`

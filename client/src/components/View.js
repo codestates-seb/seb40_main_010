@@ -49,7 +49,7 @@ const ViewContainer = styled.div`
 
 const InformationContainer = styled.div`
   margin-top: 100px;
-  width: 700px;
+  width: 600px;
   height: auto;
   margin-right: auto;
   padding-left: 15px;
@@ -57,7 +57,9 @@ const InformationContainer = styled.div`
 
 const InformationTitle = styled.div`
   font-size: 2rem;
-  font-weight: 600;
+  /* font-weight: 600; */
+  font-weight: 17.3%;
+  margin-left: 20px;
 `;
 
 const InformationMiniImageContainer = styled.div`
@@ -66,7 +68,7 @@ const InformationMiniImageContainer = styled.div`
   justify-content: center;
   margin-left: 20px;
   margin-bottom: 15px;
-  width: 500px;
+  width: 600px;
 `;
 
 const InformationMiniImage = styled.img`

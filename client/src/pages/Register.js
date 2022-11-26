@@ -58,11 +58,17 @@ export default function Register() {
   };
 
   const editHandleChange = event => {
-    if (event.target.id === 'capacityMinus' && editData.capacity > 1) {
-      return setEditData({ ...editData, capacity: editData.capacity - 1 });
+    if (event.target.id === 'capacityMinus' && editData.maxCapacity > 1) {
+      return setEditData({
+        ...editData,
+        maxCapacity: editData.maxCapacity - 1,
+      });
     }
     if (event.target.id === 'capacityPlus') {
-      return setEditData({ ...editData, capacity: editData.capacity + 1 });
+      return setEditData({
+        ...editData,
+        maxCapacity: editData.maxCapacity + 1,
+      });
     }
     const { name, value } = event.target;
     return setEditData({ ...editData, [name]: value });
@@ -128,6 +134,11 @@ export default function Register() {
     }
   };
 
+  const handleEditSubmit = () => {
+    const data = { editData };
+    console.log(data);
+  };
+
   console.log(checkedList);
   return (
     <>
@@ -183,7 +194,7 @@ export default function Register() {
                   type="number"
                   name="capacity"
                   onChange={editHandleChange}
-                  value={editData.capacity}
+                  value={editData.maxCapacity}
                   readOnly
                 />
               ) : (
@@ -262,16 +273,13 @@ export default function Register() {
             <div className="set-charge">
               <div className="hour-description">1시간 / </div>
               {editData ? (
-                <>
-                  <SmallInput
-                    type="number"
-                    width="100px"
-                    onChange={editHandleChange}
-                    value={editData.charge}
-                    name="charge"
-                  />
-                  {charge < 1 && <Validation>금액을 설정해주세요</Validation>}
-                </>
+                <SmallInput
+                  type="number"
+                  width="100px"
+                  onChange={editHandleChange}
+                  value={editData.charge}
+                  name="charge"
+                />
               ) : (
                 <SmallInput
                   type="number"
@@ -282,25 +290,46 @@ export default function Register() {
               )}
               <div className="hour-description">원</div>
             </div>
-            {charge < 1 && <Validation>금액을 설정해주세요</Validation>}
+            {charge < 1 && !editData && (
+              <Validation>금액을 설정해주세요</Validation>
+            )}
           </Wrapper>
           <ButtonWrapper>
-            <button
-              type="submit"
-              className="form-register-button"
-              onClick={handleSubmit}
-              disabled={
-                !(
-                  title.length < 20 &&
-                  checkedList.length > 0 &&
-                  address &&
-                  images.length > 0 &&
-                  charge > 0
-                )
-              }
-            >
-              등록하기
-            </button>
+            {editData ? (
+              <button
+                type="submit"
+                className="form-register-button"
+                onClick={handleEditSubmit}
+                disabled={
+                  !(
+                    title.length < 20 &&
+                    checkedList.length > 0 &&
+                    address &&
+                    images.length > 0 &&
+                    charge > 0
+                  )
+                }
+              >
+                수정하기
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="form-register-button"
+                onClick={handleSubmit}
+                disabled={
+                  !(
+                    title.length < 20 &&
+                    checkedList.length > 0 &&
+                    address &&
+                    images.length > 0 &&
+                    charge > 0
+                  )
+                }
+              >
+                등록하기
+              </button>
+            )}
           </ButtonWrapper>
         </FormContainer>
       </Container>
@@ -349,7 +378,7 @@ const Container = styled.div`
 
   .hour-description {
     width: fit-content;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     color: #2b2b2b;
   }
 

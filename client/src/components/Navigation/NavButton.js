@@ -74,13 +74,15 @@ export function NavRightButtonContainer() {
 
 const NavLeftButton = styled.button`
   width: 80px;
+  /* font-family: 'GmarketSans'; */
+  font-family: inherit;
   margin: 10px 7px;
   padding: 8px;
   border-radius: 20px;
   border: none;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: ${props => props.buttonColor || '#ffda77'};
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   line-height: 20px;
   text-align: center;
