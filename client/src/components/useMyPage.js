@@ -17,6 +17,10 @@ const useMyPage = () => {
     },
   };
 
+  const clearCategory = () => {
+    setListData([]);
+  };
+
   const changeCategory = event => {
     setMyPageCategory(event.target.textContent);
   };
@@ -33,48 +37,48 @@ const useMyPage = () => {
 
   const callRegistrationList = async () => {
     try {
+      clearCategory();
       const response = await axios.get(`/place`, header);
       console.log('place', response.data.data);
-      setListData([]);
       setListData([...response.data.data]);
     } catch (err) {
-      setListData([]);
+      clearCategory();
       console.log(err);
     }
   };
 
   const reservationList = async () => {
     try {
+      clearCategory();
       const response = await axios.get(`/reserve`, header);
       console.log('reserve', response.data.data);
-      setListData([]);
       setListData([...response.data.data]);
     } catch (err) {
-      setListData([]);
+      clearCategory();
       console.log(err);
     }
   };
 
   const bookmarkList = async () => {
     try {
+      clearCategory();
       const response = await axios.get(`/bookmark`, header);
       console.log('bookmark', response.data.data);
-      setListData([]);
       setListData([...response.data.data]);
     } catch (err) {
-      setListData([]);
+      clearCategory();
       console.log(err);
     }
   };
 
   const reviewList = async () => {
     try {
+      clearCategory();
       const response = await axios.get(`/review`, header);
       console.log('review', response.data.data);
-      setListData([]);
       setListData([...response.data.data]);
     } catch (err) {
-      setListData([]);
+      clearCategory();
       console.log(err);
     }
   };
@@ -157,6 +161,7 @@ const useMyPage = () => {
     onClickCancel,
     onClickCategory,
     onChangeNickName,
+    clearCategory,
   };
 };
 
