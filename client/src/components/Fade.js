@@ -54,10 +54,10 @@ const StyledSlide = styled(Slider)`
     z-index: -1;
   }
   ul {
-    width: 200px;
+    width: 600px;
     position: absolute;
     bottom: 3%;
-    right: 32%;
+    /* right: 0%; */
   }
 
   .slick-dots li button:before {
