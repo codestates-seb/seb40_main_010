@@ -1,6 +1,7 @@
 package com.main21.reserve.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.main21.reserve.pay.ReadyToPaymentInfo;
 import io.jsonwebtoken.security.Keys;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,6 +44,49 @@ public class Reserve {
     }
 
 
+    /************************** 주문 내역 정보 **************************/
+
+    private String cid;
+
+    private String tid;
+
+    private String partnerOrderId;
+
+    private String partnerUserId;
+
+    private String itemName;
+
+    private String quantity;
+
+    private String totalAmount;
+
+    private String valAmount;
+
+    private String taxFreeAmount;
+
+    private String approvalUrl;
+
+    private String failUrl;
+
+    private String cancelUrl;
+
+    public void setPaymentInfo(ReadyToPaymentInfo params, String tid) {
+        this.cid = params.getCid();
+        this.tid = tid;
+        this.partnerOrderId = params.getPartner_order_id();
+        this.partnerUserId = params.getPartner_user_id();
+        this.itemName = params.getItem_name();
+        this.quantity = params.getQuantity();
+        this.totalAmount = params.getTotal_amount();
+        this.valAmount = params.getVal_amount();
+        this.taxFreeAmount = params.getTax_free_amount();
+        this.approvalUrl = params.getApproval_url();
+        this.failUrl = params.getFail_url();
+        this.cancelUrl = params.getCancel_url();
+    }
+
+    /************************** 주문 내역 정보 **************************/
+
     @Builder
     public Reserve(int capacity,
                    LocalDateTime startTime,
@@ -71,6 +115,9 @@ public class Reserve {
     public void setStatus(ReserveStatus reserveStatus) {
         this.status = reserveStatus;
     }
+
+
+
 
 
     public enum ReserveStatus {

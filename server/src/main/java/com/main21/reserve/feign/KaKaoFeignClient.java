@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.main21.reserve.utils.PayConstants.*;
 
+/**
+ * feign client 카카오페이 api 통신 인터페이스
+ * @author mozzi327
+ */
 @FeignClient(value = "kakaopay", url = "https://kapi.kakao.com", configuration = {FeignErrorConfig.class})
 public interface KaKaoFeignClient {
 

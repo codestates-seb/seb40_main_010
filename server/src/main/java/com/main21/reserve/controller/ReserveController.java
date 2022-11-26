@@ -29,8 +29,8 @@ public class ReserveController {
     /**
      * 예약 프로세스 1 - 예약 등록 컨트롤러 메서드
      *
-     * @param placeId  장소 식별자
-     * @param post     예약 등록 정보
+     * @param placeId      장소 식별자
+     * @param post         예약 등록 정보
      * @param refreshToken
      * @return ResonseEntity
      * @author LeeGoh
@@ -47,15 +47,14 @@ public class ReserveController {
     /**
      * 예약 프로세스 2 - 사용자 결제 화면 전송 컨트롤러 메서드
      *
-     * @param reserveId 예약 식별자
+     * @param reserveId    예약 식별자
      * @param refreshToken
-     * @param req       요청
+     * @param req          요청
      * @return Message
      * @author mozzi327
      */
     @GetMapping("/place/reserve/{reserve-id}/payment")
     public ResponseEntity<Message> orderAction(@PathVariable(name = "reserve-id") Long reserveId,
-                                               @RequestHeader(AUTHORIZATION) String accessToken,
                                                @RequestHeader(REFRESH_TOKEN) String refreshToken,
                                                HttpServletRequest req) {
         String requestUrl = req.getRequestURL()
@@ -78,13 +77,15 @@ public class ReserveController {
     /**
      * 예약 프로세스 3 - 결제 승인 시 발생되는 컨트롤러 메서드
      *
+     * @param reserveId 예약 식별자
      * @param pgToken Payment Gateway Token
      * @return PayApprovalDto
      * @author mozzi327
      */
-    @GetMapping("/api/order/completed")
-    public ResponseEntity<Message> paySuccessAction(@RequestParam("pg_token") String pgToken) {
-        PayApproveInfo payInfo = reserveService.getApprovedKaKaoPayInfo(pgToken);
+    @GetMapping("/api/reserve/{reserve-id}/completed")
+    public ResponseEntity<Message> paySuccessAction(@PathVariable("reserve-id") Long reserveId,
+                                                    @RequestParam("pg_token") String pgToken) {
+        PayApproveInfo payInfo = reserveService.getApprovedKaKaoPayInfo(reserveId, pgToken);
 
         if (payInfo == null) getFailedPayMessage();
 
@@ -103,12 +104,13 @@ public class ReserveController {
     /**
      * 예약 프로세스 4 - 결제 취소 시 발생되는 컨트롤러 메서드
      *
+     * @param reserveId 예약 식별자
      * @return ResponseEntity
      * @author mozzi327
      */
-    @GetMapping("/api/order/cancel")
-    public ResponseEntity<String> payCancelAction() {
-        reserveService.setCanceledStatus();
+    @GetMapping("/api/reserve/{reserve-id}/cancel")
+    public ResponseEntity<String> payCancelAction(@PathVariable("reserve-id") Long reserveId) {
+        reserveService.setCanceledStatus(reserveId);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(CANCELED_PAY_MESSAGE);
     }
 
@@ -116,12 +118,13 @@ public class ReserveController {
     /**
      * 예약 프로세스 5 - 결제 실패 시 발생되는 컨트롤러 메서드
      *
+     * @param reserveId 예약 식별자
      * @return ResponseEntity
      * @author mozzi327
      */
-    @GetMapping("/api/order/fail")
-    public ResponseEntity<String> payFailedAction() {
-        reserveService.setFailedStatus();
+    @GetMapping("/api/reserve/{reserve-id}/fail")
+    public ResponseEntity<String> payFailedAction(@PathVariable("reserve-id") Long reserveId) {
+        reserveService.setFailedStatus(reserveId);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(FAILED_PAY_MESSAGE);
     }
 
@@ -146,8 +149,8 @@ public class ReserveController {
     /**
      * 예약 수정 컨트롤러 메서드
      *
-     * @param reserveId 예약 식별자
-     * @param patch     예약 수정 정보
+     * @param reserveId    예약 식별자
+     * @param patch        예약 수정 정보
      * @param refreshToken
      * @return ResponseEntity
      * @author Quartz614
@@ -181,7 +184,7 @@ public class ReserveController {
      * 예약 내역 삭제 컨트롤러 메서드
      * 예약 내역 상태 변경 및 예약 취소 사유 저장
      *
-     * @param reserveId 예약 식별자
+     * @param reserveId    예약 식별자
      * @param refreshToken
      * @return ResponseEntity
      * @author LeeGoh

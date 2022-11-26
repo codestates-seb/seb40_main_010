@@ -20,10 +20,10 @@ public class MailService {
 
     @Autowired
     private JavaMailSender mailSender;
-    private ReserveDbService reserveDbService;
-    private PlaceDbService placeDbService;
-    private MemberDbService memberDbService;
-    private RedisUtils redisUtils;
+    private final ReserveDbService reserveDbService;
+    private final PlaceDbService placeDbService;
+    private final MemberDbService memberDbService;
+    private final RedisUtils redisUtils;
     private static final String FROM_ADDRESS = "YOUR_EMAIL_ADDRESS";
 
     public MailService(ReserveDbService reserveDbService,

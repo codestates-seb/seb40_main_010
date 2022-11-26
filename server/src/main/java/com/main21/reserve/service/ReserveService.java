@@ -17,7 +17,6 @@ import com.main21.reserve.pay.RequestForReserveInfo;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,52 +30,12 @@ import static com.main21.reserve.utils.PayConstants.*;
 @RequiredArgsConstructor
 public class ReserveService {
 
-    @Value("${kakao.admin.key}")
-    private String adminKey;
-
-    @Value("${kakao.host}")
-    private String host;
-
-    @Value("${kakao.uri.approval}")
-    private String approvalUri;
-
-    @Value("${kakao.uri.cancel}")
-    private String cancelUri;
-
-    @Value("${kakao.uri.fail}")
-    private String failUri;
-
-    @Value("${kakao.pay.ready}")
-    private String kakaoPayReady;
-
-    @Value("${kakao.pay.approve}")
-    private String kakaoPayApprove;
-
-    @Value("${kakao.pay.cid}")
-    private String testCid;
-
-    @Value("${kakao.pay.taxfree}")
-    private Integer taxFreeAmount;
-
-    @Value("${kakao.pay.cancel}")
-    private String kakaoPayCancel;
-
-    @Value("${kakao.pay.order}")
-    private String kakaoPayOrder;
-
     private final RedisUtils redisUtils;
     private final FeignService feignService;
     private final PlaceDbService placeDbService;
     private final MemberDbService memberDbService;
     private final MbtiCountService mbtiCountService;
     private final ReserveDbService reserveDbService;
-
-    private long quantity;
-    private String userId;
-    private String orderId;
-    private String itemName;
-    private Long totalAmount;
-    private PayReadyInfo payReadyDto;
 
 
     /**
@@ -90,11 +49,7 @@ public class ReserveService {
     @Transactional
     public void createReserve(ReserveDto.Post post, Long placeId, String refreshToken) {
         Long memberId = redisUtils.getId(refreshToken);
-
-        //공간 확인
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
-
-        // 유저 확인
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         Reserve reserve = Reserve.builder()
@@ -105,7 +60,6 @@ public class ReserveService {
                 .memberId(memberId)
                 .totalCharge((long)(post.getEndTime().getHour() - post.getStartTime().getHour()) * findPlace.getCharge())
                 .build();
-
 
         // 최대 수용인원 초과 예약 금지
         if (reserve.getCapacity() > findPlace.getMaxCapacity()) {
@@ -130,7 +84,7 @@ public class ReserveService {
                                  String refreshToken,
                                  String requestUrl) {
 
-        /*  Todo : 예약 가능한지 확인하는 이벤트 처리  */
+        /*  Todo : 예약 가능한지 확인하는 이벤트 처리(논의중)  */
 
         Long memberId = redisUtils.getId(refreshToken);
 
@@ -139,13 +93,17 @@ public class ReserveService {
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
         Place findPlace = placeDbService.ifExistsReturnPlace(findReserve.getPlaceId());
 
-        // 헤더에 정보 추가
-        KakaoHeaders headers = feignService.setHeaders(KAKAO_AK + adminKey);
-        readyToInfo(findMember, findReserve, findPlace);
+        // 결제 페이지 요청을 위한 headers, params 세팅
+        KakaoHeaders headers = feignService.setHeaders();
+        ReadyToPaymentInfo params = feignService.setReadyParams(requestUrl, findMember, findReserve, findPlace);
 
-        // 카카오 서버에 보내기 위한 params Map 생성
-        ReadyToPaymentInfo params = setReadyParams(requestUrl, quantity, findPlace.getCharge());
-        payReadyDto = feignService.getPaymentUrlResponse(headers, params);
+        // feign client 요청(결제페이지 정보)
+        PayReadyInfo payReadyDto = feignService.getPaymentUrlResponse(headers, params);
+
+        // 성공적으로 결제 창 요청이 왔다면 해당 데이터를 예약 정보에 저장
+        findReserve.setPaymentInfo(params, payReadyDto.getTid());
+        reserveDbService.saveReserve(findReserve);
+
         return payReadyDto.getNextRedirectPcUrl();
     }
 
@@ -158,19 +116,19 @@ public class ReserveService {
      * @author mozzi327
      */
     @Transactional
-    public PayApproveInfo getApprovedKaKaoPayInfo(String pgToken) {
+    public PayApproveInfo getApprovedKaKaoPayInfo(Long reserveId,
+                                                  String pgToken) {
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
 
         // 예약 정보 반환을 위한 headers, params 세팅
-        KakaoHeaders headers = feignService.setHeaders(KAKAO_AK + adminKey);
-        RequestForReserveInfo params = setRequestParams(pgToken);
+        KakaoHeaders headers = feignService.setHeaders();
+        RequestForReserveInfo params = feignService.setRequestParams(pgToken, findReserve);
+
+        // feign client 요청(예약 정보)
         PayApproveInfo approvalDto = feignService.getSuccessResponse(headers, params);
 
-
         // 결제 성공시 예약 상태 변경 및 DTO에 메시지를 담는 과정
-        String[] orderInfoList = parseOrderInfo(orderId);
-        String reserveId = orderInfoList[1];
         approvalDto.setOrderStatus(ORDER_APPROVED);
-        Reserve findReserve = reserveDbService.ifExistsReturnReserve(Long.valueOf(reserveId));
         findReserve.setStatus(Reserve.ReserveStatus.PAY_SUCCESS);
         reserveDbService.saveReserve(findReserve);
 
@@ -183,9 +141,8 @@ public class ReserveService {
      *
      * @author mozzi327
      */
-    public void setCanceledStatus() {
-        String reserveId = parseOrderInfo(orderId)[1];
-        Reserve findReserve = reserveDbService.ifExistsReturnReserve(Long.valueOf(reserveId));
+    public void setCanceledStatus(Long reserveId) {
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
         findReserve.setStatus(Reserve.ReserveStatus.PAY_CANCELED);
         reserveDbService.saveReserve(findReserve);
     }
@@ -196,18 +153,14 @@ public class ReserveService {
      *
      * @author mozzi327
      */
-    public void setFailedStatus() {
-        String reserveId = parseOrderInfo(orderId)[1];
-        Reserve findReserve = reserveDbService.ifExistsReturnReserve(Long.valueOf(reserveId));
+    public void setFailedStatus(Long reserveId) {
+        Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
         findReserve.setStatus(Reserve.ReserveStatus.PAY_FAILED);
         reserveDbService.saveReserve(findReserve);
     }
 
 
-    /* ------------------------------------ 결제 외 메서드 -------------------------------------*/
-
-
-
+    /* ------------------------------------ 예약 프로세스 끝 -------------------------------------*/
 
 
     /**
@@ -221,8 +174,6 @@ public class ReserveService {
         Long memberId = redisUtils.getId(refreshToken);
         return reserveDbService.getReservation(memberId, pageable);
     }
-
-
 
 
     /**
@@ -293,67 +244,6 @@ public class ReserveService {
 
 
     /* ------------------------------------ Common Method --------------------------------------*/
-
-
-    /**
-     * 결과별 리다이렉트 Url 파라매터 입력 메서드(Feign Client)
-     * @param requestUrl 요청 URL
-     * @param quantity 총 예약 시간
-     * @param charge 시간 당 금액
-     * @return Params
-     * @author mozzi327
-     */
-    private ReadyToPaymentInfo setReadyParams(String requestUrl, long quantity, long charge) {
-        return ReadyToPaymentInfo.builder()
-                .cid(testCid)
-                .approval_url(requestUrl + approvalUri)
-                .cancel_url(requestUrl + cancelUri)
-                .fail_url(requestUrl + failUri)
-                .partner_order_id(orderId)
-                .partner_user_id(userId)
-                .item_name(itemName)
-                .quantity(String.valueOf(quantity))
-                .total_amount(totalAmount.toString())
-                .val_amount(String.valueOf(charge))
-                .tax_free_amount(String.valueOf(taxFreeAmount))
-                .build();
-    }
-
-
-    /**
-     * 결제 진행을 위한 파라미터 세팅 메서드
-     * @param findMember 조회 사용자 정보
-     * @param findReserve 조회 진행 예약 정보
-     * @param findPlace 조회 진행 장소 정보
-     * @author mozzi327
-     */
-    private void readyToInfo(Member findMember,
-                             Reserve findReserve,
-                             Place findPlace) {
-        orderId = findReserve.getId() + "/" + findMember.getId() + "/" + findPlace.getTitle();
-        userId = findMember.getId().toString();
-        itemName = findPlace.getTitle();
-        totalAmount = findReserve.getTotalCharge();
-        quantity = (findReserve.getEndTime().getHour() - findReserve.getStartTime().getHour());
-    }
-
-
-    /**
-     * 결제 완료 후 예약 정보 조회를 위한 파라미터 세팅 메서드
-     * @param pgToken Payment Gateway Token 정보
-     * @return RequestForReserveInfo
-     * @author mozzi327
-     */
-    private RequestForReserveInfo setRequestParams(String pgToken) {
-        return RequestForReserveInfo.builder()
-                .cid(testCid)
-                .tid(payReadyDto.getTid())
-                .partner_order_id(orderId)
-                .partner_user_id(userId)
-                .pg_token(pgToken)
-                .total_amount(String.valueOf(totalAmount))
-                .build();
-    }
 
 
     /**

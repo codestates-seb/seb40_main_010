@@ -1,8 +1,6 @@
 package com.main21.member.controller;
 
-
 import com.main21.member.dto.MemberDto;
-import com.main21.member.entity.Member;
 import com.main21.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
