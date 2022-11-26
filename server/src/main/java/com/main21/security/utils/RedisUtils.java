@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtils {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisTemplate<String, Object> redisBlackListTemplate;
+    private static final String RT_KEY = "RT :";
+    private static final String AT_KEY = "AT :";
 
 
     /**

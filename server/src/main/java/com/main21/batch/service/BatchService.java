@@ -8,9 +8,11 @@ import com.main21.member.repository.MemberRepository;
 import com.main21.place.dto.PlaceDto;
 import com.main21.place.repository.PlaceRepository;
 import com.main21.security.exception.AuthException;
+import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,16 +24,18 @@ public class BatchService {
     private final BestRepository bestRepository;
     private final MemberRepository memberRepository;
     private final PlaceRepository placeRepository;
+    private final RedisUtils redisUtils;
 
     /**
      * 회원의 MBTI를 통해 Best MBTI 장소를 가져오는 메서드
-     * @param memberId 사용자 식별자
+     * @param refreshToken 리프레시 토큰
      * @return List(PlaceDto.Response)
      * @author mozzi327
      */
-    public List<PlaceDto.Response> getMbtis(Long memberId) {
+    public List<PlaceDto.Response> getBestMbtiPlaceForMember(String refreshToken) {
         String memberMbti;
-        if (memberId != null) {
+        if (StringUtils.hasText(refreshToken)) {
+            Long memberId = redisUtils.getId(refreshToken);
             Member findMember = ifExistMember(memberId);
             memberMbti = findMember.getMbti();
         } else memberMbti = "NONE";

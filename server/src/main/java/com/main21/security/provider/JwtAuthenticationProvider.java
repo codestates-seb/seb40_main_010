@@ -23,9 +23,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        JwtAuthenticationToken jwtToken = (JwtAuthenticationToken) authentication;
         Map<String, Object> claims = jwtTokenUtils
-                .getClaims(String.valueOf(((JwtAuthenticationToken) authentication)
-                .getAccessToken()));
+                .getClaims(jwtToken.getAccessToken());
         String email = (String) claims.get(USERNAME);
         List<String> roles = (List<String>) claims.get(ROLES);
 

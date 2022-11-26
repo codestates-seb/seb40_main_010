@@ -46,7 +46,6 @@ public class BookmarkRepositoryImpl implements CustomBookmarkRepository{
 
         long total = results.size();
         return new PageImpl<>(results, pageable, total);
-
     }
 
 }

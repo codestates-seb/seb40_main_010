@@ -60,9 +60,9 @@ public class MemberDbService {
      * @author Quartz614
      */
     public void verifyEmail(MemberDto.Post post) {
-        if (memberRepository.findByEmail(post.getEmail()).isPresent()) {
-            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXIST); // 멤버로 바꿔야 ㅍ
-        }
+        memberRepository.findByEmail(post.getEmail()).ifPresent(e -> {
+            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXIST);
+        }); // 멤버로 바꿔야 ㅍ
     }
 
 
@@ -102,7 +102,10 @@ public class MemberDbService {
     }
 
     public void isExistNickname(String nickname) {
-        if (memberRepository.findMemberByNickname(nickname).isPresent())
-            throw new BusinessLogicException(ExceptionCode.NICKNAME_ALREADY_EXIST);
+        memberRepository.findMemberByNickname(nickname).ifPresent(
+                e -> {
+                    throw new BusinessLogicException(ExceptionCode.NICKNAME_ALREADY_EXIST);
+                });
     }
+
 }

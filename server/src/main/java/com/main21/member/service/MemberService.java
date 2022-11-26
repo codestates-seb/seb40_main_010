@@ -34,8 +34,8 @@ public class MemberService {
      */
     public void createMember(MemberDto.Post post) {
         memberDbService.verifyEmail(post);
-        List<String> roles = authorityUtils.createRoles(post.getEmail());
         memberDbService.isExistNickname(post.getNickname());
+        List<String> roles = authorityUtils.createRoles(post.getEmail());
 
         Member member = Member.builder()
                 .email(post.getEmail())
