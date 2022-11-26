@@ -57,8 +57,8 @@ const InformationContainer = styled.div`
 
 const InformationTitle = styled.div`
   font-size: 2rem;
-  /* font-weight: 600; */
-  font-weight: 17.3%;
+  font-weight: 600;
+  /* font-weight: 17.3%; */
   margin-left: 20px;
 `;
 

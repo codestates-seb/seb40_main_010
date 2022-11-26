@@ -46,6 +46,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<Places />} />
+        <Route path="/detail/" element={<Detail />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/log-in" element={<LogIn />} />
         <Route path="/my-page" element={<MyPage />} />

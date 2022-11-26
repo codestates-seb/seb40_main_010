@@ -18,13 +18,14 @@ export default function Places() {
   const header = {
     headers: {
       'ngrok-skip-browser-warning': '010',
-      // Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-      // RefreshToken: localStorage.getItem('REFRESH'),
+      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+      RefreshToken: localStorage.getItem('REFRESH'),
     },
   };
   const get = async () => {
+    const query = '?size=20&page=2';
     try {
-      const result = await axios.get('/home', header);
+      const result = await axios.get(`/home/${query}`, header);
       console.log(result.data);
       setMainPlaceData(result.data.data);
     } catch (error) {
@@ -52,12 +53,14 @@ export default function Places() {
       <Nav />
       <Category />
       <DisplayComponentDiv>
+        <div>MBTI 추천</div>
         <MainComponentContainer>
           {mbtiPlaceData &&
             mbtiPlaceData.map(placeData => {
               return <Place key={placeData.title} placeData={placeData} />;
             })}
         </MainComponentContainer>
+        <div>장소</div>
         <MainComponentContainer>
           {mainPlaceData &&
             mainPlaceData.map(placeData => {
