@@ -91,6 +91,7 @@ const PlaceAddress = styled.div`
 
 const PlaceScore = styled.div`
   margin-top: 1px;
+  font-family: inherit;
 `;
 
 const PlaceCharge = styled.div`

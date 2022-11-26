@@ -7,6 +7,7 @@ import Category from '../components/Category';
 import Nav from '../components/Navigation/Nav';
 import Place from '../components/Place';
 import { mainDataState, mbtiPlaceDataState } from '../atoms';
+
 // import { getAllPlaces } from '../hooks/getAllPlaces';
 
 // ToDo : Mbti 컴포넌트 위치, 요청
@@ -14,16 +15,17 @@ export default function Places() {
   const [mainPlaceData, setMainPlaceData] = useRecoilState(mainDataState);
   const [mbtiPlaceData, setMbtiPlaceData] = useRecoilState(mbtiPlaceDataState);
   // const mainPlaceData = useRecoilValue(mainDataState);
-
   const header = {
     headers: {
       'ngrok-skip-browser-warning': '010',
+      // Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+      // RefreshToken: localStorage.getItem('REFRESH'),
     },
   };
   const get = async () => {
     try {
       const result = await axios.get('/home', header);
-      console.log(result.data.data);
+      console.log(result.data);
       setMainPlaceData(result.data.data);
     } catch (error) {
       console.log(error);
@@ -74,7 +76,6 @@ const DisplayComponentDiv = styled.div`
   align-items: center;
 `;
 const MainComponentContainer = styled.div`
-  overflow-y: scroll;
   margin: 1 auto;
   width: 1200px;
   flex-wrap: wrap;

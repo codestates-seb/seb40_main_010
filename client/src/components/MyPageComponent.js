@@ -130,7 +130,11 @@ function MyPageComponent() {
         {myPageCategory === '리뷰내역' &&
           listData.map(el => {
             return (
-              <MyPageCategoryList listData={el} key={el.id} type="reviews" />
+              <MyPageCategoryList
+                listData={el}
+                key={el.reviewId}
+                type="reviews"
+              />
             );
           })}
       </MyPageCategoryItemList>
