@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 
 import Nav from '../components/Navigation/Nav';
+import mbtiList from '../utils/mbtiList';
 
 function SignUp() {
   const navigator = useNavigate();
@@ -25,31 +26,7 @@ function SignUp() {
     } catch (err) {
       return console.log('Error >>', err);
     }
-    // axios.
-    //   .post(`/member/join`, data)
-    //   .then(res => console.log(res))
-    //   .catch(err => console.log(err));
   };
-
-  const mbtiList = [
-    { value: 'NONE', label: '없음' },
-    { value: 'ISTJ', label: 'ISTJ' },
-    { value: 'ISFJ', label: 'ISFJ' },
-    { value: 'INFJ', label: 'INFJ' },
-    { value: 'INTJ', label: 'INTJ' },
-    { value: 'ISTP', label: 'ISTP' },
-    { value: 'ISFP', label: 'ISFP' },
-    { value: 'INFP', label: 'INFP' },
-    { value: 'INTP', label: 'INTP' },
-    { value: 'ESTJ', label: 'ESTJ' },
-    { value: 'ESFJ', label: 'ESFJ' },
-    { value: 'ENFJ', label: 'ENFJ' },
-    { value: 'ENTJ', label: 'ENTJ' },
-    { value: 'ESTP', label: 'ESTP' },
-    { value: 'ESFP', label: 'ESFP' },
-    { value: 'ENFP', label: 'ENFP' },
-    { value: 'ENTP', label: 'ENTP' },
-  ];
 
   return (
     <div className="test">
@@ -96,8 +73,6 @@ function SignUp() {
                     specialCheck: value =>
                       (value && /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi.test(value)) ||
                       '특수문자를 추가해주세요',
-                    // spacecheck: value =>
-                    //   (value && /\s/gi.test(value)) || '공백을 제거해주세요',
                   },
                 })}
               />
