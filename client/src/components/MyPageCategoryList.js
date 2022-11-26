@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import ReviewWrite from './ReviewWrite';
 import { reservationEditData } from '../atoms';
+import useMyPage from './useMyPage';
 import header from '../utils/header';
 import { onClickPaymentButton } from '../utils/payment';
 
@@ -34,6 +35,8 @@ function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [, setReservationData] = useRecoilState(reservationEditData);
+
+  const { clearCategory } = useMyPage();
 
   const navigate = useNavigate();
 
@@ -105,10 +108,12 @@ function MyPageCategoryList({ listData, type }) {
 
   const bookMarkStatusChange = async () => {
     try {
-      await axios.get(`/bookmark/${listData.bookmarkId}`, header);
+      await axios.get(`/bookmark/${listData.placeId}`, header);
       // 북마크 아이콘 색상 변화 등
-    } catch (err) {
+      clearCategory();
       navigate('/my-page');
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -122,6 +127,8 @@ function MyPageCategoryList({ listData, type }) {
       console.log(err);
     }
   };
+
+  const today = new Date();
 
   return (
     <CategoryItemList>
@@ -159,7 +166,13 @@ function MyPageCategoryList({ listData, type }) {
           )}
           {type === 'reservation' && (
             <>
-              <CategoryButton onClick={showModal}>취소하기</CategoryButton>
+              {handleDate(today) < handleDate(listData.startTime) ? (
+                <CategoryButton onClick={showModal}>취소하기</CategoryButton>
+              ) : (
+                <CategoryButton onClick={showReviewModal}>
+                  리뷰쓰기
+                </CategoryButton>
+              )}
               {modalOpen && (
                 <Modal
                   modalOpen={modalOpen}
@@ -177,8 +190,8 @@ function MyPageCategoryList({ listData, type }) {
             </>
           )}
           {type === 'bookmark' && (
-            <CategoryButton>
-              <BsFillBookmarkFill size={24} onClick={bookMarkStatusChange} />
+            <CategoryButton onClick={bookMarkStatusChange}>
+              <BsFillBookmarkFill size={24} />
             </CategoryButton>
           )}
           {type === 'reviews' && (
@@ -213,6 +226,7 @@ function MyPageCategoryList({ listData, type }) {
           reviewScore={listData.score}
           reserveId={listData.reserveId}
           placeId={listData.placeId}
+          reviewId={listData.reviewId}
         />
       )}
     </CategoryItemList>

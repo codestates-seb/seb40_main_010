@@ -12,6 +12,7 @@ function ReviewWrite({
   reviewScore,
   reserveId,
   placeId,
+  reviewId,
 }) {
   const [reviewStar, setReviewStar] = useState(null);
   const [reviewText, setReviewText] = useState('');
@@ -39,7 +40,20 @@ function ReviewWrite({
     };
     try {
       await axios.post(`/review/${placeId}/reserve/${reserveId}`, data, header);
-      console.log(data);
+      showReviewModal();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const submitEditReview = async () => {
+    const data = {
+      score: reviewStar,
+      comment: reviewText,
+    };
+    try {
+      await axios.patch(`/review/${reviewId}/edit`, data, header);
+      showReviewModal();
     } catch (err) {
       console.log(err);
     }
@@ -84,9 +98,15 @@ function ReviewWrite({
           {reviewText}
         </ReviewInput>
         <ButtonContainer>
-          <ReviewButton className="blue" onClick={submitReview}>
-            등록
-          </ReviewButton>
+          {reviewId ? (
+            <ReviewButton className="blue" onClick={submitEditReview}>
+              수정
+            </ReviewButton>
+          ) : (
+            <ReviewButton className="blue" onClick={submitReview}>
+              등록
+            </ReviewButton>
+          )}
           <ReviewButton onClick={showReviewModal}>취소</ReviewButton>
         </ButtonContainer>
       </ReviewContainer>
