@@ -151,7 +151,7 @@ function ReservationAsideBar({ charge }) {
 
 const Container = styled.div`
   position: sticky;
-  top: 140px;
+  top: 152px;
   width: 18rem;
   height: flex;
   border-radius: 15px;
@@ -159,7 +159,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0px 30px;
+  padding: 20px 30px 0px 30px;
   margin-bottom: 10px;
 
   .hour-charge {
@@ -199,13 +199,18 @@ const Container = styled.div`
     width: 120px;
     height: 50px;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #ffda77;
     border-radius: 15px;
     color: #2b2b2b;
+    font: inherit;
     font-size: 1.1rem;
     font-weight: 600;
     border: none;
     box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
+    padding: 3px 0px 0px 0px;
 
     :active {
       box-shadow: none;

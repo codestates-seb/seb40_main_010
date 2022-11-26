@@ -61,7 +61,8 @@ const RightIcon = styled(FaCaretRight)`
 const SmallInput = styled.input`
   width: 1rem;
   height: 1rem;
-  font-size: 0.9rem;
+  font: inherit;
+  font-size: 0.75rem;
   outline: none;
   border: 3px solid #96c2ff;
   border-radius: 5px;

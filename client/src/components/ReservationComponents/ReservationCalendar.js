@@ -203,7 +203,7 @@ export default function ReservationCalendar({
           required
         />
       </DatePick>
-      <DatePick>
+      <DatePick marginTop="10px">
         <Label>종료일시</Label>
         <DatePicker
           selectsEnd
@@ -229,6 +229,7 @@ export default function ReservationCalendar({
 
 const DatePick = styled.div`
   margin-bottom: ${({ marginBottom }) => marginBottom};
+  margin-top: ${({ marginTop }) => marginTop};
 `;
 
 const Label = styled.div`
@@ -276,6 +277,8 @@ const Container = styled.div`
     margin-top: 10px;
     height: 2rem;
     padding: 0px 0px 0px 8px;
+    font: inherit;
+    font-size: 0.82rem;
     :focus-visible {
       outline: #96c2ff auto 1px;
     }
