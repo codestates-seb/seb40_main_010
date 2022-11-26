@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
+import {
+  handleImageCompress,
+  handleGetPreviewImagesUrl,
+} from '../utils/images';
 
 const useMyPage = () => {
   const [myPageCategory, setMyPageCategory] = useState('등록내역');
@@ -8,6 +12,8 @@ const useMyPage = () => {
   const [userNickName, setUserNickName] = useState('');
   const [userMBTI, setUserMBTI] = useState('');
   const [editStatus, setEditStatus] = useState(false);
+  const [profileImage, setProfileImage] = useState([]);
+  const [previewProfileImage, setPreviewProfileImage] = useState([]);
 
   const header = {
     headers: {
@@ -86,7 +92,6 @@ const useMyPage = () => {
   const callUserData = async () => {
     try {
       const response = await axios.get('/member', header);
-      console.log(response.data);
       setMemberData(response.data);
       setUserNickName(response.data.nickname);
       setUserMBTI(response.data.mbti);
@@ -116,6 +121,33 @@ const useMyPage = () => {
     }
   };
 
+  const userImageEdit = async () => {
+    try {
+      await axios.post(
+        `/member/profile`,
+        {
+          profileImage,
+        },
+        header,
+      );
+      callUserData();
+      editStatusChange();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUploadImage = async event => {
+    const selectedImages = event.target.files[0];
+
+    const compressedImage = await handleImageCompress(selectedImages);
+    const compressedImageUrl = await handleGetPreviewImagesUrl(compressedImage);
+
+    setProfileImage(compressedImage);
+    setPreviewProfileImage(compressedImageUrl);
+    userImageEdit();
+  };
+
   const onChange = event => {
     setUserMBTI(event.value);
   };
@@ -124,6 +156,7 @@ const useMyPage = () => {
     editStatusChange();
     setUserNickName(memberData.nickname);
     setUserMBTI(memberData.mbti);
+    setPreviewProfileImage([]);
   };
 
   const categoryHandler = {
@@ -162,6 +195,8 @@ const useMyPage = () => {
     onClickCategory,
     onChangeNickName,
     clearCategory,
+    handleUploadImage,
+    previewProfileImage,
   };
 };
 

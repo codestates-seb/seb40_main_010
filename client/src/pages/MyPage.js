@@ -16,9 +16,12 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: #ffda77;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+  overflow: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export default MyPage;

@@ -35,8 +35,7 @@ function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [, setReservationData] = useRecoilState(reservationEditData);
-
-  const { clearCategory } = useMyPage();
+  const { bookmarkList } = useMyPage();
 
   const navigate = useNavigate();
 
@@ -94,13 +93,10 @@ function MyPageCategoryList({ listData, type }) {
     return `${year}.${month}.${day} ${time}AM`;
   };
 
-  // 아래 함수 3개 await async 형태로 변경하기
-
   const reviewDelete = async () => {
     try {
       await axios.delete(`/review/${listData.reviewId}`, header);
       showModal();
-      navigate('/my-page');
     } catch (err) {
       showModal();
     }
@@ -109,9 +105,9 @@ function MyPageCategoryList({ listData, type }) {
   const bookMarkStatusChange = async () => {
     try {
       await axios.get(`/bookmark/${listData.placeId}`, header);
-      // 북마크 아이콘 색상 변화 등
-      clearCategory();
-      navigate('/my-page');
+      // 삭제 완료시 새로고침이나 상태 즉시 변경
+      console.log('삭제 성공');
+      bookmarkList();
     } catch (err) {
       console.log(err);
     }
@@ -182,9 +178,6 @@ function MyPageCategoryList({ listData, type }) {
                   modalAction="취소하는 함수 만들어서 넣기"
                 />
               )}
-              <CategoryButton onClick={showReviewModal}>
-                리뷰쓰기
-              </CategoryButton>
               <CategoryButton onClick={onClickPayment}>결제하기</CategoryButton>
               {modalOpen && <Modal {...IsPayment} />}
             </>

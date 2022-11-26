@@ -134,6 +134,12 @@ export default function Register() {
     }
   };
 
+  const handleEditSubmit = () => {
+    const data = { editData };
+    console.log(data);
+  };
+
+  console.log(checkedList);
   return (
     <>
       <Nav />
@@ -289,22 +295,41 @@ export default function Register() {
             )}
           </Wrapper>
           <ButtonWrapper>
-            <button
-              type="submit"
-              className="form-register-button"
-              onClick={handleSubmit}
-              disabled={
-                !(
-                  title.length < 20 &&
-                  checkedList.length > 0 &&
-                  address &&
-                  images.length > 0 &&
-                  charge > 0
-                )
-              }
-            >
-              등록하기
-            </button>
+            {editData ? (
+              <button
+                type="submit"
+                className="form-register-button"
+                onClick={handleEditSubmit}
+                disabled={
+                  !(
+                    title.length < 20 &&
+                    checkedList.length > 0 &&
+                    address &&
+                    images.length > 0 &&
+                    charge > 0
+                  )
+                }
+              >
+                수정하기
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="form-register-button"
+                onClick={handleSubmit}
+                disabled={
+                  !(
+                    title.length < 20 &&
+                    checkedList.length > 0 &&
+                    address &&
+                    images.length > 0 &&
+                    charge > 0
+                  )
+                }
+              >
+                등록하기
+              </button>
+            )}
           </ButtonWrapper>
         </FormContainer>
       </Container>

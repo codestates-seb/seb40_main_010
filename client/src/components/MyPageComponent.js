@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 import { BiTimeFive, BiPencil } from 'react-icons/bi';
@@ -7,10 +7,6 @@ import { IoHeartCircleOutline } from 'react-icons/io5';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import MyPageCategoryList from './MyPageCategoryList';
 import useMyPage from './useMyPage';
-import {
-  handleImageCompress,
-  handleGetPreviewImagesUrl,
-} from '../utils/images';
 import mbtiList from '../utils/mbtiList';
 
 function MyPageComponent() {
@@ -31,10 +27,9 @@ function MyPageComponent() {
     onClickCancel,
     onClickCategory,
     onChangeNickName,
+    handleUploadImage,
+    previewProfileImage,
   } = useMyPage();
-
-  const [profileImage, setProfileImage] = useState([]);
-  const [previewProfileImage, setPreviewProfileImage] = useState([]);
 
   const hiddenFileInput = useRef(null);
 
@@ -46,19 +41,6 @@ function MyPageComponent() {
     callUserData();
     callRegistrationList();
   }, []);
-
-  const handleUploadImage = async event => {
-    const selectedImages = event.target.files[0];
-
-    const compressedImage = await handleImageCompress(selectedImages);
-    const compressedImageUrl = await handleGetPreviewImagesUrl(compressedImage);
-
-    setProfileImage(compressedImage);
-    setPreviewProfileImage(compressedImageUrl);
-  };
-
-  console.log(profileImage);
-  console.log(previewProfileImage);
 
   return (
     <MyPageComponentContainer>
@@ -168,6 +150,9 @@ const MyPageComponentContainer = styled.div`
   background-color: #ffffff;
   padding: 35px;
   box-sizing: border-box;
+  margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
 `;
 
 const MyProfileImage = styled.img`
