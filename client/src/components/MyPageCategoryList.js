@@ -121,7 +121,7 @@ function MyPageCategoryList({ listData, type }) {
     // id를 인자로 받아서 /place/id로 조회해야되는데 현재 api랑 연동안되므로 detaildata로 임시 작성
     try {
       const response = await axios.get(`/place/${listData.placeId}`, header);
-      setReservationData(response.data[0]);
+      setReservationData(response.data);
       navigate('/register');
     } catch (err) {
       console.log(err);

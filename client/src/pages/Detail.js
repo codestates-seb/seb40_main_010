@@ -49,7 +49,6 @@ function Detail() {
 
   useEffect(() => {
     callDetailData();
-    console.log(isBookmark);
   }, [placeId, isBookmark]);
 
   return (

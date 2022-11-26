@@ -11,14 +11,9 @@ import header from '../../utils/header';
 // window를 지원하지 않을 수 있다..
 function ReservationBottomButtons() {
   const placeId = useRecoilValue(PlaceIDState);
-  // const detailInformation = useRecoilValue(DetailInformation);
-  // const [bookmark, setBookmark] = useState(detailInformation.bookmark);
-  // const { bookmark } = detailInformation;
-  // console.log(bookmark);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
-  const copyLinkRef = useRef();
 
-  // let test = bookmark;
+  const copyLinkRef = useRef();
 
   const handleCopyLink = () => {
     if (!document.queryCommandSupported('copy')) {
@@ -35,11 +30,7 @@ function ReservationBottomButtons() {
   const handleBookmark = async () => {
     try {
       const response = await axios.get(`/bookmark/${placeId}`, header);
-      // console.log(response);
       setIsBookmark(response.data);
-      // console.log('북마크', detailInformation);
-      // test = response.data;
-      // console.log(test);
     } catch (error) {
       console.log(error);
     }
@@ -73,6 +64,8 @@ const Container = styled.div`
     justify-content: center;
     border-radius: 10px;
     color: #2b2b2b;
+    font: inherit;
+    font-size: 0.82rem;
     font-weight: 500;
     box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
     border: none;
