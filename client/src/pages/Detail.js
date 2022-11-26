@@ -13,18 +13,6 @@ import ReviewContainer from '../components/ReviewContainer';
 
 // ToDo api 3개 불러오기
 function Detail() {
-  // ToDo : 예약, 북마크, 상세정보 get
-
-  // const [detailInformation, setDetailInformation] =
-  //   useRecoilState(DetailInformation);
-  // const placeId = useRecoilValue(PlaceIDState);
-  // useEffect(() => {
-  //   axios
-  //     .get(`{{BACKEND}}/place/${placeId}`)
-  //     .then(res => console.log(res))
-  //     .catch(err => console.log(err));
-  // }, []); // > 실제 api.
-
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
   const placeId = useRecoilValue(PlaceIDState);
