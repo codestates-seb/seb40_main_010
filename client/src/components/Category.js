@@ -92,6 +92,7 @@ const CategoryContainer = styled.div`
 `;
 
 const CategoryButton = styled.button`
+  font-family: inherit;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;

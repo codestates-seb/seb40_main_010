@@ -169,6 +169,7 @@ const SearchContainer = styled.form`
 `;
 
 const SearchInput = styled.input`
+  font-family: inherit;
   margin: 10px 0;
   padding: 10px 45px 10px 25px;
   width: 100%;
