@@ -132,7 +132,8 @@ const NavBackground = styled.div`
 
   .NavLogo {
     font-size: 2rem;
-    padding-right: 20px;
+    /* padding-right: 20px; */
+    padding-right: 9vw;
     padding-left: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
