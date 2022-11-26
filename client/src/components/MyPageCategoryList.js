@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import ReviewWrite from './ReviewWrite';
 import { reservationEditData } from '../atoms';
+import header from '../utils/header';
+import { onClickPaymentButton } from '../utils/payment';
 
 const chargeComponent = (listData, type) => {
   if (type === 'reviews') {
@@ -34,6 +36,29 @@ function MyPageCategoryList({ listData, type }) {
   const [, setReservationData] = useRecoilState(reservationEditData);
 
   const navigate = useNavigate();
+
+  const onClickPaymentKaKaoButton = async () => {
+    const { reserveId } = listData;
+    const response = await axios.get(
+      `/place/reserve/${reserveId}/payment`,
+      header,
+    );
+    const paymentUrl = response.data.data;
+    onClickPaymentButton(paymentUrl);
+    setModalOpen(false);
+  };
+
+  const IsPayment = {
+    modalText: '결제하시겠습니까?',
+    modalActionText: '결제하기',
+    modalAction: onClickPaymentKaKaoButton,
+    modalOpen,
+    setModalOpen,
+  };
+
+  const onClickPayment = () => {
+    setModalOpen(true);
+  };
 
   const showModal = () => {
     setModalOpen(!modalOpen);
@@ -66,14 +91,6 @@ function MyPageCategoryList({ listData, type }) {
     return `${year}.${month}.${day} ${time}AM`;
   };
 
-  const header = {
-    headers: {
-      'ngrok-skip-browser-warning': '010',
-      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-      RefreshToken: localStorage.getItem('REFRESH'),
-    },
-  };
-
   // 아래 함수 3개 await async 형태로 변경하기
 
   const reviewDelete = async () => {
@@ -88,7 +105,7 @@ function MyPageCategoryList({ listData, type }) {
 
   const bookMarkStatusChange = async () => {
     try {
-      await axios.get(`/bookmark/${listData.bookmarkId}`);
+      await axios.get(`/bookmark/${listData.bookmarkId}`, header);
       // 북마크 아이콘 색상 변화 등
     } catch (err) {
       navigate('/my-page');
@@ -98,7 +115,7 @@ function MyPageCategoryList({ listData, type }) {
   const registerEditDataSend = async () => {
     // id를 인자로 받아서 /place/id로 조회해야되는데 현재 api랑 연동안되므로 detaildata로 임시 작성
     try {
-      const response = await axios.get(`/place/${listData.placeId}`);
+      const response = await axios.get(`/place/${listData.placeId}`, header);
       setReservationData(response.data[0]);
       navigate('/register');
     } catch (err) {
@@ -155,6 +172,8 @@ function MyPageCategoryList({ listData, type }) {
               <CategoryButton onClick={showReviewModal}>
                 리뷰쓰기
               </CategoryButton>
+              <CategoryButton onClick={onClickPayment}>결제하기</CategoryButton>
+              {modalOpen && <Modal {...IsPayment} />}
             </>
           )}
           {type === 'bookmark' && (
