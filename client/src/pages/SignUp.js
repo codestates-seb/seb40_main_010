@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -10,6 +10,8 @@ import mbtiList from '../utils/mbtiList';
 
 function SignUp() {
   const navigator = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+
   const {
     register,
     handleSubmit,
@@ -20,11 +22,16 @@ function SignUp() {
 
   const onSubmit = async data => {
     try {
-      const response = await axios.post(`/member/join`, data);
+      await axios.post(`/member/join`, data);
       navigator('/log-in');
-      return response.data;
     } catch (err) {
-      return console.log('Error >>', err);
+      console.log('Error >>', err);
+      if (err.response.data.message === '이미 존재하는 닉네임입니다.') {
+        setErrorMessage(err.response.data.message);
+      }
+      if (err.response.data.message === '이미 존재하는 이메일입니다.') {
+        setErrorMessage(err.response.data.message);
+      }
     }
   };
 
@@ -49,6 +56,9 @@ function SignUp() {
               />
               {errors.email && (
                 <div className="alert">{errors.email.message}</div>
+              )}
+              {errorMessage === '이미 존재하는 이메일입니다.' && (
+                <div className="alert">{errorMessage}</div>
               )}
             </div>
             <div className="wrapper">
@@ -132,6 +142,9 @@ function SignUp() {
               />
               {errors.nickname && (
                 <div className="alert">{errors.nickname.message}</div>
+              )}
+              {errorMessage === '이미 존재하는 닉네임입니다.' && (
+                <div className="alert">{errorMessage}</div>
               )}
             </div>
             <div className="wrapper">
@@ -267,7 +280,7 @@ const Container = styled.div`
 const Input = styled.input`
   width: 99%;
   height: fit-content;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font: inherit;
   outline: none;
   border: none;
