@@ -9,24 +9,20 @@ import MyPage from './pages/MyPage';
 import Register from './pages/Register';
 import SignUp from './pages/SignUp';
 import NotFound from './components/NotFound';
-// ToDo : jwt decode exp 시간 수정
+// ToDo : refresh 주석 풀면 작동 > 개발 하고 ctr+s 할 때마다 요청가서 막아둠 , console.log(refresh)지워야함
 function App() {
   const login = useState(localStorage.getItem('REFRESH'));
   const [ref, setRef] = useState(false);
 
   const refresh = async () => {
     try {
-      const response = await axios.get(
-        `/auth/re-issue`,
-        {},
-        {
-          headers: {
-            'ngrok-skip-browser-warning': '010',
-            Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-            RefreshToken: `${localStorage.getItem('REFRESH')}`,
-          },
+      const response = await axios.get(`/auth/re-issue`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+          RefreshToken: `${localStorage.getItem('REFRESH')}`,
         },
-      );
+      });
 
       if (response.headers.authorization) {
         localStorage.setItem(
@@ -38,14 +34,13 @@ function App() {
       console.log(error);
     }
   };
-
+  console.log(refresh);
   useEffect(() => {
-    if (login) {
-      setTimeout(() => {
-        refresh();
-        setRef(!ref);
-      }, 1500000);
-    }
+    // refresh();
+    setTimeout(() => {
+      setRef(!ref);
+      console(ref);
+    }, 1500000 - 60000);
   }, [login, ref]);
 
   return (
