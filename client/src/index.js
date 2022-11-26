@@ -23,6 +23,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
+	font-family: 'inherit';
 	font: inherit;
 	vertical-align: baseline;
 }
@@ -32,6 +33,9 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
+	font-family: 'GmarketSans';
+	font-weight: normal;
+    font-style: normal;
 	line-height: 1;
 }
 ol, ul {
