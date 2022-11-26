@@ -122,7 +122,7 @@ const Container = styled.div`
   .title {
     width: 100%;
     height: fit-content;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #2b2b2b;
     margin-bottom: 10px;
@@ -137,7 +137,7 @@ const Container = styled.div`
     border-radius: 40px;
     color: #2b2b2b;
     font: inherit;
-    font-size: 1.45rem;
+    font-size: 1.3rem;
     font-weight: 600;
     border: none;
     box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
@@ -169,7 +169,7 @@ const Container = styled.div`
 const Input = styled.input`
   width: 99%;
   height: fit-content;
-  font-size: 1rem;
+  font-size: 0.82rem;
   font: inherit;
   outline: none;
   border: none;

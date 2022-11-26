@@ -218,8 +218,8 @@ const Container = styled.div`
   .title {
     width: 100%;
     height: fit-content;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: #2b2b2b;
     margin-bottom: 10px;
   }
@@ -232,7 +232,8 @@ const Container = styled.div`
     background-color: #ffda77;
     border-radius: 40px;
     color: #2b2b2b;
-    font-size: 1.5rem;
+    font: inherit;
+    font-size: 1.3rem;
     font-weight: 600;
     border: none;
     box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
@@ -265,11 +266,13 @@ const Container = styled.div`
 const Input = styled.input`
   width: 99%;
   height: fit-content;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  font: inherit;
   outline: none;
   border: none;
   border-bottom: 2px solid #96c2ff;
   color: #2b2b2b;
+  padding: 3px 0px;
 `;
 
 const MbtiSelect = styled(Select)`
