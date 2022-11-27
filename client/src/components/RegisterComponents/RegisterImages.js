@@ -3,15 +3,15 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { FaTimes } from 'react-icons/fa';
+import { registerFormPreviewImage } from '../../atoms';
 import {
   handleImageCompress,
   handleGetPreviewImagesUrl,
 } from '../../utils/images';
-import { registerFormPreviewImage } from '../../atoms';
 
-// TODO
-// 1. 이미지 업로드 속도가 느림
-// 3. 105번째줄 onClick 바꾸기
+// TODO:
+// 1. 105번째줄 onClick 바꾸기
+// 2. for eslint 오류 수정
 function RegisterImages({ images, setImages }) {
   const [previewImages, setPreviewImages] = useRecoilState(
     registerFormPreviewImage,
@@ -70,7 +70,7 @@ function RegisterImages({ images, setImages }) {
           사진 업로드하기
         </button>
       </div>
-      <PreviewImagesWrapper margin={previewImages.length > 0 ? '15px' : null}>
+      <PreviewImagesWrapper margin={previewImages.length > 0 && '15px'}>
         {previewImages.map((image, index) => (
           <PreviewImageWrapper key={`${image}`}>
             <img src={image} alt={`${image} - ${index}`} />
@@ -81,8 +81,6 @@ function RegisterImages({ images, setImages }) {
     </Wrapper>
   );
 }
-
-export default RegisterImages;
 
 const Wrapper = styled.div`
   width: 95%;
@@ -143,3 +141,5 @@ const DeleteImageIcon = styled(FaTimes)`
     cursor: pointer;
   }
 `;
+
+export default RegisterImages;
