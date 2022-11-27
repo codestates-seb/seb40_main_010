@@ -1,38 +1,44 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 // import axios from 'axios';
 import styled from 'styled-components';
+import { DetailInformation } from '../atoms';
 // import { useRecoilState, useRecoilValue } from 'recoil';
 
 // import { DetailInformation, PlaceIDState } from '../atoms';
 import FadeCarousel from './Fade';
 import Location from './Map';
+// { detailInformation }
+function View() {
+  const detailData = useRecoilValue(DetailInformation);
+  const { title, filePath, category, detailInfo, address, phoneNumber } =
+    detailData;
 
-function View({ detailInformation }) {
   return (
     <ViewContainer>
       <InformationContainer>
-        <InformationTitle>{detailInformation.title}</InformationTitle>
+        <InformationTitle>{title && title}</InformationTitle>
         <CarouselImageContainer>
           <FadeCarousel />
         </CarouselImageContainer>
         <InformationMiniImageContainer>
-          {detailInformation.filePath &&
-            detailInformation.filePath.map(placeImage => {
+          {filePath &&
+            filePath.map(placeImage => {
               return <InformationMiniImage key={placeImage} src={placeImage} />;
             })}
         </InformationMiniImageContainer>
         <DetailTitle>상세 정보</DetailTitle>
         <DetailTagContainer>
-          {detailInformation.category &&
-            detailInformation.category.map(placeTag => {
+          {category &&
+            category.map(placeTag => {
               return <DetailTag key={placeTag}>{placeTag}</DetailTag>;
             })}
         </DetailTagContainer>
-        <MoreInformation>{detailInformation.detailInfo}</MoreInformation>
+        <MoreInformation>{detailInfo && detailInfo}</MoreInformation>
         <NormalStyleDetailTitle>위치</NormalStyleDetailTitle>
-        <InformationLocation address={detailInformation.address} />
+        <InformationLocation address={address && address} />
         <NormalStyleDetailTitle>호스트 연락처</NormalStyleDetailTitle>
-        <DetailPhoneNumber>{detailInformation.phoneNumber}</DetailPhoneNumber>
+        <DetailPhoneNumber>{phoneNumber && phoneNumber}</DetailPhoneNumber>
       </InformationContainer>
     </ViewContainer>
   );

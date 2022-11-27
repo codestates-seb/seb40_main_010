@@ -1,8 +1,8 @@
 import { atom } from 'recoil';
-import { recoilPersist } from 'recoil-persist';
+// import { recoilPersist } from 'recoil-persist';
 // atom
 
-const { persistAtom } = recoilPersist();
+// const { persistAtom } = recoilPersist();
 
 export const registerFormTitle = atom({
   key: 'registerFormTitle',
@@ -97,7 +97,7 @@ export const mainDataState = atom({
 export const PlaceIDState = atom({
   key: 'PlaceIDState',
   default: '',
-  effects_UNSTABLE: [persistAtom],
+  // effects_UNSTABLE: [persistAtom],
 });
 
 export const DetailInformation = atom({
