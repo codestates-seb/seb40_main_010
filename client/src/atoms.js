@@ -100,16 +100,6 @@ export const DetailInformation = atom({
   default: [],
 });
 
-export const reservationStartCalendarSelectedDay = atom({
-  key: 'reservationStartCalendarSelectedDay',
-  default: false,
-});
-
-export const reservationEndCalendarSelectedDay = atom({
-  key: 'reservationEndCalendarSelectedDay',
-  default: false,
-});
-
 export const mbtiPlaceDataState = atom({
   key: 'mbtiPlaceDataState',
   default: null,

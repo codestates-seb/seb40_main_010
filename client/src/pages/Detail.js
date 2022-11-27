@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useParams, useMatch, useNavigate } from 'react-router-dom';
 
-import { DetailInformation, bookmarkState } from '../atoms';
+import {
+  DetailInformation,
+  bookmarkState,
+  reservationStartDate,
+  reservationEndDate,
+} from '../atoms';
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Navigation/Nav';
 import View from '../components/View';
@@ -19,6 +24,8 @@ function Detail() {
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
+  const setStartDate = useSetRecoilState(reservationStartDate);
+  const setEndDate = useSetRecoilState(reservationEndDate);
 
   const callDetailData = async () => {
     try {
@@ -26,6 +33,8 @@ function Detail() {
         const response = await getData(`/place/${id}`);
         setDetailInformation({ ...response.data });
         setIsBookmark(response.data.bookmark);
+        setStartDate(false);
+        setEndDate(false);
       }
     } catch (error) {
       console.log(error);

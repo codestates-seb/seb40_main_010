@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { useRecoilState } from 'recoil';
@@ -8,11 +8,7 @@ import { ko } from 'date-fns/esm/locale';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import {
-  reservationStartDateChangedState,
-  reservationStartCalendarSelectedDay,
-  reservationEndCalendarSelectedDay,
-} from '../../atoms';
+import { reservationStartDateChangedState } from '../../atoms';
 
 dayjs.extend(isBetween);
 
@@ -26,11 +22,9 @@ export default function ReservationCalendar({
     reservationStartDateChangedState,
   );
   const [startCalendarSelectedDay, setStartCalendarSelectedDay] =
-    useRecoilState(reservationStartCalendarSelectedDay);
-
-  const [endCalendarSelectedDay, setEndCalendarSelectedDay] = useRecoilState(
-    reservationEndCalendarSelectedDay,
-  );
+    useState('dayNull');
+  const [endCalendarSelectedDay, setEndCalendarSelectedDay] =
+    useState('dayNull');
 
   const maxEndDate = new Date(startDate).setDate(
     new Date(startDate).getDate() + 1,
@@ -41,7 +35,7 @@ export default function ReservationCalendar({
     const now = new Date();
 
     if (
-      startCalendarSelectedDay === false &&
+      startCalendarSelectedDay === 'dayNull' &&
       clickedTime.getDate() === now.getDate()
     ) {
       clickedTime.setHours(now.getHours() + 1);
@@ -79,13 +73,22 @@ export default function ReservationCalendar({
     const startTime = new Date(startDate);
 
     if (
-      endCalendarSelectedDay === false &&
+      endCalendarSelectedDay === 'dayNull' &&
       clickedTime.getDate() === startTime.getDate()
     ) {
       clickedTime.setHours(startTime.getHours() + 1);
       setEndDate(clickedTime);
 
       setEndCalendarSelectedDay('today');
+    }
+
+    if (
+      endCalendarSelectedDay === 'dayNull' &&
+      clickedTime.getDate() !== startTime.getDate()
+    ) {
+      setEndDate(time);
+
+      setEndCalendarSelectedDay('nextDay');
     }
 
     if (endCalendarSelectedDay === 'today') {

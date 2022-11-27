@@ -1,10 +1,8 @@
-// import React from 'react';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import Modal from '../Modal';
 
 import {
   reservationStartDate,
@@ -17,6 +15,9 @@ import ReservationCalendar from './ReservationCalendar';
 import ReservationCapacityHandler from './ReservationCapacityHandler';
 import ReservationBottomButtons from './ReservationBottomButtons';
 import { onClickPaymentButton } from '../../utils/payment';
+import Modal from '../Modal';
+import header from '../../utils/header';
+
 // TODO
 // 23~32까지 파일로 빼기
 function ReservationAsideBar({ charge }) {
@@ -67,14 +68,6 @@ function ReservationAsideBar({ charge }) {
 
     setModalOpen(true);
 
-    const header = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-        RefreshToken: localStorage.getItem('REFRESH'),
-      },
-    };
-
     const reservationInformation = {
       startTime: startDate,
       endTime: endDate,
@@ -84,7 +77,8 @@ function ReservationAsideBar({ charge }) {
     try {
       const response = await axios.post(
         `/place/${placeId}/reserve`,
-        JSON.stringify(reservationInformation),
+        // JSON.stringify(reservationInformation),
+        reservationInformation,
         header,
       );
       console.log(response.data);
