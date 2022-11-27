@@ -74,7 +74,6 @@ export function NavRightButtonContainer() {
 
 const NavLeftButton = styled.button`
   width: 80px;
-  /* font-family: 'GmarketSans'; */
   font-family: inherit;
   margin: 10px 7px;
   padding: 8px;

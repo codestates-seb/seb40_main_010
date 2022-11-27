@@ -11,25 +11,8 @@ import { carouselSettings } from '../utils/carouselSetting';
 
 function Fade() {
   const detailInformation = useRecoilValue(DetailInformation);
-  const { filePath } = detailInformation;
 
-  // const settings = {
-  //   dots: true,
-  //   lazyLoad: true,
-  //   dotsClass: 'slick-dots',
-  //   fade: true,
-  //   infinite: true,
-  //   arrows: true,
-  //   autoplay: true,
-  //   autoplaySpeed: 5000,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  //   pauseOnHover: true,
-  //   centerMode: false,
-  //   centerPadding: '0px',
-  //   nextArrow: <NextTo>＞</NextTo>,
-  //   prevArrow: <Pre>＜</Pre>,
-  // };
+  const { filePath } = detailInformation;
 
   const settings = carouselSettings;
 
@@ -61,7 +44,6 @@ const StyledSlide = styled(Slider)`
     width: 600px;
     position: absolute;
     bottom: 3%;
-    /* right: 0%; */
   }
 
   .slick-dots li button:before {
@@ -103,28 +85,6 @@ const StyledSlide = styled(Slider)`
     height: 100%;
   }
 `;
-
-// const Pre = styled.div`
-//   width: 30px;
-//   height: 30px;
-//   position: absolute;
-//   left: 2%;
-//   z-index: 3;
-//   &::before {
-//     color: white;
-//   }
-// `;
-
-// const NextTo = styled.div`
-//   width: 30px;
-//   height: 30px;
-//   position: absolute;
-//   right: 0%;
-//   z-index: 3;
-//   &::before {
-//     color: white;
-//   }
-// `;
 
 const SlickImage = styled.img`
   width: 600px;

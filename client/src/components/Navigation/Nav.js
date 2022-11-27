@@ -8,8 +8,8 @@ import { SlHome } from 'react-icons/sl';
 
 import { navSearchValue, categoryFocus, mainDataState } from '../../atoms';
 import { NavLeftButtonContainer, NavRightButtonContainer } from './NavButton';
-import { header } from './NavUtils';
 import getData from '../../hooks/useAsyncGetData';
+import { header } from './NavUtils';
 
 // ToDo 코드 리팩토링
 function Nav({ navColor, buttonColor }) {
@@ -25,6 +25,7 @@ function Nav({ navColor, buttonColor }) {
   };
 
   // eslint-disable-next-line consistent-return
+
   const onSubmit = async event => {
     event.preventDefault();
 
@@ -35,8 +36,6 @@ function Nav({ navColor, buttonColor }) {
 
     if (!trimmedSearch) return setCurrentSearch('');
 
-    // if (trimmedSearch) {
-    // try {
     const response = await getData(`/search/${encodeURI(replacedSearch)}`);
     setFocusCategoryID(0);
     setCurrentSearch('');
@@ -45,25 +44,6 @@ function Nav({ navColor, buttonColor }) {
       return setMainPlaceData(response.data.data);
     }
     return alert('다시 검색해주세요');
-    // const response = await axios.get(
-    //   `/search/${encodeURI(replacedSearch)}`,
-    //   header,
-    // );
-    // console.log(response.data);
-
-    // return response;
-    // } catch (error) {
-    // setCurrentSearch('');
-    // setFocusCategoryID(0);
-    // setCurrentSearch('');
-    // navigate('/');
-
-    // alert('검색 error');
-    // }
-    // }
-    // else {
-    //   setCurrentSearch('');
-    // }
   };
 
   // eslint-disable-next-line consistent-return
@@ -146,7 +126,6 @@ const NavBackground = styled.div`
 
   .NavLogo {
     font-size: 2rem;
-    /* padding-right: 20px; */
     padding-right: 9vw;
     padding-left: 20px;
     padding-top: 10px;
