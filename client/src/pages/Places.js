@@ -8,64 +8,33 @@ import Nav from '../components/Navigation/Nav';
 import Place from '../components/Place';
 import { mainDataState, mbtiPlaceDataState } from '../atoms';
 import getData from '../hooks/useAsyncGetData';
-
-// import { getAllPlaces } from '../hooks/getAllPlaces';
+// import header from '../utils/header';
 
 // ToDo : Mbti 컴포넌트 위치, 요청
 export default function Places() {
   const [mainPlaceData, setMainPlaceData] = useRecoilState(mainDataState);
   const [mbtiPlaceData, setMbtiPlaceData] = useRecoilState(mbtiPlaceDataState);
-  // const mainPlaceData = useRecoilValue(mainDataState);
-  // const header = {
-  //   headers: {
-  //     'ngrok-skip-browser-warning': '010',
-  //     Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-  //     RefreshToken: localStorage.getItem('REFRESH'),
-  //   },
-  // };
-  // const get = async () => {
-  //   const query = '?size=20&page=2';
-  //   try {
-  //     const result = await axios.get(`/home/${query}`, header);
-  //     console.log(result.data);
-  //     setMainPlaceData(result.data.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
-  // const query = '?size=20&page=2';
-  // const url = `/home${query}`;
-  const url = '/home';
+  const query = '?size=20&page=1';
+  const url = `/home${query}`;
+  // const url = '/home';
 
   const displayPlaces = async () => {
-    try {
-      const getAllPlaces = getData(url);
-      setMainPlaceData([...getAllPlaces.data.data]);
+    const getAllPlaces = await getData(url);
+    // const get
+    // const getAllPlaces = await axios.get(url, header);
 
-      const getMbtiPlaces = getData('/mbti');
-      setMbtiPlaceData([...getMbtiPlaces.data.data]);
-    } catch (error) {
-      console.log(error);
-    }
+    setMainPlaceData([...getAllPlaces.data.data]);
+
+    const getMbtiPlaces = await getData('/mbti');
+
+    setMbtiPlaceData([...getMbtiPlaces.data.data]);
   };
-  // const getMbtiPlace = async () => {
-  //   try {
-  //     const result = await axios.get('/mbti', header);
-  //     console.log(result.data.data);
-  //     setMbtiPlaceData(result.data.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   useEffect(() => {
-    // get();
-    // getMbtiPlace();
     displayPlaces();
   }, []);
 
-  // console.log(mainPlaceData);
   return (
     <MainContainer>
       <Nav />
@@ -76,15 +45,17 @@ export default function Places() {
           {mbtiPlaceData &&
             mbtiPlaceData.map(placeData => {
               const { placeId } = placeData;
-              return <Place key={placeId} placeData={placeData} />;
+              return <Place key={`mbti ${placeId}`} placeData={placeData} />;
             })}
         </MainComponentContainer>
         <div>장소</div>
         <MainComponentContainer>
           {mainPlaceData &&
             mainPlaceData.map(placeData => {
+              // const { endTime } = placeData;
               const { placeId } = placeData;
-              return <Place key={placeId} placeData={placeData} />;
+              // console.log(placeId);
+              return <Place key={`main ${placeId}`} placeData={placeData} />;
             })}
         </MainComponentContainer>
       </DisplayComponentDiv>

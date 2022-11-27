@@ -1,8 +1,4 @@
 import { atom } from 'recoil';
-// import { recoilPersist } from 'recoil-persist';
-// atom
-
-// const { persistAtom } = recoilPersist();
 
 export const registerFormTitle = atom({
   key: 'registerFormTitle',
@@ -91,13 +87,12 @@ export const reservationEditData = atom({
 
 export const mainDataState = atom({
   key: 'mainDataState',
-  default: [],
+  default: null,
 });
 
 export const PlaceIDState = atom({
   key: 'PlaceIDState',
   default: '',
-  // effects_UNSTABLE: [persistAtom],
 });
 
 export const DetailInformation = atom({
@@ -117,7 +112,7 @@ export const reservationEndCalendarSelectedDay = atom({
 
 export const mbtiPlaceDataState = atom({
   key: 'mbtiPlaceDataState',
-  default: [],
+  default: null,
 });
 
 export const bookmarkState = atom({

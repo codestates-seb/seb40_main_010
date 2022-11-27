@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-// import axios from 'axios';
 import { useRecoilState } from 'recoil';
+import { useParams, useMatch, useNavigate } from 'react-router-dom';
 
-import { useParams } from 'react-router-dom';
 import { DetailInformation, bookmarkState } from '../atoms';
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Navigation/Nav';
@@ -13,20 +12,17 @@ import getData from '../hooks/useAsyncGetData';
 
 // ToDo api 3개 불러오기
 function Detail() {
-  // const placeId = useRecoilValue(PlaceIDState);
-  // const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
+  const isDetailUrl = useMatch('/detail');
+  const navigate = useNavigate();
 
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
-  // id = useRecoilValue(PlaceIDState);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
 
   const callDetailData = async () => {
     try {
       if (id) {
-        // const response = await axios.get(`/place/${placeId}`, header);
         const response = await getData(`/place/${id}`);
         setDetailInformation({ ...response.data });
         setIsBookmark(response.data.bookmark);
@@ -37,6 +33,9 @@ function Detail() {
   };
 
   useEffect(() => {
+    if (isDetailUrl) {
+      navigate('/');
+    }
     callDetailData();
   }, [isBookmark, id]);
 

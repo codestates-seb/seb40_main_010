@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useRecoilValue } from 'recoil';
+// import { useRecoilValue } from 'recoil';
+import { useParams } from 'react-router-dom';
 import Review from './Review';
-import { PlaceIDState } from '../atoms';
+// import { PlaceIDState } from '../atoms';
 
 function ReviewContainer() {
   const [reviews, setReviews] = useState([]);
-  const placeId = useRecoilValue(PlaceIDState);
+  // const placeId = useRecoilValue(PlaceIDState);
 
+  const { id } = useParams();
   const header = {
     headers: {
       'ngrok-skip-browser-warning': '010',
@@ -46,7 +48,7 @@ function ReviewContainer() {
 
   const callReviews = async () => {
     try {
-      const response = await axios.get(`/review/${placeId}`, header);
+      const response = await axios.get(`/review/${id}`, header);
       setReviews([...response.data.data]);
     } catch (err) {
       console.log(err);
