@@ -249,9 +249,17 @@ const Container = styled.div`
   .react-datepicker-time__header,
   .react-datepicker__day-name {
     color: white;
+    font-family: 'GmarketSans';
+    font-weight: 600;
   }
   .react-datepicker__navigation-icon::before {
     border-color: white;
+  }
+
+  .react-datepicker__day {
+    color: #2b2b2b;
+    font-family: 'GmarketSans';
+    font-size: 0.71rem;
   }
 
   .react-datepicker__day--in-selecting-range,
@@ -263,6 +271,16 @@ const Container = styled.div`
     ul.react-datepicker__time-list
     li.react-datepicker__time-list-item--selected {
     background-color: #ffda77;
+    color: white;
+  }
+
+  li.react-datepicker__time-list-item {
+    font-family: 'GmarketSans';
+    font-size: 0.71rem;
+  }
+
+  .react-datepicker__day--disabled {
+    color: #aeaeae;
   }
 
   .react-datepicker__time-list::-webkit-scrollbar {
@@ -278,7 +296,8 @@ const Container = styled.div`
     height: 2rem;
     padding: 0px 0px 0px 8px;
     font: inherit;
-    font-size: 0.82rem;
+    color: #2b2b2b;
+    font-size: 0.8rem;
     :focus-visible {
       outline: #96c2ff auto 1px;
     }
