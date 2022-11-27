@@ -1,5 +1,6 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
@@ -12,6 +13,8 @@ import {
   reservationStartCalendarSelectedDay,
   reservationEndCalendarSelectedDay,
 } from '../../atoms';
+
+dayjs.extend(isBetween);
 
 export default function ReservationCalendar({
   startDate,
@@ -133,11 +136,11 @@ export default function ReservationCalendar({
       for (let i = 0; i < slots.length; i += 1) {
         const slot = slots[i];
 
-        const x = moment(time);
-        const startTime = moment(slot.start);
-        const endTime = moment(slot.end);
+        const x = dayjs(time);
+        const startTime = dayjs(slot.start);
+        const endTime = dayjs(slot.end);
 
-        if (x.isBetween(startTime, endTime) || x.isSame(moment(startTime))) {
+        if (x.isBetween(startTime, endTime) || x.isSame(dayjs(startTime))) {
           return false;
         }
 
@@ -159,14 +162,14 @@ export default function ReservationCalendar({
       for (let i = 0; i < slots.length; i += 1) {
         const slot = slots[i];
 
-        const x = moment(time);
-        const y = moment(startDate);
-        const slotStartTime = moment(slot.start);
-        const slotEndTime = moment(slot.end);
+        const x = dayjs(time);
+        const y = dayjs(startDate);
+        const slotStartTime = dayjs(slot.start);
+        const slotEndTime = dayjs(slot.end);
 
         if (
           x.isBetween(slotStartTime, slotEndTime) ||
-          x.isSame(moment(slotEndTime))
+          x.isSame(dayjs(slotEndTime))
         ) {
           return false;
         }
