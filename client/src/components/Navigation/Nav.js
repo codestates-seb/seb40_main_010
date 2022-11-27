@@ -8,7 +8,10 @@ import { SlHome } from 'react-icons/sl';
 
 import { navSearchValue, categoryFocus, mainDataState } from '../../atoms';
 import { NavLeftButtonContainer, NavRightButtonContainer } from './NavButton';
-// ToDo : async await 수정
+import { header } from './NavUtils';
+import getData from '../../hooks/useAsyncGetData';
+
+// ToDo 코드 리팩토링
 function Nav({ navColor, buttonColor }) {
   const [currentSearch, setCurrentSearch] = useState('');
   const setSearch = useSetRecoilState(navSearchValue);
@@ -17,13 +20,8 @@ function Nav({ navColor, buttonColor }) {
 
   const navigate = useNavigate();
 
-  const onChangeSearch = e => {
-    setCurrentSearch(e.target.value);
-  };
-  const header = {
-    headers: {
-      'ngrok-skip-browser-warning': '010',
-    },
+  const onChangeSearch = event => {
+    setCurrentSearch(event.target.value);
   };
 
   // eslint-disable-next-line consistent-return
@@ -35,55 +33,71 @@ function Nav({ navColor, buttonColor }) {
 
     setSearch(replacedSearch);
 
-    if (trimmedSearch) {
-      try {
-        const response = await axios.get(
-          `/search/${encodeURI(replacedSearch)}`,
-          header,
-        );
-        console.log(response.data);
-        setFocusCategoryID(0);
-        setMainPlaceData(response.data.data);
-        setCurrentSearch('');
-        navigate('/');
+    if (!trimmedSearch) return setCurrentSearch('');
 
-        return response;
-      } catch (error) {
-        setCurrentSearch('');
-        setFocusCategoryID(0);
-        setCurrentSearch('');
-        navigate('/');
-
-        alert('검색 error');
-      }
-    } else {
-      setCurrentSearch('');
+    // if (trimmedSearch) {
+    // try {
+    const response = await getData(`/search/${encodeURI(replacedSearch)}`);
+    setFocusCategoryID(0);
+    setCurrentSearch('');
+    navigate('/');
+    if (response) {
+      return setMainPlaceData(response.data.data);
     }
+    return alert('다시 검색해주세요');
+    // const response = await axios.get(
+    //   `/search/${encodeURI(replacedSearch)}`,
+    //   header,
+    // );
+    // console.log(response.data);
+
+    // return response;
+    // } catch (error) {
+    // setCurrentSearch('');
+    // setFocusCategoryID(0);
+    // setCurrentSearch('');
+    // navigate('/');
+
+    // alert('검색 error');
+    // }
+    // }
+    // else {
+    //   setCurrentSearch('');
+    // }
   };
 
   // eslint-disable-next-line consistent-return
-  const onClickSearch = () => {
+  const onClickSearch = async () => {
     const trimmedSearch = currentSearch.trim();
     const replacedSearch = trimmedSearch.replace(/ +(?= )/g, '');
 
     setSearch(replacedSearch);
     if (!trimmedSearch) return setCurrentSearch('');
 
-    axios
-      .get(`/search/${encodeURI(replacedSearch)}`, header)
-      .then(res => setMainPlaceData(res.data.data))
-      .then(setFocusCategoryID(0), setCurrentSearch(''), navigate('/'));
+    try {
+      const response = await axios.get(
+        `/search/${encodeURI(replacedSearch)}`,
+        header,
+      );
+
+      setMainPlaceData(response.data.data);
+      setFocusCategoryID(0);
+      setCurrentSearch('');
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const onClickHomeIcon = () => {
-    axios
-      .get('/home', header)
-      .then(
-        res => setMainPlaceData(res.data.data),
-        setFocusCategoryID(0),
-        setSearch(''),
-      )
-      .catch(err => console.log(err));
+  const onClickHomeIcon = async () => {
+    try {
+      const response = await axios.get('/home', header);
+      setMainPlaceData(response.data.data);
+      setFocusCategoryID(0);
+      setSearch('');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

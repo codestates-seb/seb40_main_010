@@ -1,24 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
-import { PlaceIDState } from '../atoms';
+import { DetailInformation, PlaceIDState } from '../atoms';
 
 function Place({ placeData }) {
   const setFocusPlaceID = useSetRecoilState(PlaceIDState);
+  const navigate = useNavigate();
+  const setDetailInformation = useSetRecoilState(DetailInformation);
 
   const { address, charge, image, score, title, placeId } = placeData;
 
   const slicedTitle = title.slice(0, 15);
 
   const onClickPlaceComponent = () => {
+    setDetailInformation([]);
     setFocusPlaceID(placeId);
   };
 
+  const onClickPlaceContainer = e => {
+    e.stopPropagation();
+    navigate(`/detail/${placeId}`);
+  };
+
+  const chargePerHour = new Intl.NumberFormat('ko-KR').format(charge);
+
   return (
-    <MainContainer onClick={e => e.stopPropagation()}>
+    <MainContainer onClick={onClickPlaceContainer}>
       <Link to="/detail">
         <MainComponent onClick={onClickPlaceComponent}>
           <Image src={image} />
@@ -28,9 +38,7 @@ function Place({ placeData }) {
             <PlaceScore>{score}</PlaceScore>
           </TitleContainer>
           <PlaceAddress>{address}</PlaceAddress>
-          <PlaceCharge>
-            {new Intl.NumberFormat('ko-KR').format(charge)}원
-          </PlaceCharge>
+          <PlaceCharge>{chargePerHour}원</PlaceCharge>
         </MainComponent>
       </Link>
     </MainContainer>

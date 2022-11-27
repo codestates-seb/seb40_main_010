@@ -1,35 +1,36 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-// import { useRecoilValue } from 'recoil';
-import { useRecoilState, useRecoilValue } from 'recoil';
+// import axios from 'axios';
+import { useRecoilState } from 'recoil';
 
-import { DetailInformation, PlaceIDState, bookmarkState } from '../atoms';
+import { useParams } from 'react-router-dom';
+import { DetailInformation, bookmarkState } from '../atoms';
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Navigation/Nav';
 import View from '../components/View';
 import ReviewContainer from '../components/ReviewContainer';
-// import { PlaceIDState } from '../atoms';
+import getData from '../hooks/useAsyncGetData';
 
 // ToDo api 3개 불러오기
 function Detail() {
+  // const placeId = useRecoilValue(PlaceIDState);
+  // const navigate = useNavigate();
+  const { id } = useParams();
+  console.log(id);
+
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
-  const placeId = useRecoilValue(PlaceIDState);
+  // id = useRecoilValue(PlaceIDState);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
-  const header = {
-    headers: {
-      'ngrok-skip-browser-warning': '010',
-      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-      RefreshToken: localStorage.getItem('REFRESH'),
-    },
-  };
 
   const callDetailData = async () => {
     try {
-      const response = await axios.get(`/place/${placeId}`, header);
-      setDetailInformation({ ...response.data });
-      setIsBookmark(response.data.bookmark);
+      if (id) {
+        // const response = await axios.get(`/place/${placeId}`, header);
+        const response = await getData(`/place/${id}`);
+        setDetailInformation({ ...response.data });
+        setIsBookmark(response.data.bookmark);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -37,16 +38,20 @@ function Detail() {
 
   useEffect(() => {
     callDetailData();
-  }, [placeId, isBookmark]);
+  }, [isBookmark, id]);
 
   return (
     <DetailReviewContainer>
       <DetailContainer>
         <DetailViewContainer>
           <Nav />
-          <View detailInformation={detailInformation} />
+          <View
+            detailInformation={detailInformation.title && detailInformation}
+          />
         </DetailViewContainer>
-        <ReservationAsideBar charge={detailInformation.charge} />
+        <ReservationAsideBar
+          charge={detailInformation.charge && detailInformation.charge}
+        />
       </DetailContainer>
       <ReviewContainer />
     </DetailReviewContainer>
