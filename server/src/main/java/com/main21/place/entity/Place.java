@@ -47,8 +47,8 @@ public class Place {
     // 공간 - 회원 간접 참
     private Long memberId;
 
-    // 영엉 마감 시간
-    private Integer endTIme;
+    // 영업 마감 시간
+    private Integer endTime;
 
     // 공간 - 공간 카테고리 1:N
     @OneToMany(mappedBy = "place")
@@ -77,7 +77,7 @@ public class Place {
         this.memberId = memberId;
         this.score = score;
         this.maxSpace = 1;
-        this.endTIme = endTime;
+        this.endTime = endTime;
     }
 
     public void addPlaceCategory(PlaceCategory placeCategory) {
