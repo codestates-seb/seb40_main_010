@@ -33,6 +33,7 @@ const chargeComponent = (listData, type) => {
 
 function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [payModalOpen, setPayModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [, setReservationData] = useRecoilState(reservationEditData);
   const { bookmarkList } = useMyPage();
@@ -54,12 +55,12 @@ function MyPageCategoryList({ listData, type }) {
     modalText: '결제하시겠습니까?',
     modalActionText: '결제하기',
     modalAction: onClickPaymentKaKaoButton,
-    modalOpen,
-    setModalOpen,
+    modalOpen: payModalOpen,
+    setModalOpen: setPayModalOpen,
   };
 
   const onClickPayment = () => {
-    setModalOpen(true);
+    setPayModalOpen(true);
   };
 
   const showModal = () => {
@@ -198,7 +199,7 @@ function MyPageCategoryList({ listData, type }) {
                 />
               )}
               <CategoryButton onClick={onClickPayment}>결제하기</CategoryButton>
-              {modalOpen && <Modal {...IsPayment} />}
+              {payModalOpen && <Modal {...IsPayment} />}
             </>
           )}
           {type === 'bookmark' && (
