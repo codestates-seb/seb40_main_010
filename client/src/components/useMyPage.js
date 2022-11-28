@@ -130,35 +130,9 @@ const useMyPage = () => {
     setEditStatus(!editStatus);
   };
 
-  const userDataEdit = async () => {
-    try {
-      await axios.patch(
-        `/member/edit`,
-        {
-          nickname: userNickName,
-          mbti: userMBTI,
-        },
-        header,
-      );
-      callUserData();
-      editStatusChange();
-    } catch (err) {
-      console.log(err);
-      if (err.response.data.message === '이미 존재하는 닉네임입니다.') {
-        setNickNameValidationMessage(err.response.data.message);
-        setNickNameCheck(false);
-      }
-      if (err.response.data.message === '이미 존재하는 이메일입니다.') {
-        setNickNameValidationMessage(err.response.data.message);
-        setNickNameCheck(false);
-      }
-    }
-  };
-
   const userImageEdit = async () => {
     const formData = new FormData();
     formData.append('file', profileImage);
-    console.log(profileImage);
 
     try {
       await axios.post(`/member/profile`, formData, {
@@ -175,6 +149,9 @@ const useMyPage = () => {
     }
   };
 
+  console.log(profileImage);
+  console.log(previewProfileImage);
+
   const handleUploadImage = async event => {
     const selectedImages = event.target.files[0];
 
@@ -183,7 +160,6 @@ const useMyPage = () => {
 
     setProfileImage(compressedImage);
     setPreviewProfileImage(compressedImageUrl);
-    userImageEdit();
   };
 
   const onChange = event => {
@@ -215,6 +191,32 @@ const useMyPage = () => {
   const onChangeNickName = event => {
     // event.stopPropagation();
     setUserNickName(event.target.value);
+  };
+
+  const userDataEdit = async () => {
+    userImageEdit();
+    try {
+      await axios.patch(
+        `/member/edit`,
+        {
+          nickname: userNickName,
+          mbti: userMBTI,
+        },
+        header,
+      );
+      callUserData();
+      editStatusChange();
+    } catch (err) {
+      console.log(err);
+      if (err.response.data.message === '이미 존재하는 닉네임입니다.') {
+        setNickNameValidationMessage(err.response.data.message);
+        setNickNameCheck(false);
+      }
+      if (err.response.data.message === '이미 존재하는 이메일입니다.') {
+        setNickNameValidationMessage(err.response.data.message);
+        setNickNameCheck(false);
+      }
+    }
   };
 
   return {
