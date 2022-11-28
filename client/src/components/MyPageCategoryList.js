@@ -134,6 +134,15 @@ function MyPageCategoryList({ listData, type }) {
     }
   };
 
+  const reservationCancel = async () => {
+    try {
+      await axios.delete(`/reserve/${listData.reserveId}`, header);
+      showModal();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const today = new Date();
 
   return (
@@ -185,7 +194,7 @@ function MyPageCategoryList({ listData, type }) {
                   setModalOpen={setModalOpen}
                   modalText="예악을 취소하시겠습니까?"
                   modalActionText="취소하기"
-                  modalAction="취소하는 함수 만들어서 넣기"
+                  modalAction={reservationCancel}
                 />
               )}
               <CategoryButton onClick={onClickPayment}>결제하기</CategoryButton>
