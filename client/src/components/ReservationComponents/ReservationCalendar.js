@@ -4,6 +4,8 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
+import setHours from 'date-fns/setHours';
+import setMinutes from 'date-fns/setMinutes';
 import { ko } from 'date-fns/esm/locale';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -26,9 +28,7 @@ export default function ReservationCalendar({
   const [endCalendarSelectedDay, setEndCalendarSelectedDay] =
     useState('dayNull');
 
-  const maxEndDate = new Date(startDate).setDate(
-    new Date(startDate).getDate() + 1,
-  );
+  const maxEndDate = new Date(startDate).setHours(23);
 
   const handleStartDate = time => {
     const clickedTime = new Date(time);
@@ -66,60 +66,21 @@ export default function ReservationCalendar({
 
     setIsStartDateSelected(time);
     setEndDate(false);
+    setEndCalendarSelectedDay('dayNull');
   };
 
   const handleEndDate = time => {
     const clickedTime = new Date(time);
     const startTime = new Date(startDate);
 
-    if (
-      endCalendarSelectedDay === 'dayNull' &&
-      clickedTime.getDate() === startTime.getDate()
-    ) {
+    if (clickedTime.getDate() === startTime.getDate()) {
       clickedTime.setHours(startTime.getHours() + 1);
       setEndDate(clickedTime);
 
       setEndCalendarSelectedDay('today');
     }
-
-    if (
-      endCalendarSelectedDay === 'dayNull' &&
-      clickedTime.getDate() !== startTime.getDate()
-    ) {
-      setEndDate(time);
-
-      setEndCalendarSelectedDay('nextDay');
-    }
-
     if (endCalendarSelectedDay === 'today') {
       setEndDate(time);
-    }
-
-    if (
-      clickedTime.getDate() !== startTime.getDate() &&
-      clickedTime.getHours() > startTime.getHours()
-    ) {
-      clickedTime.setHours(startTime.getHours());
-      setEndDate(clickedTime);
-
-      setEndCalendarSelectedDay('nextDay');
-    }
-
-    if (
-      endCalendarSelectedDay === 'nextDay' &&
-      clickedTime.getDate() === startTime.getDate()
-    ) {
-      clickedTime.setHours(startTime.getHours() + 1);
-      setEndDate(clickedTime);
-
-      setEndCalendarSelectedDay('today');
-    }
-
-    if (
-      endCalendarSelectedDay === 'nextDay' &&
-      clickedTime.getDate() !== startTime.getDate()
-    ) {
-      setEndDate(clickedTime);
     }
   };
 
@@ -200,6 +161,7 @@ export default function ReservationCalendar({
           startDate={startDate}
           endDate={endDate}
           minDate={new Date()}
+          excludeTimes={[setHours(setMinutes(new Date(), 0), 23)]}
           locale={ko}
           dateFormat="yyyy년 MM월 dd일 a hh시"
           timeIntervals={60}
