@@ -134,12 +134,44 @@ export default function Register() {
     }
   };
 
-  const handleEditSubmit = () => {
-    const data = { editData };
-    console.log(data);
+  const handleEditSubmit = async () => {
+    const json = JSON.stringify({
+      title: editData.title,
+      maxCapacity: editData.maxCapacity,
+      categoryList: checkedList,
+      address: editData.address,
+      detailedAddress,
+      detailInfo: editData.detailInfo,
+      charge: editData.charge,
+    });
+    const blob = new Blob([json], { type: 'application/json' });
+
+    const formData = new FormData();
+    formData.append('key', blob);
+    images.forEach(file => {
+      formData.append('file', file, file.name);
+    });
+
+    try {
+      await axios.patch(`/place/${editData.placeId}/edit`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+          RefreshToken: localStorage.getItem('REFRESH'),
+        },
+      });
+      setCheckedList([]);
+      setAddress('');
+      setImages([]);
+      setPreviewImages([]);
+      navigator(`/detail/${editData.placeId}`);
+    } catch (err) {
+      console.log('Error >>', err);
+    }
   };
 
-  console.log(checkedList);
+  console.log(editData);
+  console.log(images);
   return (
     <>
       <Nav />
@@ -302,11 +334,11 @@ export default function Register() {
                 onClick={handleEditSubmit}
                 disabled={
                   !(
-                    title.length < 20 &&
+                    editData.title.length < 20 &&
                     checkedList.length > 0 &&
-                    address &&
+                    editData.address &&
                     images.length > 0 &&
-                    charge > 0
+                    editData.charge > 0
                   )
                 }
               >

@@ -19,33 +19,6 @@ function ReviewContainer() {
     },
   };
 
-  // const temp = [
-  //   {
-  //     reviewId: '1',
-  //     profileImage: 'https://picsum.photos/200/50',
-  //     nickname: '홍길동',
-  //     score: '4',
-  //     comment: '편의점 가깝고 좋아요',
-  //     createdAt: '2022-10-03',
-  //   },
-  //   {
-  //     reviewId: '2',
-  //     profileImage: 'https://picsum.photos/201/50',
-  //     nickname: '둘리',
-  //     score: '5',
-  //     comment: '완전 좋아요',
-  //     createdAt: '2022-08-03',
-  //   },
-  //   {
-  //     reviewId: '3',
-  //     profileImage: 'https://picsum.photos/202/50',
-  //     nickname: '고길동',
-  //     score: '3',
-  //     comment: '우 구려요',
-  //     createdAt: '2022-09-21',
-  //   },
-  // ];
-
   const callReviews = async () => {
     try {
       const response = await axios.get(`/review/${id}`, header);
