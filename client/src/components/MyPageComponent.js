@@ -217,6 +217,7 @@ const NameAndEditIconContainer = styled.div`
 const EditText = styled.p`
   color: #89bbff;
   margin: 0px 4px;
+  cursor: pointer;
 `;
 
 const EditTextBlock = styled.p`
