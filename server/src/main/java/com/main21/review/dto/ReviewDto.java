@@ -28,6 +28,9 @@ public class ReviewDto {
     }
 
     @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class Patch {
 
         @NotBlank
