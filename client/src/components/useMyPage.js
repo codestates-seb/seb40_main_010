@@ -149,9 +149,6 @@ const useMyPage = () => {
     }
   };
 
-  console.log(profileImage);
-  console.log(previewProfileImage);
-
   const handleUploadImage = async event => {
     const selectedImages = event.target.files[0];
 
