@@ -34,6 +34,7 @@ import static com.main21.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.main21.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static com.main21.utils.AuthConstants.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -133,5 +134,51 @@ class ReviewControllerTest {
                         )
                 )
                 ));
+    }
+    @Test
+    @DisplayName("리뷰 PATCH")
+    void patchReview() throws Exception {
+        Long reviewId = 1L;
+        ReviewDto.Patch patch = ReviewDto.Patch.builder()
+                .score(2.5)
+                .comment("진짜 별로입니다..")
+                .build();
+
+        Place place = Place.builder()
+                .title("감성 있는 파티룸")
+                .address("경기도 오사카시")
+                .charge(100000)
+                .build();
+        Member member = Member.builder()
+                .email("hgd@gmail.com")
+                .roles(List.of("USER"))
+                .build();
+        String content = gson.toJson(patch);
+        String accessToken = jwtTokenUtils.generateAccessToken(member);
+        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
+        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
+        doNothing().when(reviewService).updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class),Mockito.anyString());
+        ResultActions actions =
+                mockMvc.perform(
+                        patch("/review/{review-id}/edit",reviewId)
+                                .header(AUTHORIZATION, "Bearer " + accessToken)
+                                .header(REFRESH, refreshToken)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content)
+                                .with(csrf())
+                );
+        actions
+                .andExpect(status().isOk())
+                .andDo(document("리뷰 수정",
+                        pathParameters(
+                                parameterWithName("review-id").description("리뷰 식별자")
+                        ),
+                        requestFields(List.of(
+                                fieldWithPath("score").type(JsonFieldType.NUMBER).description("별점"),
+                                fieldWithPath("comment").type(JsonFieldType.STRING).description("댓글")
+                            )
+                        )
+                        ));
     }
 }
