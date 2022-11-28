@@ -32,7 +32,7 @@ public class PlaceResponseDto {
         this.charge = place.getCharge();
         this.score = place.getScore();
         this.filePath = filePath;
-        this.endTime = place.getEndTIme();
+        this.endTime = place.getEndTime();
         this.address = place.getAddress();
         this.nickname = member.getNickname();
         this.phoneNumber = member.getPhoneNumber();
