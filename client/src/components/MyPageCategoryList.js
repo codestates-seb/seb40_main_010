@@ -33,6 +33,7 @@ const chargeComponent = (listData, type) => {
 
 function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [payModalOpen, setPayModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [, setReservationData] = useRecoilState(reservationEditData);
   const { bookmarkList } = useMyPage();
@@ -54,12 +55,12 @@ function MyPageCategoryList({ listData, type }) {
     modalText: '결제하시겠습니까?',
     modalActionText: '결제하기',
     modalAction: onClickPaymentKaKaoButton,
-    modalOpen,
-    setModalOpen,
+    modalOpen: payModalOpen,
+    setModalOpen: setPayModalOpen,
   };
 
   const onClickPayment = () => {
-    setModalOpen(true);
+    setPayModalOpen(true);
   };
 
   const showModal = () => {
@@ -134,6 +135,15 @@ function MyPageCategoryList({ listData, type }) {
     }
   };
 
+  const reservationCancel = async () => {
+    try {
+      await axios.delete(`/reserve/${listData.reserveId}`, header);
+      showModal();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const today = new Date();
 
   return (
@@ -185,11 +195,11 @@ function MyPageCategoryList({ listData, type }) {
                   setModalOpen={setModalOpen}
                   modalText="예악을 취소하시겠습니까?"
                   modalActionText="취소하기"
-                  modalAction="취소하는 함수 만들어서 넣기"
+                  modalAction={reservationCancel}
                 />
               )}
               <CategoryButton onClick={onClickPayment}>결제하기</CategoryButton>
-              {modalOpen && <Modal {...IsPayment} />}
+              {payModalOpen && <Modal {...IsPayment} />}
             </>
           )}
           {type === 'bookmark' && (
