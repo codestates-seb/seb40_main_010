@@ -29,6 +29,9 @@ function MyPageComponent() {
     onChangeNickName,
     handleUploadImage,
     previewProfileImage,
+    nickNameCheck,
+    nickNameValidationMessage,
+    checkNickNameValidation,
   } = useMyPage();
 
   const hiddenFileInput = useRef(null);
@@ -49,7 +52,10 @@ function MyPageComponent() {
         {!editStatus && <MyNickName>{nickname}</MyNickName>}
         {editStatus && (
           <UserNickNameChange
-            onChange={onChangeNickName}
+            onChange={event => {
+              onChangeNickName(event);
+              checkNickNameValidation(event.target.value);
+            }}
             placeholder={userNickName}
           />
         )}
@@ -63,9 +69,18 @@ function MyPageComponent() {
             onChange={handleUploadImage}
           />
         )}
-        {editStatus && <EditText onClick={userDataEdit}>수정하기</EditText>}
+        {editStatus && nickNameCheck ? (
+          <EditText onClick={userDataEdit}>수정하기</EditText>
+        ) : (
+          editStatus && <EditTextBlock>수정하기</EditTextBlock>
+        )}
         {editStatus && <EditText onClick={onClickCancel}>취소</EditText>}
       </NameAndEditIconContainer>
+      {!nickNameCheck && (
+        <ValidationErrorMessage>
+          {nickNameValidationMessage}
+        </ValidationErrorMessage>
+      )}
       {!editStatus && <MyMBTI>{mbti}</MyMBTI>}
       {editStatus && (
         <MbtiSelect
@@ -76,19 +91,35 @@ function MyPageComponent() {
         />
       )}
       <MyPageContentCategory>
-        <MyPageCategoryItem onClick={onClickCategory} value="register">
+        <MyPageCategoryItem
+          onClick={onClickCategory}
+          value="register"
+          clicked={myPageCategory}
+        >
           <AiOutlineDollarCircle size="35" />
           등록내역
         </MyPageCategoryItem>
-        <MyPageCategoryItem onClick={onClickCategory} value="reservation">
+        <MyPageCategoryItem
+          onClick={onClickCategory}
+          value="reservation"
+          clicked={myPageCategory}
+        >
           <BiTimeFive size="35" />
           예약내역
         </MyPageCategoryItem>
-        <MyPageCategoryItem onClick={onClickCategory} value="bookmark">
+        <MyPageCategoryItem
+          onClick={onClickCategory}
+          value="bookmark"
+          clicked={myPageCategory}
+        >
           <IoHeartCircleOutline size="35" />
           관심장소
         </MyPageCategoryItem>
-        <MyPageCategoryItem onClick={onClickCategory} value="review">
+        <MyPageCategoryItem
+          onClick={onClickCategory}
+          value="review"
+          clicked={myPageCategory}
+        >
           <CgMenuRound size="35" />
           리뷰내역
         </MyPageCategoryItem>
@@ -167,8 +198,6 @@ const MyProfileImage = styled.img`
   :hover {
     cursor: pointer;
   }
-
-  /* border: 1px solid black; */
 `;
 
 const NameAndEditIconContainer = styled.div`
@@ -187,6 +216,11 @@ const NameAndEditIconContainer = styled.div`
 
 const EditText = styled.p`
   color: #89bbff;
+  margin: 0px 4px;
+`;
+
+const EditTextBlock = styled.p`
+  color: #666666;
   margin: 0px 4px;
 `;
 
@@ -301,6 +335,11 @@ const UserNickNameChange = styled.input`
   cursor: pointer;
   color: #2b2b2b;
   margin-left: 99px;
+`;
+
+const ValidationErrorMessage = styled.p`
+  font-size: 14px;
+  color: red;
 `;
 
 export default MyPageComponent;

@@ -14,6 +14,31 @@ const useMyPage = () => {
   const [editStatus, setEditStatus] = useState(false);
   const [profileImage, setProfileImage] = useState([]);
   const [previewProfileImage, setPreviewProfileImage] = useState([]);
+  const [nickNameCheck, setNickNameCheck] = useState(false);
+  const [nickNameValidationMessage, setNickNameValidationMessage] =
+    useState('');
+
+  const checkNickNameValidation = nickname => {
+    const checkNameForm = name => {
+      return /[0-9]|[a-z]|[A-Z]|[가-힣]/.test(name);
+    };
+    const checkNameGap = name => {
+      return /\s/g.test(name);
+    };
+    if (!checkNameForm(nickname) && nickname.length > 0) {
+      setNickNameCheck(false);
+      setNickNameValidationMessage('이름 형식에 맞지 않습니다.');
+    } else if (nickname.length === 0) {
+      setNickNameCheck(false);
+      setNickNameValidationMessage('필수 정보입니다.');
+    } else if (checkNameGap(nickname)) {
+      setNickNameCheck(false);
+      setNickNameValidationMessage('공백이 있습니다.');
+    } else {
+      setNickNameCheck(true);
+      setNickNameValidationMessage('');
+    }
+  };
 
   const header = {
     headers: {
@@ -95,6 +120,7 @@ const useMyPage = () => {
       setMemberData(response.data);
       setUserNickName(response.data.nickname);
       setUserMBTI(response.data.mbti);
+      setPreviewProfileImage(response.data.profileImage);
     } catch (err) {
       console.log(err);
     }
@@ -118,18 +144,30 @@ const useMyPage = () => {
       editStatusChange();
     } catch (err) {
       console.log(err);
+      if (err.response.data.message === '이미 존재하는 닉네임입니다.') {
+        setNickNameValidationMessage(err.response.data.message);
+        setNickNameCheck(false);
+      }
+      if (err.response.data.message === '이미 존재하는 이메일입니다.') {
+        setNickNameValidationMessage(err.response.data.message);
+        setNickNameCheck(false);
+      }
     }
   };
 
   const userImageEdit = async () => {
+    const formData = new FormData();
+    formData.append('file', profileImage);
+    console.log(profileImage);
+
     try {
-      await axios.post(
-        `/member/profile`,
-        {
-          profileImage,
+      await axios.post(`/member/profile`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+          RefreshToken: localStorage.getItem('REFRESH'),
         },
-        header,
-      );
+      });
       callUserData();
       editStatusChange();
     } catch (err) {
@@ -157,6 +195,8 @@ const useMyPage = () => {
     setUserNickName(memberData.nickname);
     setUserMBTI(memberData.mbti);
     setPreviewProfileImage([]);
+    setNickNameCheck(true);
+    setNickNameValidationMessage('');
   };
 
   const categoryHandler = {
@@ -173,7 +213,7 @@ const useMyPage = () => {
   };
 
   const onChangeNickName = event => {
-    event.stopPropagation();
+    // event.stopPropagation();
     setUserNickName(event.target.value);
   };
 
@@ -197,6 +237,9 @@ const useMyPage = () => {
     clearCategory,
     handleUploadImage,
     previewProfileImage,
+    nickNameCheck,
+    nickNameValidationMessage,
+    checkNickNameValidation,
   };
 };
 

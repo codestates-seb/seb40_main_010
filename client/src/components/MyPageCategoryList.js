@@ -114,11 +114,21 @@ function MyPageCategoryList({ listData, type }) {
   };
 
   const registerEditDataSend = async () => {
-    // id를 인자로 받아서 /place/id로 조회해야되는데 현재 api랑 연동안되므로 detaildata로 임시 작성
     try {
       const response = await axios.get(`/place/${listData.placeId}`, header);
+      response.data.filePath = [];
+      response.data.category = [];
       setReservationData(response.data);
+      console.log(response.data);
       navigate('/register');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const moveDetailPage = async () => {
+    try {
+      navigate(`/detail/${listData.placeId}`);
     } catch (err) {
       console.log(err);
     }
@@ -131,7 +141,7 @@ function MyPageCategoryList({ listData, type }) {
       <CategoryContainer>
         <CategoryBodyContainer>
           <PlaceBodyContainer>
-            <PlaceTitle>{listData.title}</PlaceTitle>
+            <PlaceTitle onClick={moveDetailPage}>{listData.title}</PlaceTitle>
             <PlaceAddress>{listData.comment}</PlaceAddress>
             <PlaceAddress>{listData.address}</PlaceAddress>
             {type === 'reservation' && (
@@ -271,6 +281,7 @@ const PlaceTitle = styled.p`
   font-weight: bold;
   margin-bottom: 6px;
   color: #1b1c1e;
+  cursor: pointer;
 `;
 
 const PlaceAddress = styled.span`
