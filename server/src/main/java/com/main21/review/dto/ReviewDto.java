@@ -4,14 +4,19 @@ import com.main21.member.entity.Member;
 import com.main21.place.entity.Place;
 import com.main21.review.entity.Review;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class ReviewDto {
     @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class Post {
 
         @NotBlank
@@ -34,6 +39,7 @@ public class ReviewDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class Response {
         private final Long reviewId;
         private final String nickname;

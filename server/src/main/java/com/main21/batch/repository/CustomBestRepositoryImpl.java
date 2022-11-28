@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+
 import static com.main21.batch.entity.QMbtiCount.mbtiCount;
+
 
 
 public class CustomBestRepositoryImpl implements CustomBestRepository {
