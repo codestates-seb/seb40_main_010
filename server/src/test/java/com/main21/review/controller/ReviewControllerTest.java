@@ -34,7 +34,7 @@ import static com.main21.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.main21.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static com.main21.utils.AuthConstants.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -50,7 +50,6 @@ import static com.main21.review.entity.QReview.review;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 
 
 @AutoConfigureMockMvc
@@ -160,7 +159,7 @@ class ReviewControllerTest {
         doNothing().when(reviewService).updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class),Mockito.anyString());
         ResultActions actions =
                 mockMvc.perform(
-                        patch("/review/{review-id}/edit",reviewId)
+                        patch("/review/{review-id}/edit", reviewId)
                                 .header(AUTHORIZATION, "Bearer " + accessToken)
                                 .header(REFRESH, refreshToken)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -180,5 +179,33 @@ class ReviewControllerTest {
                             )
                         )
                         ));
+    }
+    @Test
+    @DisplayName("리뷰 DELETE")
+    void deleteReview() throws Exception {
+        Long reviewId = 1L;
+        Member member = Member.builder()
+                .email("hgd@gmail.com")
+                .roles(List.of("USER"))
+                .build();
+
+        String accessToken = jwtTokenUtils.generateAccessToken(member);
+        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
+        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
+        doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyString());
+
+        ResultActions actions =
+                mockMvc.perform(
+                        delete("/review/{review-id}", reviewId)
+                                .header(AUTHORIZATION, "Bearer " + accessToken)
+                                .header(REFRESH, refreshToken)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(csrf())
+                );
+        actions.andExpect(status().isNoContent())
+                .andDo(document("리뷰 삭제",
+                        pathParameters(
+                                parameterWithName("review-id").description("리뷰 식별자"))
+                ));
     }
 }
