@@ -17,7 +17,7 @@ module.exports = function (app) {
     ],
     createProxyMiddleware({
       // 서버주소 바꿔줄 것
-      target: `https://d016-182-226-233-7.jp.ngrok.io`,
+      target: `https://c07c-182-226-233-7.jp.ngrok.io`,
       changeOrigin: true,
     }),
   );

@@ -3,14 +3,16 @@ import styled from 'styled-components';
 
 import { categories } from '../../utils/categoryData';
 
-function RegisterCategory({ checkedList, setCheckedList }) {
+function RegisterCategory({ addItem, removeItem }) {
   const handleCategory = event => {
     const isCategoryChecked = event.target.checked;
     const category = event.target.value;
+
     if (isCategoryChecked) {
-      setCheckedList([...checkedList, category]);
-    } else if (!isCategoryChecked) {
-      setCheckedList(checkedList.filter(item => item !== category));
+      addItem(category);
+    }
+    if (!isCategoryChecked) {
+      removeItem(category);
     }
   };
 

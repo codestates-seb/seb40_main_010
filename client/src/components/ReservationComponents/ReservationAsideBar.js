@@ -1,93 +1,29 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-
-import {
-  reservationStartDate,
-  reservationEndDate,
-  reservationMaxCapacity,
-  PlaceIDState,
-} from '../../atoms';
 
 import ReservationCalendar from './ReservationCalendar';
 import ReservationCapacityHandler from './ReservationCapacityHandler';
 import ReservationBottomButtons from './ReservationBottomButtons';
-import { onClickPaymentButton } from '../../utils/payment';
+// import { onClickPaymentButton } from '../../utils/payment';
 import Modal from '../Modal';
-import header from '../../utils/header';
+import useReservation from './useReservation';
 
-// TODO
-// 23~32까지 파일로 빼기
 function ReservationAsideBar({ charge }) {
-  const [startDate, setStartDate] = useRecoilState(reservationStartDate);
-  const [endDate, setEndDate] = useRecoilState(reservationEndDate);
-  const [capacity, setCapacity] = useRecoilState(reservationMaxCapacity);
-  const placeId = useRecoilValue(PlaceIDState);
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const timeDiff = new Date(endDate).getTime() - new Date(startDate).getTime();
-  const reservedTimeRange = timeDiff / (1000 * 60 * 60);
-
-  const chargePerHour = charge;
-  const chargePerHourString = new Intl.NumberFormat('ko-KR').format(charge);
-
-  const totalCharge = reservedTimeRange * chargePerHour;
-  const totalChargeString = new Intl.NumberFormat('ko-KR').format(totalCharge);
-
-  const navigator = useNavigate();
-
-  // const paymentUrl = 'https://jaimemin.tistory.com/1449';
-  const reserveId = '?'; // 물어보기
-  const onClickPaymentKaKaoButton = async () => {
-    const response = await axios.get(`/place/reserve/${reserveId}/payment`);
-    const paymentUrl = response.data.data;
-    onClickPaymentButton(paymentUrl);
-    setModalOpen(false);
-  };
-
-  const IsPayment = {
-    modalText: '결제하시겠습니까?',
-    modalActionText: '결제하기',
-    modalAction: onClickPaymentKaKaoButton,
+  const {
+    chargePerHourString,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+    capacity,
+    setCapacity,
+    handleSubmit,
     modalOpen,
-    setModalOpen,
-  };
-
-  // eslint-disable-next-line consistent-return
-  const handleSubmit = async event => {
-    event.preventDefault();
-    const isLogIn = localStorage.getItem('ACCESS');
-    if (!isLogIn) {
-      setStartDate(false);
-      setEndDate(false);
-      setCapacity(1);
-      navigator('/log-in');
-    }
-
-    setModalOpen(true);
-
-    const reservationInformation = {
-      startTime: startDate,
-      endTime: endDate,
-      capacity,
-    };
-
-    try {
-      const response = await axios.post(
-        `/place/${placeId}/reserve`,
-        // JSON.stringify(reservationInformation),
-        reservationInformation,
-        header,
-      );
-      console.log(response.data);
-      setStartDate(false);
-      setEndDate(false);
-    } catch (err) {
-      console.log('Error >>', err);
-    }
-  };
+    IsPayment,
+    // onClickPaymentButton,
+    reservedTimeRange,
+    totalChargeString,
+  } = useReservation(charge);
 
   return (
     <form>

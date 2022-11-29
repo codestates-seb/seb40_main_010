@@ -1,53 +1,21 @@
 import React, { useRef } from 'react';
-import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import { FaTimes } from 'react-icons/fa';
-import { registerFormPreviewImage } from '../../atoms';
-import {
-  handleImageCompress,
-  handleGetPreviewImagesUrl,
-} from '../../utils/images';
 
-// TODO:
-// 1. 105번째줄 onClick 바꾸기
-// 2. for eslint 오류 수정
+import useRegisterImages from './useRegisterImages';
+
 function RegisterImages({ images, setImages }) {
-  const [previewImages, setPreviewImages] = useRecoilState(
-    registerFormPreviewImage,
-  );
+  const { handleUploadImage, handleDeleteImage, previewImages } =
+    useRegisterImages({
+      images,
+      setImages,
+    });
 
   const hiddenFileInput = useRef(null);
 
   const handleImageSelect = () => {
     hiddenFileInput.current.click();
-  };
-
-  const handleUploadImage = async event => {
-    const selectedImages = event.target.files;
-    const maxImages = selectedImages.length > 3 ? 3 : selectedImages.length;
-
-    if (images.length + maxImages > 3 || selectedImages.length > 3) {
-      alert('최대 3장까지만 가능합니다');
-      return;
-    }
-
-    for (let i = 0; i < maxImages; i += 1) {
-      // eslint-disable-next-line no-await-in-loop
-      const compressedImage = await handleImageCompress(selectedImages[i]);
-      // eslint-disable-next-line no-await-in-loop
-      const compressedImageUrl = await handleGetPreviewImagesUrl(
-        compressedImage,
-      );
-
-      setImages(image => [...image, compressedImage]);
-      setPreviewImages(url => [...url, compressedImageUrl]);
-    }
-  };
-
-  const handleDeleteImage = id => {
-    setImages(images.filter((_, index) => index !== id));
-    setPreviewImages(previewImages.filter((_, index) => index !== id));
   };
 
   return (
