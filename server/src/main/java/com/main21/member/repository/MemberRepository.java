@@ -1,5 +1,6 @@
 package com.main21.member.repository;
 
+import com.main21.member.entity.AccountStatus;
 import com.main21.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findMemberByNickname(String nickname);
 
-
+    Optional<Member> findMemberByEmailAndAccountStatus(String email, AccountStatus accountStatus);
 
 }

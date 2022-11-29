@@ -6,6 +6,7 @@ import org.springframework.cache.CacheManager;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class RedisInitializeConfig {
 
@@ -17,6 +18,11 @@ public class RedisInitializeConfig {
         cacheManager.getCacheNames()
                 .parallelStream()
                 .forEach(n -> Objects.requireNonNull(cacheManager.getCache(n)).clear());
+    }
+
+    @PostConstruct
+    public void started() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     }
 
 }

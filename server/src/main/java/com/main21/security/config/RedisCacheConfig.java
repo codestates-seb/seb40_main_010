@@ -13,10 +13,9 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * 레디스 캐시 적용(미구현)
+ * RedisCache 설정 정보 Configuration 클래스
  * @author mozzi327
  */
-
 @Configuration
 public class RedisCacheConfig {
 

@@ -12,6 +12,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * Redis 설정 정보 Configuration 클래스
+ * @author mozzi327
+ */
 //@EnableCaching
 @Configuration
 public class RedisConfig {
@@ -32,8 +36,6 @@ public class RedisConfig {
                  늘어난다면 시간이 상당히 소요될 수 있다.
      */
 
-
-
     /**
      * RedisTemplate을 이용하여 redis를 Connection하는 메서드<br>
      * RedisConnectionFactory 인터페이스를 통해<br>
@@ -45,7 +47,6 @@ public class RedisConfig {
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(redisHost, redisPort);
     }
-
 
     /**
      * redis의 자료구조를 사용하기 위한 메서드
@@ -65,5 +66,4 @@ public class RedisConfig {
 
         return redisTemplate;
     }
-
 }

@@ -27,7 +27,7 @@ public class CustomBestRepositoryImpl implements CustomBestRepository {
                 .selectFrom(mbtiCount)
                 .where(mbtiCount.mbti.eq(mbtiValue))
                 .orderBy(mbtiCount.totalCount.desc())
-                .limit(5).fetch();
+                .limit(4).fetch();
 
 
 //        mbtiCounts

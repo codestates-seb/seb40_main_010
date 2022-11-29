@@ -5,12 +5,14 @@ import com.main21.exception.ExceptionCode;
 import com.main21.member.dto.AuthDto;
 import com.main21.member.entity.Member;
 import com.main21.member.repository.MemberRepository;
+import com.main21.security.details.MemberDetails;
 import com.main21.security.dto.LoginDto;
 import com.main21.security.exception.AuthException;
 import com.main21.security.utils.JwtTokenUtils;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,8 +95,8 @@ public class AuthService {
      * @author mozzi327
      */
     public AuthDto.Response reIssueToken(String accessToken,
-                                         String refreshToken, HttpServletResponse res) {
-
+                                         String refreshToken,
+                                         HttpServletResponse res) {
         // accessToken parsing(Bearer ..)
         accessToken = jwtTokenUtils.parseAccessToken(accessToken);
 

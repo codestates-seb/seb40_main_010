@@ -1,6 +1,8 @@
 package com.main21.security.utils;
 
+import com.main21.exception.ExceptionCode;
 import com.main21.member.entity.Member;
+import com.main21.security.exception.AuthException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -16,6 +18,10 @@ import java.util.*;
 
 import static com.main21.security.utils.AuthConstants.*;
 
+/**
+ * 토큰 발급용 Util 클래스
+ * @author mozzi327
+ */
 @Slf4j
 @Component
 public class JwtTokenUtils {
@@ -29,7 +35,6 @@ public class JwtTokenUtils {
     @Getter
     private final int refreshTokenExpirationMinutes;
 
-
     public JwtTokenUtils(@Value("${JWT_SECRET_KEY}") String secretKey,
                          @Value("${jwt.access-token-expiration-minutes}") int accessTokenExpirationMinutes,
                          @Value("${jwt.refresh-token-expiration-minutes}") int refreshTokenExpirationMinutes) {
@@ -37,7 +42,6 @@ public class JwtTokenUtils {
         this.accessTokenExpirationMinutes = accessTokenExpirationMinutes;
         this.refreshTokenExpirationMinutes = refreshTokenExpirationMinutes;
     }
-
 
     /**
      * 서버 환경변수에 저장된 시크릿 키를 인코딩하여 반환해주는 메서드
@@ -49,7 +53,6 @@ public class JwtTokenUtils {
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
     }
-
 
     /**
      * 엑세스 토큰을 발급하는 메서드
@@ -78,7 +81,6 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-
     /**
      * 리프레시 토큰을 발급하는 메서드
      *
@@ -100,7 +102,6 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-
     /**
      * 검증 후 Jws(Claims) 정보를 반환해주는 메서드
      *
@@ -117,7 +118,6 @@ public class JwtTokenUtils {
                 .build().parseClaimsJws(jws).getBody();
     }
 
-
     /**
      * 액세스 토큰의 만료시간을 반환해주는 메서드
      *
@@ -130,7 +130,6 @@ public class JwtTokenUtils {
         calendar.add(Calendar.MINUTE, expirationMinutes);
         return calendar.getTime();
     }
-
 
     /**
      * 액세스 토큰을 통해 만료 시간을 계산해주는 메서드
@@ -152,7 +151,6 @@ public class JwtTokenUtils {
         return (expiration.getTime() - now);
     }
 
-
     /**
      * base64로 인코딩된 키를 Key 객체로 만들어 반환하는 메서드
      *
@@ -164,7 +162,6 @@ public class JwtTokenUtils {
         byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
 
     /**
      * 토큰 정보를 검증하는 메서드
@@ -195,7 +192,6 @@ public class JwtTokenUtils {
         return true;
     }
 
-
     /**
      * 액세스 토큰의 Prefix(Bearer )를 제거해주는 메서드
      * @param accessToken 액세스 토큰
@@ -205,6 +201,6 @@ public class JwtTokenUtils {
     public String parseAccessToken(String accessToken) {
         if (accessToken.startsWith(BEARER))
             return accessToken.split(" ")[1];
-        return accessToken;
+        throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
     }
 }

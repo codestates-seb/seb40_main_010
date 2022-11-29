@@ -71,7 +71,7 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
                         place
                 ))
                 .from(review)
-                .leftJoin(place).on(review.memberId.eq(place.memberId))
+                .leftJoin(place).on(review.placeId.eq(place.id))
                 .where(
                         review.memberId.eq(memberId)
                 )
