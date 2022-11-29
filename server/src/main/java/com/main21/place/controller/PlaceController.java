@@ -101,6 +101,18 @@ public class PlaceController {
     }
 
     /**
+     * 조회 테스트
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/home/test")
+    public ResponseEntity getPlacesPageTest(Pageable pageable) {
+        Page<PlaceDto.ResponseTest> pagePlace = placeDbService.getPlacesPageTest(pageable);
+        List<PlaceDto.ResponseTest> place = pagePlace.getContent();
+        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+    }
+
+    /**
      * Slice 무한스크롤 메인페이지 공간 전체 조회 컨트롤
      *
      * @param refreshToken 리프래시 토큰

@@ -24,8 +24,9 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
 
     /**
      * Pagination 적용한 공간 전체 조회 Querydsl
-     * @param pageable
-     * @return
+     *
+     * @param pageable 페이지 정보
+     * @return Page<PlaceDto.Response>
      * @author LeeGoh
      */
     @Override
@@ -42,9 +43,9 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
         return new PageImpl<>(results, pageable, total);
     }
 
-
     /**
      * Mbti 조회를 위한 단건 조회 QueryDsl
+     *
      * @param placeId 장소 식별자
      * @return PlaceDto.Response
      * @author mozzi327
@@ -60,9 +61,10 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
 
     /**
      * Slice 무한스크롤 공간 전체 조회 Querydsl
-     * @param pageable
-     * @return
-      @author LeeGoh
+     *
+     * @param pageable 페이지 정보
+     * @return Slice<PlaceDto.Response>
+     * @author LeeGoh
      */
     /*
     @Override
@@ -87,17 +89,18 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
 
     /**
      * Pagination 적용한 공간 카테고리 조회 Querydsl
-     * @param categoryId
-     * @param pageable
-     * @return
-      @author LeeGoh
+     *
+     * @param categoryId 카테고리 식별자
+     * @param pageable 페이지 정보
+     * @return Page<PlaceCategoryDto.Response>
+     * @author LeeGoh
      */
     @Override
     public Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable) {
         List<PlaceCategoryDto.Response> results = queryFactory
                 .select(new QPlaceCategoryDto_Response(
                         place,
-                        placeCategory
+                        placeCategory.id
                 ))
                 .from(place)
                 .leftJoin(placeCategory).on(place.id.eq(placeCategory.place.id))
@@ -113,10 +116,11 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
 
     /**
      * Slice 무한스크롤 공간 카테고리 조회 Querydsl
-     * @param categoryId
-     * @param pageable
-     * @return
-      @author LeeGoh
+     *
+     * @param categoryId 카테고리 식별자
+     * @param pageable 페이지 정보
+     * @return Slice<PlaceCategoryDto.Response>
+     * @author LeeGoh
      */
     /*
     @Override
@@ -146,10 +150,11 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
 
     /**
      * 공간 최소 가격, 최대 가격, 인원수별 상세 검색 Query
-     * @param searchDetail
-     * @param pageable
-     * @return
-      @author LeeGoh
+     *
+     * @param searchDetail 상세 검색 항목
+     * @param pageable 페이지 정보
+     * @return Page<PlaceDto.Response>
+     * @author LeeGoh
      */
     @Override
     public Page<PlaceDto.Response> searchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
@@ -169,9 +174,10 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
 
     /**
      * 공간 전체 타이틀 검색 Query
-     * @param titles
-     * @param pageable
-     * @return
+     *
+     * @param titles 검색 키워드
+     * @param pageable 페이지 정보
+     * @return Page<PlaceDto.Response>
      * @author LeeGoh
      */
     @Override
@@ -192,18 +198,19 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
 
     /**
      * 공간 카테고리별 타이틀 검색 Query
-     * @param categoryId
-     * @param titles
-     * @param pageable
-     * @return
-     @author LeeGoh
+     *
+     * @param categoryId 카테고리 식별자
+     * @param titles 검색 키워드
+     * @param pageable 페이지 정보
+     * @return Page<PlaceCategoryDto.Response>
+     * @author LeeGoh
      */
     @Override
     public Page<PlaceCategoryDto.Response> searchCategoryTitle(Long categoryId, List<String> titles, Pageable pageable) {
         List<PlaceCategoryDto.Response> results = queryFactory
                 .select(new QPlaceCategoryDto_Response(
                         place,
-                        placeCategory
+                        placeCategory.id
                 ))
                 .from(place)
                 .leftJoin(placeCategory).on(place.id.eq(placeCategory.place.id))
@@ -218,12 +225,13 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
     }
 
     /**
-     * 검색 단어의 수만큼 or문 추가하는 Query
+     * 검색 단어의 수만큼 or문 추가하는 Query<br>
      * 검색 단어가 하나라도 포함된 게시글 조회
-     * @param titles
-     * @param title
-     * @return
-     @author mozzi327
+     *
+     * @param titles 검색 키워드 리스트
+     * @param title 검색 첫 번째 키워드
+     * @return BooleanExpression
+     * @author mozzi327
      */
     private BooleanExpression searchTitleArray(List<String> titles, BooleanExpression title) {
         for (int i = 1; i < titles.size(); i++) {
@@ -236,6 +244,15 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
         return categoryId == 0 ? null : placeCategory.category.id.eq(categoryId);
     }
 
+    /**
+     * 검색 단어의 수만큼 or문 추가하는 Query<br>
+     * 검색 단어가 하나라도 포함된 게시글 조회
+     *
+     * @param memberId 사용자 식별자
+     * @param pageable 페이지 정보
+     * @return Page<PlaceDto.Response>
+     * @author mozzi327
+     */
     @Override
     public Page<PlaceDto.Response> getPlaceMypage(Long memberId, Pageable pageable) {
         List<PlaceDto.Response> results = queryFactory

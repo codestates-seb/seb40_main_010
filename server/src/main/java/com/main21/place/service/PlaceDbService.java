@@ -12,6 +12,8 @@ import com.main21.place.repository.PlaceRepository;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -90,6 +92,30 @@ public class PlaceDbService {
      */
     public Page<PlaceDto.Response> getPlacesPage(Pageable pageable) {
         return placeRepository.getPlacesPage(pageable);
+    }
+
+    /**
+     * 조회 테스트
+     * @param pageable
+     * @return
+     */
+    public Page<PlaceDto.ResponseTest> getPlacesPageTest(Pageable pageable) {
+       List<Place> placeList = placeRepository.findAll();
+       List<PlaceDto.ResponseTest> responseTestList = new ArrayList<>();
+       placeList.forEach(
+               place -> {
+                   PlaceDto.ResponseTest responseTest = PlaceDto.ResponseTest.builder()
+                           .place(place)
+                           .placeImage(placeImageRepository.findFirstByPlaceId(place.getId()))
+                           .build();
+                   responseTestList.add(responseTest);
+               }
+       );
+       final int start = (int)pageable.getOffset();
+       final int end = Math.min((start + pageable.getPageSize()), responseTestList.size());
+       final Page<PlaceDto.ResponseTest> responseTestPage = new PageImpl<>(responseTestList.subList(start, end), pageable, responseTestList.size());
+
+       return responseTestPage;
     }
 
     /**

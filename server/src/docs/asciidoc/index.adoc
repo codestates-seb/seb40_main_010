@@ -1,0 +1,7 @@
+== ReviewController
+=== 리뷰 등록
+.curl-request
+include::{snippets}/리뷰 추가/curl-request.adoc[]
+
+.http-request
+include::{snippets}/리뷰 추가/httpie-request.adoc[]

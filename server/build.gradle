@@ -37,91 +37,63 @@ ext {
 dependencies {
     // (4) mockmvc 라이브러리
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
     //스프링 벨리데이션
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     // (5) 아스키 닥터
     asciidoctorExtensions "org.springframework.restdocs:spring-restdocs-asciidoctor"
-
     //스프링 웹
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
     //스프링 시큐리티
     implementation 'org.springframework.boot:spring-boot-starter-security'
-
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
     // embedded-redis
     implementation ('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple" }
-
     // testcontainers
     testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
-
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
     //롬복
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-
     // 테스트 Slf4j 충돌로 인한 Lombok implementation 추가
     implementation 'org.projectlombok:lombok'
-
-
     //스프링데이터 JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
     //h2
     runtimeOnly 'com.h2database:h2'
-
     // mysql
 //    runtimeOnly 'com.mysql:mysql-connector-java'
 //    implementation 'mysql:mysql-connector-java'
-
     //mapper 자동 생성
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
     //문서화
     implementation 'com.google.code.gson:gson'
-
     // Redis 추가
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
     //jjwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly    'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
     //test용 시큐리티
     testImplementation 'org.springframework.security:spring-security-test'
-
     //파일 업로드
     implementation 'commons-io:commons-io:2.11.0'
-
     // querydsl 디펜던시 추가
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
-
     // S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
     // Spring Batch
     implementation 'org.springframework.boot:spring-boot-starter-batch'
     testImplementation 'org.springframework.batch:spring-batch-test'
-
-
     // feign client
     compile("io.github.openfeign:feign-httpclient")
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation group: 'io.github.openfeign', name: 'feign-gson', version: '11.0'
-
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
-
-
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
@@ -179,7 +151,6 @@ querydsl {
 sourceSets {
     main.java.srcDir querydslDir
 }
-
 
 // querydsl 컴파일 시 사용할 옵션 설정
 compileQuerydsl {

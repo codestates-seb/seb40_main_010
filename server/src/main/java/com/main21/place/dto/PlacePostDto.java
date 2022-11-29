@@ -1,13 +1,17 @@
 package com.main21.place.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlacePostDto {
     private Long memberId;
     private Long reserveId;

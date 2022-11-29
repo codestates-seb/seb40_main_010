@@ -3,12 +3,14 @@ package com.main21.member.dto;
 import lombok.Getter;
 import lombok.Builder;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 public class MemberDto {
 
     @Getter
     @Builder
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Post {
 
         private String mbti;

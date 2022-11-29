@@ -1,13 +1,19 @@
 package com.main21.place.dto;
 
 import com.main21.place.entity.Place;
+import com.main21.place.entity.PlaceImage;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class PlaceDto {
 
     @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class SearchDetail {
 
         private int startCharge;
@@ -41,9 +47,30 @@ public class PlaceDto {
             this.score = place.getScore();
             this.charge = place.getCharge();
             this.address = place.getAddress();
-            this.endTime = place.getEndTIme();
+            this.endTime = place.getEndTime();
             this.image = place.getPlaceImages().get(0).getFilePath();
         }
     }
 
+    @Getter
+    public static class ResponseTest{
+        private Long placeId;
+        private String title;
+        private int charge;
+        private String image;
+        private Double score;
+        private String address;
+        private Integer endTime;
+
+        @Builder
+        public ResponseTest(Place place, PlaceImage placeImage) {
+            this.placeId = place.getId();
+            this.title = place.getTitle();
+            this.score = place.getScore();
+            this.charge = place.getCharge();
+            this.address = place.getAddress();
+            this.endTime = place.getEndTime();
+            this.image = placeImage.getFilePath();
+        }
+    }
 }

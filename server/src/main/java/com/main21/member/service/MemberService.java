@@ -6,11 +6,14 @@ import com.main21.file.UploadFile;
 import com.main21.member.dto.MemberDto;
 import com.main21.member.entity.Member;
 import com.main21.member.entity.MemberImage;
+import com.main21.member.repository.MemberImageRepository;
 import com.main21.security.utils.CustomAuthorityUtils;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -25,7 +28,10 @@ public class MemberService {
     private final FileHandler fileHandler;
     private final MemberDbService memberDbService;
     private final CustomAuthorityUtils authorityUtils;
+    private final MemberImageRepository memberImageRepository;
 
+    @Value("${default.image.address}")
+    private String defaultImageAddress;
 
     /**
      * 회원가입 메서드
@@ -45,6 +51,18 @@ public class MemberService {
                 .roles(roles)
                 .mbti(post.getMbti())
                 .build();
+
+        // Local default Image
+/*        MemberImage memberImageLocal = MemberImage.builder()
+                .filePath(defaultImageAddress)
+                .build();
+        member.addMemberImage(memberImageLocal);*/
+
+        // S3 default Image
+        MemberImage memberImageS3 = MemberImage.builder()
+                .filePath(defaultImageAddress)
+                .build();
+        member.addMemberImage(memberImageS3);
 
         memberDbService.saveMember(member);
     }
@@ -135,13 +153,17 @@ public class MemberService {
      * @author LimJaeMinZ
      */
     @SneakyThrows
+    @Transactional
     public void createProfileS3(String refreshToken,
                                 MultipartFile file) {
         Long memberId = redisUtils.getId(refreshToken);
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
-        String dir = "memberImage";
+        if(!file.isEmpty()) {
+            memberImageRepository.deleteByMemberId(memberId);
+        }
 
+        String dir = "memberImage";
         UploadFile uploadFile = s3Upload.uploadfile(file, dir);
 
         MemberImage memberImage = MemberImage.builder()

@@ -69,7 +69,7 @@ public class MemberController {
      * @param file 프로필 사진 정보
      * @author LimJaeMinZ
      */
-    @PostMapping("/profileS3")
+    @PostMapping("/profile")
     public void createMemberImageS3(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                     @RequestPart(value = "file") MultipartFile file) {
         memberService.createProfileS3(refreshToken, file);
@@ -83,7 +83,7 @@ public class MemberController {
      * @author LimJaeMinZ
      */
     @Deprecated
-    @PostMapping("/profile")
+    @PostMapping("/profileLocal")
     public void createMemberImage(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                                   @RequestPart(value = "file") List<MultipartFile> files) {
         memberService.createProfile(refreshToken, files);
