@@ -17,13 +17,13 @@ export const getURL = (index, search) => {
     return `/search/${encodeURI(search)}`;
   }
   if (index === 0 && !search) {
-    return `/home`;
+    return `/home?size=20&page=`;
   }
   if (index !== 0 && search) {
-    return `/category/${index}/search/${encodeURI(search)}`;
+    return `/category/${index}/search/${encodeURI(search)}?size=20&page=`;
   }
   if (index !== 0 && !search) {
-    return `/category/${index}`;
+    return `/category/${index}?size=20&page=`;
   }
   return '';
 };

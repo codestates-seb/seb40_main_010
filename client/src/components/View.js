@@ -1,18 +1,21 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-// import axios from 'axios';
 import styled from 'styled-components';
-import { DetailInformation } from '../atoms';
-// import { useRecoilState, useRecoilValue } from 'recoil';
 
-// import { DetailInformation, PlaceIDState } from '../atoms';
+import { DetailInformation } from '../atoms';
 import FadeCarousel from './Fade';
 import Location from './Map';
-// { detailInformation }
+
 function View() {
   const detailData = useRecoilValue(DetailInformation);
-  const { title, filePath, category, detailInfo, address, phoneNumber } =
-    detailData;
+  const {
+    title,
+    filePath: images,
+    category,
+    detailInfo,
+    address,
+    phoneNumber,
+  } = detailData;
 
   return (
     <ViewContainer>
@@ -22,8 +25,8 @@ function View() {
           <FadeCarousel />
         </CarouselImageContainer>
         <InformationMiniImageContainer>
-          {filePath &&
-            filePath.map(placeImage => {
+          {images &&
+            images.map(placeImage => {
               return <InformationMiniImage key={placeImage} src={placeImage} />;
             })}
         </InformationMiniImageContainer>

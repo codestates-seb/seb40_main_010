@@ -1,28 +1,40 @@
 // import axios from 'axios';
 import React from 'react';
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil';
 
-import { navSearchValue, categoryFocus, mainDataState } from '../atoms';
+import {
+  navSearchValue,
+  categoryFocus,
+  mainDataState,
+  pageState,
+  settingUrl,
+  NextPage,
+} from '../atoms';
 import { categoryData, getURL } from '../utils/categoryData';
-import getData from '../hooks/useAsyncGetData';
 import categoryButton from '../utils/categoryButton';
 
 function Category() {
   const [focusCategoryID, setFocusCategoryID] = useRecoilState(categoryFocus);
-  const setMainPlaceData = useSetRecoilState(mainDataState);
-  const searchState = useRecoilValue(navSearchValue);
+  const setUrl = useSetRecoilState(settingUrl);
+  const search = useRecoilValue(navSearchValue);
+  const setPage = useSetRecoilState(pageState);
+  const setHasNextPage = useSetRecoilState(NextPage);
+  const resetMainPlaceData = useResetRecoilState(mainDataState);
 
   const categories = categoryData;
 
   const onClickCategoryButton = async (e, idx) => {
+    resetMainPlaceData();
+    setUrl(() => getURL(idx, search));
+    setPage(1);
     setFocusCategoryID(idx);
-
-    const url = getURL(idx, searchState);
-
-    const response = await getData(url);
-
-    setMainPlaceData([...response.data.data]);
+    setHasNextPage(true);
   };
 
   return (

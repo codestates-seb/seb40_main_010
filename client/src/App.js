@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import axios from 'axios';
+
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
 import Places from './pages/Places';
@@ -13,40 +14,42 @@ import NotFound from './components/NotFound';
 import header from './utils/header';
 
 function App() {
-  const [ref, setRef] = useState(false);
+  const [timer, setTimer] = useState(false);
 
   const token = localStorage.getItem('ACCESS');
   const isLogIn = localStorage.getItem('REFRESH');
 
+  const expiration = 60 * 30 * 1000;
+
   const reIssue = async () => {
     if (!isLogIn) return;
 
-    const decoded = jwt_decode(token);
+    const { exp } = jwt_decode(token);
+    const currentTime = Math.ceil(Date.now() / 1000);
 
-    if (decoded.exp - Date.now() / 1000 > 60 * 1) return;
+    if (exp - currentTime > 60 * 3) return;
 
-    if (Date.now() / 1000 > decoded.exp) {
+    if (currentTime > exp) {
       alert('다시 로그인 해주세요');
+      localStorage.removeItem('ACCESS');
+      localStorage.removeItem('REFRESH');
     }
 
-    if (decoded.exp - Date.now() / 1000 <= 60 * 3) {
+    if (exp - currentTime <= 60 * 3) {
       const response = await axios.get('/auth/re-issue', header);
-
-      if (response.headers.authorization) {
-        localStorage.setItem(
-          'ACCESS',
-          `Bearer ${response.headers.authorization}`,
-        );
-      }
+      localStorage.setItem(
+        'ACCESS',
+        `Bearer ${response.headers.authorization}`,
+      );
     }
   };
 
   useEffect(() => {
     reIssue();
     setTimeout(() => {
-      setRef(!ref);
-    }, 1740000);
-  }, [isLogIn, ref]);
+      setTimer(!timer);
+    }, expiration - 60000);
+  }, [isLogIn, timer]);
 
   return (
     <div>

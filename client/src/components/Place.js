@@ -1,35 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { Link } from 'react-router-dom';
+import { useSetRecoilState, useResetRecoilState } from 'recoil';
 
-import { DetailInformation, PlaceIDState } from '../atoms';
+import { DetailInformation, PlaceIDState, mainDataState } from '../atoms';
 
 function Place({ placeData }) {
   const setFocusPlaceID = useSetRecoilState(PlaceIDState);
-  const navigate = useNavigate();
-  const setDetailInformation = useSetRecoilState(DetailInformation);
+  const resetDetailInformation = useResetRecoilState(DetailInformation);
+  const resetPlaces = useResetRecoilState(mainDataState);
 
   const { address, charge, image, score, title, placeId } = placeData;
 
   const slicedTitle = title.slice(0, 15);
 
   const onClickPlaceComponent = () => {
-    setDetailInformation([]);
+    resetPlaces();
+    resetDetailInformation();
     setFocusPlaceID(placeId);
   };
 
   const onClickPlaceContainer = e => {
     e.stopPropagation();
-    navigate(`/detail/${placeId}`);
   };
 
   const chargePerHour = new Intl.NumberFormat('ko-KR').format(charge);
 
   return (
     <MainContainer onClick={onClickPlaceContainer}>
-      <Link to="/detail">
+      <Link to={`/detail/${placeId}`}>
         <MainComponent onClick={onClickPlaceComponent}>
           <Image src={image} />
           <TitleContainer>

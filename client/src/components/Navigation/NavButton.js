@@ -2,7 +2,8 @@ import React from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { BsFillPersonFill } from 'react-icons/bs';
 import styled from 'styled-components';
-import axios from 'axios';
+// import axios from 'axios';
+import deleteData from '../../hooks/useAsyncDeleteData';
 
 export function NavLeftButtonContainer({ buttonColor }) {
   const logInUrl = useMatch('/log-in');
@@ -35,12 +36,8 @@ export function NavRightButtonContainer() {
   const onClickLogOutButton = async () => {
     localStorage.removeItem('ACCESS');
     localStorage.removeItem('REFRESH');
-    await axios.delete('/auth/logout', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-        RefreshToken: `${localStorage.getItem('REFRESH')}`,
-      },
-    });
+
+    await deleteData('/auth/logout');
   };
 
   if (signUpUrl) return null;
