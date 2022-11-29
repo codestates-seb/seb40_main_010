@@ -2,8 +2,10 @@ package com.main21.review.controller;
 
 import com.google.gson.Gson;
 import com.main21.batch.service.BatchService;
+import com.main21.member.dto.MemberDto;
 import com.main21.member.entity.Member;
 import com.main21.place.entity.Place;
+import com.main21.place.entity.PlaceImage;
 import com.main21.reserve.entity.Reserve;
 import com.main21.review.dto.ReviewDto;
 import com.main21.review.entity.Review;
@@ -23,6 +25,8 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -30,6 +34,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.main21.place.entity.QPlaceImage.placeImage;
 import static com.main21.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.main21.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static com.main21.utils.AuthConstants.*;
@@ -41,9 +46,11 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import redis.embedded.Redis;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.main21.review.entity.QReview.review;
@@ -60,7 +67,6 @@ import static org.mockito.Mockito.doNothing;
 class ReviewControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
 
 
     @MockBean
@@ -111,7 +117,7 @@ class ReviewControllerTest {
         doNothing().when(reviewService).createReview(Mockito.any(ReviewDto.Post.class), Mockito.anyString(), Mockito.anyLong(), Mockito.anyLong());
         ResultActions actions =
                 mockMvc.perform(
-                        post("/review/{place-id}/reserve/{reserve-id}",placeId, reserveId)
+                        post("/review/{place-id}/reserve/{reserve-id}", placeId, reserveId)
                                 .header(AUTHORIZATION, "Bearer " + accessToken)
                                 .header(REFRESH, refreshToken)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -130,10 +136,11 @@ class ReviewControllerTest {
                                 List.of(
                                         fieldWithPath("score").type(JsonFieldType.NUMBER).description("별점"),
                                         fieldWithPath("comment").type(JsonFieldType.STRING).description("댓글")
+                                )
                         )
-                )
                 ));
     }
+
     @Test
     @DisplayName("리뷰 PATCH")
     void patchReview() throws Exception {
@@ -156,7 +163,7 @@ class ReviewControllerTest {
         String accessToken = jwtTokenUtils.generateAccessToken(member);
         String refreshToken = jwtTokenUtils.generateRefreshToken(member);
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(reviewService).updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class),Mockito.anyString());
+        doNothing().when(reviewService).updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class), Mockito.anyString());
         ResultActions actions =
                 mockMvc.perform(
                         patch("/review/{review-id}/edit", reviewId)
@@ -174,12 +181,13 @@ class ReviewControllerTest {
                                 parameterWithName("review-id").description("리뷰 식별자")
                         ),
                         requestFields(List.of(
-                                fieldWithPath("score").type(JsonFieldType.NUMBER).description("별점"),
-                                fieldWithPath("comment").type(JsonFieldType.STRING).description("댓글")
-                            )
+                                        fieldWithPath("score").type(JsonFieldType.NUMBER).description("별점"),
+                                        fieldWithPath("comment").type(JsonFieldType.STRING).description("댓글")
+                                )
                         )
-                        ));
+                ));
     }
+
     @Test
     @DisplayName("리뷰 DELETE")
     void deleteReview() throws Exception {
@@ -206,6 +214,73 @@ class ReviewControllerTest {
                 .andDo(document("리뷰 삭제",
                         pathParameters(
                                 parameterWithName("review-id").description("리뷰 식별자"))
+                ));
+    }
+
+    @Test
+    @DisplayName("상세페이지 리뷰 조회")
+    void getPlaceReview() throws Exception {
+        Long placeId = 1L;
+        int page = 1;
+        int size = 5;
+//        ProfileImage profileImage = MemberDto.Info.builder()
+        Member member = Member.builder()
+                .nickname("홍길동")
+                .email("hgd@gmail.com")
+                .roles(List.of("USER"))
+                .build();
+
+        Place place = Place.builder()
+                .title("문의는 DM으로 받는 카페")
+                .address("경기도 인스타시")
+                .charge(1000000)
+                .detailInfo("정중하게 질문해 주세요. 저희는 대답하는 기계가 아닙니다.")
+                .endTime(23)
+                .build();
+
+        Review review = Review.builder()
+                .score(0.5)
+                .comment("그렇게 장사하지 마세요!!")
+                .build();
+
+        PlaceImage placeImage = PlaceImage.builder().filePath("image.jpg").build();
+        place.addPlaceImage(placeImage);
+
+        List<ReviewDto.Response> responses = new ArrayList<>();
+        responses.add(new ReviewDto.Response(review, member));
+        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
+        given(reviewService.getPlaceReviews(Mockito.anyLong(), Mockito.any(Pageable.class))).willReturn(new PageImpl<>(responses));
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/review/{place-id}", placeId)
+                                .queryParam("page", String.valueOf(page))
+                                .queryParam("size", String.valueOf(size))
+                );
+
+        actions
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "장소 상세페이지 리뷰 조회",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("리뷰 데이터"),
+                                        fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자").ignored(),
+//                                      fieldWithPath("data[].profileImage").type(JsonFieldType.ARRAY).description("프로필 이미지"),
+                                        fieldWithPath("data[].nickname").type(JsonFieldType.STRING).description("닉네임"),
+                                        fieldWithPath("data[].score").type(JsonFieldType.NUMBER).description("별점"),
+                                        fieldWithPath("data[].comment").type(JsonFieldType.STRING).description("댓글"),
+                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("생성일").ignored(),
+
+                                        fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
+                                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),
+                                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("사이즈"),
+                                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 갯수"),
+                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수")
+                                )
+                        )
                 ));
     }
 }
