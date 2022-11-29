@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { ImStarFull } from 'react-icons/im';
 import { BsFillBookmarkFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
@@ -35,7 +35,7 @@ function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [payModalOpen, setPayModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const [, setReservationData] = useRecoilState(reservationEditData);
+  const setReservationData = useSetRecoilState(reservationEditData);
   const { bookmarkList } = useMyPage();
 
   const navigate = useNavigate();
@@ -74,6 +74,7 @@ function MyPageCategoryList({ listData, type }) {
   const handleDate = createdAt => {
     if (createdAt === undefined) return null;
 
+    // TODO : dayjs로 바꿔보기
     let date = new Date(createdAt);
     const month = date.getMonth() + 1;
     const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
@@ -117,6 +118,7 @@ function MyPageCategoryList({ listData, type }) {
   const registerEditDataSend = async () => {
     try {
       const response = await axios.get(`/place/${listData.placeId}`, header);
+      // TODO : 다른 방식으로 바꿔보기 // 직접 할당 X
       response.data.filePath = [];
       response.data.category = [];
       setReservationData(response.data);
@@ -162,6 +164,7 @@ function MyPageCategoryList({ listData, type }) {
             )}
             <ReservationDate>{handleDate(listData.createdAt)}</ReservationDate>
           </PlaceBodyContainer>
+          {/* url이나 search를 사용해서 바꿔보기 */}
           {type === 'reservation' ? null : (
             <RatingStarContainer>
               <ImStarFull size={23} />

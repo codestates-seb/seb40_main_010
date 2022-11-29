@@ -18,26 +18,55 @@ const useMyPage = () => {
   const [nickNameValidationMessage, setNickNameValidationMessage] =
     useState('');
 
-  const checkNickNameValidation = nickname => {
+  // TODO: 더 리팩터링 생각해보기
+  const getValidationType = nickname => {
     const checkNameForm = name => {
       return /[0-9]|[a-z]|[A-Z]|[가-힣]/.test(name);
     };
     const checkNameGap = name => {
       return /\s/g.test(name);
     };
+
     if (!checkNameForm(nickname) && nickname.length > 0) {
+      return 'invalidNickName';
+    }
+    if (nickname.length === 0) {
+      return 'emptyNickName';
+    }
+    if (checkNameGap(nickname)) {
+      return 'existSpace';
+    }
+    return 'regular';
+  };
+
+  const setValidationException = type => {
+    if (type === 'invalidNickName') {
       setNickNameCheck(false);
       setNickNameValidationMessage('이름 형식에 맞지 않습니다.');
-    } else if (nickname.length === 0) {
+      return null;
+    }
+    if (type === 'emptyNickName') {
       setNickNameCheck(false);
       setNickNameValidationMessage('필수 정보입니다.');
-    } else if (checkNameGap(nickname)) {
+      return null;
+    }
+    if (type === 'existSpace') {
       setNickNameCheck(false);
       setNickNameValidationMessage('공백이 있습니다.');
-    } else {
-      setNickNameCheck(true);
-      setNickNameValidationMessage('');
+      return null;
     }
+    return null;
+  };
+
+  const checkNickNameValidation = nickname => {
+    const validationType = getValidationType(nickname);
+    // if문 고치기
+    if (validationType !== 'regular')
+      return setValidationException(validationType);
+
+    setNickNameCheck(true);
+    setNickNameValidationMessage('');
+    return null;
   };
 
   const header = {

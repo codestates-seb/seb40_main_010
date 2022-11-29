@@ -42,6 +42,7 @@ export default function Register() {
 
   const [images, setImages] = useRecoilState(registerFormImage);
   const setPreviewImages = useSetRecoilState(registerFormPreviewImage);
+  const setReservationData = useSetRecoilState(reservationEditData);
 
   const [editData, setEditData] = useRecoilState(reservationEditData);
 
@@ -173,6 +174,7 @@ export default function Register() {
       setAddress('');
       setImages([]);
       setPreviewImages([]);
+      setReservationData(null);
       navigator(`/detail/${editData.placeId}`);
     } catch (err) {
       console.log('Error >>', err);
@@ -338,11 +340,14 @@ export default function Register() {
                 onClick={handleEditSubmit}
                 disabled={
                   !(
-                    editData.title.length < 20 &&
-                    checkedList.length > 0 &&
-                    editData.address &&
-                    images.length > 0 &&
-                    editData.charge > 0
+                    // 한 줄로 줄여보기 의미있는 단어로
+                    (
+                      editData.title.length < 20 &&
+                      checkedList.length > 0 &&
+                      editData.address &&
+                      images.length > 0 &&
+                      editData.charge > 0
+                    )
                   )
                 }
               >
