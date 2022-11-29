@@ -33,8 +33,8 @@ public class PlaceCategoryDto {
 
         @Builder
         @QueryProjection
-        public Response(Place place, PlaceCategory placeCategory) {
-            this.categoryId = placeCategory.getCategory().getId();
+        public Response(Place place, Long categoryId) {
+            this.categoryId = categoryId;
             this.placeId = place.getId();
             this.title = place.getTitle();
             this.charge = place.getCharge();
