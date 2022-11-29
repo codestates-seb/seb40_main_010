@@ -3,12 +3,17 @@ package com.main21.place.dto;
 import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceImage;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class PlaceDto {
 
     @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class SearchDetail {
 
         private int startCharge;
