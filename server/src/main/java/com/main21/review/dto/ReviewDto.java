@@ -50,7 +50,6 @@ public class ReviewDto {
         private final String comment;
         private final LocalDateTime createdAt;
 
-
         @Builder
         @QueryProjection
         public Response(Review review, Member member) {
