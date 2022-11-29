@@ -21,8 +21,8 @@ export default function LogIn() {
   const onSubmit = async data => {
     try {
       const response = await axios.post(`/auth/login`, data);
-      localStorage.setItem('ACCESS', response.headers.authorization);
-      localStorage.setItem('REFRESH', response.headers.refreshtoken);
+      await localStorage.setItem('ACCESS', response.headers.authorization);
+      await localStorage.setItem('REFRESH', response.headers.refreshtoken);
       navigator('/');
     } catch (err) {
       if (err.response.data.status === 403) {

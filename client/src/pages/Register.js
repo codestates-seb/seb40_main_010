@@ -39,6 +39,7 @@ export default function Register() {
   const [checkedList, setCheckedList] = useRecoilState(
     registerFormItemsCheckedState,
   );
+
   const [images, setImages] = useRecoilState(registerFormImage);
   const setPreviewImages = useSetRecoilState(registerFormPreviewImage);
 
@@ -55,6 +56,14 @@ export default function Register() {
   const handleChange = event => {
     const { name, value } = event.target;
     handler[name](value);
+  };
+
+  const addItem = category => {
+    setCheckedList(prev => [...prev, category]);
+  };
+
+  const removeItem = category => {
+    setCheckedList(prev => prev.filter(item => item !== category));
   };
 
   const editHandleChange = event => {
@@ -170,8 +179,6 @@ export default function Register() {
     }
   };
 
-  console.log(editData);
-  console.log(images);
   return (
     <>
       <Nav />
@@ -204,10 +211,7 @@ export default function Register() {
           </Wrapper>
           <Wrapper>
             <Title>카테고리</Title>
-            <RegisterCategory
-              checkedList={checkedList}
-              setCheckedList={setCheckedList}
-            />
+            <RegisterCategory addItem={addItem} removeItem={removeItem} />
             {checkedList.length < 1 && (
               <Validation>1개 이상 선택해주세요</Validation>
             )}

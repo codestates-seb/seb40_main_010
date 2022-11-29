@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
@@ -7,25 +7,15 @@ import { FaRegBookmark, FaLink, FaBookmark } from 'react-icons/fa';
 import { PlaceIDState, bookmarkState } from '../../atoms';
 import header from '../../utils/header';
 
-// TODO
-// window를 지원하지 않을 수 있다..
 function ReservationBottomButtons() {
   const placeId = useRecoilValue(PlaceIDState);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
 
-  const copyLinkRef = useRef();
-
-  const handleCopyLink = () => {
-    if (!document.queryCommandSupported('copy')) {
-      return alert('복사 기능이 지원되지 않는 브라우저입니다.');
-    }
-
-    copyLinkRef.current.focus();
-    copyLinkRef.current.select();
-    document.execCommand('copy');
-
-    return alert('링크를 복사했습니다.');
-  };
+  function handleCopyUrl() {
+    const nowUrl = window.location.href;
+    navigator.clipboard.writeText(nowUrl);
+    alert('주소가 복사되었습니다!');
+  }
 
   const handleBookmark = async () => {
     try {
@@ -43,11 +33,10 @@ function ReservationBottomButtons() {
         {isBookmark && <FullBookmarkIcon />}
         관심장소
       </button>
-      <button type="button" className="button" onClick={handleCopyLink}>
+      <button type="button" className="button" onClick={handleCopyUrl}>
         <LinkCopyIcon />
         링크복사
       </button>
-      <TextArea ref={copyLinkRef} value={window.location.href} readOnly />
     </Container>
   );
 }
@@ -108,15 +97,6 @@ const LinkCopyIcon = styled(FaLink)`
   :hover {
     cursor: pointer;
   }
-`;
-
-const TextArea = styled.textarea`
-  position: absolute;
-  width: 0px;
-  height: 0px;
-  bottom: 0;
-  left: 0;
-  opacity: 0;
 `;
 
 export default ReservationBottomButtons;

@@ -8,13 +8,13 @@ function ReservationCapacityHandler({ capacity, setCapacity }) {
   };
 
   const plusCapacity = event => {
-    setCapacity(capacity + 1);
     event.stopPropagation();
+    setCapacity(capacity + 1);
   };
 
   const minusCapacity = event => {
-    if (capacity > 1) setCapacity(capacity - 1);
     event.stopPropagation();
+    if (capacity > 1) setCapacity(capacity - 1);
   };
 
   return (

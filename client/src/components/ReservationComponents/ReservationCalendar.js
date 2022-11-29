@@ -1,192 +1,23 @@
-import React, { useState } from 'react';
-import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween';
-import { useRecoilState } from 'recoil';
+import React from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
+import setHours from 'date-fns/setHours';
+import setMinutes from 'date-fns/setMinutes';
 import { ko } from 'date-fns/esm/locale';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { reservationStartDateChangedState } from '../../atoms';
+import useCalendar from './useCalendar';
 
-dayjs.extend(isBetween);
-
-export default function ReservationCalendar({
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
-}) {
-  const [isStartDateSelected, setIsStartDateSelected] = useRecoilState(
-    reservationStartDateChangedState,
-  );
-  const [startCalendarSelectedDay, setStartCalendarSelectedDay] =
-    useState('dayNull');
-  const [endCalendarSelectedDay, setEndCalendarSelectedDay] =
-    useState('dayNull');
-
-  const maxEndDate = new Date(startDate).setDate(
-    new Date(startDate).getDate() + 1,
-  );
-
-  const handleStartDate = time => {
-    const clickedTime = new Date(time);
-    const now = new Date();
-
-    if (
-      startCalendarSelectedDay === 'dayNull' &&
-      clickedTime.getDate() === now.getDate()
-    ) {
-      clickedTime.setHours(now.getHours() + 1);
-      setStartDate(clickedTime);
-
-      setStartCalendarSelectedDay('today');
-    }
-
-    if (startCalendarSelectedDay === 'today') {
-      setStartDate(time);
-    }
-
-    if (clickedTime.getDate() !== now.getDate()) {
-      setStartDate(time);
-
-      setStartCalendarSelectedDay('future');
-    }
-
-    if (
-      startCalendarSelectedDay === 'future' &&
-      clickedTime.getDate() === now.getDate()
-    ) {
-      clickedTime.setHours(now.getHours() + 1);
-      setStartDate(clickedTime);
-
-      setStartCalendarSelectedDay('today');
-    }
-
-    setIsStartDateSelected(time);
-    setEndDate(false);
-  };
-
-  const handleEndDate = time => {
-    const clickedTime = new Date(time);
-    const startTime = new Date(startDate);
-
-    if (
-      endCalendarSelectedDay === 'dayNull' &&
-      clickedTime.getDate() === startTime.getDate()
-    ) {
-      clickedTime.setHours(startTime.getHours() + 1);
-      setEndDate(clickedTime);
-
-      setEndCalendarSelectedDay('today');
-    }
-
-    if (
-      endCalendarSelectedDay === 'dayNull' &&
-      clickedTime.getDate() !== startTime.getDate()
-    ) {
-      setEndDate(time);
-
-      setEndCalendarSelectedDay('nextDay');
-    }
-
-    if (endCalendarSelectedDay === 'today') {
-      setEndDate(time);
-    }
-
-    if (
-      clickedTime.getDate() !== startTime.getDate() &&
-      clickedTime.getHours() > startTime.getHours()
-    ) {
-      clickedTime.setHours(startTime.getHours());
-      setEndDate(clickedTime);
-
-      setEndCalendarSelectedDay('nextDay');
-    }
-
-    if (
-      endCalendarSelectedDay === 'nextDay' &&
-      clickedTime.getDate() === startTime.getDate()
-    ) {
-      clickedTime.setHours(startTime.getHours() + 1);
-      setEndDate(clickedTime);
-
-      setEndCalendarSelectedDay('today');
-    }
-
-    if (
-      endCalendarSelectedDay === 'nextDay' &&
-      clickedTime.getDate() !== startTime.getDate()
-    ) {
-      setEndDate(clickedTime);
-    }
-  };
-
-  const slots = [
-    {
-      start: '2022-11-27T09:00:00.000Z',
-      end: '2022-11-27T11:00:00.000Z',
-    },
-  ];
-
-  // eslint-disable-next-line consistent-return
-  const handleDisableStartTime = time => {
-    const currentTime = new Date();
-    const selectedTime = new Date(time);
-    const isPastTime = currentTime.getTime() > selectedTime.getTime();
-    if (!isPastTime) {
-      for (let i = 0; i < slots.length; i += 1) {
-        const slot = slots[i];
-
-        const x = dayjs(time);
-        const startTime = dayjs(slot.start);
-        const endTime = dayjs(slot.end);
-
-        if (x.isBetween(startTime, endTime) || x.isSame(dayjs(startTime))) {
-          return false;
-        }
-
-        if (i + 1 === slots.length) {
-          return true;
-        }
-      }
-    }
-  };
-
-  // eslint-disable-next-line consistent-return
-  const handleDisabledEndTime = time => {
-    const selectedTime = new Date(time);
-    const isStartTimePassed = new Date(startDate) < selectedTime.getTime();
-    const isBeforeEndTime =
-      selectedTime.getTime() <= new Date(maxEndDate).getTime();
-
-    if (isStartTimePassed && isBeforeEndTime) {
-      for (let i = 0; i < slots.length; i += 1) {
-        const slot = slots[i];
-
-        const x = dayjs(time);
-        const y = dayjs(startDate);
-        const slotStartTime = dayjs(slot.start);
-        const slotEndTime = dayjs(slot.end);
-
-        if (
-          x.isBetween(slotStartTime, slotEndTime) ||
-          x.isSame(dayjs(slotEndTime))
-        ) {
-          return false;
-        }
-
-        if (y.isBefore(slotStartTime) && x.isAfter(slotEndTime)) {
-          return false;
-        }
-
-        if (i + 1 === slots.length) {
-          return true;
-        }
-      }
-    }
-  };
+function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
+  const {
+    isStartDateSelected,
+    handleStartDate,
+    handleDisableStartTime,
+    handleEndDate,
+    maxEndDate,
+    handleDisabledEndTime,
+  } = useCalendar({ startDate, setStartDate, endDate, setEndDate });
 
   return (
     <Container>
@@ -200,6 +31,7 @@ export default function ReservationCalendar({
           startDate={startDate}
           endDate={endDate}
           minDate={new Date()}
+          excludeTimes={[setHours(setMinutes(new Date(), 0), 23)]}
           locale={ko}
           dateFormat="yyyy년 MM월 dd일 a hh시"
           timeIntervals={60}
@@ -309,3 +141,5 @@ const Container = styled.div`
     }
   }
 `;
+
+export default ReservationCalendar;
