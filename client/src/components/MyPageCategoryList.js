@@ -78,7 +78,7 @@ function MyPageCategoryList({ listData, type }) {
     let date = new Date(createdAt);
     const month = date.getMonth() + 1;
     const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
-    const KR_TIME_DIFF = 9 * 60 * 60 * 1000; // 한국 시간(KST)은 UTC시간보다 9시간 더 빠르므로 9시간을 밀리초 단위로 변환.
+    const KR_TIME_DIFF = 9 * 60 * 60 * 1000 * 2; // 한국 시간(KST)은 UTC시간보다 9시간 더 빠르므로 9시간을 밀리초 단위로 변환.
     const krCurr = utc + KR_TIME_DIFF;
 
     date = new Date(krCurr).toString();
@@ -201,7 +201,11 @@ function MyPageCategoryList({ listData, type }) {
                   modalAction={reservationCancel}
                 />
               )}
-              <CategoryButton onClick={onClickPayment}>결제하기</CategoryButton>
+              {handleDate(today) < handleDate(listData.startTime) && (
+                <CategoryButton onClick={onClickPayment}>
+                  결제하기
+                </CategoryButton>
+              )}
               {payModalOpen && <Modal {...IsPayment} />}
             </>
           )}
