@@ -6,8 +6,8 @@ import { CgMenuRound } from 'react-icons/cg';
 import { IoHeartCircleOutline } from 'react-icons/io5';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import MyPageCategoryList from './MyPageCategoryList';
-import useMyPage from './useMyPage';
-import mbtiList from '../utils/mbtiList';
+import useMyPage from '../../hooks/useMyPage';
+import mbtiList from '../../utils/mbtiList';
 
 function MyPageComponent() {
   const {

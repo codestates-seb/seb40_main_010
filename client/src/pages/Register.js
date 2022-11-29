@@ -1,185 +1,33 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import axios from 'axios';
-import ReactDaumPost from 'react-daumpost-hook';
 import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
-
-import {
-  registerFormTitle,
-  registerFormAddress,
-  registerFormMaxCapacity,
-  registerFormDetailedAddress,
-  registerFormDetailedInformation,
-  registerFormCharge,
-  registerFormItemsCheckedState,
-  registerFormImage,
-  registerFormPreviewImage,
-  reservationEditData,
-} from '../atoms';
 
 import Nav from '../components/Navigation/Nav';
 import RegisterImages from '../components/RegisterComponents/RegisterImages';
 import RegisterCategory from '../components/RegisterComponents/RegisterCategory';
+import useRegister from '../hooks/useRegister';
+import useRegisterEdit from '../hooks/useRegisterEdit';
 
 export default function Register() {
-  // const ACCESS = localStorage.getItem('ACCESS');
-  const navigator = useNavigate();
-  const [title, setTitle] = useRecoilState(registerFormTitle);
-  const [maxCapacity, setMaxCapacity] = useRecoilState(registerFormMaxCapacity);
-  const [address, setAddress] = useRecoilState(registerFormAddress);
-  const [detailedAddress, setDetailedAddress] = useRecoilState(
-    registerFormDetailedAddress,
-  );
-  const [detailedInformation, setDetailedInformation] = useRecoilState(
-    registerFormDetailedInformation,
-  );
-  const [charge, setCharge] = useRecoilState(registerFormCharge);
-  const [checkedList, setCheckedList] = useRecoilState(
-    registerFormItemsCheckedState,
-  );
+  const {
+    title,
+    address,
+    handleChange,
+    handleSubmit,
+    maxCapacity,
+    minusCapacity,
+    plusCapacity,
+    postCode,
+    checkedList,
+    addItem,
+    removeItem,
+    images,
+    setImages,
+    charge,
+  } = useRegister();
 
-  const [images, setImages] = useRecoilState(registerFormImage);
-  const setPreviewImages = useSetRecoilState(registerFormPreviewImage);
-  const setReservationData = useSetRecoilState(reservationEditData);
-
-  const [editData, setEditData] = useRecoilState(reservationEditData);
-
-  const handler = {
-    title: setTitle,
-    maxCapacity: setMaxCapacity,
-    detailedAddress: setDetailedAddress,
-    detailedInformation: setDetailedInformation,
-    charge: setCharge,
-  };
-
-  const handleChange = event => {
-    const { name, value } = event.target;
-    handler[name](value);
-  };
-
-  const addItem = category => {
-    setCheckedList(prev => [...prev, category]);
-  };
-
-  const removeItem = category => {
-    setCheckedList(prev => prev.filter(item => item !== category));
-  };
-
-  const editHandleChange = event => {
-    if (event.target.id === 'capacityMinus' && editData.maxCapacity > 1) {
-      return setEditData({
-        ...editData,
-        maxCapacity: editData.maxCapacity - 1,
-      });
-    }
-    if (event.target.id === 'capacityPlus') {
-      return setEditData({
-        ...editData,
-        maxCapacity: editData.maxCapacity + 1,
-      });
-    }
-    const { name, value } = event.target;
-    return setEditData({ ...editData, [name]: value });
-  };
-
-  const plusCapacity = () => {
-    setMaxCapacity(maxCapacity + 1);
-  };
-
-  const minusCapacity = () => {
-    if (maxCapacity > 1) setMaxCapacity(maxCapacity - 1);
-  };
-
-  const postConfig = {
-    onComplete: data => {
-      setAddress(data.address);
-    },
-  };
-
-  const postConfigEdit = {
-    onComplete: data => {
-      setEditData({ ...editData, address: data.address });
-    },
-  };
-
-  const postCodeEdit = ReactDaumPost(postConfigEdit);
-
-  const postCode = ReactDaumPost(postConfig);
-
-  const handleSubmit = async () => {
-    const json = JSON.stringify({
-      title,
-      maxCapacity,
-      categoryList: checkedList,
-      address,
-      detailedAddress,
-      detailInfo: detailedInformation,
-      charge,
-    });
-    const blob = new Blob([json], { type: 'application/json' });
-
-    const formData = new FormData();
-    formData.append('key', blob);
-    images.forEach(file => {
-      formData.append('file', file, file.name);
-    });
-
-    try {
-      await axios.post(`/place/post`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-          RefreshToken: localStorage.getItem('REFRESH'),
-        },
-      });
-      setCheckedList([]);
-      setAddress('');
-      setImages([]);
-      setPreviewImages([]);
-      navigator('/');
-    } catch (err) {
-      console.log('Error >>', err);
-    }
-  };
-
-  const handleEditSubmit = async () => {
-    const json = JSON.stringify({
-      title: editData.title,
-      maxCapacity: editData.maxCapacity,
-      categoryList: checkedList,
-      address: editData.address,
-      detailedAddress,
-      detailInfo: editData.detailInfo,
-      charge: editData.charge,
-    });
-    const blob = new Blob([json], { type: 'application/json' });
-
-    const formData = new FormData();
-    formData.append('key', blob);
-    images.forEach(file => {
-      formData.append('file', file, file.name);
-    });
-
-    try {
-      await axios.patch(`/place/${editData.placeId}/edit`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-          RefreshToken: localStorage.getItem('REFRESH'),
-        },
-      });
-      setCheckedList([]);
-      setAddress('');
-      setImages([]);
-      setPreviewImages([]);
-      setReservationData(null);
-      navigator(`/detail/${editData.placeId}`);
-    } catch (err) {
-      console.log('Error >>', err);
-    }
-  };
+  const { editData, postCodeEdit, editHandleChange, handleEditSubmit } =
+    useRegisterEdit();
 
   return (
     <>

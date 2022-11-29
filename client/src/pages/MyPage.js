@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Nav from '../components/Navigation/Nav';
-import MyPageComponent from '../components/MyPageComponent';
+import MyPageComponent from '../components/MyPageComponents/MyPageComponent';
 
 function MyPage() {
   return (

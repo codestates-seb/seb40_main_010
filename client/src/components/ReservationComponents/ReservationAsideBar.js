@@ -5,12 +5,11 @@ import ReservationCalendar from './ReservationCalendar';
 import ReservationCapacityHandler from './ReservationCapacityHandler';
 import ReservationBottomButtons from './ReservationBottomButtons';
 // import { onClickPaymentButton } from '../../utils/payment';
-import Modal from '../Modal';
+import Modal from '../../utils/Modal';
 import useReservation from './useReservation';
 
 function ReservationAsideBar({ charge }) {
   const {
-    chargePerHourString,
     startDate,
     setStartDate,
     endDate,
@@ -21,15 +20,21 @@ function ReservationAsideBar({ charge }) {
     modalOpen,
     IsPayment,
     // onClickPaymentButton,
-    reservedTimeRange,
-    totalChargeString,
+    getReservationInformation,
   } = useReservation(charge);
+
+  const {
+    chargePerHour,
+    totalReservedTimeRange,
+    totalCharges,
+    chargeMultiplyTime,
+  } = getReservationInformation();
 
   return (
     <form>
       <Container>
         <OuterWrapper display="flex" alignItems="flex-end">
-          <div className="hour-charge">{chargePerHourString}원</div>
+          <div className="hour-charge">{chargePerHour}</div>
           <div className="hour">1시간</div>
         </OuterWrapper>
         <OuterWrapper>
@@ -51,14 +56,12 @@ function ReservationAsideBar({ charge }) {
         {endDate ? (
           <>
             <OuterWrapper display="flex" justifyContent="space-between">
-              <div className="total-title">총 {reservedTimeRange}시간</div>
-              <div className="total-detail">
-                {chargePerHourString}원 x {reservedTimeRange}시간
-              </div>
+              <div className="total-title">{totalReservedTimeRange}</div>
+              <div className="total-detail">{chargeMultiplyTime}</div>
             </OuterWrapper>
             <OuterWrapper display="flex" justifyContent="space-between">
               <div className="total-title">합계</div>
-              <div className="total-detail">{totalChargeString}원</div>
+              <div className="total-detail">{totalCharges}</div>
             </OuterWrapper>
           </>
         ) : null}

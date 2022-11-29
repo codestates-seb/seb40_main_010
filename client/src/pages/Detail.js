@@ -12,7 +12,7 @@ import {
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Navigation/Nav';
 import View from '../components/View';
-import ReviewContainer from '../components/ReviewContainer';
+import ReviewContainer from '../components/ReviewComponents/ReviewContainer';
 import getData from '../hooks/useAsyncGetData';
 
 // ToDo api 3개 불러오기

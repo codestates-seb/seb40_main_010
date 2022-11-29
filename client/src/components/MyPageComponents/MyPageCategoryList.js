@@ -5,12 +5,12 @@ import { useSetRecoilState } from 'recoil';
 import { ImStarFull } from 'react-icons/im';
 import { BsFillBookmarkFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import Modal from './Modal';
-import ReviewWrite from './ReviewWrite';
-import { reservationEditData } from '../atoms';
-import useMyPage from './useMyPage';
-import header from '../utils/header';
-import { onClickPaymentButton } from '../utils/payment';
+import Modal from '../../utils/Modal';
+import ReviewWrite from '../ReviewComponents/ReviewWrite';
+import { reservationEditData } from '../../atoms';
+import useMyPage from '../../hooks/useMyPage';
+import header from '../../utils/header';
+import { onClickPaymentButton } from '../../utils/payment';
 
 const chargeComponent = (listData, type) => {
   if (type === 'reviews') {
@@ -35,7 +35,7 @@ function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [payModalOpen, setPayModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const setReservationData = useSetRecoilState(reservationEditData);
+  const setEditData = useSetRecoilState(reservationEditData);
   const { bookmarkList } = useMyPage();
 
   const navigate = useNavigate();
@@ -121,7 +121,7 @@ function MyPageCategoryList({ listData, type }) {
       // TODO : 다른 방식으로 바꿔보기 // 직접 할당 X
       response.data.filePath = [];
       response.data.category = [];
-      setReservationData(response.data);
+      setEditData(response.data);
       console.log(response.data);
       navigate('/register');
     } catch (err) {

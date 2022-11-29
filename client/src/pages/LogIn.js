@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -6,11 +6,10 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 
 import Nav from '../components/Navigation/Nav';
+import useLogin from '../hooks/useLogin';
 
 export default function LogIn() {
   const navigator = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
-  const [errorStatus, setErrorStatus] = useState('');
 
   const {
     register,
@@ -18,22 +17,22 @@ export default function LogIn() {
     formState: { isSubmitting, errors },
   } = useForm({ mode: 'onChange' });
 
+  const { errorMessage, errorStatus, getErrorType, setErrorException } =
+    useLogin();
+
   const onSubmit = async data => {
     try {
       const response = await axios.post(`/auth/login`, data);
       await localStorage.setItem('ACCESS', response.headers.authorization);
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
       navigator('/');
-    } catch (err) {
-      if (err.response.data.status === 403) {
-        setErrorStatus(403);
-        setErrorMessage('비밀번호를 잘못 입력했습니다');
-      }
-      if (err.response.data.status === 504) {
-        setErrorStatus(504);
-        setErrorMessage('존재하지 않는 계정입니다.');
-      }
+    } catch (error) {
+      const validationType = getErrorType(error.response.data.status);
+
+      if (validationType !== 'regular')
+        return setErrorException(validationType);
     }
+    return null;
   };
 
   return (
