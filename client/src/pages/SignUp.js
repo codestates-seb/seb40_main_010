@@ -20,18 +20,22 @@ function SignUp() {
     formState: { isSubmitting, errors },
   } = useForm({ mode: 'onChange' });
 
+  const getErrorType = message => {
+    if (message === '이미 존재하는 닉네임입니다.') {
+      return setErrorMessage('이미 존재하는 닉네임입니다.');
+    }
+    if (message === '이미 존재하는 이메일입니다.') {
+      return setErrorMessage('이미 존재하는 이메일입니다.');
+    }
+    return null;
+  };
+
   const onSubmit = async data => {
     try {
       await axios.post(`/member/join`, data);
       navigator('/log-in');
     } catch (err) {
-      console.log('Error >>', err);
-      if (err.response.data.message === '이미 존재하는 닉네임입니다.') {
-        setErrorMessage(err.response.data.message);
-      }
-      if (err.response.data.message === '이미 존재하는 이메일입니다.') {
-        setErrorMessage(err.response.data.message);
-      }
+      getErrorType(err.response.data.message);
     }
   };
 
