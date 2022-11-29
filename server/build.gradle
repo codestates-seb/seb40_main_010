@@ -93,6 +93,8 @@ dependencies {
     implementation group: 'io.github.openfeign', name: 'feign-gson', version: '11.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
 }
 dependencyManagement {
     imports {

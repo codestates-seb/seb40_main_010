@@ -29,7 +29,10 @@ public class Member extends Auditable {
     private String phoneNumber;
 
     @Enumerated(value = EnumType.STRING)
-    private MemberStatus memberStatus;
+    private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+
+    @Enumerated(value = EnumType.STRING)
+    private AccountStatus accountStatus = AccountStatus.COMMON_MEMBER;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
@@ -42,15 +45,15 @@ public class Member extends Auditable {
                   String nickname,
                   String mbti,
                   String password,
+                  AccountStatus accountStatus,
                   String phoneNumber,
-                  List<String> roles
-                  ) {
+                  List<String> roles) {
         this.email = email;
         this.nickname = nickname;
         this.mbti = mbti;
         this.password = password;
+        this.accountStatus = accountStatus;
         this.phoneNumber = phoneNumber;
-        this.memberStatus = MemberStatus.MEMBER_ACTIVE;
         this.roles = roles;
     }
 
@@ -70,22 +73,15 @@ public class Member extends Auditable {
         this.roles = roles;
     }
 
-    public enum MemberStatus {
-        MEMBER_ACTIVE("활동중인 회원입니다."),
-        MEMBER_SLEEP("휴먼 회원입니다."),
-        MEMBER_EXITED("탈퇴한 회원입니다.");
-        @Getter
-        private final String status;
-
-        MemberStatus(String status) {
-            this.status = status;
-        }
-    }
 
     public void editMember(String nickname,
                            String mbti) {
         this.nickname = nickname;
         this.mbti = mbti;
+    }
+
+    public void setMemberStatus(MemberStatus memberStatus) {
+        this.memberStatus = memberStatus;
     }
 
     public void addMemberImage(MemberImage memberImage) {

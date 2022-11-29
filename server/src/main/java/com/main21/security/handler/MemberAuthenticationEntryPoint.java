@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * 인증되지 않은 사용자가 url 요청했을 경우 발생하는 핸들러 클래스
  * @author mozzi327

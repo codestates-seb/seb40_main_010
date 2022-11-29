@@ -3,6 +3,7 @@ package com.main21.member.service;
 import com.main21.exception.BusinessLogicException;
 import com.main21.exception.ExceptionCode;
 import com.main21.member.dto.MemberDto;
+import com.main21.member.entity.AccountStatus;
 import com.main21.member.entity.Member;
 import com.main21.member.repository.MemberRepository;
 import com.main21.security.exception.AuthException;
@@ -48,7 +49,7 @@ public class MemberDbService {
      */
     public Member ifExistMemberByEmail(String email) {
         return memberRepository
-                .findMemberByEmail(email)
+                .findMemberByEmailAndAccountStatus(email, AccountStatus.COMMON_MEMBER)
                 .orElseThrow(() -> new AuthException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
@@ -60,7 +61,7 @@ public class MemberDbService {
      * @author Quartz614
      */
     public void verifyEmail(MemberDto.Post post) {
-        memberRepository.findByEmail(post.getEmail()).ifPresent(e -> {
+        memberRepository.findMemberByEmailAndAccountStatus(post.getEmail(), AccountStatus.COMMON_MEMBER).ifPresent(e -> {
             throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXIST);
         }); // 멤버로 바꿔야 ㅍ
     }

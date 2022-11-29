@@ -15,12 +15,23 @@ import java.util.Map;
 
 import static com.main21.security.utils.AuthConstants.*;
 
+/**
+ * AuthenticationToken을 발급해주는 클래스
+ * @author mozzi327
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
     private final JwtTokenUtils jwtTokenUtils;
     private final CustomAuthorityUtils authorityUtils;
 
+    /**
+     * JwtAuthenticationToken 발급 메서드
+     * @param authentication Authentication 정보
+     * @return JwtAuthenticationToken
+     * @throws AuthenticationException 인증 예외
+     * @author mozzi327
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         JwtAuthenticationToken jwtToken = (JwtAuthenticationToken) authentication;
@@ -34,6 +45,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         return new JwtAuthenticationToken(authorities, email, null);
     }
 
+    /**
+     * 해당 토큰이 지원하는 형식의 토큰 형식인지 판단하는 메서드
+     * @param authentication Authentication 정보
+     * @return boolean
+     * @author mozzi327
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return JwtAuthenticationToken.class.isAssignableFrom(authentication);

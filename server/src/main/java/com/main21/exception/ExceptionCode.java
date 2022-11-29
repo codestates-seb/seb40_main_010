@@ -12,12 +12,13 @@ public enum ExceptionCode {
 
     INVALID_ACCESS(403, "유효하지 않은 접근입니다."),
     INVALID_MEMBER(403, "회원 정보를 다시 확인하세요."),
+    INVALID_OAUTH2(404, "지원하지 않는 OAuth2 프로바이더입니다."),
 
     //토큰
-    INVALID_AUTH_TOKEN(504, "권한 정보가 없는 토큰입니다."),
+    INVALID_AUTH_TOKEN(504, "유효하지 않은 토큰입니다."),
     INVALID_REFRESH_TOKEN(504, "리프레시 토큰이 유효하지 않습니다."),
     MISMATCH_ACCESS_TOKEN(504, "엑세스 토큰의 유저 정보가 일치하지 않습니다."),
-    REFRESH_TOKEN_NOT_FOUND(504, "로그아웃 된 사용자입니다."),
+    BLACK_LIST(504, "로그아웃 처리된 토큰입니다."),
     MISSING_HEADER_ACCESS_TOKEN(504,"헤더에 엑세스 토큰을 넣어주세요."),
 
 
@@ -29,6 +30,9 @@ public enum ExceptionCode {
     // 요청 실패
     UPLOAD_FAILED(504, "업로드가 실패했습니다."),
     PAYMENT_URL_REQUEST_FAILED(504, "결제 URL 요청을 실패했습니다."),
+    HOST_CANNOT_RESERVATION(504, "호스트는 예약할 수 없습니다."),
+    HOST_CANNOT_BOOKMARK(504, "호스트는 북마크를 등록할 수 없습니다."),
+    HOST_CANNOT_REVIEW(504, "호스트는 리뷰를 남길 수 없습니다."),
 
     NO_IMAGE(504, "이미지가 비어있습니다."),
     UNAUTHORIZED_FOR_UPDATE(403, "수정 권한이 없습니다."),

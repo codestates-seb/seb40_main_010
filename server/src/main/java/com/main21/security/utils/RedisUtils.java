@@ -10,14 +10,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Redis Util 클래스
+ * @author mozzi327
+ */
 @Component
 @RequiredArgsConstructor
 public class RedisUtils {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisTemplate<String, Object> redisBlackListTemplate;
-    private static final String RT_KEY = "RT :";
-    private static final String AT_KEY = "AT :";
-
 
     /**
      * redis에서 key-value를 저장하는 메서드
@@ -30,7 +31,6 @@ public class RedisUtils {
         redisTemplate.opsForValue().set(key, o, minutes, TimeUnit.MINUTES);
     }
 
-
     /**
      * redis에서 key에 대한 value 값을 가져오는 메서드
      * @param key REFRESH_TOKEN
@@ -41,7 +41,6 @@ public class RedisUtils {
         return redisTemplate.opsForValue().get(key);
     }
 
-
     /**
      * redis에서 key에 대한 row를 삭제하는 메서드
      * @param key REFRESH_TOKEN
@@ -50,7 +49,6 @@ public class RedisUtils {
     public void deleteData(String key) {
         redisTemplate.delete(key);
     }
-
 
     /**
      * redis 로그아웃 처리를 위한 블랙 리스트 메서드
@@ -63,14 +61,25 @@ public class RedisUtils {
         redisBlackListTemplate.opsForValue().set(key, o, setTime, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * accessToken 블랙리스트 여부 조회 메서드(로그아웃)
+     * @param key accessToken
+     * @return accssToken
+     * @author mozzi327
+     */
     public String isBlackList(String key) {
         return (String) redisBlackListTemplate.opsForValue().get(key);
     }
 
-
+    /**
+     * 리프레시 토큰을 통해 memberId를 조회하는 메서드(논의 필요)
+     * @param refreshToken 리프레시 토큰
+     * @return Long(memberId)
+     * @author mozzi327
+     */
     public Long getId(String refreshToken) {
         Long memberId = (Long) redisTemplate.opsForValue().get(refreshToken);
-        if (memberId == null) throw new AuthException(ExceptionCode.REFRESH_TOKEN_NOT_FOUND);
+        if (memberId == null) throw new AuthException(ExceptionCode.INVALID_REFRESH_TOKEN);
         return memberId;
     }
 }

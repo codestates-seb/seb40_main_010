@@ -50,7 +50,9 @@ public class ReserveService {
     public void createReserve(ReserveDto.Post post, Long placeId, String refreshToken) {
         Long memberId = redisUtils.getId(refreshToken);
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+
+//        if (memberId.equals(findPlace.getMemberId()))
+//            throw new BusinessLogicException(ExceptionCode.HOST_CANNOT_RESERVATION);
 
         Reserve reserve = Reserve.builder()
                 .capacity(post.getCapacity())
@@ -65,8 +67,6 @@ public class ReserveService {
         if (reserve.getCapacity() > findPlace.getMaxCapacity()) {
             throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
         } else reserveDbService.saveReserve(reserve);
-
-        mbtiCountService.addMbtiCount(findMember, placeId);
     }
 
 
@@ -119,6 +119,7 @@ public class ReserveService {
     public PayApproveInfo getApprovedKaKaoPayInfo(Long reserveId,
                                                   String pgToken) {
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
+        Member findMember = memberDbService.ifExistsReturnMember(findReserve.getMemberId());
 
         // 예약 정보 반환을 위한 headers, params 세팅
         KakaoHeaders headers = feignService.setHeaders();
@@ -131,6 +132,8 @@ public class ReserveService {
         approvalDto.setOrderStatus(ORDER_APPROVED);
         findReserve.setStatus(Reserve.ReserveStatus.PAY_SUCCESS);
         reserveDbService.saveReserve(findReserve);
+
+        mbtiCountService.addMbtiCount(findMember, findReserve.getPlaceId());
 
         return approvalDto;
     }

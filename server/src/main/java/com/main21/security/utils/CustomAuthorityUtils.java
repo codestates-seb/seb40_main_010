@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 사용자 권한 발급 Util 클래스
+ * @author mozzi327
+ */
 @Component
 public class CustomAuthorityUtils {
 
@@ -23,7 +27,6 @@ public class CustomAuthorityUtils {
     private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
     private final List<String> USER_ROLES_STRING = List.of("USER");
 
-
     /**
      * 사용자 이메일을 통해 GrantedAuthority 컬렉션을 리턴해주는 메서드
      * @param email 사용자 이메일
@@ -34,7 +37,6 @@ public class CustomAuthorityUtils {
         if (email.equals(addminMailAddress)) return ADMIN_ROLES;
         return USER_ROLES;
     }
-
 
     /**
      * 사용자 권한 리스트를 통해 GradtedAuthority 컬렉션을 리턴해주는 메서드
@@ -47,7 +49,6 @@ public class CustomAuthorityUtils {
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
     }
-
 
     /**
      * 사용자 이메일을 통해 데이터베이스에 저장된 유저 권한 리스트를 리턴해주는 메서드

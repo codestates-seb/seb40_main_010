@@ -18,7 +18,6 @@ import static com.main21.reserve.entity.Reserve.ReserveStatus.PAY_IN_PROGRESS;
 
 @Service
 @RequiredArgsConstructor
-
 public class ReviewService {
     private final PlaceDbService placeDbService;
     private final RedisUtils redisUtils;

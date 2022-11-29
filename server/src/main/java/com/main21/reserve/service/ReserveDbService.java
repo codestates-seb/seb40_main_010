@@ -60,6 +60,6 @@ public class ReserveDbService {
      * @author LeeGoh
      */
     public List<Reserve> findAllByReserves(Long placeId) {
-        return reserveRepository.findAllByPlaceId(placeId);
+        return reserveRepository.findAllByPlaceIdAndStatus(placeId, Reserve.ReserveStatus.PAY_SUCCESS);
     }
 }

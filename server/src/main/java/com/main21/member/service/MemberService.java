@@ -4,6 +4,7 @@ import com.main21.file.FileHandler;
 import com.main21.file.S3Upload;
 import com.main21.file.UploadFile;
 import com.main21.member.dto.MemberDto;
+import com.main21.member.entity.AccountStatus;
 import com.main21.member.entity.Member;
 import com.main21.member.entity.MemberImage;
 import com.main21.member.repository.MemberImageRepository;
@@ -48,6 +49,7 @@ public class MemberService {
                 .password(memberDbService.encodingPassword(post.getPassword()))
                 .nickname(post.getNickname())
                 .phoneNumber(post.getPhoneNumber())
+                .accountStatus(AccountStatus.COMMON_MEMBER)
                 .roles(roles)
                 .mbti(post.getMbti())
                 .build();
@@ -67,7 +69,6 @@ public class MemberService {
         memberDbService.saveMember(member);
     }
 
-
     /**
      * 회원정보 수정 메서드
      * @param refreshToken 리프레시 토큰
@@ -81,7 +82,6 @@ public class MemberService {
         findMember.editMember(patch.getNickname(), patch.getMbti());
         memberDbService.saveMember(findMember);
     }
-
 
     /**
      * 회원정보 조회 메서드
@@ -106,7 +106,6 @@ public class MemberService {
                     .build();
         }
     }
-
 
     /**
      * 프로필 사진 업로드 메서드(Deprecated)
@@ -144,7 +143,6 @@ public class MemberService {
             }
         }
     }
-
 
     /**
      * 회원 프로필 사진 업로드 S3 메서드
