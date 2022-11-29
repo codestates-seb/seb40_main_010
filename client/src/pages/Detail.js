@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { useParams, useMatch, useNavigate } from 'react-router-dom';
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useParams } from 'react-router-dom';
 
 import {
   DetailInformation,
   bookmarkState,
+  mainDataState,
   reservationStartDate,
   reservationEndDate,
 } from '../atoms';
@@ -18,16 +19,14 @@ import getData from '../hooks/useAsyncGetData';
 // ToDo api 3개 불러오기
 function Detail() {
   const { id } = useParams();
-  const isDetailUrl = useMatch('/detail');
-  const navigate = useNavigate();
-
+  const resetPlaces = useResetRecoilState(mainDataState);
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
   const setStartDate = useSetRecoilState(reservationStartDate);
   const setEndDate = useSetRecoilState(reservationEndDate);
 
-  const callDetailData = async () => {
+  const getDetailData = async () => {
     try {
       if (id) {
         const response = await getData(`/place/${id}`);
@@ -42,10 +41,8 @@ function Detail() {
   };
 
   useEffect(() => {
-    if (isDetailUrl) {
-      navigate('/');
-    }
-    callDetailData();
+    resetPlaces();
+    getDetailData();
   }, [isBookmark, id]);
 
   return (
@@ -57,9 +54,7 @@ function Detail() {
             detailInformation={detailInformation.title && detailInformation}
           />
         </DetailViewContainer>
-        <ReservationAsideBar
-          charge={detailInformation.charge && detailInformation.charge}
-        />
+        <ReservationAsideBar charge={detailInformation.charge || '0'} />
       </DetailContainer>
       <ReviewContainer />
     </DetailReviewContainer>

@@ -87,7 +87,7 @@ export const reservationEditData = atom({
 
 export const mainDataState = atom({
   key: 'mainDataState',
-  default: null,
+  default: [],
 });
 
 export const PlaceIDState = atom({
@@ -102,10 +102,25 @@ export const DetailInformation = atom({
 
 export const mbtiPlaceDataState = atom({
   key: 'mbtiPlaceDataState',
-  default: null,
+  default: [],
 });
 
 export const bookmarkState = atom({
   key: 'bookmarkState',
   default: '',
+});
+
+export const pageState = atom({
+  key: 'pageState',
+  default: 1,
+});
+
+export const settingUrl = atom({
+  key: 'settingUrl',
+  default: `/home?size=20&page=`,
+});
+
+export const NextPage = atom({
+  key: 'NextPage',
+  default: true,
 });

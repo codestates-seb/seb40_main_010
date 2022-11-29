@@ -1,64 +1,81 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-// import axios from 'axios';
 import Category from '../components/Category';
 import Nav from '../components/Navigation/Nav';
 import Place from '../components/Place';
-import { mainDataState, mbtiPlaceDataState } from '../atoms';
+import MbtiPlaces from '../components/MbtiPlaces';
+import { mainDataState, settingUrl, pageState, NextPage } from '../atoms';
 import getData from '../hooks/useAsyncGetData';
-// import header from '../utils/header';
 
 // ToDo : Mbti 컴포넌트 위치, 요청
 export default function Places() {
   const [mainPlaceData, setMainPlaceData] = useRecoilState(mainDataState);
-  const [mbtiPlaceData, setMbtiPlaceData] = useRecoilState(mbtiPlaceDataState);
+  const [clickedNav, setClickedNav] = useState(false);
+  const [hasNextPage, setHasNextPage] = useRecoilState(NextPage);
+  const [page, setPage] = useRecoilState(pageState);
+  const url = useRecoilValue(settingUrl);
 
-  const query = '?size=20&page=1';
-  const url = `/home${query}`;
-  // const url = '/home';
+  const observerTargetElement = useRef(null);
 
-  const displayPlaces = async () => {
-    const getAllPlaces = await getData(url);
-    // const get
-    // const getAllPlaces = await axios.get(url, header);
+  // Todo 무한스크롤 고치기
+  const getPageData = useCallback(async () => {
+    try {
+      const { data } = await getData(`${url}${page}`);
 
-    setMainPlaceData([...getAllPlaces.data.data]);
+      if (!mainPlaceData) {
+        setMainPlaceData([...data.data]);
+      }
 
-    const getMbtiPlaces = await getData('/mbti');
+      if (mainPlaceData) {
+        setMainPlaceData(prevPosts => [...prevPosts, ...data.data]);
+      }
 
-    setMbtiPlaceData([...getMbtiPlaces.data.data]);
-  };
+      if (data.data.length === 20) {
+        setPage(prev => prev + 1);
+      }
+      setHasNextPage(data.data.length === 20);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [page, url]);
 
   useEffect(() => {
-    displayPlaces();
-  }, []);
+    if (!observerTargetElement.current || !hasNextPage) return;
+
+    const observation = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        getPageData();
+      }
+    });
+    observation.observe(observerTargetElement.current);
+    // eslint-disable-next-line consistent-return
+    return () => {
+      observation.disconnect();
+    };
+  }, [getPageData, hasNextPage, url]);
 
   return (
     <MainContainer>
-      <Nav />
-      <Category />
+      <Nav
+        setClickedNav={setClickedNav}
+        clickedNav={clickedNav}
+        setPage={setPage}
+      />
+      <Category page={page} />
       <DisplayComponentDiv>
-        <div>MBTI 추천</div>
-        <MainComponentContainer>
-          {mbtiPlaceData &&
-            mbtiPlaceData.map(placeData => {
-              const { placeId } = placeData;
-              return <Place key={`mbti ${placeId}`} placeData={placeData} />;
-            })}
-        </MainComponentContainer>
+        <MbtiPlaces />
         <div>장소</div>
         <MainComponentContainer>
           {mainPlaceData &&
             mainPlaceData.map(placeData => {
-              // const { endTime } = placeData;
               const { placeId } = placeData;
-              // console.log(placeId);
               return <Place key={`main ${placeId}`} placeData={placeData} />;
             })}
         </MainComponentContainer>
       </DisplayComponentDiv>
+      <div ref={observerTargetElement} />
     </MainContainer>
   );
 }

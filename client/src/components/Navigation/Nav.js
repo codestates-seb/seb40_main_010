@@ -1,32 +1,47 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { SlHome } from 'react-icons/sl';
 
-import { navSearchValue, categoryFocus, mainDataState } from '../../atoms';
+import {
+  navSearchValue,
+  categoryFocus,
+  mainDataState,
+  settingUrl,
+  pageState,
+  NextPage,
+} from '../../atoms';
 import { NavLeftButtonContainer, NavRightButtonContainer } from './NavButton';
-import getData from '../../hooks/useAsyncGetData';
-import { header } from './NavUtils';
 
-// ToDo 코드 리팩토링
 function Nav({ navColor, buttonColor }) {
   const [currentSearch, setCurrentSearch] = useState('');
+
   const setSearch = useSetRecoilState(navSearchValue);
   const setFocusCategoryID = useSetRecoilState(categoryFocus);
-  const setMainPlaceData = useSetRecoilState(mainDataState);
+  const setPage = useSetRecoilState(pageState);
+  const resetMainPlaceData = useResetRecoilState(mainDataState);
+  const setUrl = useSetRecoilState(settingUrl);
+  const setHasNextPage = useSetRecoilState(NextPage);
 
   const navigate = useNavigate();
+
+  const invalidate = () => {
+    setCurrentSearch('');
+    resetMainPlaceData();
+    setHasNextPage(true);
+    setPage(1);
+    setFocusCategoryID(0);
+    navigate('/');
+  };
 
   const onChangeSearch = event => {
     setCurrentSearch(event.target.value);
   };
 
   // eslint-disable-next-line consistent-return
-
-  const onSubmit = async event => {
+  const onSubmit = event => {
     event.preventDefault();
 
     const trimmedSearch = currentSearch.trim();
@@ -34,16 +49,17 @@ function Nav({ navColor, buttonColor }) {
 
     setSearch(replacedSearch);
 
-    if (!trimmedSearch) return setCurrentSearch('');
-
-    const response = await getData(`/search/${encodeURI(replacedSearch)}`);
-    setFocusCategoryID(0);
-    setCurrentSearch('');
-    navigate('/');
-    if (response) {
-      return setMainPlaceData(response.data.data);
+    if (!trimmedSearch) {
+      alert('검색어를 입력해주세요');
+      return setCurrentSearch('');
     }
-    return alert('다시 검색해주세요');
+
+    const encoded = encodeURI(replacedSearch);
+
+    const url = `/search/${encoded}?size=20&page=`;
+
+    setUrl(() => url);
+    invalidate();
   };
 
   // eslint-disable-next-line consistent-return
@@ -52,32 +68,23 @@ function Nav({ navColor, buttonColor }) {
     const replacedSearch = trimmedSearch.replace(/ +(?= )/g, '');
 
     setSearch(replacedSearch);
-    if (!trimmedSearch) return setCurrentSearch('');
 
-    try {
-      const response = await axios.get(
-        `/search/${encodeURI(replacedSearch)}`,
-        header,
-      );
-
-      setMainPlaceData(response.data.data);
-      setFocusCategoryID(0);
-      setCurrentSearch('');
-      navigate('/');
-    } catch (error) {
-      console.log(error);
+    if (!trimmedSearch) {
+      alert('검색어를 입력해주세요');
+      return setCurrentSearch('');
     }
+
+    const encoded = encodeURI(replacedSearch);
+
+    const url = `/search/${encoded}?size=20&page=`;
+
+    setUrl(() => url);
+    invalidate();
   };
 
-  const onClickHomeIcon = async () => {
-    try {
-      const response = await axios.get('/home', header);
-      setMainPlaceData(response.data.data);
-      setFocusCategoryID(0);
-      setSearch('');
-    } catch (error) {
-      console.log(error);
-    }
+  const onClickHomeIcon = () => {
+    setUrl(() => `/home?size=20&page=`);
+    invalidate();
   };
 
   return (
