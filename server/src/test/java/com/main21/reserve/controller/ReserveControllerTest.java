@@ -2,16 +2,12 @@ package com.main21.reserve.controller;
 
 import com.google.gson.Gson;
 import com.main21.member.entity.Member;
-import com.main21.place.entity.Place;
-import com.main21.place.service.PlaceDbService;
-import com.main21.place.service.PlaceService;
 import com.main21.reserve.entity.Reserve;
 import com.main21.reserve.service.ReserveDbService;
 import com.main21.reserve.service.ReserveService;
 import com.main21.security.utils.JwtTokenUtils;
 import com.main21.security.utils.RedisUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
