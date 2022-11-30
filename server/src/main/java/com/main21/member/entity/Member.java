@@ -41,13 +41,15 @@ public class Member extends Auditable {
     private MemberImage memberImage;
 
     @Builder
-    public Member(String email,
+    public Member(Long id,
+                  String email,
                   String nickname,
                   String mbti,
                   String password,
                   AccountStatus accountStatus,
                   String phoneNumber,
                   List<String> roles) {
+        this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.mbti = mbti;
@@ -72,7 +74,6 @@ public class Member extends Auditable {
     public void setDetailsRoles(List<String> roles) {
         this.roles = roles;
     }
-
 
     public void editMember(String nickname,
                            String mbti) {

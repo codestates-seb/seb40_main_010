@@ -10,11 +10,18 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.multipart.MultipartFile;
+import static com.main21.utils.ApiDocumentUtils.getRequestPreProcessor;
+import static com.main21.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static com.main21.utils.AuthConstants.AUTHORIZATION;
 import static com.main21.utils.AuthConstants.REFRESH;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,7 +31,7 @@ public class UploadProfileImageTest extends MemberControllerTest {
     S3Upload s3Upload;
 
     @Test
-    @DisplayName("멤버 이미지 업로드 테스트")
+    @DisplayName("멤버 프로필 수정 테스트")
     public void createMemberImageS3Test() throws Exception {
 
         MockMultipartFile files =
@@ -50,7 +57,18 @@ public class UploadProfileImageTest extends MemberControllerTest {
                 .characterEncoding("UTF-8")
                 .with(csrf())
         );
+
         actions.andExpect(status().isOk())
-                .andReturn();
+                .andDo(document(
+                        "회원 프로필 이미지 수정",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("액세스 토큰"),
+                                headerWithName(REFRESH).description("리프레시 토큰")
+                        ),
+                        requestParts(
+                                partWithName("file").description("요청 프로필 이미지")
+                        )));
     }
 }

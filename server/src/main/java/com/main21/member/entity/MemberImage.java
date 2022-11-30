@@ -35,10 +35,12 @@ public class MemberImage {
 
 
     @Builder
-    public MemberImage(String originFileName,
+    public MemberImage(Long id,
+                       String originFileName,
                        String fileName,
                        String filePath,
                        Long fileSize) {
+        this.id = id;
         this.originFileName = originFileName;
         this.fileName = fileName;
         this.filePath = filePath;
