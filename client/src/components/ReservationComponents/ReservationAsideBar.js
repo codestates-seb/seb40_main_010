@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import ReservationCalendar from './ReservationCalendar';
 import ReservationCapacityHandler from './ReservationCapacityHandler';
 import ReservationBottomButtons from './ReservationBottomButtons';
-// import { onClickPaymentButton } from '../../utils/payment';
 import Modal from '../../utils/Modal';
 import useReservation from './useReservation';
 
@@ -19,7 +18,6 @@ function ReservationAsideBar({ charge, slots }) {
     handleSubmit,
     modalOpen,
     IsPayment,
-    // onClickPaymentButton,
     getReservationInformation,
   } = useReservation(charge);
 
@@ -29,7 +27,7 @@ function ReservationAsideBar({ charge, slots }) {
     totalCharges,
     chargeMultiplyTime,
   } = getReservationInformation();
-  console.log(slots);
+
   return (
     <form>
       <Container>

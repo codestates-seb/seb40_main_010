@@ -15,9 +15,7 @@ import ReservationAsideBar from '../components/ReservationComponents/Reservation
 import Nav from '../components/Navigation/Nav';
 import View from '../components/View';
 import ReviewContainer from '../components/ReviewComponents/ReviewContainer';
-// import getData from '../hooks/useAsyncGetData';
 
-// ToDo api 3개 불러오기
 function Detail() {
   const { id } = useParams();
   const resetPlaces = useResetRecoilState(mainDataState);
@@ -43,12 +41,10 @@ function Detail() {
           },
         });
         setDetailInformation({ ...response.data });
-        console.log(response.data.reserves);
         setIsBookmark(response.data.bookmark);
         setSlots(prev => [...prev, ...response.data.reserves]);
         setStartDate(false);
         setEndDate(false);
-        console.log(response.data);
       }
     } catch (error) {
       console.log(error);
@@ -71,7 +67,6 @@ function Detail() {
         </DetailViewContainer>
         <ReservationAsideBar
           charge={detailInformation.charge || '0'}
-          // slots={detailInformation.reserves}
           slots={slots}
         />
       </DetailContainer>
