@@ -88,12 +88,14 @@ public class Reserve {
     /************************** 주문 내역 정보 **************************/
 
     @Builder
-    public Reserve(int capacity,
-                   LocalDateTime startTime,
-                   LocalDateTime endTime,
-                   Long placeId,
-                   Long memberId,
-                   Long totalCharge) {
+    public Reserve(Long id,
+                int capacity,
+                LocalDateTime startTime,
+                LocalDateTime endTime,
+                Long placeId,
+                Long memberId,
+                Long totalCharge) {
+        this.id = id;
         this.capacity = capacity;
         this.startTime = startTime;
         this.endTime = endTime;

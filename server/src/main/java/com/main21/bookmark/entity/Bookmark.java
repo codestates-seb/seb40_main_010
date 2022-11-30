@@ -28,7 +28,8 @@ public class Bookmark extends Auditable {
     private Long placeId;
 
     @Builder
-    public Bookmark(Long memberId, Long placeId) {
+    public Bookmark(Long memberId, Long placeId, Long id) {
+        this.id = id;
         this.bookmarkUrl = "http://localhost:3000/place/" + placeId;
         this.memberId = memberId;
         this.placeId = placeId;
