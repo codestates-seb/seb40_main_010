@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 
 import { useForm } from 'react-hook-form';
 
@@ -9,31 +8,13 @@ import Nav from '../components/Navigation/Nav';
 import useLogin from '../hooks/useLogin';
 
 export default function LogIn() {
-  const navigator = useNavigate();
-
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm({ mode: 'onChange' });
 
-  const { errorMessage, errorStatus, getErrorType, setErrorException } =
-    useLogin();
-
-  const onSubmit = async data => {
-    try {
-      const response = await axios.post(`/auth/login`, data);
-      await localStorage.setItem('ACCESS', response.headers.authorization);
-      await localStorage.setItem('REFRESH', response.headers.refreshtoken);
-      navigator('/');
-    } catch (error) {
-      const validationType = getErrorType(error.response.data.status);
-
-      if (validationType !== 'regular')
-        return setErrorException(validationType);
-    }
-    return null;
-  };
+  const { errorMessage, errorStatus, onSubmit } = useLogin();
 
   return (
     <>

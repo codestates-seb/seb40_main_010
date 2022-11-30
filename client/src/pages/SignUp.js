@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 
 import Nav from '../components/Navigation/Nav';
 import mbtiList from '../utils/mbtiList';
+import useSignUp from '../hooks/useSignUp';
 
 function SignUp() {
-  const navigator = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
-
   const {
     register,
     handleSubmit,
@@ -20,24 +17,7 @@ function SignUp() {
     formState: { isSubmitting, errors },
   } = useForm({ mode: 'onChange' });
 
-  const getErrorType = message => {
-    if (message === '이미 존재하는 닉네임입니다.') {
-      return setErrorMessage('이미 존재하는 닉네임입니다.');
-    }
-    if (message === '이미 존재하는 이메일입니다.') {
-      return setErrorMessage('이미 존재하는 이메일입니다.');
-    }
-    return null;
-  };
-
-  const onSubmit = async data => {
-    try {
-      await axios.post(`/member/join`, data);
-      navigator('/log-in');
-    } catch (err) {
-      getErrorType(err.response.data.message);
-    }
-  };
+  const { errorMessage, onSubmit } = useSignUp();
 
   return (
     <div className="test">
