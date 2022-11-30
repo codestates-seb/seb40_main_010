@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import static com.main21.reserve.entity.Reserve.ReserveStatus.PAY_IN_PROGRESS;
+import static com.main21.reserve.entity.Reserve.ReserveStatus.PAY_SUCCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -36,20 +37,31 @@ public class ReviewService {
                              String refreshToken,
                              Long placeId,
                              Long reserveId) {
+
         Long memberId = redisUtils.getId(refreshToken);
+        Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
+
+//        if (findPlace.getMemberId().equals(memberId)) {
+//            throw new BusinessLogicException(ExceptionCode.HOST_CANNOT_REVIEW);
+//        }
+
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
 
         // 예약 상태가 결제 진행중이 아니라면 리뷰 달지 못함
         if (!findReserve.getStatus().equals(PAY_IN_PROGRESS)) {
             throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
         }
+
+//        if (!findReserve.getStatus().equals(PAY_SUCCESS)) {
+//            throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
+//        }
+
         Review review = Review.builder()
                 .score(post.getScore())
                 .comment(post.getComment())
                 .memberId(memberId)
                 .placeId(placeId).build();
         reviewDbService.saveReview(review);
-        Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
         modifyScore(findPlace, findPlace.getTotalScore() + review.getScore(), placeId);
     }
