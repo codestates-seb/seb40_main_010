@@ -68,6 +68,7 @@ class ReserveControllerTest {
         refreshToken = jwtTokenUtils.generateRefreshToken(member);
 
         reserve = Reserve.builder()
+                .id(1L)
                 .placeId(1L)
                 .memberId(1L)
                 .capacity(3)
