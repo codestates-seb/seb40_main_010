@@ -62,4 +62,16 @@ public class ReserveDbService {
     public List<Reserve> findAllByReserves(Long placeId) {
         return reserveRepository.findAllByPlaceIdAndStatus(placeId, Reserve.ReserveStatus.PAY_SUCCESS);
     }
+
+
+    /**
+     * 장소에 대한 예약 정보 전체 조회 메서드
+     *
+     * @param placeId 장소 식별자
+     * @return List(ReserveDto.Detail)
+     * @author mozzi327
+     */
+    public List<ReserveDto.Detail> findAllReserveForPlace(Long placeId) {
+        return reserveRepository.getDetailReservationTime(placeId);
+    }
 }

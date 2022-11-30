@@ -13,6 +13,7 @@ import com.main21.place.dto.*;
 import com.main21.place.entity.Place;
 import com.main21.place.entity.PlaceCategory;
 import com.main21.place.entity.PlaceImage;
+import com.main21.reserve.dto.ReserveDto;
 import com.main21.reserve.entity.Reserve;
 import com.main21.batch.service.MbtiCountService;
 import com.main21.reserve.service.ReserveDbService;
@@ -184,11 +185,12 @@ public class PlaceService {
         List<PlaceImageResponseDto> placeImageResponseDtoList = placeImageService.findAllByPlaceImagePath(placeId);
         List<String> categoryList = placeCategoryService.findByAllPlaceCategoryList(placeId);
         List<String> filePath = new ArrayList<>();
+        List<ReserveDto.Detail> reserves = reserveDbService.findAllReserveForPlace(placeId);
 
         for (PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
             filePath.add(placeImageResponseDto.getFilePath());
 
-        return new PlaceResponseDto(place, filePath, categoryList, findMember, isBookmark);
+        return new PlaceResponseDto(place, filePath, categoryList, findMember, isBookmark, reserves);
     }
 
     /**
