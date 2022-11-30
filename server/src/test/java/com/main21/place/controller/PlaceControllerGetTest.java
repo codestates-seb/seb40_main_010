@@ -4,6 +4,7 @@ import com.main21.place.dto.PlaceCategoryDto;
 import com.main21.place.dto.PlaceDto;
 import com.main21.place.dto.PlaceResponseDto;
 import com.main21.place.entity.PlaceImage;
+import com.main21.reserve.dto.ReserveDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +48,13 @@ public class PlaceControllerGetTest extends PlaceControllerTest{
         placeImages.add("파티룸");
         placeImages.add("또 뭐있더라");
 
+        List<ReserveDto.Detail> reserves = List.of(ReserveDto.Detail.builder()
+                        .startTime(LocalDateTime.now())
+                        .endTime(LocalDateTime.now())
+                .build());
+
         PlaceResponseDto responseDto =
-                new PlaceResponseDto(place, placeImages, categories, member, isBookmark);
+                new PlaceResponseDto(place, placeImages, categories, member, isBookmark, reserves);
 
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         given(placeService.searchPlace(Mockito.anyLong(), Mockito.anyString()))

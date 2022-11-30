@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+<<<<<<< Updated upstream:server/src/main/java/com/main21/member/controller/AuthController.java
+=======
+
+>>>>>>> Stashed changes:server/src/main/java/com/main21/member/memberController/AuthController.java
 import javax.servlet.http.HttpServletResponse;
 
 import static com.main21.security.utils.AuthConstants.*;
