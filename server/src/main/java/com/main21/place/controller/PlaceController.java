@@ -101,7 +101,7 @@ public class PlaceController {
     }
 
     /**
-     * 조회 테스트
+     * 공간 전체 조회 테스트
      * @param pageable
      * @return
      */
@@ -143,6 +143,21 @@ public class PlaceController {
 
         Page<PlaceCategoryDto.Response> pagePlace = placeDbService.getCategoryPage(categoryId, pageable);
         List<PlaceCategoryDto.Response> place = pagePlace.getContent();
+        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+    }
+
+    /**
+     * 카테고리별 공간 조회 테스트
+     * @param categoryId
+     * @param pageable
+     * @return
+     */
+    @GetMapping("category/{category-id}/test")
+    public ResponseEntity getCategoryPageTest(@PathVariable("category-id") Long categoryId,
+                                          Pageable pageable) {
+
+        Page<PlaceCategoryDto.ResponseTest> pagePlace = placeDbService.getCategoryPageTest(categoryId, pageable);
+        List<PlaceCategoryDto.ResponseTest> place = pagePlace.getContent();
         return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
     }
 

@@ -1,5 +1,16 @@
 == PlaceController
 === 장소 등록
+.curl-request
+include::{snippets}/장소 등록/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 등록/http-request.adoc[]
+
+.request-header
+include::{snippets}/장소 등록/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/장소 등록/request-fields.adoc[]
 
 === 장소 수정
 
