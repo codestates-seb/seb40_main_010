@@ -18,7 +18,6 @@ const useReservation = charge => {
   const [capacity, setCapacity] = useRecoilState(reservationMaxCapacity);
   const [modalOpen, setModalOpen] = useState(false);
   const [reserveId, setReserveId] = useState(null);
-  // const [returnInformation, setReturnInformation] = useState(null);
 
   const { id } = useParams();
 
@@ -57,9 +56,6 @@ const useReservation = charge => {
       const paymentUrl = response.data.data;
       onClickPaymentButton(paymentUrl);
       setModalOpen(false);
-
-      // const result = await axios.get(`/api/order/completed?pg_token=`, header);
-      // console.log(result);
     } catch (error) {
       console.log('Error', error);
     }
@@ -96,10 +92,36 @@ const useReservation = charge => {
       const response = await axios.post(
         `/place/${id}/reserve`,
         reservationInformation,
-        header,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
+        },
       );
-      console.log(response);
+
       setReserveId(response.data);
+
+      await axios.post(
+        `/reserve/${response.data}/mail`,
+        {},
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
+        },
+      );
       setStartDate(false);
       setEndDate(false);
     } catch (err) {

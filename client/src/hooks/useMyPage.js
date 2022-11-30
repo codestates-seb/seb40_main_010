@@ -269,7 +269,6 @@ const useMyPage = () => {
   };
 
   const onChangeNickName = event => {
-    // event.stopPropagation();
     setUserNickName(event.target.value);
   };
 

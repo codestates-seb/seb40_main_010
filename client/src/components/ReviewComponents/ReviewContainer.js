@@ -1,28 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-// import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
 import Review from './Review';
-// import { PlaceIDState } from '../atoms';
 
 function ReviewContainer() {
   const [reviews, setReviews] = useState([]);
-  // const placeId = useRecoilValue(PlaceIDState);
 
   const { id } = useParams();
-  const header = {
-    headers: {
-      'ngrok-skip-browser-warning': '010',
-      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-      RefreshToken: localStorage.getItem('REFRESH'),
-    },
-  };
 
   const callReviews = async () => {
     try {
-      const response = await axios.get(`/review/${id}`, header);
+      const response = await axios.get(`/review/${id}`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+        },
+      });
       setReviews([...response.data.data]);
+
+      console.log(response.data);
     } catch (err) {
       console.log(err);
       setReviews([]);
@@ -31,7 +27,6 @@ function ReviewContainer() {
 
   useEffect(() => {
     callReviews();
-    // setReviews([...temp]);
   }, []);
 
   return (

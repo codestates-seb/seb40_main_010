@@ -4,15 +4,12 @@ import { BsFillPersonFill } from 'react-icons/bs';
 import styled from 'styled-components';
 import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
-// import deleteData from '../../hooks/useAsyncDeleteData';
 import { mbtiPlaceDataState, HasRefresh } from '../../atoms';
 
 export function NavLeftButtonContainer({ buttonColor }) {
   const logInUrl = useMatch('/log-in');
   const registerUrl = useMatch('/register');
   const isLogIn = useRecoilValue(HasRefresh);
-
-  // const isLogIn = localStorage.getItem('ACCESS');
 
   if (registerUrl || logInUrl) return null;
 
@@ -36,8 +33,6 @@ export function NavRightButtonContainer() {
 
   const resetMbti = useSetRecoilState(mbtiPlaceDataState);
   const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
-
-  // const isLogIn = localStorage.getItem('ACCESS');
 
   const onClickLogOutButton = async () => {
     await axios.delete('/auth/logout', {
