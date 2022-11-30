@@ -3,7 +3,9 @@ package com.main21.member.auth.controller;
 
 import com.google.gson.Gson;
 import com.main21.member.controller.AuthController;
+import com.main21.member.dto.AuthDto;
 import com.main21.member.service.AuthService;
+import com.main21.member.service.MemberDbService;
 import com.main21.security.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -33,4 +35,8 @@ public class AuthControllerTest {
     @MockBean
     protected RedisUtils redisUtils;
 
+    @MockBean
+    protected MemberDbService memberDbService;
+
+    AuthDto.Login login;
 }
