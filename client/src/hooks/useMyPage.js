@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
 import {
   handleImageCompress,
   handleGetPreviewImagesUrl,
 } from '../utils/images';
+import { wholeData } from '../atoms';
+// import header from '../utils/header';
 
 const useMyPage = () => {
   const [myPageCategory, setMyPageCategory] = useState('등록내역');
   const [memberData, setMemberData] = useState([]);
-  const [listData, setListData] = useState([]);
+  const [listData, setListData] = useRecoilState(wholeData);
   const [userNickName, setUserNickName] = useState('');
   const [userMBTI, setUserMBTI] = useState('');
   const [editStatus, setEditStatus] = useState(false);
@@ -69,13 +72,13 @@ const useMyPage = () => {
     return null;
   };
 
-  const header = {
-    headers: {
-      'ngrok-skip-browser-warning': '010',
-      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-      RefreshToken: localStorage.getItem('REFRESH'),
-    },
-  };
+  // const header = {
+  //   headers: {
+  //     'ngrok-skip-browser-warning': '010',
+  //     Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+  //     RefreshToken: localStorage.getItem('REFRESH'),
+  //   },
+  // };
 
   const clearCategory = () => {
     setListData([]);
@@ -98,7 +101,17 @@ const useMyPage = () => {
   const callRegistrationList = async () => {
     try {
       clearCategory();
-      const response = await axios.get(`/place`, header);
+      const response = await axios.get(`/place`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       console.log('place', response.data.data);
       setListData([...response.data.data]);
     } catch (err) {
@@ -110,7 +123,17 @@ const useMyPage = () => {
   const reservationList = async () => {
     try {
       clearCategory();
-      const response = await axios.get(`/reserve`, header);
+      const response = await axios.get(`/reserve`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       console.log('reserve', response.data.data);
       setListData([...response.data.data]);
     } catch (err) {
@@ -122,9 +145,20 @@ const useMyPage = () => {
   const bookmarkList = async () => {
     try {
       clearCategory();
-      const response = await axios.get(`/bookmark`, header);
+      const response = await axios.get(`/bookmark`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       console.log('bookmark', response.data.data);
-      setListData([...response.data.data]);
+
+      setListData(() => [...response.data.data]);
     } catch (err) {
       clearCategory();
       console.log(err);
@@ -134,7 +168,17 @@ const useMyPage = () => {
   const reviewList = async () => {
     try {
       clearCategory();
-      const response = await axios.get(`/review`, header);
+      const response = await axios.get(`/review`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       console.log('review', response.data.data);
       setListData([...response.data.data]);
     } catch (err) {
@@ -145,7 +189,17 @@ const useMyPage = () => {
 
   const callUserData = async () => {
     try {
-      const response = await axios.get('/member', header);
+      const response = await axios.get('/member', {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       setMemberData(response.data);
       setUserNickName(response.data.nickname);
       setUserMBTI(response.data.mbti);
@@ -228,7 +282,17 @@ const useMyPage = () => {
           nickname: userNickName,
           mbti: userMBTI,
         },
-        header,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
+        },
       );
       callUserData();
       editStatusChange();
@@ -268,6 +332,7 @@ const useMyPage = () => {
     nickNameCheck,
     nickNameValidationMessage,
     checkNickNameValidation,
+    bookmarkList,
   };
 };
 

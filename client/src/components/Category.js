@@ -56,6 +56,7 @@ export default Category;
 const CategoryContainer = styled.div`
   margin-top: 100px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 `;

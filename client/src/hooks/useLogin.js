@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useSetRecoilState } from 'recoil';
+import { HasRefresh } from '../atoms';
 
 const useLogin = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
+  const setIsLogIn = useSetRecoilState(HasRefresh);
 
   const getErrorType = status => {
     if (status === 403) {
@@ -35,7 +38,9 @@ const useLogin = () => {
       await localStorage.setItem('ACCESS', response.headers.authorization);
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
 
-      window.location.replace('/');
+      setIsLogIn(true);
+
+      navigator('/');
     } catch (error) {
       const validationType = getErrorType(error.response.data.status);
 

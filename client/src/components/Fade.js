@@ -12,15 +12,15 @@ import { carouselSettings } from '../utils/carouselSetting';
 function Fade() {
   const detailInformation = useRecoilValue(DetailInformation);
 
-  const { filePath } = detailInformation;
+  const { filePath: images } = detailInformation;
 
   const settings = carouselSettings;
 
   return (
     <div>
       <StyledSlide {...settings}>
-        {filePath &&
-          filePath.map(el => {
+        {images &&
+          images.map(el => {
             return (
               <SlickImageContainer key={el}>
                 <SlickImage src={el} />
