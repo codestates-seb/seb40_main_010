@@ -2,6 +2,7 @@ package com.main21.place.repository;
 
 import com.main21.place.dto.PlaceCategoryDto;
 import com.main21.place.dto.PlaceDto;
+import com.main21.place.entity.Place;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -20,4 +21,6 @@ public interface CustomPlaceRepository {
     Page<PlaceCategoryDto.Response> searchCategoryTitle(Long categoryId, List<String> titles, Pageable pageable);
 
     Page<PlaceDto.Response> getPlaceMypage(Long memberId, Pageable pageable);
+
+    List<Place> getCategoryPageTest(Long categoryId);
 }

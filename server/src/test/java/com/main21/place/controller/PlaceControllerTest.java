@@ -77,13 +77,13 @@ class PlaceControllerTest {
                 .endTime(23)
                 .build();
 
-
+        place.setId(1L);
     }
 
     protected List<FieldDescriptor> placePageResponse() {
         return List.of(
                 fieldWithPath("data").type(JsonFieldType.ARRAY).description("장소 데이터"),
-                fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자").ignored(),
+                fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자"),
                 fieldWithPath("data[].image").type(JsonFieldType.STRING).description("이미지"),
                 fieldWithPath("data[].title").type(JsonFieldType.STRING).description("장소 이름"),
                 fieldWithPath("data[].score").type(JsonFieldType.NUMBER).description("장소 평점"),
@@ -103,7 +103,7 @@ class PlaceControllerTest {
         return List.of(
                 fieldWithPath("data").type(JsonFieldType.ARRAY).description("장소 데이터"),
                 fieldWithPath("data[].categoryId").type(JsonFieldType.NUMBER).description("카테고리 식별자").ignored(),
-                fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자").ignored(),
+                fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자"),
                 fieldWithPath("data[].image").type(JsonFieldType.STRING).description("이미지"),
                 fieldWithPath("data[].title").type(JsonFieldType.STRING).description("장소 이름"),
                 fieldWithPath("data[].score").type(JsonFieldType.NUMBER).description("장소 평점"),
@@ -119,19 +119,22 @@ class PlaceControllerTest {
     }
     protected List<FieldDescriptor> placeDefaultResponse() {
         return List.of(
-                fieldWithPath("placeId").type(JsonFieldType.NUMBER).description("장소 식별자").ignored(),
+                fieldWithPath("placeId").type(JsonFieldType.NUMBER).description("장소 식별자"),
                 fieldWithPath("title").type(JsonFieldType.STRING).description("장소 이름"),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("장소 주소"),
                 fieldWithPath("detailInfo").type(JsonFieldType.STRING).description("장소 상세 정보"),
                 fieldWithPath("endTime").type(JsonFieldType.NUMBER).description("장소 영업 종료 시간"),
 
+                fieldWithPath("reserves").type(JsonFieldType.ARRAY).description("예약 완료 시간 정보"),
+                fieldWithPath("reserves[].startTime").type(JsonFieldType.STRING).description("예약 시작 시간"),
+                fieldWithPath("reserves[].endTime").type(JsonFieldType.STRING).description("예약 종료 시간"),
+
                 fieldWithPath("category").type(JsonFieldType.ARRAY).description("장소 카테고리 리스트"),
+                fieldWithPath("filePath").type(JsonFieldType.ARRAY).description("장소 이미지 리스트"),
 
                 fieldWithPath("maxCapacity").type(JsonFieldType.NUMBER).description("장소 최대 수용인원"),
                 fieldWithPath("score").type(JsonFieldType.NUMBER).description("장소 평점"),
                 fieldWithPath("charge").type(JsonFieldType.NUMBER).description("장소 시간당 가격"),
-
-                fieldWithPath("filePath").type(JsonFieldType.ARRAY).description("장소 이미지 리스트"),
 
                 fieldWithPath("nickname").type(JsonFieldType.STRING).description("장소 작성자 닉네임"),
                 fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("장소 작성자 전화번호"),

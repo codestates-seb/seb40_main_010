@@ -5,6 +5,7 @@ import com.main21.place.dto.PlaceDto;
 import com.main21.place.dto.PlaceResponseDto;
 import com.main21.place.entity.PlaceImage;
 import com.main21.reserve.dto.ReserveDto;
+import com.main21.reserve.entity.Reserve;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -29,7 +30,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PlaceControllerGetTest extends PlaceControllerTest{
+public class PlaceGetTest extends PlaceControllerTest{
 
     @Test
     @DisplayName("GET 장소 상세 조회")
@@ -48,9 +49,14 @@ public class PlaceControllerGetTest extends PlaceControllerTest{
         placeImages.add("파티룸");
         placeImages.add("또 뭐있더라");
 
+        Reserve reserve = Reserve.builder()
+                .startTime(LocalDateTime.of(2022, 11, 30, 03, 00))
+                .endTime(LocalDateTime.of(2022, 11, 30, 04, 00))
+                .build();
+
         List<ReserveDto.Detail> reserves = List.of(ReserveDto.Detail.builder()
-                        .startTime(LocalDateTime.now())
-                        .endTime(LocalDateTime.now())
+                        .startTime(reserve.getStartTime())
+                        .endTime(reserve.getEndTime())
                 .build());
 
         PlaceResponseDto responseDto =
@@ -122,7 +128,6 @@ public class PlaceControllerGetTest extends PlaceControllerTest{
     void getCategoryPage() throws Exception{
 
         Long categoryId = 1L;
-        String title = "짱짱";
 
         PlaceImage placeImage = PlaceImage.builder().filePath("image.jpg").build();
         place.addPlaceImage(placeImage);
@@ -130,12 +135,12 @@ public class PlaceControllerGetTest extends PlaceControllerTest{
         List<PlaceCategoryDto.Response> placeList = new ArrayList<>();
         placeList.add(new PlaceCategoryDto.Response(place, categoryId));
 
-        given(placeDbService.searchTitleCategory(Mockito.anyLong(), Mockito.anyString(), Mockito.any(Pageable.class)))
+        given(placeDbService.getCategoryPage(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(placeList));
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/category/{category-id}/search/{title:.+}", categoryId, title)
+                        get("/category/{category-id}", categoryId)
                 );
 
         actions
@@ -145,8 +150,7 @@ public class PlaceControllerGetTest extends PlaceControllerTest{
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
                         pathParameters(
-                                parameterWithName("category-id").description("카테고리 식별자"),
-                                parameterWithName("title").description("검색 키워드")
+                                parameterWithName("category-id").description("카테고리 식별자")
                         ),
                         responseFields(
                                 placeCategoryPageResponse()

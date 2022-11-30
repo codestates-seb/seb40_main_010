@@ -95,7 +95,7 @@ public class PlaceDbService {
     }
 
     /**
-     * 조회 테스트
+     * 공간 전체 조회 테스트
      * @param pageable
      * @return
      */
@@ -141,6 +141,32 @@ public class PlaceDbService {
      */
     public Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable) {
         return placeRepository.getCategoryPage(categoryId, pageable);
+    }
+
+    /**
+     * 카테고리별 공간 조회 테스트
+     * @param categoryId
+     * @param pageable
+     * @return
+     */
+    public Page<PlaceCategoryDto.ResponseTest> getCategoryPageTest(Long categoryId, Pageable pageable) {
+        List<Place> placeList = placeRepository.getCategoryPageTest(categoryId);
+        List<PlaceCategoryDto.ResponseTest> responseTestList = new ArrayList<>();
+        placeList.forEach(
+                place -> {
+                    PlaceCategoryDto.ResponseTest responseTest = PlaceCategoryDto.ResponseTest.builder()
+                            .categoryId(categoryId)
+                            .place(place)
+                            .placeImage(placeImageRepository.findFirstByPlaceId(place.getId()))
+                            .build();
+                    responseTestList.add(responseTest);
+                }
+        );
+        final int start = (int)pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), responseTestList.size());
+        final Page<PlaceCategoryDto.ResponseTest> responseTestPage = new PageImpl<>(responseTestList.subList(start, end), pageable, responseTestList.size());
+
+        return responseTestPage;
     }
 
     /**

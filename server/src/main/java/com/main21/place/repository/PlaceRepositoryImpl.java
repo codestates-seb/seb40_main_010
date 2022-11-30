@@ -4,6 +4,7 @@ import com.main21.place.dto.PlaceCategoryDto;
 import com.main21.place.dto.PlaceDto;
 import com.main21.place.dto.QPlaceCategoryDto_Response;
 import com.main21.place.dto.QPlaceDto_Response;
+import com.main21.place.entity.Place;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.*;
@@ -109,9 +110,24 @@ public class PlaceRepositoryImpl implements CustomPlaceRepository{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
         long total = results.size();
         return new PageImpl<>(results, pageable, total);
+    }
+
+    /**
+     * 테스트
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Place> getCategoryPageTest(Long categoryId) {
+        List<Place> results = queryFactory
+                .selectFrom(place)
+                .leftJoin(placeCategory).on(place.id.eq(placeCategory.place.id))
+                .where(placeCategory.category.id.eq(categoryId))
+                .orderBy(place.id.desc())
+                .fetch();
+        return results;
     }
 
     /**

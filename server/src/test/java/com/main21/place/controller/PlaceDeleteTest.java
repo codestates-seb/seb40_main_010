@@ -17,7 +17,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PlaceControllerDeleteTest extends PlaceControllerTest{
+public class PlaceDeleteTest extends PlaceControllerTest{
 
     @Test
     @DisplayName("DELETE 장소 삭제")

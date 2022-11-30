@@ -31,7 +31,7 @@ public class ReserveController {
      *
      * @param placeId      장소 식별자
      * @param post         예약 등록 정보
-     * @param refreshToken
+     * @param refreshToken 리프레시 토큰
      * @return ResonseEntity
      * @author LeeGoh
      */
@@ -48,7 +48,7 @@ public class ReserveController {
      * 예약 프로세스 2 - 사용자 결제 화면 전송 컨트롤러 메서드
      *
      * @param reserveId    예약 식별자
-     * @param refreshToken
+     * @param refreshToken 리프레시 토큰
      * @param req          요청
      * @return Message
      * @author mozzi327
@@ -143,6 +143,42 @@ public class ReserveController {
     }
 
 
+    /* ------------------------------------ 결제 외 메서드 -------------------------------------*/
+
+
+    /**
+     * 사용자 예약 내역 조회 컨트롤러 메서드
+     *
+     * @param refreshToken 리프레시 토큰
+     * @return ResponseEntity
+     * @author LeeGoh
+     */
+    @GetMapping("/reserve")
+    public ResponseEntity getReservations(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
+                                          Pageable pageable) {
+        Page<ReserveDto.Response> pageReservations = reserveService.getReservation(refreshToken, pageable);
+        List<ReserveDto.Response> reservations = pageReservations.getContent();
+        return new ResponseEntity(new MultiResponseDto<>(reservations, pageReservations), HttpStatus.OK);
+    }
+
+
+    /**
+     * 예약 내역 삭제 컨트롤러 메서드<br>
+     * 예약 내역 상태 변경 및 예약 취소 사유 저장
+     *
+     * @param reserveId    예약 식별자
+     * @param refreshToken 리프레시 토큰
+     * @return ResponseEntity
+     * @author LeeGoh
+     */
+    @DeleteMapping("/reserve/{reserve-id}")
+    public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId,
+                                        @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
+        reserveService.deleteReserve(reserveId, refreshToken);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
     /* ------------------------------------ 일단 예외 -------------------------------------*/
 
 
@@ -163,36 +199,4 @@ public class ReserveController {
         return ResponseEntity.ok().build();
     }
 
-
-    /**
-     * 사용자 예약 내역 조회 컨트롤러 메서드
-     *
-     * @param refreshToken
-     * @return ResponseEntity
-     * @author LeeGoh
-     */
-    @GetMapping("/reserve")
-    public ResponseEntity getReservations(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
-                                          Pageable pageable) {
-        Page<ReserveDto.Response> pageReservations = reserveService.getReservation(refreshToken, pageable);
-        List<ReserveDto.Response> reservations = pageReservations.getContent();
-        return new ResponseEntity(new MultiResponseDto<>(reservations, pageReservations), HttpStatus.OK);
-    }
-
-
-    /**
-     * 예약 내역 삭제 컨트롤러 메서드
-     * 예약 내역 상태 변경 및 예약 취소 사유 저장
-     *
-     * @param reserveId    예약 식별자
-     * @param refreshToken
-     * @return ResponseEntity
-     * @author LeeGoh
-     */
-    @DeleteMapping("/reserve/{reserve-id}")
-    public ResponseEntity deleteReserve(@PathVariable("reserve-id") Long reserveId,
-                                        @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
-        reserveService.deleteReserve(reserveId, refreshToken);
-        return new ResponseEntity(HttpStatus.OK);
-    }
 }

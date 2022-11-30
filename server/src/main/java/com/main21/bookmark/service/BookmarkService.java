@@ -3,6 +3,10 @@ package com.main21.bookmark.service;
 import com.main21.bookmark.dto.BookmarkDto;
 import com.main21.bookmark.entity.Bookmark;
 import com.main21.bookmark.repository.BookmarkRepository;
+import com.main21.exception.BusinessLogicException;
+import com.main21.exception.ExceptionCode;
+import com.main21.place.entity.Place;
+import com.main21.place.service.PlaceDbService;
 import com.main21.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +22,7 @@ import java.util.Optional;
 public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
+    private final PlaceDbService placeDbService;
     private final RedisUtils redisUtils;
 
     /**
@@ -43,6 +48,12 @@ public class BookmarkService {
      */
     public boolean createBookmark(Long placeId, String refreshToken) {
         Long memberId = redisUtils.getId(refreshToken);
+        Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
+
+//        if (findPlace.getMemberId().equals(memberId)) {
+//            throw new BusinessLogicException(ExceptionCode.HOST_CANNOT_BOOKMARK);
+//        }
+
         Optional<Bookmark> findBookmark = bookmarkRepository
                 .findBookmarkByMemberIdAndPlaceId(memberId, placeId);
 
