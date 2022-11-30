@@ -1,6 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const useLogin = () => {
+  const navigator = useNavigate();
+
   const [errorMessage, setErrorMessage] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
 
@@ -28,7 +32,27 @@ const useLogin = () => {
     return null;
   };
 
-  return { getErrorType, setErrorException, errorMessage, errorStatus };
+  const onSubmit = async data => {
+    try {
+      const response = await axios.post(`/auth/login`, data);
+      await localStorage.setItem('ACCESS', response.headers.authorization);
+      await localStorage.setItem('REFRESH', response.headers.refreshtoken);
+      navigator('/');
+    } catch (error) {
+      const validationType = getErrorType(error.response.data.status);
+
+      if (validationType !== 'regular')
+        return setErrorException(validationType);
+    }
+    return null;
+  };
+  return {
+    getErrorType,
+    setErrorException,
+    errorMessage,
+    errorStatus,
+    onSubmit,
+  };
 };
 
 export default useLogin;
