@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
-import {
-  reservationStartDateChangedState,
-  reservationSlots,
-} from '../../atoms';
+import { reservationStartDateChangedState } from '../../atoms';
 
 dayjs.extend(isBetween);
 
-const useCalendar = ({ startDate, setStartDate, setEndDate }) => {
+const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
   const [isStartDateSelected, setIsStartDateSelected] = useRecoilState(
     reservationStartDateChangedState,
   );
@@ -18,7 +15,7 @@ const useCalendar = ({ startDate, setStartDate, setEndDate }) => {
     useState('dayNull');
   const [endCalendarSelectedDay, setEndCalendarSelectedDay] =
     useState('dayNull');
-  const slots = useRecoilValue(reservationSlots);
+  // const slots = useRecoilValue(reservationSlots);
 
   const maxEndDate = new Date(startDate).setHours(23);
 

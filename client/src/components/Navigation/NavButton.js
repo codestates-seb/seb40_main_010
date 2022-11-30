@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { BsFillPersonFill } from 'react-icons/bs';
 import styled from 'styled-components';
-import { useResetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
 // import deleteData from '../../hooks/useAsyncDeleteData';
 import { mbtiPlaceDataState, HasRefresh } from '../../atoms';
@@ -34,7 +34,7 @@ export function NavRightButtonContainer() {
   const signUpUrl = useMatch('/sign-up');
   const myPageUrl = useMatch('/my-page');
 
-  const resetMbti = useResetRecoilState(mbtiPlaceDataState);
+  const resetMbti = useSetRecoilState(mbtiPlaceDataState);
   const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
 
   // const isLogIn = localStorage.getItem('ACCESS');
@@ -54,8 +54,8 @@ export function NavRightButtonContainer() {
     await localStorage.removeItem('ACCESS');
     await localStorage.removeItem('REFRESH');
 
-    setIsLogIn(false);
-    resetMbti();
+    await setIsLogIn(false);
+    resetMbti([]);
   };
 
   if (signUpUrl) return null;

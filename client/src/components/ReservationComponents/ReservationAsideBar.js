@@ -29,7 +29,7 @@ function ReservationAsideBar({ charge, slots }) {
     totalCharges,
     chargeMultiplyTime,
   } = getReservationInformation();
-
+  console.log(slots);
   return (
     <form>
       <Container>

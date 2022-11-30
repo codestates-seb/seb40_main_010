@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import { HasRefresh } from '../atoms';
 
 const useLogin = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
   const setIsLogIn = useSetRecoilState(HasRefresh);
+
+  const navigator = useNavigate();
 
   const getErrorType = status => {
     if (status === 403) {
