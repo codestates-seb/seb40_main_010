@@ -9,7 +9,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import useCalendar from './useCalendar';
 
-function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
+function ReservationCalendar({
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+  slots,
+}) {
   const {
     isStartDateSelected,
     handleStartDate,
@@ -17,7 +23,7 @@ function ReservationCalendar({ startDate, setStartDate, endDate, setEndDate }) {
     handleEndDate,
     maxEndDate,
     handleDisabledEndTime,
-  } = useCalendar({ startDate, setStartDate, endDate, setEndDate });
+  } = useCalendar({ startDate, setStartDate, endDate, setEndDate, slots });
 
   return (
     <Container>

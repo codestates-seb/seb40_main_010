@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { reservationStartDateChangedState } from '../../atoms';
+import {
+  reservationStartDateChangedState,
+  reservationSlots,
+} from '../../atoms';
 
 dayjs.extend(isBetween);
 
@@ -15,6 +18,7 @@ const useCalendar = ({ startDate, setStartDate, setEndDate }) => {
     useState('dayNull');
   const [endCalendarSelectedDay, setEndCalendarSelectedDay] =
     useState('dayNull');
+  const slots = useRecoilValue(reservationSlots);
 
   const maxEndDate = new Date(startDate).setHours(23);
 
@@ -78,17 +82,10 @@ const useCalendar = ({ startDate, setStartDate, setEndDate }) => {
     }
   };
 
-  const slots = [
-    {
-      start: '2022-11-29T09:00:00.000Z',
-      end: '2022-11-29T11:00:00.000Z',
-    },
-  ];
-
   const getTimes = (slot, time) => {
     const targetTime = dayjs(time);
-    const slotStartTime = dayjs(slot.start);
-    const slotEndTime = dayjs(slot.end);
+    const slotStartTime = dayjs(slot.startTime);
+    const slotEndTime = dayjs(slot.endTime);
     const reservationStartTime = dayjs(startDate);
     return { targetTime, slotStartTime, slotEndTime, reservationStartTime };
   };
@@ -98,6 +95,7 @@ const useCalendar = ({ startDate, setStartDate, setEndDate }) => {
     const selectedTime = new Date(time);
     const isPastTime = currentTime.getTime() > selectedTime.getTime();
 
+    if (slots.length === 0) slots.push({});
     if (isPastTime) return null;
     for (let i = 0; i < slots.length; i += 1) {
       const slot = slots[i];

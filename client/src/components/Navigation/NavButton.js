@@ -34,10 +34,10 @@ export function NavRightButtonContainer() {
   const isLogIn = localStorage.getItem('ACCESS');
 
   const onClickLogOutButton = async () => {
+    await deleteData('/auth/logout');
+
     localStorage.removeItem('ACCESS');
     localStorage.removeItem('REFRESH');
-
-    await deleteData('/auth/logout');
   };
 
   if (signUpUrl) return null;

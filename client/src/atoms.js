@@ -124,3 +124,8 @@ export const NextPage = atom({
   key: 'NextPage',
   default: true,
 });
+
+export const reservationSlots = atom({
+  key: 'reservationSlots',
+  default: [{}],
+});
