@@ -1,7 +1,240 @@
+== PlaceController
+=== 장소 등록
+
+=== 장소 수정
+
+=== 장소 상세 조회
+.curl-request
+include::{snippets}/장소 상세 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 상세 조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/장소 상세 조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/장소 상세 조회/http-response.adoc[]
+
+.response-fields
+include::{snippets}/장소 상세 조회/response-fields.adoc[]
+
+
+=== 장소 전체 조회
+.curl-request
+include::{snippets}/장소 전체 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 전체 조회/http-request.adoc[]
+
+.http-response
+include::{snippets}/장소 전체 조회/http-response.adoc[]
+
+.response-fields
+include::{snippets}/장소 상세 조회/response-fields.adoc[]
+
+
+=== 장소 카테고리 조회
+.curl-request
+include::{snippets}/장소 카테고리 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 카테고리 조회/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/장소 카테고리 조회/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/장소 카테고리 조회/http-response.adoc[]
+
+.response-fields
+include::{snippets}/장소 카테고리 조회/response-fields.adoc[]
+
+
+=== 장소 상세 검색
+.curl-request
+include::{snippets}/장소 상세 검색/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 상세 검색/http-request.adoc[]
+
+.request-fields
+include::{snippets}/장소 상세 검색/request-fields.adoc[]
+
+.http-response
+include::{snippets}/장소 상세 검색/http-response.adoc[]
+
+.response-fields
+include::{snippets}/장소 상세 검색/response-fields.adoc[]
+
+
+=== 장소 전체 타이틀 검색
+.curl-request
+include::{snippets}/장소 전체 타이틀 검색/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 전체 타이틀 검색/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/장소 전체 타이틀 검색/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/장소 전체 타이틀 검색/http-response.adoc[]
+
+.response-fields
+include::{snippets}/장소 전체 타이틀 검색/response-fields.adoc[]
+
+
+=== 장소 카테고리 타이틀 검색
+.curl-request
+include::{snippets}/장소 카테고리 타이틀 검색/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 카테고리 타이틀 검색/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/장소 카테고리 타이틀 검색/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/장소 카테고리 타이틀 검색/http-response.adoc[]
+
+.response-fields
+include::{snippets}/장소 카테고리 타이틀 검색/response-fields.adoc[]
+
+
+=== 장소 삭제
+.curl-request
+include::{snippets}/장소 삭제/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 삭제/http-request.adoc[]
+
+.request-header
+include::{snippets}/장소 상세 조회/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/장소 삭제/path-parameters.adoc[]
+
+
+== MemberController
+=== 사용자 등록
+
+
+== ReserveController
+=== 예약 등록
+
+
 == ReviewController
 === 리뷰 등록
 .curl-request
 include::{snippets}/리뷰 추가/curl-request.adoc[]
 
 .http-request
-include::{snippets}/리뷰 추가/httpie-request.adoc[]
+include::{snippets}/리뷰 추가/http-request.adoc[]
+
+.request-fields
+include::{snippets}/리뷰 추가/request-fields.adoc[]
+
+.path-parameters
+include::{snippets}/리뷰 추가/path-parameters.adoc[]
+
+
+=== 리뷰 수정
+.curl-request
+include::{snippets}/리뷰 수정/curl-request.adoc[]
+
+.http-request
+include::{snippets}/리뷰 수정/http-request.adoc[]
+
+.request-fields
+include::{snippets}/리뷰 수정/request-fields.adoc[]
+
+// .request-header
+// include::{snippets}/리뷰 수정/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/리뷰 수정/path-parameters.adoc[]
+
+
+=== 리뷰 삭제
+.curl-request
+include::{snippets}/리뷰 삭제/curl-request.adoc[]
+
+.http-request
+include::{snippets}/리뷰 삭제/http-request.adoc[]
+
+// .request-header
+// include::{snippets}/리뷰 삭제/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/리뷰 삭제/path-parameters.adoc[]
+
+
+=== 장소 상세페이지 리뷰 조회
+.curl-request
+include::{snippets}/장소 상세페이지 리뷰 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 상세페이지 리뷰 조회/http-request.adoc[]
+
+// .path-parameters
+// include::{snippets}/장소 상세페이지 리뷰 조회/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/장소 상세페이지 리뷰 조회/http-response.adoc[]
+
+.response-fields
+include::{snippets}/장소 상세페이지 리뷰 조회/response-fields.adoc[]
+
+
+
+== BookmarkController
+=== 북마크 전체 조회
+.curl-request
+include::{snippets}/북마크 전체 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/북마크 전체 조회/http-request.adoc[]
+
+.request-header
+include::{snippets}/북마크 전체 조회/request-headers.adoc[]
+
+.http-response
+include::{snippets}/북마크 전체 조회/http-response.adoc[]
+
+.response-fields
+include::{snippets}/북마크 전체 조회/response-fields.adoc[]
+
+
+=== 북마크 추가
+.curl-request
+include::{snippets}/북마크 추가/curl-request.adoc[]
+
+.http-request
+include::{snippets}/북마크 추가/http-request.adoc[]
+
+.request-header
+include::{snippets}/북마크 추가/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/북마크 추가/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/북마크 추가/http-response.adoc[]
+
+
+=== 북마크 삭제
+.curl-request
+include::{snippets}/북마크 삭제/curl-request.adoc[]
+
+.http-request
+include::{snippets}/북마크 삭제/http-request.adoc[]
+
+.request-header
+include::{snippets}/북마크 삭제/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/북마크 삭제/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/북마크 삭제/http-response.adoc[]

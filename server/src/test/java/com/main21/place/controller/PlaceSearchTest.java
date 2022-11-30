@@ -17,20 +17,18 @@ import java.util.List;
 
 import static com.main21.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.main21.utils.ApiDocumentUtils.getResponsePreProcessor;
-import static com.main21.utils.AuthConstants.AUTHORIZATION;
-import static com.main21.utils.AuthConstants.REFRESH;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PlaceControllerSearchTest extends PlaceControllerTest{
+public class PlaceSearchTest extends PlaceControllerTest{
 
     @Test
     @DisplayName("POST 장소 상세 검색")
@@ -107,6 +105,9 @@ public class PlaceControllerSearchTest extends PlaceControllerTest{
                         "장소 전체 타이틀 검색",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("title").description("검색 키워드")
+                        ),
                         responseFields(
                                 placePageResponse()
                         )
@@ -116,7 +117,9 @@ public class PlaceControllerSearchTest extends PlaceControllerTest{
     @Test
     @DisplayName("GET 장소 카테고리 검색 조회")
     void searchTitleCategory() throws Exception{
+
         Long categoryId = 1L;
+        String title = "짱짱";
 
         PlaceImage placeImage = PlaceImage.builder().filePath("image.jpg").build();
         place.addPlaceImage(placeImage);
@@ -124,12 +127,12 @@ public class PlaceControllerSearchTest extends PlaceControllerTest{
         List<PlaceCategoryDto.Response> placeList = new ArrayList<>();
         placeList.add(new PlaceCategoryDto.Response(place, categoryId));
 
-        given(placeDbService.getCategoryPage(Mockito.anyLong(), Mockito.any(Pageable.class)))
+        given(placeDbService.searchTitleCategory(Mockito.anyLong(), Mockito.anyString(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(placeList));
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/category/{category-id}", categoryId)
+                        get("/category/{category-id}/search/{title:.+}", categoryId, title)
                 );
 
         actions
@@ -138,6 +141,10 @@ public class PlaceControllerSearchTest extends PlaceControllerTest{
                         "장소 카테고리 타이틀 검색",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("category-id").description("카테고리 식별자"),
+                                parameterWithName("title").description("검색 키워드")
+                        ),
                         responseFields(
                                 placeCategoryPageResponse()
                         )
