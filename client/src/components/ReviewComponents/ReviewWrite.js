@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 import axios from 'axios';
+import useMyPage from '../../hooks/useMyPage';
 
 function ReviewWrite({
   reviewModalOpen,
@@ -16,13 +17,14 @@ function ReviewWrite({
 }) {
   const [reviewStar, setReviewStar] = useState(null);
   const [reviewText, setReviewText] = useState('');
+  const { reviewList } = useMyPage();
 
-  const header = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-      RefreshToken: localStorage.getItem('REFRESH'),
-    },
-  };
+  // const header = {
+  //   headers: {
+  //     Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+  //     RefreshToken: localStorage.getItem('REFRESH'),
+  //   },
+  // };
 
   const showReviewModal = () => {
     setReviewModalOpen(!reviewModalOpen);
@@ -39,7 +41,17 @@ function ReviewWrite({
       comment: reviewText,
     };
     try {
-      await axios.post(`/review/${placeId}/reserve/${reserveId}`, data, header);
+      await axios.post(`/review/${placeId}/reserve/${reserveId}`, data, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       showReviewModal();
     } catch (err) {
       console.log(err);
@@ -52,8 +64,19 @@ function ReviewWrite({
       comment: reviewText,
     };
     try {
-      await axios.patch(`/review/${reviewId}/edit`, data, header);
+      await axios.patch(`/review/${reviewId}/edit`, data, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       showReviewModal();
+      await reviewList();
     } catch (err) {
       console.log(err);
     }
