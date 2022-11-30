@@ -77,7 +77,7 @@ export default function Places() {
       <Category page={page} />
       <DisplayComponentDiv>
         <MbtiPlaces />
-        <PlacesTitle>대여가 대여</PlacesTitle>
+        {/* <PlacesTitle>가장 최근에 올라온 장소</PlacesTitle> */}
         <MainComponentContainer>
           <Distructure>
             {mainPlaceData &&
@@ -119,6 +119,8 @@ const MainContainer = styled.div`
   display: block;
 `;
 
-const PlacesTitle = styled.div`
-  font-size: 1.6rem;
-`;
+// const PlacesTitle = styled.div`
+//   font-size: 1rem;
+//   margin-left: 3rem;
+//   border: 1px solid red;
+// `;

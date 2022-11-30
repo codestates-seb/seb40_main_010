@@ -15,7 +15,6 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
     useState('dayNull');
   const [endCalendarSelectedDay, setEndCalendarSelectedDay] =
     useState('dayNull');
-  // const slots = useRecoilValue(reservationSlots);
 
   const maxEndDate = new Date(startDate).setHours(23);
 

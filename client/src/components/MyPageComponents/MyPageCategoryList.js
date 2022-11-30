@@ -10,8 +10,6 @@ import Modal from '../../utils/Modal';
 import ReviewWrite from '../ReviewComponents/ReviewWrite';
 import { reservationEditData } from '../../atoms';
 import useMyPage from '../../hooks/useMyPage';
-// import header from '../../utils/header';
-import { onClickPaymentButton } from '../../utils/payment';
 
 const chargeComponent = (listData, type) => {
   if (type === 'reviews') {
@@ -34,42 +32,12 @@ const chargeComponent = (listData, type) => {
 
 function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [payModalOpen, setPayModalOpen] = useState(false);
+
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const setEditData = useSetRecoilState(reservationEditData);
   const { bookmarkList, reviewList, reservationList } = useMyPage();
 
   const navigate = useNavigate();
-
-  const onClickPaymentKaKaoButton = async () => {
-    const { reserveId } = listData;
-    const response = await axios.get(`/place/reserve/${reserveId}/payment`, {
-      headers: {
-        'ngrok-skip-browser-warning': '010',
-        Authorization: (await localStorage.getItem('ACCESS'))
-          ? `Bearer ${localStorage.getItem('ACCESS')}`
-          : '',
-        RefreshToken: (await localStorage.getItem('REFRESH'))
-          ? localStorage.getItem('REFRESH')
-          : '',
-      },
-    });
-    const paymentUrl = response.data.data;
-    onClickPaymentButton(paymentUrl);
-    setModalOpen(false);
-  };
-
-  const IsPayment = {
-    modalText: '결제하시겠습니까?',
-    modalActionText: '결제하기',
-    modalAction: onClickPaymentKaKaoButton,
-    modalOpen: payModalOpen,
-    setModalOpen: setPayModalOpen,
-  };
-
-  const onClickPayment = () => {
-    setPayModalOpen(true);
-  };
 
   const showModal = () => {
     setModalOpen(!modalOpen);
@@ -232,12 +200,6 @@ function MyPageCategoryList({ listData, type }) {
                     modalAction={reservationCancel}
                   />
                 )}
-                {handleDate(today) < handleDate(listData.startTime) && (
-                  <CategoryButton onClick={onClickPayment}>
-                    결제하기
-                  </CategoryButton>
-                )}
-                {payModalOpen && <Modal {...IsPayment} />}
               </>
             )}
             {type === 'bookmark' && (
