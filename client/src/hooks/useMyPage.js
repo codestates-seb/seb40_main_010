@@ -333,6 +333,8 @@ const useMyPage = () => {
     nickNameValidationMessage,
     checkNickNameValidation,
     bookmarkList,
+    reviewList,
+    reservationList,
   };
 };
 

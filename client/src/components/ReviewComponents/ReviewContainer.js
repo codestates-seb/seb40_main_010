@@ -56,8 +56,8 @@ const ReviewsContainer = styled.div`
   align-items: flex-start;
   background-color: #ffffff;
   flex-direction: column;
-  width: 1070px;
-  padding-left: 35px;
+  width: 67rem;
+  padding-left: 2rem;
   margin-bottom: 3rem;
 `;
 
@@ -71,12 +71,12 @@ const ReviewHeadContainer = styled.div`
 `;
 
 const ReviewCount = styled.p`
-  font-size: 24px;
+  font-size: 1.5rem;
 `;
 
 const ReviewFilter = styled.div`
   cursor: pointer;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: bold;
   margin-right: 1rem;
 `;

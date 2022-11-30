@@ -8,10 +8,6 @@ function Modal({
   modalOpen,
   setModalOpen,
 }) {
-  // 각 페이지에서 모달창에 필요한 텍스트를 props로 전달
-
-  // 각 페이지에서 모달창에서 필요한 기능을 props로 전달
-
   const showModal = () => {
     setModalOpen(!modalOpen);
   };
@@ -56,11 +52,11 @@ const ModalContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
-  width: 430px;
-  height: 240px;
+  width: 25rem;
+  height: 15rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
   background-color: #ffffff;
 
   z-index: 999;
@@ -75,7 +71,7 @@ const ModalText = styled.div`
   justify-content: center;
   align-items: center;
   color: #1b1c1e;
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: bold;
 `;
 
@@ -90,11 +86,11 @@ const ModalButton = styled.button`
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: #e0e0e0;
   color: #303030;
-  width: 140px;
-  height: 45px;
+  width: 8.75rem;
+  height: 3rem;
   border: none;
-  font-size: 25px;
-  border-radius: 30px;
+  font-size: 1.5rem;
+  border-radius: 2rem;
   font-weight: bold;
   &.cancel {
     background-color: #eb7470;

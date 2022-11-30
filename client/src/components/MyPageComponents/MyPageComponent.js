@@ -184,6 +184,10 @@ const MyPageComponentContainer = styled.div`
   margin: 0 auto;
   margin-top: 100px;
   margin-bottom: 100px;
+
+  @media (max-width: 840px) {
+    width: 480px;
+  }
 `;
 
 const MyProfileImage = styled.img`
@@ -281,6 +285,10 @@ const MyPageCategoryItemTitle = styled.div`
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 12px;
+
+  @media (max-width: 840px) {
+    width: 400px;
+  }
 `;
 
 const MyPageCategoryItemList = styled.div`
@@ -288,8 +296,12 @@ const MyPageCategoryItemList = styled.div`
   align-items: center;
   flex-direction: column;
   width: 750px;
-  height: 400px;
+  height: 25rem;
   overflow: auto;
+
+  @media (max-width: 840px) {
+    width: 323px;
+  }
 
   ::-webkit-scrollbar {
     width: 0px;

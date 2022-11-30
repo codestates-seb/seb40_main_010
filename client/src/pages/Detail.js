@@ -48,6 +48,7 @@ function Detail() {
         setSlots(prev => [...prev, ...response.data.reserves]);
         setStartDate(false);
         setEndDate(false);
+        console.log(response.data);
       }
     } catch (error) {
       console.log(error);

@@ -5,6 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import { ImStarFull } from 'react-icons/im';
 import { BsFillBookmarkFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 import Modal from '../../utils/Modal';
 import ReviewWrite from '../ReviewComponents/ReviewWrite';
 import { reservationEditData } from '../../atoms';
@@ -36,7 +37,7 @@ function MyPageCategoryList({ listData, type }) {
   const [payModalOpen, setPayModalOpen] = useState(false);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const setEditData = useSetRecoilState(reservationEditData);
-  const { bookmarkList } = useMyPage();
+  const { bookmarkList, reviewList, reservationList } = useMyPage();
 
   const navigate = useNavigate();
 
@@ -81,32 +82,18 @@ function MyPageCategoryList({ listData, type }) {
   const handleDate = createdAt => {
     if (createdAt === undefined) return null;
 
-    // TODO : dayjs로 바꿔보기
-    let date = new Date(createdAt);
-    const month = date.getMonth() + 1;
-    const utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
-    const KR_TIME_DIFF = 9 * 60 * 60 * 1000 * 2; // 한국 시간(KST)은 UTC시간보다 9시간 더 빠르므로 9시간을 밀리초 단위로 변환.
-    const krCurr = utc + KR_TIME_DIFF;
-
-    date = new Date(krCurr).toString();
-
-    const splitDate = date.split(' ');
-    const day = splitDate[2];
-    const year = splitDate[3].slice(2);
-    let time = splitDate[4].slice(0, 2);
-
-    if (time > 12) {
-      time -= 12;
-      return `${year}.${month}.${day} ${time}PM`;
+    const date = dayjs(createdAt).subtract(2000, 'y').add(9, 'hour');
+    if (date.$H > 12) {
+      date.$H -= 12;
+      return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}PM`;
     }
-    return `${year}.${month}.${day} ${time}AM`;
+    return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}AM`;
   };
 
   const reviewDelete = async () => {
     try {
       await axios.delete(`/review/${listData.reviewId}`, {
         headers: {
-          'ngrok-skip-browser-warning': '010',
           Authorization: (await localStorage.getItem('ACCESS'))
             ? `Bearer ${localStorage.getItem('ACCESS')}`
             : '',
@@ -116,6 +103,7 @@ function MyPageCategoryList({ listData, type }) {
         },
       });
       showModal();
+      await reviewList();
     } catch (err) {
       showModal();
     }
@@ -134,9 +122,6 @@ function MyPageCategoryList({ listData, type }) {
             : '',
         },
       });
-      // 삭제 완료시 새로고침이나 상태 즉시 변경
-      console.log('삭제 성공');
-
       await bookmarkList();
     } catch (err) {
       console.log(err);
@@ -167,12 +152,8 @@ function MyPageCategoryList({ listData, type }) {
     }
   };
 
-  const moveDetailPage = async () => {
-    try {
-      navigate(`/detail/${listData.placeId}`);
-    } catch (err) {
-      console.log(err);
-    }
+  const moveDetailPage = () => {
+    navigate(`/detail/${listData.placeId}`);
   };
 
   const reservationCancel = async () => {
@@ -189,6 +170,7 @@ function MyPageCategoryList({ listData, type }) {
         },
       });
       showModal();
+      await reservationList();
     } catch (err) {
       console.log(err);
     }
@@ -221,64 +203,66 @@ function MyPageCategoryList({ listData, type }) {
           )}
         </CategoryBodyContainer>
         <CategoryActionContainer>
-          {type === 'registration' && (
-            <CategoryButton
-              onClick={e => {
-                e.stopPropagation();
-                registerEditDataSend(listData.id);
-              }}
-            >
-              수정하기
-            </CategoryButton>
-          )}
-          {type === 'reservation' && (
-            <>
-              {handleDate(today) < handleDate(listData.startTime) ? (
-                <CategoryButton onClick={showModal}>취소하기</CategoryButton>
-              ) : (
-                <CategoryButton onClick={showReviewModal}>
-                  리뷰쓰기
-                </CategoryButton>
-              )}
-              {modalOpen && (
-                <Modal
-                  modalOpen={modalOpen}
-                  setModalOpen={setModalOpen}
-                  modalText="예악을 취소하시겠습니까?"
-                  modalActionText="취소하기"
-                  modalAction={reservationCancel}
-                />
-              )}
-              {handleDate(today) < handleDate(listData.startTime) && (
-                <CategoryButton onClick={onClickPayment}>
-                  결제하기
-                </CategoryButton>
-              )}
-              {payModalOpen && <Modal {...IsPayment} />}
-            </>
-          )}
-          {type === 'bookmark' && (
-            <CategoryButton onClick={bookMarkStatusChange}>
-              <BsFillBookmarkFill size={24} />
-            </CategoryButton>
-          )}
-          {type === 'reviews' && (
-            <>
-              <CategoryButton onClick={showReviewModal}>
+          <ButtonContainer>
+            {type === 'registration' && (
+              <CategoryButton
+                onClick={e => {
+                  e.stopPropagation();
+                  registerEditDataSend(listData.id);
+                }}
+              >
                 수정하기
               </CategoryButton>
-              <CategoryButton onClick={showModal}>삭제하기</CategoryButton>
-              {modalOpen && (
-                <Modal
-                  modalOpen={modalOpen}
-                  setModalOpen={setModalOpen}
-                  modalText="리뷰를 삭제하시겠습니까?"
-                  modalActionText="삭제하기"
-                  modalAction={reviewDelete}
-                />
-              )}
-            </>
-          )}
+            )}
+            {type === 'reservation' && (
+              <>
+                {handleDate(today) < handleDate(listData.startTime) ? (
+                  <CategoryButton onClick={showModal}>취소하기</CategoryButton>
+                ) : (
+                  <CategoryButton onClick={showReviewModal}>
+                    리뷰쓰기
+                  </CategoryButton>
+                )}
+                {modalOpen && (
+                  <Modal
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    modalText="예악을 취소하시겠습니까?"
+                    modalActionText="취소하기"
+                    modalAction={reservationCancel}
+                  />
+                )}
+                {handleDate(today) < handleDate(listData.startTime) && (
+                  <CategoryButton onClick={onClickPayment}>
+                    결제하기
+                  </CategoryButton>
+                )}
+                {payModalOpen && <Modal {...IsPayment} />}
+              </>
+            )}
+            {type === 'bookmark' && (
+              <CategoryButton onClick={bookMarkStatusChange}>
+                <BsFillBookmarkFill size={24} />
+              </CategoryButton>
+            )}
+            {type === 'reviews' && (
+              <>
+                <CategoryButton onClick={showReviewModal}>
+                  수정하기
+                </CategoryButton>
+                <CategoryButton onClick={showModal}>삭제하기</CategoryButton>
+                {modalOpen && (
+                  <Modal
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    modalText="리뷰를 삭제하시겠습니까?"
+                    modalActionText="삭제하기"
+                    modalAction={reviewDelete}
+                  />
+                )}
+              </>
+            )}
+          </ButtonContainer>
           {chargeComponent(listData, type)}
         </CategoryActionContainer>
       </CategoryContainer>
@@ -303,16 +287,23 @@ function MyPageCategoryList({ listData, type }) {
 
 const CategoryItemList = styled.div`
   box-sizing: border-box;
-  padding: 24px 20px 24px 40px;
-  width: 680px;
-  height: 165px;
+  padding: 1.5rem 1.25rem 1.5rem 2.5rem;
+  width: 42.5rem;
+  height: 10rem;
   background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border-radius: 15px;
-  margin: 18px 0px;
+  border-radius: 1rem;
+  margin: 1rem 0px;
+  border: 1px solid green;
+
+  @media (max-width: 840px) {
+    width: 20rem;
+    height: 8rem;
+    padding: 1rem 0.75rem 1rem 1rem;
+  }
 `;
 
 const CategoryContainer = styled.div`
@@ -342,16 +333,24 @@ const PlaceBodyContainer = styled.div`
 `;
 
 const PlaceTitle = styled.p`
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 6px;
   color: #1b1c1e;
   cursor: pointer;
+
+  @media (max-width: 840px) {
+    font-size: 1rem;
+  }
 `;
 
 const PlaceAddress = styled.span`
   font-size: 15px;
   color: #2b2b2b;
+
+  @media (max-width: 840px) {
+    font-size: 14px;
+  }
 `;
 
 const RatingStarContainer = styled.div`
@@ -372,9 +371,23 @@ const CategoryActionContainer = styled.div`
   width: 100%;
 `;
 
+const ButtonContainer = styled.div`
+  width: 11rem;
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: 840px) {
+    width: 8rem;
+  }
+`;
+
 const CategoryButton = styled.div`
   font-size: 18px;
   color: #eb7470;
+
+  @media (max-width: 840px) {
+    font-size: 14px;
+  }
 
   :hover {
     cursor: pointer;
@@ -387,20 +400,33 @@ const CategoryButton = styled.div`
 `;
 
 const ReservationDate = styled.div`
-  margin-top: 8px;
+  margin-top: 0.5rem;
   color: #9a9a9a;
+
+  @media (max-width: 840px) {
+    font-size: 13px;
+  }
 `;
 
 const PlaceCharge = styled.span`
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
   color: #eb7470;
+
+  @media (max-width: 840px) {
+    font-size: 14px;
+  }
 `;
 
 const PlaceImage = styled.img`
-  width: 128px;
-  height: 128px;
-  border-radius: 15px;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 1rem;
+
+  @media (max-width: 840px) {
+    width: 5rem;
+    height: 5rem;
+  }
 `;
 
 export default MyPageCategoryList;

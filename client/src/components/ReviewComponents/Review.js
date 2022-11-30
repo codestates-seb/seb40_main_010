@@ -58,9 +58,9 @@ const ReviewContent = styled.div`
 `;
 
 const UserImage = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 30px;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 2rem;
   margin-right: 1rem;
 `;
 
@@ -71,7 +71,7 @@ const ReviewBodyContainer = styled.div`
 const ReviewInfoContainer = styled.div`
   width: 100%;
   display: flex;
-  padding-right: 16px;
+  padding-right: 1rem;
   box-sizing: border-box;
 `;
 
