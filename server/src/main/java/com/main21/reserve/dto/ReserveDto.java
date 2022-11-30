@@ -13,6 +13,7 @@ public class ReserveDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class Post {
         @NotBlank
         private int capacity;
@@ -24,6 +25,7 @@ public class ReserveDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class Patch {
         @NotBlank
         private int capacity;
