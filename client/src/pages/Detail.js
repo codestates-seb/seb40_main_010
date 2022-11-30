@@ -9,6 +9,7 @@ import {
   mainDataState,
   reservationStartDate,
   reservationEndDate,
+  reservationSlots,
 } from '../atoms';
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Navigation/Nav';
@@ -25,13 +26,16 @@ function Detail() {
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
   const setStartDate = useSetRecoilState(reservationStartDate);
   const setEndDate = useSetRecoilState(reservationEndDate);
+  const setSlots = useSetRecoilState(reservationSlots);
 
   const getDetailData = async () => {
     try {
       if (id) {
         const response = await getData(`/place/${id}`);
+        console.log(response);
         setDetailInformation({ ...response.data });
         setIsBookmark(response.data.bookmark);
+        setSlots(prev => [...prev, ...response.data.reserves]);
         setStartDate(false);
         setEndDate(false);
       }
@@ -54,7 +58,10 @@ function Detail() {
             detailInformation={detailInformation.title && detailInformation}
           />
         </DetailViewContainer>
-        <ReservationAsideBar charge={detailInformation.charge || '0'} />
+        <ReservationAsideBar
+          charge={detailInformation.charge || '0'}
+          slots={detailInformation.reserves}
+        />
       </DetailContainer>
       <ReviewContainer />
     </DetailReviewContainer>

@@ -58,8 +58,8 @@ const useReservation = charge => {
       onClickPaymentButton(paymentUrl);
       setModalOpen(false);
 
-      const result = await axios.get(`/api/order/completed?pg_token=`, header);
-      console.log(result);
+      // const result = await axios.get(`/api/order/completed?pg_token=`, header);
+      // console.log(result);
     } catch (error) {
       console.log('Error', error);
     }

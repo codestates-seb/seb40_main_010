@@ -8,7 +8,7 @@ import ReservationBottomButtons from './ReservationBottomButtons';
 import Modal from '../../utils/Modal';
 import useReservation from './useReservation';
 
-function ReservationAsideBar({ charge }) {
+function ReservationAsideBar({ charge, slots }) {
   const {
     startDate,
     setStartDate,
@@ -44,6 +44,7 @@ function ReservationAsideBar({ charge }) {
             setStartDate={setStartDate}
             endDate={endDate}
             setEndDate={setEndDate}
+            slots={slots}
           />
         </OuterWrapper>
         <OuterWrapper>
