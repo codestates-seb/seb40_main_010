@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
@@ -10,7 +10,6 @@ import {
   mainDataState,
   reservationStartDate,
   reservationEndDate,
-  reservationSlots,
 } from '../atoms';
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Navigation/Nav';
@@ -27,7 +26,7 @@ function Detail() {
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
   const setStartDate = useSetRecoilState(reservationStartDate);
   const setEndDate = useSetRecoilState(reservationEndDate);
-  const setSlots = useSetRecoilState(reservationSlots);
+  const [slots, setSlots] = useState([{}]);
 
   const getDetailData = async () => {
     try {
@@ -44,7 +43,7 @@ function Detail() {
           },
         });
         setDetailInformation({ ...response.data });
-        console.log(response.data);
+        console.log(response.data.reserves);
         setIsBookmark(response.data.bookmark);
         setSlots(prev => [...prev, ...response.data.reserves]);
         setStartDate(false);
@@ -71,7 +70,8 @@ function Detail() {
         </DetailViewContainer>
         <ReservationAsideBar
           charge={detailInformation.charge || '0'}
-          slots={detailInformation.reserves}
+          // slots={detailInformation.reserves}
+          slots={slots}
         />
       </DetailContainer>
       <ReviewContainer />

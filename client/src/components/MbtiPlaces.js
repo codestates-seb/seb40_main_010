@@ -4,12 +4,13 @@ import { useRecoilState } from 'recoil';
 import axios from 'axios';
 
 import Place from './Place';
-import { mbtiPlaceDataState } from '../atoms';
+import { HasRefresh, mbtiPlaceDataState } from '../atoms';
 // import header from '../utils/header';
 // import getData from '../hooks/useAsyncGetData';
 
 function MbtiPlaces() {
   const [mbtiPlaceData, setMbtiPlaceData] = useRecoilState(mbtiPlaceDataState);
+  const [isLogIn] = useRecoilState(HasRefresh);
 
   // const header = {
   //   headers: {
@@ -51,7 +52,7 @@ function MbtiPlaces() {
     // setTimeout(() => {
     setMbtiPlaces();
     // }, 2000);
-  }, []);
+  }, [isLogIn]);
 
   return (
     <MbtiContentsContainer>
