@@ -25,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.servlet.server.Jsp;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -34,6 +35,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static com.main21.place.entity.QPlaceImage.placeImage;
 import static com.main21.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.main21.utils.ApiDocumentUtils.getResponsePreProcessor;
@@ -44,6 +48,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -128,6 +133,12 @@ class ReviewControllerTest {
         actions
                 .andExpect(status().isCreated())
                 .andDo(document("리뷰 추가",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH).description("리프레시 토큰")
+                        ),
                         pathParameters(
                                 parameterWithName("place-id").description("장소 식별자"),
                                 parameterWithName("reserve-id").description("예약 식별자")
@@ -177,6 +188,12 @@ class ReviewControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andDo(document("리뷰 수정",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH).description("리프레시 토큰")
+                        ),
                         pathParameters(
                                 parameterWithName("review-id").description("리뷰 식별자")
                         ),
@@ -212,6 +229,11 @@ class ReviewControllerTest {
                 );
         actions.andExpect(status().isNoContent())
                 .andDo(document("리뷰 삭제",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH).description("리프레시 토큰")),
                         pathParameters(
                                 parameterWithName("review-id").description("리뷰 식별자"))
                 ));
@@ -257,22 +279,99 @@ class ReviewControllerTest {
                                 .queryParam("page", String.valueOf(page))
                                 .queryParam("size", String.valueOf(size))
                 );
-
         actions
                 .andExpect(status().isOk())
-                .andDo(document(
-                        "장소 상세페이지 리뷰 조회",
+                .andDo(document("장소 상세페이지 리뷰 조회",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("place-id").description("장소 식별자")
+                        ),
                         responseFields(
                                 List.of(
-                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("리뷰 데이터"),
+                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("상세 정보 리뷰 데이터"),
                                         fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자").ignored(),
 //                                      fieldWithPath("data[].profileImage").type(JsonFieldType.ARRAY).description("프로필 이미지"),
                                         fieldWithPath("data[].nickname").type(JsonFieldType.STRING).description("닉네임"),
                                         fieldWithPath("data[].score").type(JsonFieldType.NUMBER).description("별점"),
                                         fieldWithPath("data[].comment").type(JsonFieldType.STRING).description("댓글"),
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("생성일").ignored(),
+
+                                        fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
+                                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),
+                                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("사이즈"),
+                                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 갯수"),
+                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("마이페이지 리뷰 조회")
+    void getMypageReview() throws Exception {
+        Long placeId = 1L;
+        int page = 1;
+        int size = 5;
+
+        Member member = Member.builder()
+                .nickname("홍길동")
+                .email("hgd@gmail.com")
+                .roles(List.of("USER"))
+                .build();
+
+        Place place = Place.builder()
+                .title("잠깐 화장실로 쓰실분 구해요.")
+                .address("경기도 하노이시")
+                .charge(200000)
+                .detailInfo("화장실로 잠시 쓰실분은 연락 주세요.")
+                .endTime(22)
+                .build();
+
+        Review review = Review.builder()
+                .score(5.0)
+                .comment("화장실이 너무 급해서 잠깐 이용했는데 만족했어요.")
+                .build();
+
+        PlaceImage placeImage = PlaceImage.builder().filePath("image.jpg").build();
+        place.addPlaceImage(placeImage);
+
+        List<ReviewDto.MyPage> myPages = new ArrayList<>();
+        myPages.add(new ReviewDto.MyPage(review, place));
+        String accessToken = jwtTokenUtils.generateAccessToken(member);
+        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
+
+        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
+        given(reviewService.getReviewsMypage(Mockito.anyString(), Mockito.any(Pageable.class))).willReturn(new PageImpl<>(myPages));
+
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/review")
+                                .header(AUTHORIZATION, "Bearer " + accessToken)
+                                .header(REFRESH, refreshToken)
+                                .queryParam("page", String.valueOf(page))
+                                .queryParam("size", String.valueOf(size))
+                );
+
+        actions
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "마이페이지 리뷰 조회",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description("엑세스 토큰"),
+                                headerWithName(REFRESH).description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                List.of(fieldWithPath("data").type(JsonFieldType.ARRAY).description("마이페이지 리뷰 데이터"),
+                                        fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자").ignored(),
+                                        fieldWithPath("data[].title").type(JsonFieldType.STRING).description("제목"),
+                                        fieldWithPath("data[].score").type(JsonFieldType.NUMBER).description("별점"),
+                                        fieldWithPath("data[].comment").type(JsonFieldType.STRING).description("댓글"),
+                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("생성일").ignored(),
+                                        fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자").ignored(),
+                                        fieldWithPath("data[].filePath").type(JsonFieldType.STRING).description("대표 이미지"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),
