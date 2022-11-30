@@ -35,7 +35,7 @@ public class BookmarkGetTest extends BookmarkControllerTest{
     void getBookmark() throws Exception{
 
 
-        Bookmark bookmark = Bookmark.builder().placeId(1L).memberId(1L).build();
+        Bookmark bookmark = Bookmark.builder().id(1L).placeId(1L).memberId(1L).build();
 
         Place place = Place.builder()
                 .title("짱짱 좋은 캠핑장")
@@ -75,7 +75,7 @@ public class BookmarkGetTest extends BookmarkControllerTest{
                         responseFields(
                                 List.of(
                                         fieldWithPath("data").type(JsonFieldType.ARRAY).description("북마크 데이터"),
-                                        fieldWithPath("data[].bookmarkId").type(JsonFieldType.NUMBER).description("북마크 식별자").ignored(),
+                                        fieldWithPath("data[].bookmarkId").type(JsonFieldType.NUMBER).description("북마크 식별자"),
                                         fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자"),
                                         fieldWithPath("data[].image").type(JsonFieldType.STRING).description("이미지"),
                                         fieldWithPath("data[].bookmarkUrl").type(JsonFieldType.STRING).description("북마크 URL"),
