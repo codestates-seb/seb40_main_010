@@ -28,7 +28,12 @@ public class Review extends Auditable {
     private Long placeId;
 
     @Builder
-    public Review(Double score, String comment, Long memberId, Long placeId) {
+    public Review(Long id,
+                  Double score,
+                  String comment,
+                  Long memberId,
+                  Long placeId) {
+        this.id = id;
         this.score = score;
         this.comment = comment;
         this.memberId = memberId;

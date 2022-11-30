@@ -26,9 +26,11 @@ public class MbtiCount {
     private Integer totalCount;
 
     @Builder
-    public MbtiCount(String mbti,
+    public MbtiCount(Long id,
+                     String mbti,
                      Long placeId,
                      Integer totalCount) {
+        this.id = id;
         this.mbti = mbti;
         this.placeId = placeId;
         this.totalCount = totalCount;

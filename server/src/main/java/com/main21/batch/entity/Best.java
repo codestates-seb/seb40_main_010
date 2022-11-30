@@ -26,7 +26,11 @@ public class Best {
     private Integer totalCount;
 
     @Builder
-    public Best(String mbti, Long placeId, Integer totalCount) {
+    public Best(Long id,
+                String mbti,
+                Long placeId,
+                Integer totalCount) {
+        this.id = id;
         this.mbti = mbti;
         this.placeId = placeId;
         this.totalCount = totalCount;
