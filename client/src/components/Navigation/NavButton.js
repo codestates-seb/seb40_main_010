@@ -89,7 +89,8 @@ const NavLeftButton = styled.button`
   padding: 8px;
   border-radius: 20px;
   border: none;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
+  box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
   background-color: ${props => props.buttonColor || '#ffda77'};
   font-size: 0.8rem;
   font-weight: 600;
@@ -100,6 +101,9 @@ const NavLeftButton = styled.button`
     background-color: #fff9eb;
     transition: 0.7s;
     cursor: pointer;
+  }
+  &:focus {
+    box-shadow: none;
   }
 `;
 
