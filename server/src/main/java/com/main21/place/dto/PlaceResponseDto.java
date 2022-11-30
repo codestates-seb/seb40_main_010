@@ -2,8 +2,6 @@ package com.main21.place.dto;
 
 import com.main21.member.entity.Member;
 import com.main21.place.entity.Place;
-import com.main21.reserve.dto.ReserveDto;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
@@ -23,14 +21,9 @@ public class PlaceResponseDto {
     private String nickname;
     private String phoneNumber;
     private boolean isBookmark;
-    private List<ReserveDto.Detail> reserves;
 
-    public PlaceResponseDto(Place place,
-                            List<String> filePath,
-                            List<String> category,
-                            Member member,
-                            boolean isBookmark,
-                            List<ReserveDto.Detail> reserves) {
+
+    public PlaceResponseDto(Place place, List<String> filePath, List<String> category, Member member, boolean isBookmark) {
         this.placeId = place.getId();
         this.title = place.getTitle();
         this.category = category;
@@ -44,6 +37,5 @@ public class PlaceResponseDto {
         this.nickname = member.getNickname();
         this.phoneNumber = member.getPhoneNumber();
         this.isBookmark = isBookmark;
-        this.reserves = reserves;
     }
 }

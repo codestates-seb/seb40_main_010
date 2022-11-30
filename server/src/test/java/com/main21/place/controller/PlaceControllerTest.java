@@ -52,7 +52,9 @@ class PlaceControllerTest {
 
     protected Place place;
     protected Member member;
+
     protected String accessToken;
+
     protected String refreshToken;
 
     @BeforeEach

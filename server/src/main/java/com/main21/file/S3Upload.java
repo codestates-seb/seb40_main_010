@@ -44,8 +44,6 @@ public class S3Upload {
             return fileList;
         }
 
-
-
         multipartFiles.forEach(file -> {
             String fileName = createFileName(file.getOriginalFilename());
             ObjectMetadata objectMetadata = new ObjectMetadata();

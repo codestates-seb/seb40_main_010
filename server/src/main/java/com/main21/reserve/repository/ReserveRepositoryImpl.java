@@ -1,9 +1,7 @@
 package com.main21.reserve.repository;
 
-import com.main21.reserve.dto.QReserveDto_Detail;
 import com.main21.reserve.dto.QReserveDto_Response;
 import com.main21.reserve.dto.ReserveDto;
-import com.main21.reserve.entity.Reserve;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,7 +14,7 @@ import static com.main21.place.entity.QPlace.place;
 import static com.main21.reserve.entity.QReserve.reserve;
 import static com.main21.reserve.entity.Reserve.ReserveStatus.RESERVATION_CANCELED;
 
-public class ReserveRepositoryImpl implements CustomReserveRepository {
+public class ReserveRepositoryImpl implements CustomReserveRepository{
 
     private final JPAQueryFactory queryFactory;
 
@@ -26,7 +24,6 @@ public class ReserveRepositoryImpl implements CustomReserveRepository {
 
     /**
      * 마이페이지 예약 내역 조회 Query
-     *
      * @param memberId
      * @return
      * @author LeeGoh
@@ -49,24 +46,5 @@ public class ReserveRepositoryImpl implements CustomReserveRepository {
 
         long total = results.size();
         return new PageImpl<>(results, pageable, total);
-    }
-
-    /**
-     * 상세페이지 예약된 시간 조회 메서드
-     *
-     * @param placeId 장소 식별자
-     * @return List(ResponseDto.Detail)
-     * @author mozzi327
-     */
-    public List<ReserveDto.Detail> getDetailReservationTime(Long placeId) {
-        return queryFactory
-                .select(new QReserveDto_Detail(
-                        reserve.startTime,
-                        reserve.endTime
-                ))
-                .from(reserve)
-                .where(reserve.placeId.eq(placeId),
-                        reserve.status.eq(Reserve.ReserveStatus.PAY_SUCCESS))
-                .fetch();
     }
 }

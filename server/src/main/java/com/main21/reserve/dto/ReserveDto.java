@@ -69,18 +69,4 @@ public class ReserveDto {
             return (int)(this.reserveId-o.reserveId);
         }
     }
-
-
-    @Getter
-    public static class Detail {
-        private final LocalDateTime startTime;
-        private final LocalDateTime endTime;
-
-        @Builder
-        @QueryProjection
-        public Detail(LocalDateTime startTime, LocalDateTime endTime) {
-            this.startTime = startTime;
-            this.endTime = endTime;
-        }
-    }
 }
