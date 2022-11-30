@@ -1,4 +1,7 @@
 import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
+
+const { persistAtom } = recoilPersist();
 
 export const registerFormTitle = atom({
   key: 'registerFormTitle',
@@ -128,4 +131,15 @@ export const NextPage = atom({
 export const reservationSlots = atom({
   key: 'reservationSlots',
   default: [{}],
+});
+
+export const HasRefresh = atom({
+  key: 'HasRefresh',
+  default: false,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const wholeData = atom({
+  key: 'wholeData',
+  default: [],
 });

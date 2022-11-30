@@ -1,13 +1,21 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import axios from 'axios';
 
 import Category from '../components/Category';
 import Nav from '../components/Navigation/Nav';
 import Place from '../components/Place';
 import MbtiPlaces from '../components/MbtiPlaces';
-import { mainDataState, settingUrl, pageState, NextPage } from '../atoms';
-import getData from '../hooks/useAsyncGetData';
+import {
+  mainDataState,
+  settingUrl,
+  pageState,
+  NextPage,
+  HasRefresh,
+} from '../atoms';
+// import getData from '../hooks/useAsyncGetData';
+import header from '../utils/header';
 
 // ToDo : Mbti 컴포넌트 위치, 요청
 export default function Places() {
@@ -16,13 +24,16 @@ export default function Places() {
   const [hasNextPage, setHasNextPage] = useRecoilState(NextPage);
   const [page, setPage] = useRecoilState(pageState);
   const url = useRecoilValue(settingUrl);
+  const isLogIn = useRecoilValue(HasRefresh);
+  // const isLogIn = localStorage.getItem('REFRESH');
 
   const observerTargetElement = useRef(null);
 
   // Todo 무한스크롤 고치기
   const getPageData = useCallback(async () => {
     try {
-      const { data } = await getData(`${url}${page}`);
+      // const { data } = await getData(`${url}${page}`);
+      const { data } = await axios.get(`${url}${page}`, header);
 
       if (!mainPlaceData) {
         setMainPlaceData([...data.data]);
@@ -54,7 +65,7 @@ export default function Places() {
     return () => {
       observation.disconnect();
     };
-  }, [getPageData, hasNextPage, url]);
+  }, [getPageData, hasNextPage, url, isLogIn]);
 
   return (
     <MainContainer>
@@ -66,13 +77,15 @@ export default function Places() {
       <Category page={page} />
       <DisplayComponentDiv>
         <MbtiPlaces />
-        <div>장소</div>
+        <PlacesTitle>대여가 대여</PlacesTitle>
         <MainComponentContainer>
-          {mainPlaceData &&
-            mainPlaceData.map(placeData => {
-              const { placeId } = placeData;
-              return <Place key={`main ${placeId}`} placeData={placeData} />;
-            })}
+          <Distructure>
+            {mainPlaceData &&
+              mainPlaceData.map(placeData => {
+                const { placeId } = placeData;
+                return <Place key={`main ${placeId}`} placeData={placeData} />;
+              })}
+          </Distructure>
         </MainComponentContainer>
       </DisplayComponentDiv>
       <div ref={observerTargetElement} />
@@ -87,17 +100,25 @@ const DisplayComponentDiv = styled.div`
   align-items: center;
 `;
 const MainComponentContainer = styled.div`
-  margin: 1 auto;
-  width: 1200px;
-  flex-wrap: wrap;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-content: flex-start;
+  margin: 1 auto;
+  //rem
+  width: 1200px;
+  justify-content: center;
   align-items: center;
 `;
 
+const Distructure = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+`;
+
 const MainContainer = styled.div`
-  height: 100vh;
-  width: 100vw;
+  display: block;
+`;
+
+const PlacesTitle = styled.div`
+  font-size: 1.6rem;
 `;

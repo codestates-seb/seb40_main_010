@@ -9,7 +9,7 @@ import Modal from '../../utils/Modal';
 import ReviewWrite from '../ReviewComponents/ReviewWrite';
 import { reservationEditData } from '../../atoms';
 import useMyPage from '../../hooks/useMyPage';
-import header from '../../utils/header';
+// import header from '../../utils/header';
 import { onClickPaymentButton } from '../../utils/payment';
 
 const chargeComponent = (listData, type) => {
@@ -42,10 +42,17 @@ function MyPageCategoryList({ listData, type }) {
 
   const onClickPaymentKaKaoButton = async () => {
     const { reserveId } = listData;
-    const response = await axios.get(
-      `/place/reserve/${reserveId}/payment`,
-      header,
-    );
+    const response = await axios.get(`/place/reserve/${reserveId}/payment`, {
+      headers: {
+        'ngrok-skip-browser-warning': '010',
+        Authorization: (await localStorage.getItem('ACCESS'))
+          ? `Bearer ${localStorage.getItem('ACCESS')}`
+          : '',
+        RefreshToken: (await localStorage.getItem('REFRESH'))
+          ? localStorage.getItem('REFRESH')
+          : '',
+      },
+    });
     const paymentUrl = response.data.data;
     onClickPaymentButton(paymentUrl);
     setModalOpen(false);
@@ -97,7 +104,17 @@ function MyPageCategoryList({ listData, type }) {
 
   const reviewDelete = async () => {
     try {
-      await axios.delete(`/review/${listData.reviewId}`, header);
+      await axios.delete(`/review/${listData.reviewId}`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       showModal();
     } catch (err) {
       showModal();
@@ -106,10 +123,21 @@ function MyPageCategoryList({ listData, type }) {
 
   const bookMarkStatusChange = async () => {
     try {
-      await axios.get(`/bookmark/${listData.placeId}`, header);
+      await axios.get(`/bookmark/${listData.placeId}`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       // 삭제 완료시 새로고침이나 상태 즉시 변경
       console.log('삭제 성공');
-      bookmarkList();
+
+      await bookmarkList();
     } catch (err) {
       console.log(err);
     }
@@ -117,7 +145,17 @@ function MyPageCategoryList({ listData, type }) {
 
   const registerEditDataSend = async () => {
     try {
-      const response = await axios.get(`/place/${listData.placeId}`, header);
+      const response = await axios.get(`/place/${listData.placeId}`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       // TODO : 다른 방식으로 바꿔보기 // 직접 할당 X
       response.data.filePath = [];
       response.data.category = [];
@@ -139,7 +177,17 @@ function MyPageCategoryList({ listData, type }) {
 
   const reservationCancel = async () => {
     try {
-      await axios.delete(`/reserve/${listData.reserveId}`, header);
+      await axios.delete(`/reserve/${listData.reserveId}`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       showModal();
     } catch (err) {
       console.log(err);

@@ -1,19 +1,44 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
+import axios from 'axios';
 
 import Place from './Place';
 import { mbtiPlaceDataState } from '../atoms';
-import getData from '../hooks/useAsyncGetData';
+// import header from '../utils/header';
+// import getData from '../hooks/useAsyncGetData';
 
 function MbtiPlaces() {
   const [mbtiPlaceData, setMbtiPlaceData] = useRecoilState(mbtiPlaceDataState);
 
+  // const header = {
+  //   headers: {
+  //     Authorization: localStorage.getItem('ACCESS')
+  //       ? `Bearer ${localStorage.getItem('ACCESS')}`
+  //       : '',
+  //     RefreshToken: localStorage.getItem('REFRESH')
+  //       ? localStorage.getItem('REFRESH')
+  //       : '',
+  //   },
+  // };
+
   // eslint-disable-next-line consistent-return
   const setMbtiPlaces = async () => {
     try {
-      const getMbtiPlaces = await getData('/mbti');
-
+      const getMbtiPlaces = await axios.get('/mbti', {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
+      if (!getMbtiPlaces.data.data) {
+        setMbtiPlaceData([]);
+      }
       if (getMbtiPlaces.data.data) {
         setMbtiPlaceData([...getMbtiPlaces.data.data]);
       }
@@ -23,39 +48,47 @@ function MbtiPlaces() {
   };
 
   useEffect(() => {
+    // setTimeout(() => {
     setMbtiPlaces();
+    // }, 2000);
   }, []);
 
   return (
-    <MbtiContainer>
+    <MbtiContentsContainer>
       {mbtiPlaceData.length > 0 && (
         <>
-          <MbtiTitle>나와 같은 mbti유형의 사람들이 예약한 장소 best4</MbtiTitle>
-          <MainComponentContainer>
+          <MbtiTitle>
+            나와 같은 mbti유형의 사람들이 예약한 장소 best 4
+          </MbtiTitle>
+          <MbtiPlacesContainer>
             {mbtiPlaceData.map(placeData => {
               const { placeId } = placeData;
               return <Place key={`mbti ${placeId}`} placeData={placeData} />;
             })}
-          </MainComponentContainer>
+          </MbtiPlacesContainer>
         </>
       )}
-    </MbtiContainer>
+    </MbtiContentsContainer>
   );
 }
 
 export default MbtiPlaces;
 
 const MbtiTitle = styled.div`
+  margin-top: 10px;
   margin-left: 10px;
+  margin-bottom: 20px;
 `;
 
-const MbtiContainer = styled.div`
+const MbtiContentsContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const MainComponentContainer = styled.div`
+const MbtiPlacesContainer = styled.div`
   margin: 1 auto;
+  //rem
+  /* background-color: #c9c9c9; */
   width: 1200px;
   flex-wrap: wrap;
   display: flex;
@@ -63,4 +96,6 @@ const MainComponentContainer = styled.div`
   justify-content: flex-start;
   align-content: flex-start;
   align-items: center;
+  border-radius: 15px;
+  margin-bottom: 100px;
 `;

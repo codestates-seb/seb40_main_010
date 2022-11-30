@@ -2,14 +2,17 @@ import React from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { BsFillPersonFill } from 'react-icons/bs';
 import styled from 'styled-components';
-// import axios from 'axios';
-import deleteData from '../../hooks/useAsyncDeleteData';
+import { useResetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
+import axios from 'axios';
+// import deleteData from '../../hooks/useAsyncDeleteData';
+import { mbtiPlaceDataState, HasRefresh } from '../../atoms';
 
 export function NavLeftButtonContainer({ buttonColor }) {
   const logInUrl = useMatch('/log-in');
   const registerUrl = useMatch('/register');
+  const isLogIn = useRecoilValue(HasRefresh);
 
-  const isLogIn = localStorage.getItem('ACCESS');
+  // const isLogIn = localStorage.getItem('ACCESS');
 
   if (registerUrl || logInUrl) return null;
 
@@ -31,13 +34,28 @@ export function NavRightButtonContainer() {
   const signUpUrl = useMatch('/sign-up');
   const myPageUrl = useMatch('/my-page');
 
-  const isLogIn = localStorage.getItem('ACCESS');
+  const resetMbti = useResetRecoilState(mbtiPlaceDataState);
+  const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
+
+  // const isLogIn = localStorage.getItem('ACCESS');
 
   const onClickLogOutButton = async () => {
-    await deleteData('/auth/logout');
+    await axios.delete('/auth/logout', {
+      headers: {
+        'ngrok-skip-browser-warning': '010',
+        Authorization: (await localStorage.getItem('ACCESS'))
+          ? `Bearer ${localStorage.getItem('ACCESS')}`
+          : '',
+        RefreshToken: (await localStorage.getItem('REFRESH'))
+          ? localStorage.getItem('REFRESH')
+          : '',
+      },
+    });
+    await localStorage.removeItem('ACCESS');
+    await localStorage.removeItem('REFRESH');
 
-    localStorage.removeItem('ACCESS');
-    localStorage.removeItem('REFRESH');
+    setIsLogIn(false);
+    resetMbti();
   };
 
   if (signUpUrl) return null;

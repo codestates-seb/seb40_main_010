@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
 
+import axios from 'axios';
 import {
   DetailInformation,
   bookmarkState,
@@ -15,7 +16,7 @@ import ReservationAsideBar from '../components/ReservationComponents/Reservation
 import Nav from '../components/Navigation/Nav';
 import View from '../components/View';
 import ReviewContainer from '../components/ReviewComponents/ReviewContainer';
-import getData from '../hooks/useAsyncGetData';
+// import getData from '../hooks/useAsyncGetData';
 
 // ToDo api 3개 불러오기
 function Detail() {
@@ -31,9 +32,19 @@ function Detail() {
   const getDetailData = async () => {
     try {
       if (id) {
-        const response = await getData(`/place/${id}`);
-        console.log(response);
+        const response = await axios.get(`/place/${id}`, {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
+        });
         setDetailInformation({ ...response.data });
+        console.log(response.data);
         setIsBookmark(response.data.bookmark);
         setSlots(prev => [...prev, ...response.data.reserves]);
         setStartDate(false);

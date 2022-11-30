@@ -46,6 +46,9 @@ function Place({ placeData }) {
 }
 
 const MainContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 300px;
   a {
     text-decoration: none;
     color: #2b2b2b;
@@ -58,7 +61,6 @@ const MainComponent = styled.div`
   justify-content: center;
   align-items: flex-start;
   width: 280px;
-  /* border: 1px solid green; */
   padding: 10px;
   z-index: 10px;
 `;
@@ -77,6 +79,7 @@ const TitleContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-top: 4px;
   padding-bottom: 6px;
   .starIcon {
     color: #ffce31;

@@ -8,6 +8,7 @@ import Location from './Map';
 
 function View() {
   const detailData = useRecoilValue(DetailInformation);
+
   const {
     title,
     filePath: images,
@@ -67,7 +68,6 @@ const InformationContainer = styled.div`
 const InformationTitle = styled.div`
   font-size: 2rem;
   font-weight: 600;
-  /* font-weight: 17.3%; */
   margin-left: 20px;
 `;
 
@@ -145,6 +145,7 @@ const MoreInformation = styled.div`
   font-size: 0.9rem;
   font-weight: 400;
   line-height: 22px;
+  white-space: pre-wrap;
 `;
 
 const InformationLocation = styled(Location)`
