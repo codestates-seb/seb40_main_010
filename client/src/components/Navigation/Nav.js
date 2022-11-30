@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -31,7 +31,7 @@ function Nav({ navColor, buttonColor }) {
     setCurrentSearch('');
     resetMainPlaceData();
     setHasNextPage(true);
-    setPage(1);
+    setPage(() => 1);
     setFocusCategoryID(0);
     navigate('/');
   };
@@ -83,17 +83,15 @@ function Nav({ navColor, buttonColor }) {
   };
 
   const onClickHomeIcon = () => {
-    setUrl(() => `/home?size=20&page=`);
     invalidate();
+    setUrl(() => `/home?size=20&page=`);
   };
 
   return (
     <NavContainer>
       <NavBackground navColor={navColor}>
-        <Link to="/">
-          <SlHome onClick={onClickHomeIcon} className="NavLogo" />
-          <div className="structure" />
-        </Link>
+        <SlHome onClick={onClickHomeIcon} className="NavLogo" />
+        <div className="structure" />
         <SearchContainer onSubmit={onSubmit}>
           <SearchInput value={currentSearch} onChange={onChangeSearch} />
           <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />

@@ -14,10 +14,7 @@ import {
   NextPage,
   HasRefresh,
 } from '../atoms';
-// import getData from '../hooks/useAsyncGetData';
-import header from '../utils/header';
 
-// ToDo : Mbti 컴포넌트 위치, 요청
 export default function Places() {
   const [mainPlaceData, setMainPlaceData] = useRecoilState(mainDataState);
   const [clickedNav, setClickedNav] = useState(false);
@@ -25,15 +22,22 @@ export default function Places() {
   const [page, setPage] = useRecoilState(pageState);
   const url = useRecoilValue(settingUrl);
   const isLogIn = useRecoilValue(HasRefresh);
-  // const isLogIn = localStorage.getItem('REFRESH');
 
   const observerTargetElement = useRef(null);
 
-  // Todo 무한스크롤 고치기
   const getPageData = useCallback(async () => {
     try {
-      // const { data } = await getData(`${url}${page}`);
-      const { data } = await axios.get(`${url}${page}`, header);
+      const { data } = await axios.get(`${url}${page}`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: localStorage.getItem('ACCESS')
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: localStorage.getItem('REFRESH')
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
 
       if (!mainPlaceData) {
         setMainPlaceData([...data.data]);
@@ -77,15 +81,14 @@ export default function Places() {
       <Category page={page} />
       <DisplayComponentDiv>
         <MbtiPlaces />
-        {/* <PlacesTitle>가장 최근에 올라온 장소</PlacesTitle> */}
         <MainComponentContainer>
-          <Distructure>
+          <Structure>
             {mainPlaceData &&
               mainPlaceData.map(placeData => {
                 const { placeId } = placeData;
                 return <Place key={`main ${placeId}`} placeData={placeData} />;
               })}
-          </Distructure>
+          </Structure>
         </MainComponentContainer>
       </DisplayComponentDiv>
       <div ref={observerTargetElement} />
@@ -108,7 +111,8 @@ const MainComponentContainer = styled.div`
   align-items: center;
 `;
 
-const Distructure = styled.div`
+const Structure = styled.div`
+  width: 1200px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -118,9 +122,3 @@ const Distructure = styled.div`
 const MainContainer = styled.div`
   display: block;
 `;
-
-// const PlacesTitle = styled.div`
-//   font-size: 1rem;
-//   margin-left: 3rem;
-//   border: 1px solid red;
-// `;

@@ -135,7 +135,7 @@ const DetailTag = styled.div`
   padding-right: 8px;
   font-size: 0.7rem;
   font-weight: 400;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
   margin-bottom: 20px;
 `;
 

@@ -1,13 +1,23 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { HasRefresh } from '../atoms';
+import {
+  categoryFocus,
+  HasRefresh,
+  mainDataState,
+  NextPage,
+  pageState,
+} from '../atoms';
 
 const useLogin = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
   const setIsLogIn = useSetRecoilState(HasRefresh);
+  const setHasNextPage = useSetRecoilState(NextPage);
+  const setFocusCategoryID = useSetRecoilState(categoryFocus);
+  const setPage = useSetRecoilState(pageState);
+  const resetMainPlaceData = useResetRecoilState(mainDataState);
 
   const navigator = useNavigate();
 
@@ -35,6 +45,14 @@ const useLogin = () => {
     return null;
   };
 
+  const invalidate = () => {
+    resetMainPlaceData();
+    setHasNextPage(true);
+    setPage(1);
+    setFocusCategoryID(0);
+    navigator('/');
+  };
+
   const onSubmit = async data => {
     try {
       const response = await axios.post(`/auth/login`, data);
@@ -42,8 +60,7 @@ const useLogin = () => {
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
 
       setIsLogIn(true);
-
-      navigator('/');
+      invalidate();
     } catch (error) {
       const validationType = getErrorType(error.response.data.status);
 
