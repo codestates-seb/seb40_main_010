@@ -90,6 +90,7 @@ const MbtiPlacesContainer = styled.div`
   margin: 1 auto;
   //rem
   /* background-color: #c9c9c9; */
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   width: 1200px;
   flex-wrap: wrap;
   display: flex;
