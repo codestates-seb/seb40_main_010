@@ -9,9 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public class PlaceDto {
@@ -22,20 +26,31 @@ public class PlaceDto {
         private Long memberId;
 
         private Long reserveId;
-        @NotBlank
+
         private double score;
-        @NotBlank
+
+        @NotBlank(message = "장소명은 공백이 아니어야 합니다.")
+        @Length(max = 15, message = "글자 수는 최대 15자 이하여야 합니다.")
         private String title;
+
         private List<String> categoryList;
-        @NotBlank
+
+        @NotBlank(message = "최대 인원 수를 작성해 주세요")
+        @Positive(message = "최대 인원수는 1명 이상이어야 합니다.")
         private int maxCapacity;
-        @NotBlank
+
+        @NotBlank(message = "주소는 공백이 아니어야 합니다.")
+        @Length(max = 255, message = "주소는 255자 이하여야 합니다.")
         private String address;
-        @NotBlank
+
+        @NotBlank(message = "상세 설명은 공백이 아니어야 합니다.")
+        @Length(max = 10000, message = "상세 설명은 10000자 이하여야 합니다.")
         private String detailInfo;
-        @NotBlank
+
+        @NotBlank(message = "가격은 공백이 아니어야 합니다.")
+        @Positive(message = "가격은 1원 이상이어야 합니다.")
         private int charge;
-        @NotBlank
+
         private Integer endTime;
 
         @Builder
@@ -60,11 +75,26 @@ public class PlaceDto {
         private Long memberId;
         private Long reserveId;
         private double score;
+
+        @NotBlank(message = "장소명은 공백이 아니어야 합니다.")
+        @Length(max = 15, message = "글자 수는 최대 15자 이하여야 합니다.")
         private String title;
         private List<String> categoryList;
+
+        @NotBlank(message = "최대 인원 수는 공백이 아니어야 합니다.")
+        @Positive(message = "최대 인원수는 1명 이상이어야 합니다.")
         private int maxCapacity;
+
+        @NotBlank(message = "주소는 공백이 아니어야 합니다.")
+        @Length(max = 255, message = "주소는 255자 이하여야 합니다.")
         private String address;
+
+        @NotBlank(message = "상세 설명은 공백이 아니어야 합니다.")
+        @Length(max = 10000, message = "상세 설명은 10000자 이하여야 합니다.")
         private String detailInfo;
+
+        @NotBlank(message = "가격은 공백이 아니어야 합니다.")
+        @Positive(message = "가격은 1원 이상이어야 합니다.")
         private int charge;
         private Integer endTime;
         private List<MultipartFile> multipartFiles;
