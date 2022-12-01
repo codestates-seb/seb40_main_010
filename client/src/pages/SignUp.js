@@ -192,9 +192,8 @@ const Container = styled.div`
   background-color: #f9f9f9;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
+
   .signup-container {
-    /* margin-top: 120px; */
     margin-top: 35%;
     width: 33rem;
     height: flex;
@@ -234,7 +233,6 @@ const Container = styled.div`
     font-size: 1.2em;
     font-weight: 500;
     border: none;
-    /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
 
     :active {
       box-shadow: none;

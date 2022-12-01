@@ -230,7 +230,6 @@ const Container = styled.div`
   margin-top: 70px;
   width: 100vw;
   height: fit-content;
-  /* background-color: #e5f0ff; */
   background-color: #fbfbfb;
   display: flex;
   justify-content: center;
@@ -242,14 +241,12 @@ const Container = styled.div`
     height: 55px;
     margin-top: 25px;
     background-color: #ffda77;
-    /* background-color: #aaa; */
-
     border-radius: 40px;
     color: #2b2b2b;
+    font: inherit;
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: 500;
     border: none;
-    /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
 
     :active {
       box-shadow: none;
@@ -259,7 +256,6 @@ const Container = styled.div`
       cursor: not-allowed;
       opacity: 0.7;
       background-color: #c9c9c9;
-      /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
     }
   }
 
@@ -306,8 +302,8 @@ const Title = styled.div`
   height: fit-content;
   font-size: 1.05rem;
   font-weight: 500;
-  color: #2b2b2b;
-  margin-bottom: 15px;
+  color: black;
+  margin-bottom: 13px;
   margin-top: ${({ marginTop }) => marginTop};
 `;
 
@@ -332,10 +328,7 @@ const Input = styled.input`
   font-size: 0.8rem;
   outline: none;
   border: none;
-  /* border-bottom: 2px solid #96c2ff; */
   border-bottom: 1px solid #aaa;
-
-  /* border-radius: 5px; */
   color: #2b2b2b;
   padding: 5px;
 `;
@@ -345,7 +338,6 @@ const SmallInput = styled.input`
   height: 1.1rem;
   font-size: 0.8rem;
   outline: none;
-  /* border: 2px solid #96c2ff; */
   border: 1px solid #aaa;
   border-radius: 5px;
   color: #2b2b2b;
@@ -368,7 +360,6 @@ const Textarea = styled.textarea`
   height: 200px;
   font-size: 0.8rem;
   outline: none;
-  /* border: 2px solid #96c2ff; */
   border: 1px solid #aaa;
   border-radius: 5px;
   color: #2b2b2b;

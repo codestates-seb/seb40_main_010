@@ -56,16 +56,13 @@ const Container = styled.div`
     font: inherit;
     font-size: 0.82rem;
     font-weight: 500;
-    /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
     border: none;
-    /* border: 1px solid #aaa; */
     background-color: #f3f3f3;
     position: relative;
 
     :active {
       box-shadow: none;
       position: relative;
-      /* box-shadow: rgba(0, 0, 0, 0.35) 1px 1px 1px; */
     }
   }
 `;

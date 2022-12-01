@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-// import header from '../../utils/header';
 
 import {
   reservationStartDate,

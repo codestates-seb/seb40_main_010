@@ -59,10 +59,10 @@ const Wrapper = styled.div`
     background-color: #ffda77;
     border-radius: 40px;
     color: #2b2b2b;
+    font: inherit;
     font-size: 0.9rem;
     font-weight: 500;
     border: none;
-    /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
     padding: 0px 10px;
     margin-bottom: 5px;
 
@@ -86,7 +86,6 @@ const PreviewImagesWrapper = styled.div`
   img {
     height: 80px;
     aspect-ratio: 1/1;
-    /* border-radius: 10px; */
   }
 `;
 
