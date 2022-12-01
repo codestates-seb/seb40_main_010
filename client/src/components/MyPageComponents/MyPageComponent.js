@@ -19,7 +19,6 @@ function MyPageComponent() {
     mbti,
     myPageCategory,
     nickname,
-    // profileImage,
     userDataEdit,
     userMBTI,
     userNickName,
@@ -183,7 +182,7 @@ const MyPageComponentContainer = styled.div`
   box-sizing: border-box;
   margin: 0 auto;
   margin-top: 140px;
-  margin-bottom: 100px;
+  margin-bottom: 60px;
 
   @media (max-width: 840px) {
     width: 480px;
@@ -210,14 +209,14 @@ const NameAndEditIconContainer = styled.div`
   margin-bottom: 6px;
 
   & svg {
-    color: #89bbff;
+    color: #ffce31;
     margin-left: 8px;
     cursor: pointer;
   }
 `;
 
 const EditText = styled.p`
-  color: #89bbff;
+  color: #eb7470;
   margin: 0px 4px;
   cursor: pointer;
 `;
@@ -228,13 +227,13 @@ const EditTextBlock = styled.p`
 `;
 
 const MyNickName = styled.div`
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 1.3rem;
+  font-weight: 700;
   margin-left: 30px;
 `;
 
 const MyMBTI = styled.div`
-  font-size: 20px;
+  font-size: 1rem;
 `;
 
 const MyPageContentCategory = styled.div`
@@ -249,8 +248,8 @@ const MyPageCategoryItem = styled.button`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 1rem;
+  font-weight: 500;
   border-bottom: 2px solid #ffffff;
   margin: 16px 0;
   color: #2b2b2b;
@@ -264,25 +263,25 @@ const MyPageCategoryItem = styled.button`
   }
 
   :focus {
-    color: #89bbff;
+    color: #ffce31;
     & svg {
-      color: #89bbff;
+      color: #ffce31;
     }
   }
 
   :hover {
-    color: #89bbff;
+    color: #ffce31;
     & svg {
-      color: #89bbff;
+      color: #ffce31;
     }
   }
 `;
 
 const MyPageCategoryItemTitle = styled.div`
   width: 680px;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
 
   @media (max-width: 840px) {
     width: 400px;
@@ -317,8 +316,7 @@ const MbtiSelect = styled(Select)`
   .Select__control {
     height: 40px;
     width: 100%;
-    /* border: none; */
-    border: 2px solid #96c2ff;
+    border: 1px solid #ffce31;
     border-radius: 5px;
     cursor: pointer;
   }
@@ -341,7 +339,7 @@ const MbtiSelect = styled(Select)`
 const UserNickNameChange = styled.input`
   font-size: 1rem;
   width: 6.5rem;
-  border: 2px solid #96c2ff;
+  border: 1px solid #ffce31;
   border-radius: 5px;
   cursor: pointer;
   color: #2b2b2b;

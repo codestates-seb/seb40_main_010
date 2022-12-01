@@ -58,6 +58,17 @@ function MyPageCategoryList({ listData, type }) {
     return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}AM`;
   };
 
+  const handleReviewDate = createdAt => {
+    if (createdAt === undefined) return null;
+
+    const date = dayjs(createdAt).subtract(2000, 'y');
+    if (date.$H > 12) {
+      date.$H -= 12;
+      return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}PM`;
+    }
+    return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}AM`;
+  };
+
   const reviewDelete = async () => {
     try {
       await axios.delete(`/review/${listData.reviewId}`, {
@@ -109,11 +120,10 @@ function MyPageCategoryList({ listData, type }) {
             : '',
         },
       });
-      // TODO : 다른 방식으로 바꿔보기 // 직접 할당 X
+      // TODO : 다른 방식으로 바꿔보기, 직접 할당 X
       response.data.filePath = [];
       response.data.category = [];
       setEditData(response.data);
-      console.log(response.data);
       navigate('/register');
     } catch (err) {
       console.log(err);
@@ -160,12 +170,14 @@ function MyPageCategoryList({ listData, type }) {
                 {handleDate(listData.endTime)}
               </ReservationDate>
             )}
-            <ReservationDate>{handleDate(listData.createdAt)}</ReservationDate>
+            <ReservationDate>
+              {handleReviewDate(listData.createdAt)}
+            </ReservationDate>
           </PlaceBodyContainer>
           {/* url이나 search를 사용해서 바꿔보기 */}
           {type === 'reservation' ? null : (
             <RatingStarContainer>
-              <ImStarFull size={23} />
+              <ImStarFull size={22} />
               <PlaceRating>{listData.score}</PlaceRating>
             </RatingStarContainer>
           )}
@@ -204,7 +216,7 @@ function MyPageCategoryList({ listData, type }) {
             )}
             {type === 'bookmark' && (
               <CategoryButton onClick={bookMarkStatusChange}>
-                <BsFillBookmarkFill size={24} />
+                <BsFillBookmarkFill size={20} />
               </CategoryButton>
             )}
             {type === 'reviews' && (
@@ -295,8 +307,8 @@ const PlaceBodyContainer = styled.div`
 `;
 
 const PlaceTitle = styled.p`
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 18px;
   margin-bottom: 6px;
   color: #1b1c1e;
   cursor: pointer;
@@ -307,8 +319,8 @@ const PlaceTitle = styled.p`
 `;
 
 const PlaceAddress = styled.span`
-  font-size: 15px;
-  color: #2b2b2b;
+  font-size: 13px;
+  color: #666666;
 
   @media (max-width: 840px) {
     font-size: 14px;
@@ -321,7 +333,7 @@ const RatingStarContainer = styled.div`
 `;
 
 const PlaceRating = styled.div`
-  font-size: 23px;
+  font-size: 18px;
   font-weight: bold;
 `;
 
@@ -334,17 +346,17 @@ const CategoryActionContainer = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  width: 11rem;
+  width: 10rem;
   display: flex;
   justify-content: space-between;
 
   @media (max-width: 840px) {
-    width: 8rem;
+    width: 6rem;
   }
 `;
 
 const CategoryButton = styled.div`
-  font-size: 18px;
+  font-size: 1rem;
   color: #eb7470;
 
   @media (max-width: 840px) {
@@ -371,7 +383,7 @@ const ReservationDate = styled.div`
 `;
 
 const PlaceCharge = styled.span`
-  font-size: 1.25rem;
+  font-size: 18px;
   font-weight: bold;
   color: #eb7470;
 

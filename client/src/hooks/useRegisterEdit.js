@@ -67,7 +67,7 @@ const useRegisterEdit = () => {
     });
 
     try {
-      await axios.patch(`/place/${editData.placeId}/edit`, formData, {
+      await axios.post(`/place/${editData.placeId}/edit`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
