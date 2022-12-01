@@ -1,7 +1,5 @@
 package com.main10.domain.reserve.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.main10.domain.place.entity.Place;
 import com.main10.domain.reserve.entity.Reserve;
 import com.querydsl.core.annotations.QueryProjection;
@@ -42,11 +40,8 @@ public class ReserveDto {
         private String address;
         private String image;
         private int capacity;
-        @JsonSerialize(using = ToStringSerializer.class)
         private LocalDateTime startTime;
-        @JsonSerialize(using = ToStringSerializer.class)
         private LocalDateTime endTime;
-
         private Long totalCharge;
 
         @Builder
