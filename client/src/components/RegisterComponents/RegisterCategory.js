@@ -56,7 +56,6 @@ const Category = styled.div`
 
 const Label = styled.label`
   color: #2b2b2b !important;
-  /* color: black; */
   margin-left: 4px;
   font-weight: 500;
 `;

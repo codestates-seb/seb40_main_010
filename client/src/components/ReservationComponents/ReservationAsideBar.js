@@ -109,7 +109,6 @@ const Container = styled.div`
   }
 
   .title {
-    /* color: #2b2b2b; */
     color: black;
     font-size: 1rem;
     font-weight: 500;
@@ -143,22 +142,17 @@ const Container = styled.div`
     font-size: 1.1rem;
     font-weight: 500;
     border: none;
-    /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
     padding: 3px 0px 0px 0px;
 
     :active {
       box-shadow: none;
       position: relative;
-      /* box-shadow: rgba(0, 0, 0, 0.35) 1px 1px 1px; */
     }
 
     :disabled {
       cursor: not-allowed;
       background-color: #c9c9c9;
       opacity: 0.7;
-      :active {
-        /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
-      }
     }
   }
 `;
