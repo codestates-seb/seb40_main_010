@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.main10.domain.member.utils.AuthConstant.REFRESH_TOKEN;
@@ -27,7 +28,7 @@ public class MemberController {
      * @author Quartz614
      */
     @PostMapping("/join")
-    public ResponseEntity postMember(@RequestBody MemberDto.Post post) {
+    public ResponseEntity postMember(@RequestBody @Valid MemberDto.Post post) {
         memberService.createMember(post);
         return new ResponseEntity(HttpStatus.CREATED);
     }
@@ -40,7 +41,7 @@ public class MemberController {
      * @author Quartz614
      */
     @PatchMapping("/edit")
-    public ResponseEntity patchMember(@RequestBody MemberDto.Patch patch,
+    public ResponseEntity patchMember(@RequestBody @Valid MemberDto.Patch patch,
                                       @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
         memberService.updateMember(refreshToken, patch);
         return new ResponseEntity<>(HttpStatus.OK);

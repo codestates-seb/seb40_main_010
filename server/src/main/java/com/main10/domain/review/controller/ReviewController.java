@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.main10.domain.member.utils.AuthConstant.REFRESH_TOKEN;
@@ -32,7 +33,7 @@ public class ReviewController {
     @PostMapping("/{place-id}/reserve/{reserve-id}")
     public ResponseEntity postReview(@PathVariable("place-id") Long placeId,
                                      @PathVariable("reserve-id") Long reserveId,
-                                     @RequestBody ReviewDto.Post post,
+                                     @RequestBody @Valid ReviewDto.Post post,
                                      @RequestHeader(name = REFRESH_TOKEN) String refreshToken) {
         reviewService.createReview(post, refreshToken, placeId, reserveId);
         return new ResponseEntity<>(HttpStatus.CREATED);

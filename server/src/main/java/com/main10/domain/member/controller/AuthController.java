@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
 import static com.main10.domain.member.utils.AuthConstant.*;
 
 @Slf4j
@@ -23,7 +26,7 @@ public class AuthController {
      * @author mozzi327
      */
     @PostMapping("/login")
-    public ResponseEntity loginMember(@RequestBody LoginDto loginDto) {
+    public ResponseEntity loginMember(@RequestBody @Valid LoginDto loginDto) {
         TokenDto.Response response = authService.loginMember(loginDto);
         return ResponseEntity.ok()
                 .headers(response.getHeaders())

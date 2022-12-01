@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.main10.domain.member.utils.AuthConstant.REFRESH_TOKEN;
@@ -35,7 +36,7 @@ public class PlaceController {
      * @author LimJaeminZ
      */
     @PostMapping(value = "/place/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createPlace(@RequestPart(value = "key") PlaceDto.Create placePostDto,
+    public void createPlace(@RequestPart(value = "key") @Valid PlaceDto.Create placePostDto,
                          @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
@@ -74,7 +75,7 @@ public class PlaceController {
      */
     @PostMapping(value = "/place/{place-id}/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void patchPlace(@PathVariable("place-id") Long placeId,
-                           @RequestPart(value = "key") PlaceDto.Update placePatchDto,
+                           @RequestPart(value = "key") @Valid PlaceDto.Update placePatchDto,
                            @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
         /** 로컬 환경 */
@@ -186,7 +187,7 @@ public class PlaceController {
      * @author LeeGoh
      */
     @PostMapping("/search/detail")
-    public ResponseEntity searchDetail(@RequestBody PlaceDto.SearchDetail searchDetail,
+    public ResponseEntity searchDetail(@RequestBody @Valid PlaceDto.SearchDetail searchDetail,
                                        Pageable pageable) {
 
         Page<PlaceDto.Response> pagePlace = placeDbService.searchDetail(searchDetail, pageable);

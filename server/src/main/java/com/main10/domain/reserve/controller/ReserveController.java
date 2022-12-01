@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.main10.domain.member.utils.AuthConstant.REFRESH_TOKEN;
@@ -36,7 +37,7 @@ public class ReserveController {
      */
     @PostMapping("/place/{place-id}/reserve")
     public ResponseEntity postReserve(@PathVariable("place-id") Long placeId,
-                                      @RequestBody ReserveDto.Post post,
+                                      @RequestBody @Valid ReserveDto.Post post,
                                       @RequestHeader(REFRESH_TOKEN) String refreshToken) {
         reserveService.createReserve(post, placeId, refreshToken);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -186,7 +187,7 @@ public class ReserveController {
      */
     @PatchMapping("/place/reserve/{reserve-id}/edit") // 유저 테이블 생성 시 유저 추가
     public ResponseEntity patchReserve(@PathVariable("reserve-id") Long reserveId,
-                                       @RequestBody ReserveDto.Patch patch,
+                                       @RequestBody @Valid ReserveDto.Patch patch,
                                        @RequestHeader(REFRESH_TOKEN) String refreshToken) {
         reserveService.updateReserve(patch, reserveId, refreshToken);
         return ResponseEntity.ok().build();
