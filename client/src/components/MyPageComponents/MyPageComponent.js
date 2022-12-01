@@ -177,12 +177,12 @@ const MyPageComponentContainer = styled.div`
   flex-direction: column;
   border-radius: 20px;
   width: 840px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
   background-color: #ffffff;
   padding: 35px;
   box-sizing: border-box;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 140px;
   margin-bottom: 100px;
 
   @media (max-width: 840px) {
@@ -196,8 +196,6 @@ const MyProfileImage = styled.img`
   overflow: hidden;
   border-radius: 35px;
   margin-bottom: 8px;
-
-  border: 1px solid red;
 
   :hover {
     cursor: pointer;

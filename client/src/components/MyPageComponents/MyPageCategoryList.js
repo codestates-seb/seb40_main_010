@@ -256,10 +256,10 @@ const CategoryItemList = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border: 1px solid #c9c9c9;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px; */
   border-radius: 1rem;
   margin: 1rem 0px;
-  border: 1px solid green;
 
   @media (max-width: 840px) {
     width: 20rem;

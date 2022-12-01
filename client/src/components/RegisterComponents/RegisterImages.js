@@ -62,7 +62,7 @@ const Wrapper = styled.div`
     font-size: 0.9rem;
     font-weight: 500;
     border: none;
-    box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
+    /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
     padding: 0px 10px;
     margin-bottom: 5px;
 
@@ -86,7 +86,7 @@ const PreviewImagesWrapper = styled.div`
   img {
     height: 80px;
     aspect-ratio: 1/1;
-    border-radius: 10px;
+    /* border-radius: 10px; */
   }
 `;
 

@@ -49,9 +49,9 @@ const ReviewsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background-color: #ffffff;
+  background-color: #f9f9f9;
   flex-direction: column;
-  width: 67rem;
+  width: 1260px;
   padding-left: 2rem;
   margin-bottom: 3rem;
 `;
@@ -61,7 +61,7 @@ const ReviewHeadContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
   padding-top: 1rem;
 `;
 
@@ -77,9 +77,11 @@ const ReviewFilter = styled.div`
 `;
 
 const ReviewBorder = styled.div`
+  /* border: 1px solid red; */
+  padding: 30px 0px;
   width: 100%;
-  border-top: 2px solid #89bbff;
-  border-bottom: 2px solid #89bbff;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
 `;
 
 export default ReviewContainer;

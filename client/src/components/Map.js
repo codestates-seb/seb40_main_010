@@ -40,7 +40,7 @@ function Location({ address }) {
 export default Location;
 
 const MapContainer = styled.div`
-  width: 600px;
-  height: 300px;
+  width: 800px;
+  height: 400px;
   margin-left: 20px;
 `;

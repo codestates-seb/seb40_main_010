@@ -230,7 +230,8 @@ const Container = styled.div`
   margin-top: 70px;
   width: 100vw;
   height: fit-content;
-  background-color: #e5f0ff;
+  /* background-color: #e5f0ff; */
+  background-color: #fbfbfb;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -241,12 +242,14 @@ const Container = styled.div`
     height: 55px;
     margin-top: 25px;
     background-color: #ffda77;
+    /* background-color: #aaa; */
+
     border-radius: 40px;
     color: #2b2b2b;
     font-size: 1.5rem;
     font-weight: 600;
     border: none;
-    box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
+    /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
 
     :active {
       box-shadow: none;
@@ -255,7 +258,8 @@ const Container = styled.div`
     :disabled {
       cursor: not-allowed;
       opacity: 0.7;
-      box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
+      background-color: #c9c9c9;
+      /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
     }
   }
 
@@ -288,7 +292,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 25px 10px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 12px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 12px;
 `;
 
 const FormContainer = styled.div`
@@ -301,7 +305,7 @@ const Title = styled.div`
   width: 95%;
   height: fit-content;
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #2b2b2b;
   margin-bottom: 15px;
   margin-top: ${({ marginTop }) => marginTop};
@@ -327,8 +331,11 @@ const Input = styled.input`
   height: 1.1rem;
   font-size: 0.8rem;
   outline: none;
-  border: 3px solid #96c2ff;
-  border-radius: 5px;
+  border: none;
+  /* border-bottom: 2px solid #96c2ff; */
+  border-bottom: 1px solid #aaa;
+
+  /* border-radius: 5px; */
   color: #2b2b2b;
   padding: 5px;
 `;
@@ -338,7 +345,8 @@ const SmallInput = styled.input`
   height: 1.1rem;
   font-size: 0.8rem;
   outline: none;
-  border: 3px solid #96c2ff;
+  /* border: 2px solid #96c2ff; */
+  border: 1px solid #aaa;
   border-radius: 5px;
   color: #2b2b2b;
   padding: 5px 5px 3px 5px;
@@ -360,7 +368,8 @@ const Textarea = styled.textarea`
   height: 200px;
   font-size: 0.8rem;
   outline: none;
-  border: 3px solid #96c2ff;
+  /* border: 2px solid #96c2ff; */
+  border: 1px solid #aaa;
   border-radius: 5px;
   color: #2b2b2b;
   padding: 5px;

@@ -157,10 +157,11 @@ const NavLeftButton = styled.button`
   border-radius: 20px;
   border: none;
   /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
-  box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
   background-color: ${props => props.buttonColor || '#ffda77'};
+  /* background-color: #666; */
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 20px;
   text-align: center;
   color: #2b2b2b;

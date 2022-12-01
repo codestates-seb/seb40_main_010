@@ -143,3 +143,8 @@ export const wholeData = atom({
   key: 'wholeData',
   default: [],
 });
+
+// export const userMbtiValue = atom({
+//   key: 'userMbtiValue',
+//   default: '',
+// });

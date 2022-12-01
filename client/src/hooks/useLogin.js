@@ -8,6 +8,7 @@ import {
   mainDataState,
   NextPage,
   pageState,
+  // userMbtiValue,
 } from '../atoms';
 
 const useLogin = () => {
@@ -18,6 +19,7 @@ const useLogin = () => {
   const setFocusCategoryID = useSetRecoilState(categoryFocus);
   const setPage = useSetRecoilState(pageState);
   const resetMainPlaceData = useResetRecoilState(mainDataState);
+  // const [userMbti,setUserMbti] = useRecoilState(userMbtiValue)
 
   const navigator = useNavigate();
 
@@ -58,6 +60,8 @@ const useLogin = () => {
       const response = await axios.post(`/auth/login`, data);
       await localStorage.setItem('ACCESS', response.headers.authorization);
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
+
+      // setUserMbti(response.data.mbti);
 
       setIsLogIn(true);
       invalidate();

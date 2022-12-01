@@ -54,7 +54,7 @@ const ReviewContent = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 `;
 
 const UserImage = styled.img`

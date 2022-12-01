@@ -90,20 +90,29 @@ export default function Places() {
       <Category page={page} />
       <DisplayComponentDiv>
         {isLogIn ? <MbtiPlaces /> : null}
-        <MainComponentContainer>
-          <Structure>
-            {mainPlaceData &&
-              mainPlaceData.map(placeData => {
-                const { placeId } = placeData;
-                return <Place key={`main ${placeId}`} placeData={placeData} />;
-              })}
-          </Structure>
-        </MainComponentContainer>
+        <MainDiv>
+          <Div>전체 게시글</Div>
+          <MainComponentContainer>
+            <Structure>
+              {mainPlaceData &&
+                mainPlaceData.map(placeData => {
+                  const { placeId } = placeData;
+                  return (
+                    <Place key={`main ${placeId}`} placeData={placeData} />
+                  );
+                })}
+            </Structure>
+          </MainComponentContainer>
+        </MainDiv>
+        <div ref={observerTargetElement} />
       </DisplayComponentDiv>
-      <div ref={observerTargetElement} />
     </MainContainer>
   );
 }
+
+const MainDiv = styled.div`
+  width: 1225px;
+`;
 
 const DisplayComponentDiv = styled.div`
   display: flex;
@@ -115,13 +124,13 @@ const MainComponentContainer = styled.div`
   display: flex;
   margin: 1 auto;
   //rem
-  width: 1200px;
+  width: 1225px;
   justify-content: center;
   align-items: center;
 `;
 
 const Structure = styled.div`
-  width: 1200px;
+  width: 1225px;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -130,4 +139,13 @@ const Structure = styled.div`
 
 const MainContainer = styled.div`
   display: block;
+  background-color: #f9f9f9;
+`;
+
+const Div = styled.div`
+  align-self: start;
+  padding-left: 12px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 1.2rem;
 `;

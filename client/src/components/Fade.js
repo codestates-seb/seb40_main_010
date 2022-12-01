@@ -35,15 +35,15 @@ function Fade() {
 export default Fade;
 
 const StyledSlide = styled(Slider)`
-  width: 600px;
-  height: 600px;
+  width: 800px;
+  height: 800px;
   .slick-slider {
     z-index: -1;
   }
   ul {
-    width: 600px;
+    width: 800px;
     position: absolute;
-    bottom: 3%;
+    bottom: -5%;
   }
 
   .slick-dots li button:before {
@@ -72,8 +72,8 @@ const StyledSlide = styled(Slider)`
     color: #89bbff;
   }
   .slick-list {
-    width: 600px;
-    height: 600px;
+    width: 800px;
+    height: 800px;
     margin-top: 20px;
     overflow: hidden;
   }
@@ -87,14 +87,13 @@ const StyledSlide = styled(Slider)`
 `;
 
 const SlickImage = styled.img`
-  width: 600px;
-  height: 600px;
-  border-radius: 5px;
+  width: 800px;
+  height: 800px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 `;
 const SlickImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 600px;
+  width: 800px;
 `;

@@ -32,7 +32,8 @@ const CategoryButton = styled.button`
   color: #aaaaaa;
   border: none;
   padding: 5px;
-  font-weight: 600;
+  /* font-size: 0.3rem; */
+  font-weight: 500;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -41,7 +42,7 @@ const CategoryButton = styled.button`
   word-break: keep-all;
 
   > i {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     padding: 5px;
   }
 

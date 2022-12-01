@@ -189,24 +189,23 @@ const Container = styled.div`
   width: 100vw;
   /* height: 800px; */
   height: 100vh;
-  background-color: #96c2ff;
+  background-color: #f9f9f9;
   display: flex;
   justify-content: center;
   /* align-items: center; */
-
   .signup-container {
     /* margin-top: 120px; */
     margin-top: 35%;
     width: 33rem;
     height: flex;
-    padding: 50px 0px;
+    padding: 70px 0px;
     background-color: #ffffff;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   }
   .wrapper {
     width: 70%;
@@ -232,10 +231,10 @@ const Container = styled.div`
     border-radius: 40px;
     color: #2b2b2b;
     font: inherit;
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.2em;
+    font-weight: 500;
     border: none;
-    box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
+    /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
 
     :active {
       box-shadow: none;
@@ -269,9 +268,14 @@ const Input = styled.input`
   font: inherit;
   outline: none;
   border: none;
-  border-bottom: 2px solid #96c2ff;
+  border-bottom: 1px solid #c9c9c9;
   color: #2b2b2b;
   padding: 3px 0px;
+  margin-bottom: 10px;
+
+  ::placeholder {
+    font-size: 0.8rem;
+  }
 `;
 
 const MbtiSelect = styled(Select)`
@@ -281,7 +285,7 @@ const MbtiSelect = styled(Select)`
   .Select__control {
     height: 30px;
     width: 100%;
-    border: 2px solid #96c2ff;
+    border-bottom: 1px solid #c9c9c9;
     border-radius: 5px;
     cursor: pointer;
   }
@@ -302,7 +306,7 @@ const MbtiSelect = styled(Select)`
 `;
 
 const LogInLink = styled(Link)`
-  color: #2b2b2b;
-  font-size: 1rem;
+  color: #666666;
+  font-size: 0.8rem;
   font-weight: 500;
 `;

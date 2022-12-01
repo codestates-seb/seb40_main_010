@@ -9,6 +9,7 @@ import { HasRefresh, mbtiPlaceDataState } from '../atoms';
 function MbtiPlaces() {
   const [mbtiPlaceData, setMbtiPlaceData] = useRecoilState(mbtiPlaceDataState);
   const [isLogIn] = useRecoilState(HasRefresh);
+  // const [userMbti,setUserMbti] = useRecoilState(userMbtiValue)
 
   // eslint-disable-next-line consistent-return
   const setMbtiPlaces = async () => {
@@ -47,8 +48,9 @@ function MbtiPlaces() {
     <MbtiContentsContainer>
       {mbtiPlaceData.length > 0 && (
         <>
+          {/* <MbtiTitle>{userMbti}가 방문한 장소</MbtiTitle> */}
           <MbtiTitle>
-            나와 같은 mbti유형의 사람들이 예약한 장소 best 4
+            <span>Mbti</span>가 방문한 장소
           </MbtiTitle>
           <MbtiPlacesContainer>
             {mbtiPlaceData.map(placeData => {
@@ -65,9 +67,15 @@ function MbtiPlaces() {
 export default MbtiPlaces;
 
 const MbtiTitle = styled.div`
+  font-weight: 500;
+  font-size: 1.2rem;
   margin-top: 30px;
   margin-left: 10px;
   margin-bottom: 20px;
+  & > span {
+    color: #96c2ff;
+    padding-right: 3px;
+  }
 `;
 
 const MbtiContentsContainer = styled.div`
@@ -77,9 +85,9 @@ const MbtiContentsContainer = styled.div`
 
 const MbtiPlacesContainer = styled.div`
   //rem
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-  width: 1200px;
+  /* box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px; */
+  width: 1230px;
   flex-wrap: wrap;
   display: flex;
   flex-direction: row;
