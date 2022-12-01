@@ -13,7 +13,6 @@ public class AuthDto {
 
     @Getter
     @Builder
-    @NoArgsConstructor
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Login {
