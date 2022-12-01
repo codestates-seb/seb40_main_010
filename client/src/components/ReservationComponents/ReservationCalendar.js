@@ -27,7 +27,7 @@ function ReservationCalendar({
 
   return (
     <Container>
-      <DatePick marginBottom="8px">
+      <DatePick marginBottom="25px">
         <Label>시작일시</Label>
         <DatePicker
           selectsStart

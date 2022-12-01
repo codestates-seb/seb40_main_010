@@ -43,11 +43,15 @@ function Place({ placeData }) {
           <Image src={image} />
           <TitleContainer>
             <PlaceName>{slicedTitle}</PlaceName>
-            <ImStarFull className="starIcon" />
-            <PlaceScore>{score}</PlaceScore>
           </TitleContainer>
           <PlaceAddress>{addressSlice}</PlaceAddress>
-          <PlaceCharge>{chargePerHour}원</PlaceCharge>
+          <Div>
+            <StarContainer>
+              <ImStarFull className="starIcon" />
+              <PlaceScore>{score}</PlaceScore>
+            </StarContainer>
+            <PlaceCharge>{chargePerHour}원</PlaceCharge>
+          </Div>
         </MainComponent>
       </Link>
     </MainContainer>
@@ -57,11 +61,21 @@ function Place({ placeData }) {
 const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 20px;
   width: 300px;
+  margin-left: 3px;
+  margin-right: 3px;
   a {
     text-decoration: none;
     color: #2b2b2b;
   }
+`;
+
+const Div = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 `;
 
 const MainComponent = styled.div`
@@ -76,16 +90,22 @@ const MainComponent = styled.div`
 
 const Image = styled.img`
   width: 280px;
-  height: 280px;
-  border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  height: 250px;
+  border-radius: 0px;
   margin-bottom: 10px;
   &:hover {
-    /* filter: blur(2px);
-    -webkit-filter: blur(2px); */
     transition: 0.3s;
     filter: grayscale(70%);
     opacity: 0.7;
+  }
+`;
+
+const StarContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  .starIcon {
+    color: #ffce31;
+    padding-bottom: 2px;
   }
 `;
 
@@ -96,28 +116,26 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 4px;
-  padding-bottom: 6px;
-  .starIcon {
-    color: #ffce31;
-    padding-bottom: 2px;
-  }
+  padding-bottom: 8px;
 `;
 
 const PlaceName = styled.div`
   width: 83%;
-  font-weight: bold;
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 17px;
   word-break: keep-all;
 `;
 
 const PlaceAddress = styled.div`
   width: 100%;
-  font-size: 15px;
-  padding-bottom: 5px;
+  font-size: 13px;
+  color: #aaaaaa;
+  padding-bottom: 12px;
 `;
 
 const PlaceScore = styled.div`
   margin-top: 1px;
+  margin-left: 3px;
   font-family: inherit;
 `;
 

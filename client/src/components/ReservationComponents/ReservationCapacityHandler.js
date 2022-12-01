@@ -64,7 +64,7 @@ const SmallInput = styled.input`
   font: inherit;
   font-size: 0.75rem;
   outline: none;
-  border: 3px solid #96c2ff;
+  border: 2px solid #aaa;
   border-radius: 5px;
   color: #2b2b2b;
   padding: 5px 5px 3px 5px;

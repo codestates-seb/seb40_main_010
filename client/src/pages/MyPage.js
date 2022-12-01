@@ -15,7 +15,7 @@ function MyPage() {
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: #ffda77;
+  background-color: #f9f9f9;
   position: absolute;
   overflow: scroll;
 

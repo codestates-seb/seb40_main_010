@@ -22,6 +22,7 @@ export default function LogIn() {
       <Container>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="login-container">
+            <Img src="/logo3.png" alt="logo" />
             <div className="wrapper">
               <div className="title">Email</div>
               <Input
@@ -71,26 +72,31 @@ export default function LogIn() {
   );
 }
 
+const Img = styled.img`
+  width: 90px;
+  margin-bottom: 80px;
+`;
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: #ffda77;
+  background-color: #f9f9f9;
   display: flex;
   justify-content: center;
   align-items: center;
 
   .login-container {
     margin-top: 70px;
-    width: 22rem;
+    width: 38rem;
     height: flex;
-    padding: 3rem 0rem;
+    padding: 4rem 0rem 5rem 0rem;
     background-color: #ffffff;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   }
 
   .wrapper {
@@ -103,7 +109,7 @@ const Container = styled.div`
     width: 100%;
     height: fit-content;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 500;
     color: #2b2b2b;
     margin-bottom: 10px;
   }
@@ -111,16 +117,16 @@ const Container = styled.div`
   .submit-button {
     width: 15rem;
     height: 3rem;
-    margin-top: 15px;
+    margin-top: 60px;
     margin-bottom: 15px;
-    background-color: #96c2ff;
+    background-color: #ffda77;
     border-radius: 40px;
     color: #2b2b2b;
+
     font: inherit;
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 500;
     border: none;
-    box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px;
 
     :active {
       box-shadow: none;
@@ -154,13 +160,16 @@ const Input = styled.input`
   font: inherit;
   outline: none;
   border: none;
-  border-bottom: 2px solid #96c2ff;
+  border-bottom: 1px solid #c9c9c9;
   color: #2b2b2b;
   padding: 3px 0px;
+  ::placeholder {
+    font-size: 0.8rem;
+  }
 `;
 
 const SignUpLink = styled(Link)`
-  color: #2b2b2b;
-  font-size: 1rem;
+  color: #666666;
+  font-size: 0.8rem;
   font-weight: 500;
 `;

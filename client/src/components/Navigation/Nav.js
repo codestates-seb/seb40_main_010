@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { SlHome } from 'react-icons/sl';
+// import { SlHome } from 'react-icons/sl';
 
 import {
   navSearchValue,
@@ -91,7 +91,8 @@ function Nav({ navColor, buttonColor }) {
   return (
     <NavContainer>
       <NavBackground navColor={navColor}>
-        <SlHome onClick={onClickHomeIcon} className="NavLogo" />
+        {/* <SlHome onClick={onClickHomeIcon} className="NavLogo" /> */}
+        <Img src="/logo1.png" alt="logo" onClick={onClickHomeIcon} />
         {/* <div className="structure" /> */}
         <SearchContainer onSubmit={onSubmit}>
           <SearchInput value={currentSearch} onChange={onChangeSearch} />
@@ -122,9 +123,17 @@ const NavBackground = styled.div`
   left: 0;
   right: 0;
   width: 100vw;
-  height: 70px;
-  background-color: ${props => props.navColor || '#89bbff'};
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  /* height: 75px; */
+  /* height: 80px; */
+
+  height: 85px;
+  /* height: 90px; */
+  /* height: 100px; */
+  /* background-color: ${props => props.navColor || '#89bbff'}; */
+  /* background-color: #222125; */
+  border-bottom: 1px solid #d7d7d7;
+  background-color: #ffffff;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
   /* 
   .structure {
     width: 116px;
@@ -141,6 +150,15 @@ const NavBackground = styled.div`
       cursor: pointer;
     }
   }
+`;
+
+const Img = styled.img`
+  margin-left: 40px;
+  width: 180px;
+  &:hover {
+    cursor: pointer;
+  }
+  /* background-image: url('./logo1.png'); */
 `;
 
 const SearchContainer = styled.form`
@@ -174,9 +192,9 @@ const SearchInput = styled.input`
   padding: 10px 45px 10px 25px;
   width: 100%;
   border-radius: 20px;
-  border: none;
-  background-color: #fff9eb;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border: 1px solid #d7d7d7;
+  background-color: #ffffff;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
   caret-color: #89bbff;
   &:focus {
     outline: none;

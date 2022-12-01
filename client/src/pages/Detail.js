@@ -78,13 +78,16 @@ function Detail() {
 export default Detail;
 
 const DetailContainer = styled.div`
+  width: 1280px;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  /* justify-content: center; */
+  justify-content: space-around;
 `;
 const DetailViewContainer = styled.div``;
 
 const DetailReviewContainer = styled.div`
+  background-color: #f9f9f9;
   display: flex;
   align-items: center;
   flex-direction: column;
