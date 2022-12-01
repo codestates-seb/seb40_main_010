@@ -1,6 +1,7 @@
 package com.main10.global.security.resolver;
 
 import com.main10.domain.member.dto.AuthDto;
+import com.main10.global.security.dto.LoginDto;
 import com.main10.global.security.token.JwtAuthenticationToken;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +17,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class CustomArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return AuthDto.Login.class.isAssignableFrom(parameter.getParameterType());
+        return LoginDto.class.isAssignableFrom(parameter.getParameterType());
     }
 
     @Override
