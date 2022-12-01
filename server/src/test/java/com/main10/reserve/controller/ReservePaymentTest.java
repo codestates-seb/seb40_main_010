@@ -1,16 +1,12 @@
 package com.main10.reserve.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.main10.domain.reserve.dto.ReserveDto;
-import com.main10.utils.LocalDateTimeSerializer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
-import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDateTime;
 import java.util.List;

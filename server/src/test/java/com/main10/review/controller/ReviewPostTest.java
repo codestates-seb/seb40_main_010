@@ -1,7 +1,5 @@
 package com.main10.review.controller;
 
-import com.main10.domain.member.entity.Member;
-import com.main10.domain.place.entity.Place;
 import com.main10.domain.review.dto.ReviewDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,28 +32,21 @@ public class ReviewPostTest extends ReviewControllerTest {
     @Test
     @DisplayName("POST 리뷰 생성")
     void createReview() throws Exception {
+
         Long placeId = 1L;
         Long reserveId = 1L;
+
         ReviewDto.Post post = ReviewDto.Post.builder()
                 .score(4.5)
                 .comment("진짜 좋아요!!")
                 .build();
-        Place place = Place.builder()
-                .title("감성 있는 파티룸")
-                .address("경기도 오사카시")
-                .charge(100000)
-                .build();
-        Member member = Member.builder()
-                .email("hgd@gmail.com")
-                .roles(List.of("USER"))
-                .build();
 
         String content = gson.toJson(post);
-        String accessToken = jwtTokenUtils.generateAccessToken(member);
-        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
 
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(reviewService).createReview(Mockito.any(ReviewDto.Post.class), Mockito.anyString(), Mockito.anyLong(), Mockito.anyLong());
+        doNothing().when(reviewService)
+                .createReview(Mockito.any(ReviewDto.Post.class), Mockito.anyString(), Mockito.anyLong(), Mockito.anyLong());
+
         ResultActions actions =
                 mockMvc.perform(
                         post("/review/{place-id}/reserve/{reserve-id}", placeId, reserveId)
@@ -66,6 +57,7 @@ public class ReviewPostTest extends ReviewControllerTest {
                                 .content(content)
                                 .with(csrf())
                 );
+
         actions
                 .andExpect(status().isCreated())
                 .andDo(document("리뷰 추가",
