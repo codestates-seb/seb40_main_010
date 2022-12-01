@@ -19,9 +19,7 @@ public class ReserveDto {
     public static class Post {
         @NotBlank
         private int capacity;
-        @JsonSerialize(using = ToStringSerializer.class)
         private LocalDateTime startTime;
-        @JsonSerialize(using = ToStringSerializer.class)
         private LocalDateTime endTime;
     }
     @Getter
@@ -31,9 +29,7 @@ public class ReserveDto {
     public static class Patch {
         @NotBlank
         private int capacity;
-        @JsonSerialize(using = ToStringSerializer.class)
         private LocalDateTime startTime;
-        @JsonSerialize(using = ToStringSerializer.class)
         private LocalDateTime endTime;
     }
 
@@ -41,7 +37,6 @@ public class ReserveDto {
     public static class Response implements Comparable<Response>{
 
         private Long reserveId;
-
         private Long placeId;
         private String title;
         private String address;
@@ -77,9 +72,7 @@ public class ReserveDto {
 
     @Getter
     public static class Detail {
-        @JsonSerialize(using = ToStringSerializer.class)
         private final LocalDateTime startTime;
-        @JsonSerialize(using = ToStringSerializer.class)
         private final LocalDateTime endTime;
 
         @Builder

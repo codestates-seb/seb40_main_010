@@ -23,9 +23,9 @@ public class Reserve {
     private Long id;
 
     private int capacity;
-    @JsonSerialize(using = ToStringSerializer.class)
+
     private LocalDateTime startTime;
-    @JsonSerialize(using = ToStringSerializer.class)
+
     private LocalDateTime endTime;
 
     private Long placeId;
