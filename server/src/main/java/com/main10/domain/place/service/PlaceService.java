@@ -64,7 +64,7 @@ public class PlaceService {
      * @author LimJaeminZ
      */
     @Transactional
-    public void createPlaceS3(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) {
+    public void createPlaceS3(PlaceDto.Create placePostDto, String refreshToken, List<MultipartFile> files) {
         //유저 확인
         Long memberId = redisUtils.getId(refreshToken);
 
@@ -116,7 +116,7 @@ public class PlaceService {
      * @author LimJaeminZ
      */
     @Transactional
-    public void createPlace(PlacePostDto placePostDto, String refreshToken, List<MultipartFile> files) throws Exception {
+    public void createPlace(PlaceDto.Create placePostDto, String refreshToken, List<MultipartFile> files) throws Exception {
         //유저 확인
         Long memberId = redisUtils.getId(refreshToken);
 
@@ -166,7 +166,7 @@ public class PlaceService {
      * @author LimJaeminZ
      */
     @Transactional
-    public PlaceResponseDto searchPlace(Long placeId, String refreshToken) {//, List<String> filePath, List<String> categoryList) {
+    public PlaceDto.DetailResponse searchPlace(Long placeId, String refreshToken) {//, List<String> filePath, List<String> categoryList) {
         boolean isBookmark = false;
 
         if (StringUtils.hasText(refreshToken)) {
@@ -182,15 +182,15 @@ public class PlaceService {
         Member findMember = memberDbService.ifExistsReturnMember(place.getMemberId());
 
 
-        List<PlaceImageResponseDto> placeImageResponseDtoList = placeImageService.findAllByPlaceImagePath(placeId);
+        List<PlaceImageDto.Response> placeImageResponseDtoList = placeImageService.findAllByPlaceImagePath(placeId);
         List<String> categoryList = placeCategoryService.findByAllPlaceCategoryList(placeId);
         List<String> filePath = new ArrayList<>();
         List<ReserveDto.Detail> reserves = reserveDbService.findAllReserveForPlace(placeId);
 
-        for (PlaceImageResponseDto placeImageResponseDto : placeImageResponseDtoList)
+        for (PlaceImageDto.Response placeImageResponseDto : placeImageResponseDtoList)
             filePath.add(placeImageResponseDto.getFilePath());
 
-        return new PlaceResponseDto(place, filePath, categoryList, findMember, isBookmark, reserves);
+        return new PlaceDto.DetailResponse(place, filePath, categoryList, findMember, isBookmark, reserves);
     }
 
     /**
@@ -202,7 +202,7 @@ public class PlaceService {
      * @param files 이미지 파일
      * @author LimjaeminZ
      */
-    public void updatePlaceS3(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) {
+    public void updatePlaceS3(Long placeId, PlaceDto.Update placePatchDto, String refreshToken, List<MultipartFile> files) {
         //유저 확인
         Long memberId = redisUtils.getId(refreshToken);
 
@@ -217,6 +217,7 @@ public class PlaceService {
         updatePlace.setAddress(placePatchDto.getAddress());
         updatePlace.setCharge(placePatchDto.getCharge());
         updatePlace.setMaxCapacity(placePatchDto.getMaxCapacity());
+        updatePlace.setEndTime(placePatchDto.getEndTime());
 
         List<PlaceCategory> dbCategoryList = placeCategoryService.findByAllPlaceCategoryList2(placeId); // db 저장 카테고리 목록
         List<String> categoryList = placePatchDto.getCategoryList(); // 전달되어온 카테고리 목록
@@ -268,7 +269,7 @@ public class PlaceService {
      * @throws Exception
      * @author LimjaeminZ
      */
-    public void updatePlace(Long placeId, PlacePatchDto placePatchDto, String refreshToken, List<MultipartFile> files) throws Exception {
+    public void updatePlace(Long placeId, PlaceDto.Update placePatchDto, String refreshToken, List<MultipartFile> files) throws Exception {
         //유저 확인
         Long memberId = redisUtils.getId(refreshToken);
 
@@ -282,6 +283,7 @@ public class PlaceService {
         updatePlace.setAddress(placePatchDto.getAddress());
         updatePlace.setCharge(placePatchDto.getCharge());
         updatePlace.setMaxCapacity(placePatchDto.getMaxCapacity());
+        updatePlace.setEndTime(placePatchDto.getEndTime());
 
         List<PlaceCategory> dbCategoryList = placeCategoryService.findByAllPlaceCategoryList2(placeId); // db 저장 카테고리 목록
         List<String> categoryList = placePatchDto.getCategoryList(); // 전달되어온 카테고리 목록

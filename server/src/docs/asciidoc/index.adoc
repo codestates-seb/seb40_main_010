@@ -13,6 +13,18 @@ include::{snippets}/장소 등록/request-headers.adoc[]
 include::{snippets}/장소 등록/request-fields.adoc[]
 
 === 장소 수정
+.curl-request
+include::{snippets}/장소 수정/curl-request.adoc[]
+
+.http-request
+include::{snippets}/장소 수정/http-request.adoc[]
+
+.request-header
+include::{snippets}/장소 수정/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/장소 수정/request-fields.adoc[]
+
 
 === 장소 상세 조회
 .curl-request
