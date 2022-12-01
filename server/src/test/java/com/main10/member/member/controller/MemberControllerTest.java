@@ -78,6 +78,7 @@ public class MemberControllerTest {
                 .build();
 
         member = Member.builder()
+                .id(1L)
                 .email("hgd@gmail.com")
                 .roles(List.of("USER"))
                 .nickname("홍길동")

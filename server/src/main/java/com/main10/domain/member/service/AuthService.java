@@ -1,5 +1,6 @@
 package com.main10.domain.member.service;
 
+import com.main10.domain.member.dto.TokenDto;
 import com.main10.global.exception.ExceptionCode;
 import com.main10.domain.member.dto.AuthDto;
 import com.main10.domain.member.entity.Member;
@@ -9,6 +10,7 @@ import com.main10.global.security.utils.JwtTokenUtils;
 import com.main10.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,16 +28,14 @@ public class AuthService {
     private final JwtTokenUtils jwtTokenUtils;
     private final MemberDbService memberDbService;
 
-
     /**
      * 사용자 로그인 메서드
+     *
      * @param login 로그인 정보
-     * @param res 응답
      * @return AuthDto.Response
      * @author mozzi327
      */
-    public AuthDto.Response loginMember(LoginDto login,
-                                        HttpServletResponse res) {
+    public TokenDto.Response loginMember(LoginDto login) {
         Member findMember = memberDbService.ifExistMemberByEmail(login.getEmail());
 
         memberDbService.isValid(findMember, login.getPassword());
@@ -43,14 +43,21 @@ public class AuthService {
         String generateAccessToken = jwtTokenUtils.generateAccessToken(findMember);
         String generateRefreshToken = jwtTokenUtils.generateRefreshToken(findMember);
 
-        res.addHeader(AUTHORIZATION, generateAccessToken);
-        res.addHeader(REFRESH_TOKEN, generateRefreshToken);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(AUTHORIZATION, generateAccessToken);
+        headers.add(REFRESH_TOKEN, generateRefreshToken);
 
         redisUtils.setData(generateRefreshToken, findMember.getId(), jwtTokenUtils.getRefreshTokenExpirationMinutes());
 
-        return AuthDto.Response.builder()
+        AuthDto.Response memberRes = AuthDto.Response.builder()
                 .nickname(findMember.getNickname())
                 .email(login.getEmail())
+                .mbti(findMember.getMbti())
+                .build();
+
+        return TokenDto.Response.builder()
+                .response(memberRes)
+                .headers(headers)
                 .build();
     }
 
@@ -74,7 +81,6 @@ public class AuthService {
         // refreshToken이 존재하는 경우 리프레시 토큰 삭제
         redisUtils.deleteData(refreshToken);
 
-
         // 엑세스 토큰 만료 전까지 블랙리스트 처리
         Long expiration = jwtTokenUtils.getExpiration(accessToken);
         redisUtils.setBlackList(accessToken, "Logout", expiration);
@@ -89,9 +95,8 @@ public class AuthService {
      * @return AuthDto.Response
      * @author mozzi327
      */
-    public AuthDto.Response reIssueToken(String accessToken,
-                                         String refreshToken,
-                                         HttpServletResponse res) {
+    public TokenDto.Response reIssueToken(String accessToken,
+                                         String refreshToken) {
         // accessToken parsing(Bearer ..)
         accessToken = jwtTokenUtils.parseAccessToken(accessToken);
 
@@ -110,12 +115,19 @@ public class AuthService {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         String generateToken = jwtTokenUtils.generateAccessToken(findMember);
 
-        res.addHeader(AUTHORIZATION, generateToken);
-        res.addHeader(REFRESH_TOKEN, refreshToken);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(AUTHORIZATION, generateToken);
+        headers.add(REFRESH_TOKEN, refreshToken);
 
-        return AuthDto.Response.builder()
+        AuthDto.Response memberRes = AuthDto.Response.builder()
                 .nickname(findMember.getNickname())
                 .email(findMember.getEmail())
+                .mbti(findMember.getMbti())
+                .build();
+
+        return TokenDto.Response.builder()
+                .headers(headers)
+                .response(memberRes)
                 .build();
     }
 }

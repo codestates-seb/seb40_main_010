@@ -61,7 +61,8 @@ public class Place {
 
     // createPlace 생성자
     @Builder
-    public Place(String title,
+    public Place(Long id,
+                 String title,
                  String detailInfo,
                  int maxCapacity,
                  String address,
@@ -69,6 +70,7 @@ public class Place {
                  Long memberId,
                  double score,
                  Integer endTime){
+        this.id = id;
         this.title = title;
         this.detailInfo = detailInfo;
         this.maxCapacity = maxCapacity;

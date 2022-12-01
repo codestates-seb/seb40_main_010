@@ -211,7 +211,9 @@ public class ReserveService {
         }
 
         // mbtiCount -1
-        mbtiCountService.reduceMbtiCount(findMember, findReserve.getPlaceId());
+        if (findReserve.getStatus().equals(Reserve.ReserveStatus.PAY_SUCCESS)) {
+            mbtiCountService.reduceMbtiCount(findMember, findReserve.getPlaceId());
+        }
 
         // 예약 상태 변경 ... -> RESERVATION_CANCELED
         findReserve.setStatus(Reserve.ReserveStatus.RESERVATION_CANCELED);

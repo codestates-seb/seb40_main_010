@@ -4,15 +4,15 @@ import com.main10.domain.place.entity.Place;
 import com.main10.domain.reserve.entity.Reserve;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class ReserveDto {
 
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     @Builder
     public static class Post {
         @NotBlank
@@ -32,7 +32,7 @@ public class ReserveDto {
     }
 
     @Getter
-    public static class Response implements Comparable<Response>{
+    public static class Response {
 
         private Long reserveId;
         private Long placeId;
@@ -56,11 +56,6 @@ public class ReserveDto {
             this.startTime = reserve.getStartTime();
             this.endTime = reserve.getEndTime();
             this.totalCharge = reserve.getTotalCharge();
-        }
-
-        @Override
-        public int compareTo(Response o) {
-            return (int)(this.reserveId-o.reserveId);
         }
     }
 

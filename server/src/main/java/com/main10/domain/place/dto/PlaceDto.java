@@ -20,6 +20,7 @@ public class PlaceDto {
     @NoArgsConstructor
     public static class Create {
         private Long memberId;
+
         private Long reserveId;
         @NotBlank
         private double score;
@@ -129,8 +130,8 @@ public class PlaceDto {
 
     @Getter
     @Builder
-    @AllArgsConstructor
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class SearchDetail {
 
         private int startCharge;
@@ -142,19 +143,13 @@ public class PlaceDto {
 
     @Getter
     public static class Response{
-        private Long placeId;
-
-        private String title;
-
-        private int charge;
-
-        private String image;
-
-        private Double score;
-
-        private String address;
-
-        private Integer endTime;
+        private final Long placeId;
+        private final String title;
+        private final int charge;
+        private final String image;
+        private final Double score;
+        private final String address;
+        private final Integer endTime;
 
         @Builder
         @QueryProjection
@@ -171,13 +166,13 @@ public class PlaceDto {
 
     @Getter
     public static class ResponseTest{
-        private Long placeId;
-        private String title;
-        private int charge;
-        private String image;
-        private Double score;
-        private String address;
-        private Integer endTime;
+        private final Long placeId;
+        private final String title;
+        private final int charge;
+        private final String image;
+        private final Double score;
+        private final String address;
+        private final Integer endTime;
 
         @Builder
         public ResponseTest(Place place, PlaceImage placeImage) {

@@ -1,6 +1,7 @@
 package com.main10.domain.member.controller;
 
 import com.main10.domain.member.dto.AuthDto;
+import com.main10.domain.member.dto.TokenDto;
 import com.main10.domain.member.service.AuthService;
 import com.main10.global.security.dto.LoginDto;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +22,15 @@ public class AuthController {
     /**
      * 사용자 로그인을 위한 컨트롤러 호출 메서드
      * @param loginDto 로그인 정보
-     * @param res 응답
      * @return ResponseEntity
      * @author mozzi327
      */
     @PostMapping("/login")
-    public ResponseEntity loginMember(@RequestBody LoginDto loginDto,
-                                      HttpServletResponse res) {
-        AuthDto.Response response = authService.loginMember(loginDto, res);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity loginMember(@RequestBody LoginDto loginDto) {
+        TokenDto.Response response = authService.loginMember(loginDto);
+        return ResponseEntity.ok()
+                .headers(response.getHeaders())
+                .body(response.getResponse());
     }
 
     /**
@@ -55,9 +56,10 @@ public class AuthController {
      */
     @GetMapping("/re-issue")
     public ResponseEntity reIssueToken(@RequestHeader(AUTHORIZATION) String accessToken,
-                                       @RequestHeader(REFRESH_TOKEN) String refreshToken,
-                                       HttpServletResponse res) {
-        AuthDto.Response response = authService.reIssueToken(accessToken, refreshToken, res);
-        return ResponseEntity.ok(response);
+                                       @RequestHeader(REFRESH_TOKEN) String refreshToken) {
+        TokenDto.Response response = authService.reIssueToken(accessToken, refreshToken);
+        return ResponseEntity.ok()
+                .headers(response.getHeaders())
+                .body(response.getResponse());
     }
 }

@@ -19,10 +19,10 @@ public class RedisInitializeConfig {
                 .parallelStream()
                 .forEach(n -> Objects.requireNonNull(cacheManager.getCache(n)).clear());
     }
-
-    @PostConstruct
-    public void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-    }
+//
+//    @PostConstruct
+//    public void started() {
+//        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+//    }
 
 }
