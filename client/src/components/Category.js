@@ -53,10 +53,7 @@ function Category() {
 export default Category;
 
 const CategoryContainer = styled.div`
-  /* position: fixed;
-  top: 120; */
   padding-top: 110px;
-  /* margin-top: 110px; */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

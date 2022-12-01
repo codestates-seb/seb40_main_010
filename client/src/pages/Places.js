@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
@@ -17,7 +17,6 @@ import {
 
 export default function Places() {
   const [mainPlaceData, setMainPlaceData] = useRecoilState(mainDataState);
-  const [clickedNav, setClickedNav] = useState(false);
   const [hasNextPage, setHasNextPage] = useRecoilState(NextPage);
   const [page, setPage] = useRecoilState(pageState);
   const url = useRecoilValue(settingUrl);
@@ -26,9 +25,7 @@ export default function Places() {
   const observerTargetElement = useRef(null);
 
   const getPageData = useCallback(async () => {
-    // console.log(url, page);
     try {
-      // console.log(url, page);
       const { data } = await axios.get(`${url}${page}`, {
         headers: {
           'ngrok-skip-browser-warning': '010',
@@ -48,14 +45,6 @@ export default function Places() {
         setMainPlaceData(prevPosts => [...prevPosts, ...data.data]);
       }
 
-      // if (page === 1) {
-      //   setMainPlaceData([...data.data]);
-      // }
-
-      // if (page !== 1 && mainPlaceData) {
-      //   setMainPlaceData(prevPosts => [...prevPosts, ...data.data]);
-      // }
-
       if (data.data.length === 20) {
         setPage(prev => prev + 1);
       }
@@ -69,14 +58,14 @@ export default function Places() {
   useEffect(() => {
     if (!observerTargetElement.current || !hasNextPage) return;
 
-    // console.log(url, page);
     const observation = new IntersectionObserver(entries => {
-      console.log(entries[0]);
       if (entries[0].isIntersecting) {
         getPageData();
       }
     });
+
     observation.observe(observerTargetElement.current);
+
     // eslint-disable-next-line consistent-return
     return () => {
       observation.disconnect();
@@ -85,11 +74,7 @@ export default function Places() {
 
   return (
     <MainContainer>
-      <Nav
-        setClickedNav={setClickedNav}
-        clickedNav={clickedNav}
-        setPage={setPage}
-      />
+      <Nav />
       <Category page={page} />
       <DisplayComponentDiv>
         {isLogIn ? <MbtiPlaces /> : null}
@@ -126,11 +111,9 @@ const DisplayComponentDiv = styled.div`
   margin: 1 auto;
   .observer {
     padding: 2px;
-    /* border: 1px solid black; */
   }
 `;
 const MainComponentContainer = styled.div`
-  /* border: 1px solid red; */
   display: flex;
   //rem
   width: 1225px;

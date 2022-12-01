@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import Places from './pages/Places';
 import Detail from './pages/Detail';
@@ -18,7 +18,7 @@ import { HasRefresh, mbtiPlaceDataState } from './atoms';
 
 function App() {
   const [timer, setTimer] = useState(false);
-  const [, setLogIn] = useRecoilState(HasRefresh);
+  const setLogIn = useSetRecoilState(HasRefresh);
   const resetMbti = useSetRecoilState(mbtiPlaceDataState);
 
   const token = localStorage.getItem('ACCESS');

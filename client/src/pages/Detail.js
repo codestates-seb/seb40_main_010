@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
-
 import axios from 'axios';
+
 import {
   DetailInformation,
   bookmarkState,
-  // mainDataState,
   reservationStartDate,
   reservationEndDate,
 } from '../atoms';
@@ -18,7 +17,6 @@ import ReviewContainer from '../components/ReviewComponents/ReviewContainer';
 
 function Detail() {
   const { id } = useParams();
-  // const resetPlaces = useResetRecoilState(mainDataState);
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
@@ -40,6 +38,7 @@ function Detail() {
               : '',
           },
         });
+
         setDetailInformation({ ...response.data });
         setIsBookmark(response.data.bookmark);
         setSlots(prev => [...prev, ...response.data.reserves]);
@@ -52,7 +51,6 @@ function Detail() {
   };
 
   useEffect(() => {
-    // resetPlaces();
     getDetailData();
   }, [isBookmark, id]);
 
@@ -81,7 +79,6 @@ const DetailContainer = styled.div`
   width: 1280px;
   display: flex;
   flex-direction: row;
-  /* justify-content: center; */
   justify-content: space-around;
 `;
 const DetailViewContainer = styled.div``;
