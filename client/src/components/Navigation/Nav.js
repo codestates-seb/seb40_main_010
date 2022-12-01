@@ -83,6 +83,7 @@ function Nav({ navColor, buttonColor }) {
   };
 
   const onClickHomeIcon = () => {
+    setSearch('');
     invalidate();
     setUrl(() => `/home?size=20&page=`);
   };
@@ -91,7 +92,7 @@ function Nav({ navColor, buttonColor }) {
     <NavContainer>
       <NavBackground navColor={navColor}>
         <SlHome onClick={onClickHomeIcon} className="NavLogo" />
-        <div className="structure" />
+        {/* <div className="structure" /> */}
         <SearchContainer onSubmit={onSubmit}>
           <SearchInput value={currentSearch} onChange={onChangeSearch} />
           <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />
@@ -124,17 +125,17 @@ const NavBackground = styled.div`
   height: 70px;
   background-color: ${props => props.navColor || '#89bbff'};
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-
+  /* 
   .structure {
     width: 116px;
-  }
+  } */
 
   .NavLogo {
     font-size: 2rem;
-    padding-right: 9vw;
-    padding-left: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    margin-right: 9vw;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     color: #2b2b2b;
     &:hover {
       cursor: pointer;
@@ -184,8 +185,10 @@ const SearchInput = styled.input`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   margin-right: 20px;
   margin-left: 20px;
+  /* border: 1px solid red; */
+  width: 188px;
 `;

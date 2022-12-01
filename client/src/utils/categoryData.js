@@ -14,7 +14,7 @@ export const categoryData = [
 
 export const getURL = (index, search) => {
   if (index === 0 && search) {
-    return `/search/${encodeURI(search)}`;
+    return `/search/${encodeURI(search)}?size=20&page=`;
   }
   if (index === 0 && !search) {
     return `/home?size=20&page=`;

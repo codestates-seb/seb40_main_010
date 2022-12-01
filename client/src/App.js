@@ -4,6 +4,8 @@ import axios from 'axios';
 
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+
 import Places from './pages/Places';
 import Detail from './pages/Detail';
 import LogIn from './pages/LogIn';
@@ -12,9 +14,12 @@ import Register from './pages/Register';
 import SignUp from './pages/SignUp';
 import NotFound from './components/NotFound';
 import header from './utils/header';
+import { HasRefresh, mbtiPlaceDataState } from './atoms';
 
 function App() {
   const [timer, setTimer] = useState(false);
+  const [, setLogIn] = useRecoilState(HasRefresh);
+  const resetMbti = useSetRecoilState(mbtiPlaceDataState);
 
   const token = localStorage.getItem('ACCESS');
   const isLogIn = localStorage.getItem('REFRESH');
@@ -31,8 +36,13 @@ function App() {
 
     if (currentTime > exp) {
       alert('다시 로그인 해주세요');
-      localStorage.removeItem('ACCESS');
-      localStorage.removeItem('REFRESH');
+
+      await localStorage.removeItem('ACCESS');
+      await localStorage.removeItem('REFRESH');
+
+      await setLogIn(false);
+
+      resetMbti([]);
     }
 
     if (exp - currentTime <= 60 * 3) {
