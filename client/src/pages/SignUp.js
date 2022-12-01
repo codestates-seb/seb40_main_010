@@ -209,15 +209,15 @@ const Container = styled.div`
   .wrapper {
     width: 70%;
     height: fit-content;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .title {
     width: 100%;
     height: fit-content;
     font-size: 0.95rem;
-    font-weight: 600;
-    color: #2b2b2b;
+    font-weight: 500;
+    color: black;
     margin-bottom: 10px;
   }
 
@@ -269,15 +269,15 @@ const Input = styled.input`
   border-bottom: 1px solid #c9c9c9;
   color: #2b2b2b;
   padding: 3px 0px;
-  margin-bottom: 10px;
 
   ::placeholder {
     font-size: 0.8rem;
+    font-weight: 500;
   }
 `;
 
 const MbtiSelect = styled(Select)`
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   width: 100%;
 
   .Select__control {
@@ -286,6 +286,10 @@ const MbtiSelect = styled(Select)`
     border-bottom: 1px solid #c9c9c9;
     border-radius: 5px;
     cursor: pointer;
+
+    &--is-focused {
+      border: none;
+    }
   }
 
   .Select__indicator-separator {

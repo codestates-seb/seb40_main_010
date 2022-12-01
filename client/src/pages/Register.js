@@ -325,7 +325,7 @@ const Validation = styled.div`
 const Input = styled.input`
   width: 94%;
   height: 1.1rem;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   outline: none;
   border: none;
   border-bottom: 1px solid #aaa;
@@ -336,7 +336,7 @@ const Input = styled.input`
 const SmallInput = styled.input`
   width: ${({ width }) => width};
   height: 1.1rem;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   outline: none;
   border: 1px solid #aaa;
   border-radius: 5px;
