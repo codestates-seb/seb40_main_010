@@ -72,11 +72,6 @@ export default function LogIn() {
   );
 }
 
-const Img = styled.img`
-  width: 90px;
-  margin-bottom: 80px;
-`;
-
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -110,7 +105,7 @@ const Container = styled.div`
     height: fit-content;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #2b2b2b;
+    color: black;
     margin-bottom: 10px;
   }
 
@@ -172,4 +167,9 @@ const SignUpLink = styled(Link)`
   color: #666666;
   font-size: 0.8rem;
   font-weight: 500;
+`;
+
+const Img = styled.img`
+  width: 90px;
+  margin-bottom: 80px;
 `;
