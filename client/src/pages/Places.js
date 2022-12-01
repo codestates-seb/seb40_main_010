@@ -132,6 +132,7 @@ const Structure = styled.div`
 const MainContainer = styled.div`
   display: block;
   background-color: #f9f9f9;
+  height: 100%;
 `;
 
 const Div = styled.div`

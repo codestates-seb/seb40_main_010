@@ -141,7 +141,7 @@ const BlurBackground = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  height: 100%;
+  height: 300%;
 `;
 
 const ReviewContainer = styled.div`
@@ -210,15 +210,14 @@ const PlaceName = styled.div`
 const Image = styled.img`
   width: 130px;
   height: 130px;
-  border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 5px;
 `;
 
 const ReviewInput = styled.textarea`
   box-sizing: border-box;
   width: 90%;
   height: 130px;
-  border-radius: 15px;
+  border-radius: 5px;
   border: 1px solid #d9d9d9;
   padding: 1em;
   opacity: 1;
@@ -243,11 +242,10 @@ const ReviewButton = styled.button`
   font-weight: bold;
   width: 115px;
   height: 45px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin-left: 16px;
 
   &.yellow {
-    background-color: #ffce31;
+    background-color: #ffda77;
     color: white;
   }
 

@@ -209,7 +209,7 @@ const NameAndEditIconContainer = styled.div`
   margin-bottom: 6px;
 
   & svg {
-    color: #ffce31;
+    color: #ffda77;
     margin-left: 8px;
     cursor: pointer;
   }
@@ -263,16 +263,16 @@ const MyPageCategoryItem = styled.button`
   }
 
   :focus {
-    color: #ffce31;
+    color: #ffda77;
     & svg {
-      color: #ffce31;
+      color: #ffda77;
     }
   }
 
   :hover {
-    color: #ffce31;
+    color: #ffda77;
     & svg {
-      color: #ffce31;
+      color: #ffda77;
     }
   }
 `;

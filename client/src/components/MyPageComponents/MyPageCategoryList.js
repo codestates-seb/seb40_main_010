@@ -332,6 +332,7 @@ const RatingStarContainer = styled.div`
 const PlaceRating = styled.div`
   font-size: 18px;
   font-weight: bold;
+  padding-top: 3px;
 `;
 
 const CategoryActionContainer = styled.div`

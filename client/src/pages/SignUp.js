@@ -188,10 +188,11 @@ export default SignUp;
 const Container = styled.div`
   width: 100vw;
   /* height: 800px; */
-  height: 100vh;
+  height: 100%;
   background-color: #f9f9f9;
   display: flex;
   justify-content: center;
+  padding-bottom: 100px;
 
   .signup-container {
     margin-top: 35%;
