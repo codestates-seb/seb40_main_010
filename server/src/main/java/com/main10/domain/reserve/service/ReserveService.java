@@ -1,5 +1,6 @@
 package com.main10.domain.reserve.service;
 
+import com.main10.domain.reserve.response.Message;
 import com.main10.global.batch.service.MbtiCountService;
 import com.main10.domain.reserve.dto.ReserveDto;
 import com.main10.domain.reserve.entity.Reserve;
@@ -24,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import static com.main10.domain.reserve.utils.PayConstants.*;
+import static com.main10.domain.reserve.utils.ReserveConstants.INFO_URI_MSG;
+import static com.main10.domain.reserve.utils.ReserveConstants.PAY_URI_MSG;
 
 @Slf4j
 @Service
@@ -80,7 +83,7 @@ public class ReserveService {
      * @author mozzi327
      */
     @Transactional
-    public String getKaKaoPayUrl(Long reserveId,
+    public Message getKaKaoPayUrl(Long reserveId,
                                  String refreshToken,
                                  String requestUrl) {
 
@@ -104,7 +107,10 @@ public class ReserveService {
         findReserve.setPaymentInfo(params, payReadyDto.getTid());
         reserveDbService.saveReserve(findReserve);
 
-        return payReadyDto.getNextRedirectPcUrl();
+        return Message.builder()
+                .data(payReadyDto.getNextRedirectPcUrl())
+                .message(PAY_URI_MSG)
+                .build();
     }
 
 
@@ -116,8 +122,8 @@ public class ReserveService {
      * @author mozzi327
      */
     @Transactional
-    public PayApproveInfo getApprovedKaKaoPayInfo(Long reserveId,
-                                                  String pgToken) {
+    public Message getApprovedKaKaoPayInfo(Long reserveId,
+                                           String pgToken) {
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
         Member findMember = memberDbService.ifExistsReturnMember(findReserve.getMemberId());
 
@@ -135,7 +141,10 @@ public class ReserveService {
 
         mbtiCountService.addMbtiCount(findMember, findReserve.getPlaceId());
 
-        return approvalDto;
+        return Message.builder()
+                .data(approvalDto)
+                .message(INFO_URI_MSG)
+                .build();
     }
 
 
