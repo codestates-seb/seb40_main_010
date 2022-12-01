@@ -1,12 +1,10 @@
 package com.main10.member.auth.controller;
 
-import com.main10.domain.member.dto.TokenDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
@@ -34,12 +32,12 @@ public class ReIssueTest extends AuthControllerTest {
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         given(memberDbService.ifExistsReturnMember(Mockito.anyLong())).willReturn(member);
         given(redisUtils.getData(Mockito.anyString())).willReturn(tmp);
-        given(authService.reIssueToken(accessToken, refreshToken)).willReturn(resToken);
+        given(authService.reIssueToken(Mockito.anyString(), Mockito.anyString())).willReturn(resToken);
 
 
         ResultActions actions = mockMvc.perform(get("/auth/re-issue")
-                        .header(REFRESH, refreshToken)
                         .header(AUTHORIZATION, "Bearer " + accessToken)
+                        .header(REFRESH, refreshToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf()));

@@ -104,9 +104,9 @@ public class AuthService {
         if (jwtTokenUtils.validateToken(accessToken))
             throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
 
-        // refreshToken이 존재하지 않는 경우 예외를 던짐
-        if (redisUtils.getData(refreshToken) == null)
-            throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
+//        // refreshToken이 존재하지 않는 경우 예외를 던짐
+//        if (redisUtils.getData(refreshToken) == null)
+//            throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
 
         // 레디스에 저장된 Id 추출
         Long memberId = redisUtils.getId(refreshToken);
