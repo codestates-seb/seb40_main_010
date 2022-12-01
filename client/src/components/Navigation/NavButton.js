@@ -110,6 +110,7 @@ export function NavRightButtonContainer() {
 
     await setIsLogIn(false);
     await invalidate();
+    // setUrl(() => `/home?size=20&page=`);
     // await resetMbti();
     alert('로그아웃 되셨습니다');
   };
