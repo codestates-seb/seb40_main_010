@@ -140,10 +140,11 @@ public class ReviewService {
     }
 
     /**
+     * 장소 평점 계산 메서드
      *
-     * @param findPlace
-     * @param totalScore
-     * @param placeId
+     * @param findPlace 장소
+     * @param totalScore 등록된 총 평점
+     * @param placeId 장소 식별자
      * @author LimJaeminZ
      */
     public void modifyScore(Place findPlace, Double totalScore, Long placeId) {
