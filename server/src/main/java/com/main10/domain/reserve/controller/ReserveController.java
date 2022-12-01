@@ -56,20 +56,18 @@ public class ReserveController {
     public ResponseEntity<Message> orderAction(@PathVariable(name = "reserve-id") Long reserveId,
                                                @RequestHeader(REFRESH_TOKEN) String refreshToken,
                                                HttpServletRequest req) {
+
         String requestUrl = req.getRequestURL()
                 .toString()
                 .replace(req.getRequestURI(), "");
-        String url = reserveService.getKaKaoPayUrl(reserveId, refreshToken, requestUrl);
 
-        if (url == null) getFailedPayMessage();
+        Message message = reserveService.getKaKaoPayUrl(reserveId, refreshToken, requestUrl);
+
+        if (message.getData() == null) getFailedPayMessage();
 
         return ResponseEntity
                 .ok()
-                .body(
-                        Message.builder()
-                                .data(url)
-                                .message(PAY_URI_MSG)
-                                .build());
+                .body(message);
     }
 
 
@@ -84,19 +82,15 @@ public class ReserveController {
     @GetMapping("/api/reserve/{reserve-id}/completed")
     public ResponseEntity<Message> paySuccessAction(@PathVariable("reserve-id") Long reserveId,
                                                     @RequestParam("pg_token") String pgToken) {
-        PayApproveInfo payInfo = reserveService.getApprovedKaKaoPayInfo(reserveId, pgToken);
 
-        if (payInfo == null) getFailedPayMessage();
+        Message message = reserveService.getApprovedKaKaoPayInfo(reserveId, pgToken);
+
+        if (message.getData() == null) getFailedPayMessage();
 
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(
-                        Message.builder()
-                                .data(payInfo)
-                                .message(INFO_URI_MSG)
-                                .build()
-                );
+                .body(message);
     }
 
 
@@ -190,7 +184,7 @@ public class ReserveController {
      * @return ResponseEntity
      * @author Quartz614
      */
-    @PatchMapping("place/reserve/{reserve-id}/edit") // 유저 테이블 생성 시 유저 추가
+    @PatchMapping("/place/reserve/{reserve-id}/edit") // 유저 테이블 생성 시 유저 추가
     public ResponseEntity patchReserve(@PathVariable("reserve-id") Long reserveId,
                                        @RequestBody ReserveDto.Patch patch,
                                        @RequestHeader(REFRESH_TOKEN) String refreshToken) {

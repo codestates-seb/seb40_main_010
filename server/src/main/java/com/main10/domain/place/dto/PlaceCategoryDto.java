@@ -3,13 +3,17 @@ package com.main10.domain.place.dto;
 import com.main10.domain.place.entity.Place;
 import com.main10.domain.place.entity.PlaceImage;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class PlaceCategoryDto {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Search {
         private Long categoryId;
         private String categoryName;
@@ -22,13 +26,13 @@ public class PlaceCategoryDto {
 
     @Getter
     public static class Response {
-        private Long categoryId;
-        private Long placeId;
-        private String title;
-        private int charge;
-        private String image;
-        private Double score;
-        private String address;
+        private final Long categoryId;
+        private final Long placeId;
+        private final String title;
+        private final int charge;
+        private final String image;
+        private final Double score;
+        private final String address;
 
         @Builder
         @QueryProjection
@@ -45,13 +49,13 @@ public class PlaceCategoryDto {
 
     @Getter
     public static class ResponseTest {
-        private Long categoryId;
-        private Long placeId;
-        private String title;
-        private int charge;
-        private String image;
-        private Double score;
-        private String address;
+        private final Long categoryId;
+        private final Long placeId;
+        private final String title;
+        private final int charge;
+        private final String image;
+        private final Double score;
+        private final String address;
 
         @Builder
         @QueryProjection

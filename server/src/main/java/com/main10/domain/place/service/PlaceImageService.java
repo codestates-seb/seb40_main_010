@@ -2,7 +2,6 @@ package com.main10.domain.place.service;
 
 import com.main10.domain.place.repository.PlaceImageRepository;
 import com.main10.domain.place.dto.PlaceImageDto;
-import com.main10.domain.place.dto.PlaceImageResponseDto;
 import com.main10.domain.place.entity.PlaceImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,12 +34,12 @@ public class PlaceImageService {
     /**
      * 이미지 전체 조회
      * */
-    public List<PlaceImageResponseDto> findAllByPlaceImagePath(Long placeId) {
+    public List<PlaceImageDto.Response> findAllByPlaceImagePath(Long placeId) {
 
         List<PlaceImage> placeImageList = placeImageRepository.findAllByPlaceId(placeId);
 
         return placeImageList.stream()
-                .map(PlaceImageResponseDto::new)
+                .map(PlaceImageDto.Response::new)
                 .collect(Collectors.toList());
     }
 
