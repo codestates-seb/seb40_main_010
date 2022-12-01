@@ -23,6 +23,6 @@ public abstract class Auditable {
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
 
-    public Auditable() {
+    protected Auditable() {
     }
 }
