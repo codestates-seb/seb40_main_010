@@ -17,10 +17,7 @@ function ReviewContainer() {
         },
       });
       setReviews([...response.data.data]);
-
-      console.log(response.data);
     } catch (err) {
-      console.log(err);
       setReviews([]);
     }
   };

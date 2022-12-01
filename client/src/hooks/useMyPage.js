@@ -6,7 +6,6 @@ import {
   handleGetPreviewImagesUrl,
 } from '../utils/images';
 import { wholeData } from '../atoms';
-// import header from '../utils/header';
 
 const useMyPage = () => {
   const [myPageCategory, setMyPageCategory] = useState('등록내역');
@@ -63,7 +62,6 @@ const useMyPage = () => {
 
   const checkNickNameValidation = nickname => {
     const validationType = getValidationType(nickname);
-    // if문 고치기
     if (validationType !== 'regular')
       return setValidationException(validationType);
 
@@ -71,14 +69,6 @@ const useMyPage = () => {
     setNickNameValidationMessage('');
     return null;
   };
-
-  // const header = {
-  //   headers: {
-  //     'ngrok-skip-browser-warning': '010',
-  //     Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-  //     RefreshToken: localStorage.getItem('REFRESH'),
-  //   },
-  // };
 
   const clearCategory = () => {
     setListData([]);
@@ -112,7 +102,6 @@ const useMyPage = () => {
             : '',
         },
       });
-      console.log('place', response.data.data);
       setListData([...response.data.data]);
     } catch (err) {
       clearCategory();
@@ -134,7 +123,6 @@ const useMyPage = () => {
             : '',
         },
       });
-      console.log('reserve', response.data.data);
       setListData([...response.data.data]);
     } catch (err) {
       clearCategory();
@@ -156,7 +144,6 @@ const useMyPage = () => {
             : '',
         },
       });
-      console.log('bookmark', response.data.data);
 
       setListData(() => [...response.data.data]);
     } catch (err) {
@@ -179,7 +166,6 @@ const useMyPage = () => {
             : '',
         },
       });
-      console.log('review', response.data.data);
       setListData([...response.data.data]);
     } catch (err) {
       clearCategory();
@@ -250,7 +236,7 @@ const useMyPage = () => {
     editStatusChange();
     setUserNickName(memberData.nickname);
     setUserMBTI(memberData.mbti);
-    setPreviewProfileImage([]);
+    setPreviewProfileImage(memberData.profileImage);
     setNickNameCheck(true);
     setNickNameValidationMessage('');
   };

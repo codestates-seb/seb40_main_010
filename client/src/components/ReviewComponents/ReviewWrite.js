@@ -19,13 +19,6 @@ function ReviewWrite({
   const [reviewText, setReviewText] = useState('');
   const { reviewList } = useMyPage();
 
-  // const header = {
-  //   headers: {
-  //     Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-  //     RefreshToken: localStorage.getItem('REFRESH'),
-  //   },
-  // };
-
   const showReviewModal = () => {
     setReviewModalOpen(!reviewModalOpen);
   };
@@ -122,11 +115,11 @@ function ReviewWrite({
         </ReviewInput>
         <ButtonContainer>
           {reviewId ? (
-            <ReviewButton className="blue" onClick={submitEditReview}>
+            <ReviewButton className="yellow" onClick={submitEditReview}>
               수정
             </ReviewButton>
           ) : (
-            <ReviewButton className="blue" onClick={submitReview}>
+            <ReviewButton className="yellow" onClick={submitReview}>
               등록
             </ReviewButton>
           )}
@@ -194,8 +187,8 @@ const TextDateContainer = styled.div`
 `;
 
 const Review = styled.div`
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 500;
 `;
 
 const CurrentDate = styled.div`
@@ -208,7 +201,7 @@ const PlaceName = styled.div`
   display: flex;
   justify-content: center;
   align-items: top;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: bold;
   padding-top: 8px;
   height: 50px;
@@ -253,12 +246,14 @@ const ReviewButton = styled.button`
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin-left: 16px;
 
-  &.blue {
-    background-color: #89bbff;
+  &.yellow {
+    background-color: #ffce31;
     color: white;
   }
 
   :hover {
+    background-color: #fff9eb;
+    transition: 0.7s;
     cursor: pointer;
   }
 `;
