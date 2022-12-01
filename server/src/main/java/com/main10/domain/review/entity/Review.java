@@ -29,7 +29,9 @@ public class Review {
     private Long memberId;
 
     private Long placeId;
-
+    
+    @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
 
