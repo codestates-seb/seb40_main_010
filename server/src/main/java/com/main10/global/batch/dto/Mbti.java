@@ -4,17 +4,19 @@ import com.main10.domain.place.entity.Place;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class Mbti {
 
     @Getter
+    @NoArgsConstructor
     public static class Response {
-        private final Long placeId;
-        private final String title;
-        private final Integer charge;
-        private final String image;
-        private final Double score;
-        private final String address;
+        private Long placeId;
+        private String title;
+        private Integer charge;
+        private String image;
+        private Double score;
+        private String address;
 
         @Builder
         @QueryProjection

@@ -7,6 +7,7 @@ import com.main10.domain.member.dto.TokenDto;
 import com.main10.domain.member.entity.Member;
 import com.main10.domain.member.service.AuthService;
 import com.main10.domain.member.service.MemberDbService;
+import com.main10.global.security.dto.LoginDto;
 import com.main10.global.security.utils.JwtTokenUtils;
 import com.main10.global.security.utils.RedisUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,9 +56,9 @@ public class AuthControllerTest {
 
     protected HttpHeaders headers;
 
-    protected AuthDto.Login login;
+    protected LoginDto login;
 
-    protected AuthDto.Response res;
+    protected AuthDto res;
     protected Member member;
     protected TokenDto.Response resToken;
 
@@ -78,12 +79,12 @@ public class AuthControllerTest {
                 .mbti("INFJ")
                 .build();
 
-        login = AuthDto.Login.builder()
+        login = LoginDto.builder()
                 .email("hgd@gmail.com")
                 .password("ghdrlfehd")
                 .build();
 
-        res = AuthDto.Response.builder()
+        res = AuthDto.builder()
                 .nickname("홍길동")
                 .email("hgd@gmail.com")
                 .mbti("INFJ")

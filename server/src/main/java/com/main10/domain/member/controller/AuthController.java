@@ -1,6 +1,5 @@
 package com.main10.domain.member.controller;
 
-import com.main10.domain.member.dto.AuthDto;
 import com.main10.domain.member.dto.TokenDto;
 import com.main10.domain.member.service.AuthService;
 import com.main10.global.security.dto.LoginDto;
@@ -8,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-
 import static com.main10.domain.member.utils.AuthConstant.*;
 
 @Slf4j
