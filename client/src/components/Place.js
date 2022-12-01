@@ -21,6 +21,8 @@ function Place({ placeData }) {
 
   const slicedTitle = title.slice(0, 15);
 
+  const addressSlice = address.slice(0, 20);
+
   const onClickPlaceComponent = () => {
     // resetPlaces();
     // setPage(1);
@@ -44,7 +46,7 @@ function Place({ placeData }) {
             <ImStarFull className="starIcon" />
             <PlaceScore>{score}</PlaceScore>
           </TitleContainer>
-          <PlaceAddress>{address}</PlaceAddress>
+          <PlaceAddress>{addressSlice}</PlaceAddress>
           <PlaceCharge>{chargePerHour}원</PlaceCharge>
         </MainComponent>
       </Link>
