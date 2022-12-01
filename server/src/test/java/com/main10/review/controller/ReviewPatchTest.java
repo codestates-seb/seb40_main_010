@@ -35,6 +35,7 @@ public class ReviewPatchTest extends ReviewControllerTest {
     @DisplayName("PATCH 리뷰 수정")
     void patchReview() throws Exception {
         Long reviewId = 1L;
+
         ReviewDto.Patch patch = ReviewDto.Patch.builder()
                 .score(2.5)
                 .comment("진짜 별로입니다..")
@@ -45,15 +46,19 @@ public class ReviewPatchTest extends ReviewControllerTest {
                 .address("경기도 오사카시")
                 .charge(100000)
                 .build();
+
         Member member = Member.builder()
                 .email("hgd@gmail.com")
                 .roles(List.of("USER"))
                 .build();
+
         String content = gson.toJson(patch);
         String accessToken = jwtTokenUtils.generateAccessToken(member);
         String refreshToken = jwtTokenUtils.generateRefreshToken(member);
+
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         doNothing().when(reviewService).updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class), Mockito.anyString());
+
         ResultActions actions =
                 mockMvc.perform(
                         patch("/review/{review-id}/edit", reviewId)
@@ -64,11 +69,13 @@ public class ReviewPatchTest extends ReviewControllerTest {
                                 .content(content)
                                 .with(csrf())
                 );
+
         actions
                 .andExpect(status().isOk())
                 .andDo(document("리뷰 수정",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+
                         requestHeaders(
                                 headerWithName(AUTHORIZATION).description("엑세스 토큰"),
                                 headerWithName(REFRESH).description("리프레시 토큰")
