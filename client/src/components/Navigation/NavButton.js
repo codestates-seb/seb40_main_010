@@ -10,7 +10,6 @@ import {
 } from 'recoil';
 import axios from 'axios';
 import {
-  // mbtiPlaceDataState,
   HasRefresh,
   NextPage,
   categoryFocus,
@@ -90,7 +89,6 @@ export function NavRightButtonContainer() {
     setUrl(() => `/home?size=20&page=`);
   };
 
-  // const resetMbti = useResetRecoilState(mbtiPlaceDataState);
   const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
 
   const onClickLogOutButton = async () => {
@@ -110,8 +108,6 @@ export function NavRightButtonContainer() {
 
     await setIsLogIn(false);
     await invalidate();
-    // setUrl(() => `/home?size=20&page=`);
-    // await resetMbti();
     alert('로그아웃 되셨습니다');
   };
 
@@ -157,10 +153,7 @@ const NavLeftButton = styled.button`
   padding: 8px;
   border-radius: 20px;
   border: none;
-  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
-  /* box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 3px; */
   background-color: ${props => props.buttonColor || '#ffda77'};
-  /* background-color: #666; */
   font-size: 0.8rem;
   font-weight: 500;
   line-height: 20px;

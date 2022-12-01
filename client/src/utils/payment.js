@@ -1,4 +1,3 @@
-// a tag 바꾸기
 export const onClickPaymentButton = link => {
   window.open(
     link,

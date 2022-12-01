@@ -4,18 +4,11 @@ import { ImStarFull } from 'react-icons/im';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState, useResetRecoilState } from 'recoil';
 
-import {
-  DetailInformation,
-  PlaceIDState,
-  // mainDataState,
-  // pageState,
-} from '../atoms';
+import { DetailInformation, PlaceIDState } from '../atoms';
 
 function Place({ placeData }) {
   const setFocusPlaceID = useSetRecoilState(PlaceIDState);
   const resetDetailInformation = useResetRecoilState(DetailInformation);
-  // const resetPlaces = useResetRecoilState(mainDataState);
-  // const setPage = useSetRecoilState(pageState);
 
   const { address, charge, image, score, title, placeId } = placeData;
 
@@ -24,8 +17,6 @@ function Place({ placeData }) {
   const addressSlice = address.slice(0, 20);
 
   const onClickPlaceComponent = () => {
-    // resetPlaces();
-    // setPage(1);
     resetDetailInformation();
     setFocusPlaceID(placeId);
   };

@@ -8,6 +8,7 @@ const categoryButton = ({
   focusCategoryID,
 }) => {
   const { categoryId, icon, name } = category;
+
   return (
     <CategoryButton
       type="button"
@@ -32,7 +33,6 @@ const CategoryButton = styled.button`
   color: #aaaaaa;
   border: none;
   padding: 5px;
-  /* font-size: 0.3rem; */
   font-weight: 500;
   display: flex;
   flex-direction: column;
@@ -49,7 +49,6 @@ const CategoryButton = styled.button`
   &:hover {
     color: #eb7470;
     cursor: pointer;
-    /* transition: 0.3s; */
   }
   &.focus {
     color: #eb7470;

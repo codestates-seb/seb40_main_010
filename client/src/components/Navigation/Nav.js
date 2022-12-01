@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
-// import { SlHome } from 'react-icons/sl';
 
 import {
   navSearchValue,
@@ -15,7 +14,7 @@ import {
 } from '../../atoms';
 import { NavLeftButtonContainer, NavRightButtonContainer } from './NavButton';
 
-function Nav({ navColor, buttonColor }) {
+function Nav({ buttonColor }) {
   const [currentSearch, setCurrentSearch] = useState('');
 
   const setSearch = useSetRecoilState(navSearchValue);
@@ -90,10 +89,8 @@ function Nav({ navColor, buttonColor }) {
 
   return (
     <NavContainer>
-      <NavBackground navColor={navColor}>
-        {/* <SlHome onClick={onClickHomeIcon} className="NavLogo" /> */}
+      <NavBackground>
         <Img src="/logo1.png" alt="logo" onClick={onClickHomeIcon} />
-        {/* <div className="structure" /> */}
         <SearchContainer onSubmit={onSubmit}>
           <SearchInput value={currentSearch} onChange={onChangeSearch} />
           <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />
@@ -123,21 +120,9 @@ const NavBackground = styled.div`
   left: 0;
   right: 0;
   width: 100vw;
-  /* height: 75px; */
-  /* height: 80px; */
-
   height: 85px;
-  /* height: 90px; */
-  /* height: 100px; */
-  /* background-color: ${props => props.navColor || '#89bbff'}; */
-  /* background-color: #222125; */
   border-bottom: 1px solid #d7d7d7;
   background-color: #ffffff;
-  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
-  /* 
-  .structure {
-    width: 116px;
-  } */
 
   .NavLogo {
     font-size: 2rem;
@@ -158,7 +143,6 @@ const Img = styled.img`
   &:hover {
     cursor: pointer;
   }
-  /* background-image: url('./logo1.png'); */
 `;
 
 const SearchContainer = styled.form`
@@ -194,7 +178,6 @@ const SearchInput = styled.input`
   border-radius: 20px;
   border: 1px solid #d7d7d7;
   background-color: #ffffff;
-  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
   caret-color: #89bbff;
   &:focus {
     outline: none;
@@ -207,6 +190,5 @@ const ButtonContainer = styled.div`
   align-items: center;
   margin-right: 20px;
   margin-left: 20px;
-  /* border: 1px solid red; */
   width: 188px;
 `;
