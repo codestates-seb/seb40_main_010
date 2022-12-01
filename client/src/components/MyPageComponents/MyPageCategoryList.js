@@ -62,11 +62,8 @@ function MyPageCategoryList({ listData, type }) {
     if (createdAt === undefined) return null;
 
     const date = dayjs(createdAt).subtract(2000, 'y');
-    if (date.$H > 12) {
-      date.$H -= 12;
-      return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}PM`;
-    }
-    return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}AM`;
+
+    return `${date.$y}.${date.$M + 1}.${date.$D}`;
   };
 
   const reviewDelete = async () => {
