@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
+import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -93,20 +95,42 @@ public class ReservePaymentTest extends ReserveControllerTest{
 
     @Test
     @DisplayName("예약 프로세스 4 - 결제 취소")
-    void payCancelAction() {
+    void payCancelAction() throws Exception{
+
+        doNothing().when(reserveService).setFailedStatus(reserve.getId());
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/api/reserve/{reserve-id}/cancel", reserve.getId())
+                );
+
+        actions
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "결제 취소",
+                        pathParameters(
+                                parameterWithName("reserve-id").description("예약 식별자")
+                        )
+                ));
 
     }
 
     @Test
     @DisplayName("예약 프로세스 5 - 결제 실패")
-    void payFailedAction() {
+    void payFailedAction() throws Exception {
 
+        doNothing().when(reserveService).setFailedStatus(reserve.getId());
+        ResultActions actions =
+                mockMvc.perform(
+                        get("/api/reserve/{reserve-id}/fail", reserve.getId())
+                );
+
+        actions
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "결제 실패",
+                        pathParameters(
+                                parameterWithName("reserve-id").description("예약 식별자")
+                        )
+                ));
     }
-
-    @Test
-    @DisplayName("URL 요청 시 리턴되는 URL이 없을 때")
-    void getFailedPayMessage() {
-
-    }
-
 }
