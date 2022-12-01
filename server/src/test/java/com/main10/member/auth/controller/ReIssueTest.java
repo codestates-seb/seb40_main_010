@@ -34,7 +34,6 @@ public class ReIssueTest extends AuthControllerTest {
         given(redisUtils.getData(Mockito.anyString())).willReturn(tmp);
         given(authService.reIssueToken(Mockito.anyString(), Mockito.anyString())).willReturn(resToken);
 
-
         ResultActions actions = mockMvc.perform(get("/auth/re-issue")
                         .header(AUTHORIZATION, "Bearer " + accessToken)
                         .header(REFRESH, refreshToken)
