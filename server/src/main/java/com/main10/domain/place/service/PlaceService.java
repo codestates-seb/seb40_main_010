@@ -367,10 +367,11 @@ public class PlaceService {
     }
 
     /**
+     * 새롭게 전달받은 파일 리스트 반환 메서드
      *
-     * @param dbPlaceImageList
-     * @param multipartFileList
-     * @param dir
+     * @param dbPlaceImageList 조회된 이미지 리스트
+     * @param multipartFileList 새로운 이미지 리스트
+     * @param dir Local/S3
      * @return List<MultipartFile>
      * @author LimJaeminZ
      */
