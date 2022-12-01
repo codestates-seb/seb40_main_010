@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
  * @author mozzi327
  */
 public class AuthDto {
+
     @Getter
+    @Builder
+    @NoArgsConstructor
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Login {
@@ -19,27 +22,21 @@ public class AuthDto {
     }
 
     @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Token {
-        private final String accessToken;
-        private final String refreshToken;
-
-        @Builder
-        public Token(String accessToken, String refreshToken) {
-            this.accessToken = accessToken;
-            this.refreshToken = refreshToken;
-        }
+        private String accessToken;
+        private String refreshToken;
     }
 
     @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Response {
-        private final String nickname;
-        private final String email;
-
-
-        @Builder
-        public Response(String nickname, String email) {
-            this.nickname = nickname;
-            this.email = email;
-        }
+        private String nickname;
+        private String email;
+        private String mbti;
     }
 }

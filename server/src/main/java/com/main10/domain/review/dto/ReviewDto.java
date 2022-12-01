@@ -49,6 +49,7 @@ public class ReviewDto {
         private final Double score;
         private final String comment;
         private final LocalDateTime createdAt;
+        private final String profileImage;
 
         @Builder
         @QueryProjection
@@ -58,6 +59,7 @@ public class ReviewDto {
             this.score = review.getScore();
             this.comment = review.getComment();
             this.createdAt = review.getCreatedAt();
+            this.profileImage = member.getMemberImage().getFilePath();
         }
     }
 

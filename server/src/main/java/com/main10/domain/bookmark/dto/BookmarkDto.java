@@ -9,7 +9,7 @@ import lombok.Getter;
 public class BookmarkDto {
 
     @Getter
-    public static class Response implements Comparable<Response> {
+    public static class Response {
         private final Long bookmarkId;
         private final Long placeId;
         private final String image;
@@ -30,17 +30,6 @@ public class BookmarkDto {
             this.score = place.getScore();
             this.charge = place.getCharge();
             this.address = place.getAddress();
-        }
-
-        /**
-         * 북마크 최신순 정렬 메서드
-         * @param o Response
-         * @return 1 or -1
-         * @author mozzi327
-         */
-        @Override
-        public int compareTo(Response o) {
-            return (int) (this.bookmarkId - o.bookmarkId);
         }
     }
 }

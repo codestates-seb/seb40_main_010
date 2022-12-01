@@ -3,6 +3,8 @@ package com.main10.reserve.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.main10.domain.member.entity.Member;
+import com.main10.domain.place.entity.Place;
+import com.main10.domain.place.service.PlaceDbService;
 import com.main10.domain.reserve.controller.ReserveController;
 import com.main10.domain.reserve.entity.Reserve;
 import com.main10.domain.reserve.service.ReserveDbService;
@@ -46,6 +48,9 @@ class ReserveControllerTest {
     protected ReserveDbService reserveDbService;
 
     @MockBean
+    protected PlaceDbService placeDbService;
+
+    @MockBean
     protected RedisUtils redisUtils;
 
     protected JwtTokenUtils jwtTokenUtils;
@@ -56,6 +61,8 @@ class ReserveControllerTest {
 
     protected Reserve reserve;
     protected Member member;
+    protected Place place;
+
     protected String accessToken;
     protected String refreshToken;
 
