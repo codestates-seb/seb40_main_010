@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +51,10 @@ public class ReviewGetTest extends ReviewControllerTest {
                 .build();
 
         Review review = Review.builder()
+                .id(1L)
                 .score(0.5)
                 .comment("그렇게 장사하지 마세요!!")
+                .createdAt(LocalDateTime.now())
                 .build();
 
         PlaceImage placeImage = PlaceImage.builder().filePath("image.jpg").build();
@@ -80,11 +83,12 @@ public class ReviewGetTest extends ReviewControllerTest {
                         responseFields(
                                 List.of(
                                         fieldWithPath("data").type(JsonFieldType.ARRAY).description("상세 정보 리뷰 데이터"),
-                                        fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자").ignored(),
+                                        fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자"),
                                         fieldWithPath("data[].nickname").type(JsonFieldType.STRING).description("닉네임"),
                                         fieldWithPath("data[].score").type(JsonFieldType.NUMBER).description("별점"),
                                         fieldWithPath("data[].comment").type(JsonFieldType.STRING).description("댓글"),
-                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("생성일").ignored(),
+                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("생성일"),
+                                        fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("프로필 이미지"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),
@@ -105,6 +109,7 @@ public class ReviewGetTest extends ReviewControllerTest {
 
         Place place = Place.builder()
                 .title("잠깐 화장실로 쓰실분 구해요.")
+                .id(1L)
                 .address("경기도 하노이시")
                 .charge(200000)
                 .detailInfo("화장실로 잠시 쓰실분은 연락 주세요.")
@@ -112,8 +117,10 @@ public class ReviewGetTest extends ReviewControllerTest {
                 .build();
 
         Review review = Review.builder()
+                .id(1L)
                 .score(5.0)
                 .comment("화장실이 너무 급해서 잠깐 이용했는데 만족했어요.")
+                .createdAt(LocalDateTime.now())
                 .build();
 
         PlaceImage placeImage = PlaceImage.builder().filePath("image.jpg").build();
@@ -146,12 +153,12 @@ public class ReviewGetTest extends ReviewControllerTest {
                         ),
                         responseFields(
                                 List.of(fieldWithPath("data").type(JsonFieldType.ARRAY).description("마이페이지 리뷰 데이터"),
-                                        fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자").ignored(),
+                                        fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별자"),
                                         fieldWithPath("data[].title").type(JsonFieldType.STRING).description("제목"),
                                         fieldWithPath("data[].score").type(JsonFieldType.NUMBER).description("별점"),
                                         fieldWithPath("data[].comment").type(JsonFieldType.STRING).description("댓글"),
-                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("생성일").ignored(),
-                                        fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자").ignored(),
+                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("생성일"),
+                                        fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자"),
                                         fieldWithPath("data[].filePath").type(JsonFieldType.STRING).description("대표 이미지"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),

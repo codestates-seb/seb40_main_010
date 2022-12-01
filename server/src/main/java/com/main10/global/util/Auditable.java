@@ -22,4 +22,7 @@ public abstract class Auditable {
     @Setter
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
+
+    public Auditable() {
+    }
 }
