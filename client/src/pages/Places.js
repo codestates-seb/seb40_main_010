@@ -26,8 +26,9 @@ export default function Places() {
   const observerTargetElement = useRef(null);
 
   const getPageData = useCallback(async () => {
+    // console.log(url, page);
     try {
-      console.log(url, page);
+      // console.log(url, page);
       const { data } = await axios.get(`${url}${page}`, {
         headers: {
           'ngrok-skip-browser-warning': '010',
@@ -40,20 +41,20 @@ export default function Places() {
         },
       });
 
-      // if (!mainPlaceData) {
-      //   setMainPlaceData([...data.data]);
-      // }
-      // if (mainPlaceData) {
-      //   setMainPlaceData(prevPosts => [...prevPosts, ...data.data]);
-      // }
-
-      if (page === 1) {
+      if (!mainPlaceData) {
         setMainPlaceData([...data.data]);
       }
-
-      if (page !== 1 && mainPlaceData) {
+      if (mainPlaceData) {
         setMainPlaceData(prevPosts => [...prevPosts, ...data.data]);
       }
+
+      // if (page === 1) {
+      //   setMainPlaceData([...data.data]);
+      // }
+
+      // if (page !== 1 && mainPlaceData) {
+      //   setMainPlaceData(prevPosts => [...prevPosts, ...data.data]);
+      // }
 
       if (data.data.length === 20) {
         setPage(prev => prev + 1);
@@ -63,12 +64,14 @@ export default function Places() {
     } catch (err) {
       console.log(err);
     }
-  }, [page, url]);
+  }, [page, url, hasNextPage]);
 
   useEffect(() => {
     if (!observerTargetElement.current || !hasNextPage) return;
 
+    // console.log(url, page);
     const observation = new IntersectionObserver(entries => {
+      console.log(entries[0]);
       if (entries[0].isIntersecting) {
         getPageData();
       }
@@ -78,7 +81,7 @@ export default function Places() {
     return () => {
       observation.disconnect();
     };
-  }, [getPageData, hasNextPage, url, isLogIn]);
+  }, [getPageData, hasNextPage, url]);
 
   return (
     <MainContainer>
@@ -104,7 +107,7 @@ export default function Places() {
             </Structure>
           </MainComponentContainer>
         </MainDiv>
-        <div ref={observerTargetElement} />
+        <div ref={observerTargetElement} className="observer" />
       </DisplayComponentDiv>
     </MainContainer>
   );
@@ -112,6 +115,7 @@ export default function Places() {
 
 const MainDiv = styled.div`
   width: 1225px;
+  margin: 1 auto;
 `;
 
 const DisplayComponentDiv = styled.div`
@@ -119,10 +123,15 @@ const DisplayComponentDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 1 auto;
+  .observer {
+    padding: 2px;
+    /* border: 1px solid black; */
+  }
 `;
 const MainComponentContainer = styled.div`
+  /* border: 1px solid red; */
   display: flex;
-  margin: 1 auto;
   //rem
   width: 1225px;
   justify-content: center;
