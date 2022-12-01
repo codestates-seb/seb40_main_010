@@ -48,6 +48,7 @@ const CategoryButton = styled.button`
   &:hover {
     color: #eb7470;
     cursor: pointer;
+    /* transition: 0.3s; */
   }
   &.focus {
     color: #eb7470;

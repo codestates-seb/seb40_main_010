@@ -4,19 +4,28 @@ import { ImStarFull } from 'react-icons/im';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState, useResetRecoilState } from 'recoil';
 
-import { DetailInformation, PlaceIDState, mainDataState } from '../atoms';
+import {
+  DetailInformation,
+  PlaceIDState,
+  // mainDataState,
+  // pageState,
+} from '../atoms';
 
 function Place({ placeData }) {
   const setFocusPlaceID = useSetRecoilState(PlaceIDState);
   const resetDetailInformation = useResetRecoilState(DetailInformation);
-  const resetPlaces = useResetRecoilState(mainDataState);
+  // const resetPlaces = useResetRecoilState(mainDataState);
+  // const setPage = useSetRecoilState(pageState);
 
   const { address, charge, image, score, title, placeId } = placeData;
 
   const slicedTitle = title.slice(0, 15);
 
+  const addressSlice = address.slice(0, 20);
+
   const onClickPlaceComponent = () => {
-    resetPlaces();
+    // resetPlaces();
+    // setPage(1);
     resetDetailInformation();
     setFocusPlaceID(placeId);
   };
@@ -37,7 +46,7 @@ function Place({ placeData }) {
             <ImStarFull className="starIcon" />
             <PlaceScore>{score}</PlaceScore>
           </TitleContainer>
-          <PlaceAddress>{address}</PlaceAddress>
+          <PlaceAddress>{addressSlice}</PlaceAddress>
           <PlaceCharge>{chargePerHour}원</PlaceCharge>
         </MainComponent>
       </Link>
@@ -71,6 +80,13 @@ const Image = styled.img`
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin-bottom: 10px;
+  &:hover {
+    /* filter: blur(2px);
+    -webkit-filter: blur(2px); */
+    transition: 0.3s;
+    filter: grayscale(70%);
+    opacity: 0.7;
+  }
 `;
 
 const TitleContainer = styled.div`

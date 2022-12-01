@@ -175,7 +175,7 @@ function SignUp() {
             >
               Sign Up
             </button>
-            <LogInLink to="/login">Log In</LogInLink>
+            <LogInLink to="/log-in">Log In</LogInLink>
           </div>
         </form>
       </Container>

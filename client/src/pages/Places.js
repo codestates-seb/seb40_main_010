@@ -27,6 +27,7 @@ export default function Places() {
 
   const getPageData = useCallback(async () => {
     try {
+      console.log(url, page);
       const { data } = await axios.get(`${url}${page}`, {
         headers: {
           'ngrok-skip-browser-warning': '010',
@@ -39,17 +40,25 @@ export default function Places() {
         },
       });
 
-      if (!mainPlaceData) {
+      // if (!mainPlaceData) {
+      //   setMainPlaceData([...data.data]);
+      // }
+      // if (mainPlaceData) {
+      //   setMainPlaceData(prevPosts => [...prevPosts, ...data.data]);
+      // }
+
+      if (page === 1) {
         setMainPlaceData([...data.data]);
       }
 
-      if (mainPlaceData) {
+      if (page !== 1 && mainPlaceData) {
         setMainPlaceData(prevPosts => [...prevPosts, ...data.data]);
       }
 
       if (data.data.length === 20) {
         setPage(prev => prev + 1);
       }
+
       setHasNextPage(data.data.length === 20);
     } catch (err) {
       console.log(err);
@@ -80,7 +89,7 @@ export default function Places() {
       />
       <Category page={page} />
       <DisplayComponentDiv>
-        <MbtiPlaces />
+        {isLogIn ? <MbtiPlaces /> : null}
         <MainComponentContainer>
           <Structure>
             {mainPlaceData &&

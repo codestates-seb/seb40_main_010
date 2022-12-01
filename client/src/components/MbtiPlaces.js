@@ -10,7 +10,10 @@ function MbtiPlaces() {
   const [mbtiPlaceData, setMbtiPlaceData] = useRecoilState(mbtiPlaceDataState);
   const [isLogIn] = useRecoilState(HasRefresh);
 
+  // eslint-disable-next-line consistent-return
   const setMbtiPlaces = async () => {
+    if (!isLogIn) return setMbtiPlaceData([]);
+
     try {
       const getMbtiPlaces = await axios.get('/mbti', {
         headers: {
@@ -23,9 +26,11 @@ function MbtiPlaces() {
             : '',
         },
       });
+
       if (!getMbtiPlaces.data.data) {
         setMbtiPlaceData([]);
       }
+
       if (getMbtiPlaces.data.data) {
         setMbtiPlaceData([...getMbtiPlaces.data.data]);
       }

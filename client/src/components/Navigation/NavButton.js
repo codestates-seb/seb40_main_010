@@ -1,28 +1,69 @@
 import React from 'react';
-import { Link, useMatch } from 'react-router-dom';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
 import { BsFillPersonFill } from 'react-icons/bs';
 import styled from 'styled-components';
-import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
+import {
+  useSetRecoilState,
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+} from 'recoil';
 import axios from 'axios';
-import { mbtiPlaceDataState, HasRefresh } from '../../atoms';
+import {
+  // mbtiPlaceDataState,
+  HasRefresh,
+  NextPage,
+  categoryFocus,
+  pageState,
+  mainDataState,
+  settingUrl,
+  navSearchValue,
+} from '../../atoms';
 
 export function NavLeftButtonContainer({ buttonColor }) {
   const logInUrl = useMatch('/log-in');
   const registerUrl = useMatch('/register');
+
   const isLogIn = useRecoilValue(HasRefresh);
+  const setHasNextPage = useSetRecoilState(NextPage);
+  const setFocusCategoryID = useSetRecoilState(categoryFocus);
+  const setPage = useSetRecoilState(pageState);
+  const resetMainPlaceData = useResetRecoilState(mainDataState);
+  const setUrl = useSetRecoilState(settingUrl);
+  const setSearch = useSetRecoilState(navSearchValue);
+
+  const navigate = useNavigate();
+
+  const invalidate = () => {
+    resetMainPlaceData();
+    setHasNextPage(true);
+    setPage(1);
+    setFocusCategoryID(0);
+    navigate('/');
+  };
 
   if (registerUrl || logInUrl) return null;
+
+  const onClickAnotherPage = () => {
+    setSearch('');
+    invalidate();
+    setUrl(() => `/home?size=20&page=`);
+  };
 
   if (isLogIn) {
     return (
       <Link to="/register">
-        <NavLeftButton buttonColor={buttonColor}>장소등록</NavLeftButton>
+        <NavLeftButton buttonColor={buttonColor} onClick={onClickAnotherPage}>
+          장소등록
+        </NavLeftButton>
       </Link>
     );
   }
   return (
     <Link to="/log-in">
-      <NavLeftButton buttonColor={buttonColor}>Log In</NavLeftButton>
+      <NavLeftButton buttonColor={buttonColor} onClick={onClickAnotherPage}>
+        Log In
+      </NavLeftButton>
     </Link>
   );
 }
@@ -31,7 +72,25 @@ export function NavRightButtonContainer() {
   const signUpUrl = useMatch('/sign-up');
   const myPageUrl = useMatch('/my-page');
 
-  const resetMbti = useSetRecoilState(mbtiPlaceDataState);
+  const setHasNextPage = useSetRecoilState(NextPage);
+  const setFocusCategoryID = useSetRecoilState(categoryFocus);
+  const setPage = useSetRecoilState(pageState);
+  const resetMainPlaceData = useResetRecoilState(mainDataState);
+  const setUrl = useSetRecoilState(settingUrl);
+  const setSearch = useSetRecoilState(navSearchValue);
+
+  const navigate = useNavigate();
+
+  const invalidate = () => {
+    resetMainPlaceData();
+    setHasNextPage(true);
+    setPage(1);
+    setFocusCategoryID(0);
+    navigate('/');
+    setUrl(() => `/home?size=20&page=`);
+  };
+
+  // const resetMbti = useResetRecoilState(mbtiPlaceDataState);
   const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
 
   const onClickLogOutButton = async () => {
@@ -50,7 +109,15 @@ export function NavRightButtonContainer() {
     await localStorage.removeItem('REFRESH');
 
     await setIsLogIn(false);
-    resetMbti([]);
+    await invalidate();
+    // await resetMbti();
+    alert('로그아웃 되셨습니다');
+  };
+
+  const onClickAnotherPage = () => {
+    setSearch('');
+    invalidate();
+    setUrl(() => `/home?size=20&page=`);
   };
 
   if (signUpUrl) return null;
@@ -66,7 +133,7 @@ export function NavRightButtonContainer() {
   if (isLogIn && !myPageUrl) {
     return (
       <Link to="/my-page">
-        <NavRightButton>
+        <NavRightButton onClick={onClickAnotherPage}>
           <MyPageDiv>
             <BsFillPersonFill />
           </MyPageDiv>
@@ -77,7 +144,7 @@ export function NavRightButtonContainer() {
 
   return (
     <Link to="/sign-up">
-      <NavRightButton>Sign Up</NavRightButton>
+      <NavRightButton onClick={onClickAnotherPage}>Sign Up</NavRightButton>
     </Link>
   );
 }

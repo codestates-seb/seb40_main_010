@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router-dom';
 
 import axios from 'axios';
 import {
   DetailInformation,
   bookmarkState,
-  mainDataState,
+  // mainDataState,
   reservationStartDate,
   reservationEndDate,
 } from '../atoms';
@@ -18,7 +18,7 @@ import ReviewContainer from '../components/ReviewComponents/ReviewContainer';
 
 function Detail() {
   const { id } = useParams();
-  const resetPlaces = useResetRecoilState(mainDataState);
+  // const resetPlaces = useResetRecoilState(mainDataState);
   const [detailInformation, setDetailInformation] =
     useRecoilState(DetailInformation);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
@@ -52,7 +52,7 @@ function Detail() {
   };
 
   useEffect(() => {
-    resetPlaces();
+    // resetPlaces();
     getDetailData();
   }, [isBookmark, id]);
 
