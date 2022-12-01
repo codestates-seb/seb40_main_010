@@ -12,6 +12,7 @@ include::{snippets}/장소 등록/request-headers.adoc[]
 .request-fields
 include::{snippets}/장소 등록/request-fields.adoc[]
 
+
 === 장소 수정
 .curl-request
 include::{snippets}/장소 수정/curl-request.adoc[]
@@ -133,18 +134,144 @@ include::{snippets}/장소 삭제/curl-request.adoc[]
 include::{snippets}/장소 삭제/http-request.adoc[]
 
 .request-header
-include::{snippets}/장소 상세 조회/request-headers.adoc[]
+include::{snippets}/장소 삭제/request-headers.adoc[]
 
 .path-parameters
 include::{snippets}/장소 삭제/path-parameters.adoc[]
 
 
+
 == MemberController
-=== 사용자 등록
+=== 일반 회원가입
+
+
+=== 회원가입_성공
+
+
+=== 회원 정보 수정
+
+
+=== 회원 정보 조회
+
+
+=== 회원 프로필 이미지 수정
+
+
+
+
+== AuthController
+=== 로그인
+
+
 
 
 == ReserveController
-=== 예약 등록
+=== 예약1 예약 등록
+.curl-request
+include::{snippets}/예약1 예약 등록/curl-request.adoc[]
+
+.http-request
+include::{snippets}/예약1 예약 등록/http-request.adoc[]
+
+.request-fields
+include::{snippets}/예약1 예약 등록/request-fields.adoc[]
+
+.request-header
+include::{snippets}/예약1 예약 등록/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/예약1 예약 등록/path-parameters.adoc[]
+
+
+=== 예약2 사용자 결제 화면 전송
+.curl-request
+include::{snippets}/예약2 사용자 결제 화면 전송/curl-request.adoc[]
+
+.http-request
+include::{snippets}/예약2 사용자 결제 화면 전송/http-request.adoc[]
+
+.request-header
+include::{snippets}/예약2 사용자 결제 화면 전송/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/예약2 사용자 결제 화면 전송/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/예약2 사용자 결제 화면 전송/http-response.adoc[]
+
+.response-fields
+include::{snippets}/예약2 사용자 결제 화면 전송/response-fields.adoc[]
+
+
+=== 예약3 결제 승인
+.curl-request
+include::{snippets}/예약3 결제 승인/curl-request.adoc[]
+
+.http-request
+include::{snippets}/예약3 결제 승인/http-request.adoc[]
+
+.request-header
+include::{snippets}/예약3 결제 승인/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/예약3 결제 승인/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/예약3 결제 승인/http-response.adoc[]
+
+.response-fields
+include::{snippets}/예약3 결제 승인/response-fields.adoc[]
+
+
+=== 예약4 결제 취소
+.curl-request
+include::{snippets}/예약4 결제 취소/curl-request.adoc[]
+
+.http-request
+include::{snippets}/예약4 결제 취소/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/예약4 결제 취소/path-parameters.adoc[]
+
+
+=== 예약5 결제 실패
+.curl-request
+include::{snippets}/예약5 결제 실패/curl-request.adoc[]
+
+.http-request
+include::{snippets}/예약5 결제 실패/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/예약5 결제 실패/path-parameters.adoc[]
+
+
+=== 예약 수정
+.curl-request
+include::{snippets}/예약 수정/curl-request.adoc[]
+
+.http-request
+include::{snippets}/예약 수정/http-request.adoc[]
+
+.request-header
+include::{snippets}/예약 수정/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/예약 수정/request-fields.adoc[]
+
+
+=== 예약 삭제
+.curl-request
+include::{snippets}/예약 삭제/curl-request.adoc[]
+
+.http-request
+include::{snippets}/예약 삭제/http-request.adoc[]
+
+.request-header
+include::{snippets}/예약 삭제/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/예약 삭제/path-parameters.adoc[]
+
 
 
 == ReviewController
@@ -172,8 +299,8 @@ include::{snippets}/리뷰 수정/http-request.adoc[]
 .request-fields
 include::{snippets}/리뷰 수정/request-fields.adoc[]
 
-// .request-header
-// include::{snippets}/리뷰 수정/request-headers.adoc[]
+.request-header
+include::{snippets}/리뷰 수정/request-headers.adoc[]
 
 .path-parameters
 include::{snippets}/리뷰 수정/path-parameters.adoc[]
@@ -186,8 +313,8 @@ include::{snippets}/리뷰 삭제/curl-request.adoc[]
 .http-request
 include::{snippets}/리뷰 삭제/http-request.adoc[]
 
-// .request-header
-// include::{snippets}/리뷰 삭제/request-headers.adoc[]
+.request-header
+include::{snippets}/리뷰 삭제/request-headers.adoc[]
 
 .path-parameters
 include::{snippets}/리뷰 삭제/path-parameters.adoc[]
@@ -200,14 +327,28 @@ include::{snippets}/장소 상세페이지 리뷰 조회/curl-request.adoc[]
 .http-request
 include::{snippets}/장소 상세페이지 리뷰 조회/http-request.adoc[]
 
-// .path-parameters
-// include::{snippets}/장소 상세페이지 리뷰 조회/path-parameters.adoc[]
+.path-parameters
+include::{snippets}/장소 상세페이지 리뷰 조회/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/장소 상세페이지 리뷰 조회/http-response.adoc[]
 
 .response-fields
 include::{snippets}/장소 상세페이지 리뷰 조회/response-fields.adoc[]
+
+
+=== 마이페이지 리뷰 조회
+.curl-request
+include::{snippets}/마이페이지 리뷰 조회/curl-request.adoc[]
+
+.http-request
+include::{snippets}/마이페이지 리뷰 조회/http-request.adoc[]
+
+.http-response
+include::{snippets}/마이페이지 리뷰 조회/http-response.adoc[]
+
+.response-fields
+include::{snippets}/마이페이지 리뷰 조회/response-fields.adoc[]
 
 
 

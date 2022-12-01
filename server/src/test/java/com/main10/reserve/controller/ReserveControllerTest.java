@@ -19,6 +19,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,6 +49,9 @@ class ReserveControllerTest {
     protected RedisUtils redisUtils;
 
     protected JwtTokenUtils jwtTokenUtils;
+
+//    protected ReservePaymentTest reservePaymentTest;
+//    protected WebApplicationContext context;
 
 
     protected Reserve reserve;
@@ -81,5 +86,9 @@ class ReserveControllerTest {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
         gson = gsonBuilder.setPrettyPrinting().create();
+
+//        this.mockMvc = MockMvcBuilders.standaloneSetup(reservePaymentTest).build();
+//        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+
     }
 }

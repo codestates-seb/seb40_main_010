@@ -28,6 +28,7 @@ public class MemberDto {
     @Getter
     @Builder
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Patch {
 
         private String mbti;
@@ -39,6 +40,7 @@ public class MemberDto {
     @Getter
     @Builder
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Info {
 
         private String mbti;
