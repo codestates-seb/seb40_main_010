@@ -1,7 +1,5 @@
 package com.main10.reserve.controller;
 
-import com.main10.domain.member.entity.Member;
-import com.main10.domain.place.entity.Place;
 import com.main10.domain.reserve.dto.ReserveDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +30,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ReservePatchTest extends ReserveControllerTest {
+
     @Test
     @DisplayName("PATCH 예약 수정")
     void patchReserve() throws Exception {
@@ -43,20 +42,7 @@ public class ReservePatchTest extends ReserveControllerTest {
                 .endTime(LocalDateTime.of(2022, 11, 30, 16, 00))
                 .build();
 
-        Place place = Place.builder()
-                .title("강아지와 함께 공부할 수 있는 스터디룸")
-                .address("경기도 방콕시")
-                .charge(50000)
-                .build();
-
-        Member member = Member.builder()
-                .email("hgd@gmail.com")
-                .roles(List.of("USER"))
-                .build();
-
         String content = gson.toJson(patch);
-        String accessToken = jwtTokenUtils.generateAccessToken(member);
-        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
 
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         doNothing().when(reserveService).updateReserve(Mockito.any(ReserveDto.Patch.class), Mockito.anyLong(), Mockito.anyString());

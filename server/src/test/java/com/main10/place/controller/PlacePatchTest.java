@@ -45,6 +45,7 @@ public class PlacePatchTest extends PlaceControllerTest {
                 .address("서울 양천구")
                 .detailInfo("조용한 공부방")
                 .charge(1000)
+                .endTime(22)
                 .build();
 
         MockMultipartFile files =
@@ -82,6 +83,7 @@ public class PlacePatchTest extends PlaceControllerTest {
                                         fieldWithPath("charge").type(JsonFieldType.NUMBER).description("장소 시간당 가격"),
                                         fieldWithPath("address").type(JsonFieldType.STRING).description("장소 주소"),
                                         fieldWithPath("detailInfo").type(JsonFieldType.STRING).description("상세 정보"),
+                                        fieldWithPath("endTime").type(JsonFieldType.NUMBER).description("영업 종료 시간"),
                                         fieldWithPath("maxCapacity").type(JsonFieldType.NUMBER).description("수용 인원"),
                                         fieldWithPath("categoryList").type(JsonFieldType.ARRAY).description("카테고리 정보")
                                 )

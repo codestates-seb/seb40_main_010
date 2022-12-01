@@ -1,7 +1,5 @@
 package com.main10.review.controller;
 
-import com.main10.domain.member.entity.Member;
-import com.main10.domain.place.entity.Place;
 import com.main10.domain.review.dto.ReviewDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +32,7 @@ public class ReviewPatchTest extends ReviewControllerTest {
     @Test
     @DisplayName("PATCH 리뷰 수정")
     void patchReview() throws Exception {
+
         Long reviewId = 1L;
 
         ReviewDto.Patch patch = ReviewDto.Patch.builder()
@@ -41,23 +40,11 @@ public class ReviewPatchTest extends ReviewControllerTest {
                 .comment("진짜 별로입니다..")
                 .build();
 
-        Place place = Place.builder()
-                .title("감성 있는 파티룸")
-                .address("경기도 오사카시")
-                .charge(100000)
-                .build();
-
-        Member member = Member.builder()
-                .email("hgd@gmail.com")
-                .roles(List.of("USER"))
-                .build();
-
         String content = gson.toJson(patch);
-        String accessToken = jwtTokenUtils.generateAccessToken(member);
-        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
 
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(reviewService).updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class), Mockito.anyString());
+        doNothing().when(reviewService)
+                .updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class), Mockito.anyString());
 
         ResultActions actions =
                 mockMvc.perform(
@@ -75,7 +62,6 @@ public class ReviewPatchTest extends ReviewControllerTest {
                 .andDo(document("리뷰 수정",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-
                         requestHeaders(
                                 headerWithName(AUTHORIZATION).description("엑세스 토큰"),
                                 headerWithName(REFRESH).description("리프레시 토큰")
