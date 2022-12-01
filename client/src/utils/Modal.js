@@ -33,6 +33,7 @@ function Modal({
 }
 
 const BlurBackground = styled.div`
+  border: 1px solid red;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,7 +44,7 @@ const BlurBackground = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  height: 100%;
+  height: 500%;
 `;
 
 const ModalContainer = styled.div`

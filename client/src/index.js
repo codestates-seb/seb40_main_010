@@ -33,6 +33,7 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
+	background-color: #f9f9f9;
 	font-family: 'GmarketSans';
 	font-weight: normal;
     font-style: normal;
