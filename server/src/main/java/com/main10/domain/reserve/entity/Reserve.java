@@ -1,7 +1,5 @@
 package com.main10.domain.reserve.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.main10.domain.reserve.pay.ReadyToPaymentInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
