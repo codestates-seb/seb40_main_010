@@ -190,7 +190,7 @@ public class ReserveController {
      * @return ResponseEntity
      * @author Quartz614
      */
-    @PatchMapping("place/reserve/{reserve-id}/edit") // 유저 테이블 생성 시 유저 추가
+    @PatchMapping("/place/reserve/{reserve-id}/edit") // 유저 테이블 생성 시 유저 추가
     public ResponseEntity patchReserve(@PathVariable("reserve-id") Long reserveId,
                                        @RequestBody ReserveDto.Patch patch,
                                        @RequestHeader(REFRESH_TOKEN) String refreshToken) {

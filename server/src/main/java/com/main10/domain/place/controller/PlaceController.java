@@ -35,7 +35,7 @@ public class PlaceController {
      * @author LimJaeminZ
      */
     @PostMapping(value = "/place/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createPlace(@RequestPart(value = "key") PlacePostDto placePostDto,
+    public void createPlace(@RequestPart(value = "key") PlaceDto.Create placePostDto,
                          @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
@@ -56,7 +56,7 @@ public class PlaceController {
      * @author LimJaeminZ
      */
     @GetMapping("/place/{place-id}")
-    public PlaceResponseDto getPlace(@PathVariable("place-id") Long placeId,
+    public PlaceDto.DetailResponse getPlace(@PathVariable("place-id") Long placeId,
                                      @RequestHeader(value = REFRESH_TOKEN, required = false) String refreshToken) {
 
         return placeService.searchPlace(placeId, refreshToken);
@@ -72,9 +72,9 @@ public class PlaceController {
      * @throws Exception
      * @author LimJaeminZ
      */
-    @PatchMapping(value = "/place/{place-id}/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/place/{place-id}/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void patchPlace(@PathVariable("place-id") Long placeId,
-                           @RequestPart(value = "key") PlacePatchDto placePatchDto,
+                           @RequestPart(value = "key") PlaceDto.Update placePatchDto,
                            @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
         /** 로컬 환경 */
@@ -100,7 +100,7 @@ public class PlaceController {
     }
 
     /**
-     * 공간 전체 조회 테스트
+     * 공간 전체 조회 테스트(이미지 limit)
      * @param pageable
      * @return
      */
@@ -146,7 +146,7 @@ public class PlaceController {
     }
 
     /**
-     * 카테고리별 공간 조회 테스트
+     * 카테고리별 공간 조회 테스트(이미지 limit)
      * @param categoryId
      * @param pageable
      * @return

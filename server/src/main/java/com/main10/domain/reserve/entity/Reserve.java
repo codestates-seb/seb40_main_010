@@ -23,7 +23,7 @@ public class Reserve {
     private int capacity;
 
     private LocalDateTime startTime;
-   
+
     private LocalDateTime endTime;
 
     private Long placeId;

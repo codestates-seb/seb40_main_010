@@ -1,6 +1,7 @@
 package com.main10.reserve.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.main10.domain.member.entity.Member;
 import com.main10.domain.reserve.controller.ReserveController;
 import com.main10.domain.reserve.entity.Reserve;
@@ -8,6 +9,7 @@ import com.main10.domain.reserve.service.ReserveDbService;
 import com.main10.domain.reserve.service.ReserveService;
 import com.main10.global.security.utils.JwtTokenUtils;
 import com.main10.global.security.utils.RedisUtils;
+import com.main10.utils.LocalDateTimeSerializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -33,7 +35,6 @@ class ReserveControllerTest {
     @Autowired
     protected MockMvc mockMvc;
 
-    @Autowired
     protected Gson gson;
 
     @MockBean
@@ -76,5 +77,9 @@ class ReserveControllerTest {
                 .endTime(LocalDateTime.of(2022, 11, 30, 16, 00))
                 .totalCharge(50000L)
                 .build();
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+        gson = gsonBuilder.setPrettyPrinting().create();
     }
 }

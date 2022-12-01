@@ -1,12 +1,10 @@
 package com.main10.review.controller;
 
-import com.main10.domain.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import java.util.List;
 
 import static com.main10.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.main10.utils.ApiDocumentUtils.getResponsePreProcessor;
@@ -28,14 +26,9 @@ public class ReviewDeleteTest extends ReviewControllerTest {
     @Test
     @DisplayName("DELETE 리뷰 삭제")
     void deleteReview() throws Exception {
-        Long reviewId = 1L;
-        Member member = Member.builder()
-                .email("hgd@gmail.com")
-                .roles(List.of("USER"))
-                .build();
 
-        String accessToken = jwtTokenUtils.generateAccessToken(member);
-        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
+        Long reviewId = 1L;
+
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyString());
 
@@ -47,6 +40,7 @@ public class ReviewDeleteTest extends ReviewControllerTest {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .with(csrf())
                 );
+
         actions.andExpect(status().isNoContent())
                 .andDo(document("리뷰 삭제",
                         getRequestPreProcessor(),

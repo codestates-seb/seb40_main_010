@@ -1,6 +1,5 @@
 package com.main10.review.controller;
 
-import com.main10.domain.member.entity.Member;
 import com.main10.domain.place.entity.Place;
 import com.main10.domain.place.entity.PlaceImage;
 import com.main10.domain.review.dto.ReviewDto;
@@ -36,15 +35,11 @@ public class ReviewGetTest extends ReviewControllerTest {
     @Test
     @DisplayName("GET 장소 리뷰 조회")
     void getPlaceReview() throws Exception {
+
         Long placeId = 1L;
+
         int page = 1;
         int size = 5;
-
-        Member member = Member.builder()
-                .nickname("홍길동")
-                .email("hgd@gmail.com")
-                .roles(List.of("USER"))
-                .build();
 
         Place place = Place.builder()
                 .title("문의는 DM으로 받는 카페")
@@ -64,6 +59,7 @@ public class ReviewGetTest extends ReviewControllerTest {
 
         List<ReviewDto.Response> responses = new ArrayList<>();
         responses.add(new ReviewDto.Response(review, member));
+
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         given(reviewService.getPlaceReviews(Mockito.anyLong(), Mockito.any(Pageable.class))).willReturn(new PageImpl<>(responses));
 
@@ -103,15 +99,9 @@ public class ReviewGetTest extends ReviewControllerTest {
     @Test
     @DisplayName("GET 마이페이지 리뷰 조회")
     void getMypageReview() throws Exception {
-        Long placeId = 1L;
+
         int page = 1;
         int size = 5;
-
-        Member member = Member.builder()
-                .nickname("홍길동")
-                .email("hgd@gmail.com")
-                .roles(List.of("USER"))
-                .build();
 
         Place place = Place.builder()
                 .title("잠깐 화장실로 쓰실분 구해요.")
@@ -131,8 +121,6 @@ public class ReviewGetTest extends ReviewControllerTest {
 
         List<ReviewDto.MyPage> myPages = new ArrayList<>();
         myPages.add(new ReviewDto.MyPage(review, place));
-        String accessToken = jwtTokenUtils.generateAccessToken(member);
-        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
 
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         given(reviewService.getReviewsMypage(Mockito.anyString(), Mockito.any(Pageable.class))).willReturn(new PageImpl<>(myPages));

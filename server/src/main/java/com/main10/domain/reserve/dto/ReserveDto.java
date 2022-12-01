@@ -17,9 +17,7 @@ public class ReserveDto {
     public static class Post {
         @NotBlank
         private int capacity;
-
         private LocalDateTime startTime;
-
         private LocalDateTime endTime;
     }
     @Getter
@@ -29,9 +27,7 @@ public class ReserveDto {
     public static class Patch {
         @NotBlank
         private int capacity;
-
         private LocalDateTime startTime;
-
         private LocalDateTime endTime;
     }
 
@@ -39,17 +35,13 @@ public class ReserveDto {
     public static class Response implements Comparable<Response>{
 
         private Long reserveId;
-
         private Long placeId;
         private String title;
         private String address;
         private String image;
         private int capacity;
-
         private LocalDateTime startTime;
-
         private LocalDateTime endTime;
-
         private Long totalCharge;
 
         @Builder
