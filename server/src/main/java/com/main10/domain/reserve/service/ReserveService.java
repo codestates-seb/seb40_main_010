@@ -54,8 +54,8 @@ public class ReserveService {
         Long memberId = redisUtils.getId(refreshToken);
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
-//        if (memberId.equals(findPlace.getMemberId()))
-//            throw new BusinessLogicException(ExceptionCode.HOST_CANNOT_RESERVATION);
+        if (memberId.equals(findPlace.getMemberId()))
+            throw new BusinessLogicException(ExceptionCode.HOST_CANNOT_RESERVATION);
 
         Reserve reserve = Reserve.builder()
                 .capacity(post.getCapacity())

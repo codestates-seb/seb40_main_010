@@ -8,48 +8,59 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 public class ReviewDto {
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class Post {
 
+    @Getter
+    @NoArgsConstructor
+    public static class Post {
         @NotBlank
+        @Positive(message = "평점은 음수가 될 수 없습니다.")
         private double score;
 
         @NotBlank
+        @Length(min = 10, max = 300, message = "글자 수는 최소 10자 이상 최대 300자 이하여야 합니다.")
         private String comment;
 
+        @Builder
+        public Post(double score, String comment) {
+            this.score = score;
+            this.comment = comment;
+        }
     }
 
     @Getter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
     public static class Patch {
-
         @NotBlank
+        @Positive(message = "평점은 음수가 될 수 없습니다.")
         private Double score;
 
         @NotBlank
+        @Length(min = 10, max = 300, message = "글자 수는 최소 10자 이상 최대 300자 이하여야 합니다.")
         private String comment;
 
+        @Builder
+        public Patch(Double score, String comment) {
+            this.score = score;
+            this.comment = comment;
+        }
     }
 
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Response {
-        private final Long reviewId;
-        private final String nickname;
-        private final Double score;
-        private final String comment;
-        private final LocalDateTime createdAt;
-        private final String profileImage;
+        private Long reviewId;
+        private String nickname;
+        private Double score;
+        private String comment;
+        private LocalDateTime createdAt;
+        private String profileImage;
 
         @Builder
         @QueryProjection
@@ -64,14 +75,15 @@ public class ReviewDto {
     }
 
     @Getter
+    @NoArgsConstructor
     public static class MyPage {
-        private final Long reviewId;
-        private final String title;
-        private final Double score;
-        private final String comment;
-        private final LocalDateTime createdAt;
-        private final Long placeId;
-        private final String filePath;
+        private Long reviewId;
+        private String title;
+        private Double score;
+        private String comment;
+        private LocalDateTime createdAt;
+        private Long placeId;
+        private String filePath;
 
         @Builder
         @QueryProjection

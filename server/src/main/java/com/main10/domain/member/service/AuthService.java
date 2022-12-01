@@ -49,7 +49,7 @@ public class AuthService {
 
         redisUtils.setData(generateRefreshToken, findMember.getId(), jwtTokenUtils.getRefreshTokenExpirationMinutes());
 
-        AuthDto.Response memberRes = AuthDto.Response.builder()
+        AuthDto memberRes = AuthDto.builder()
                 .nickname(findMember.getNickname())
                 .email(login.getEmail())
                 .mbti(findMember.getMbti())
@@ -119,7 +119,7 @@ public class AuthService {
         headers.add(AUTHORIZATION, generateToken);
         headers.add(REFRESH_TOKEN, refreshToken);
 
-        AuthDto.Response memberRes = AuthDto.Response.builder()
+        AuthDto memberRes = AuthDto.builder()
                 .nickname(findMember.getNickname())
                 .email(findMember.getEmail())
                 .mbti(findMember.getMbti())

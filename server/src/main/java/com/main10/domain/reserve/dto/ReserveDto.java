@@ -4,34 +4,57 @@ import com.main10.domain.place.entity.Place;
 import com.main10.domain.reserve.entity.Reserve;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 public class ReserveDto {
 
     @Getter
-    @Builder
-    public static class Post {
-        @NotBlank
-        private int capacity;
-        private LocalDateTime startTime;
-        private LocalDateTime endTime;
-    }
-    @Getter
     @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class Patch {
-        @NotBlank
+    public static class Post {
+
+        @NotBlank(message = "인원 수는 공백이 아니어야 합니다.")
+        @Positive(message = "인원 수가 0이 되어서는 안됩니다.")
         private int capacity;
+
+        @NotBlank(message = "체크인 시간은 공백이 아니어야 합니다.")
         private LocalDateTime startTime;
+
+        @NotBlank(message = "체크아웃 시간은 공백이 아니어야 합니다.")
         private LocalDateTime endTime;
+
+        @Builder
+        public Post(int capacity, LocalDateTime startTime, LocalDateTime endTime) {
+            this.capacity = capacity;
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
     }
 
     @Getter
+    @NoArgsConstructor
+    public static class Patch {
+        @NotBlank(message = "인원 수는 공백이 아니어야 합니다.")
+        @Positive(message = "인원 수가 0이 되어서는 안됩니다.")
+        private int capacity;
+
+        @NotBlank(message = "체크인 시간은 공백이 아니어야 합니다.")
+        private LocalDateTime startTime;
+
+        @NotBlank(message = "체크아웃 시간은 공백이 아니어야 합니다.")
+        private LocalDateTime endTime;
+
+        @Builder
+        public Patch(int capacity, LocalDateTime startTime, LocalDateTime endTime) {
+            this.capacity = capacity;
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
     public static class Response {
 
         private Long reserveId;
@@ -61,9 +84,10 @@ public class ReserveDto {
 
 
     @Getter
+    @NoArgsConstructor
     public static class Detail {
-        private final LocalDateTime startTime;
-        private final LocalDateTime endTime;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
 
         @Builder
         @QueryProjection
