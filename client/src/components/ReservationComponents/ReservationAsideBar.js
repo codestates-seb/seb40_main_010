@@ -129,7 +129,7 @@ const Container = styled.div`
   }
 
   .reservation-button {
-    width: 260px;
+    width: 263px;
     height: 50px;
     margin-top: 20px;
     display: flex;
