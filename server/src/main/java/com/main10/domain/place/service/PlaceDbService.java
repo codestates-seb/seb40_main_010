@@ -94,7 +94,7 @@ public class PlaceDbService {
     }
 
     /**
-     * 공간 전체 조회 테스트
+     * 공간 전체 조회 테스트(이미지 limit)
      * @param pageable
      * @return
      */
@@ -143,7 +143,7 @@ public class PlaceDbService {
     }
 
     /**
-     * 카테고리별 공간 조회 테스트
+     * 카테고리별 공간 조회 테스트(이미지 limit)
      * @param categoryId
      * @param pageable
      * @return

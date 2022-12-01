@@ -2,7 +2,6 @@ package com.main10.place.controller;
 
 import com.main10.domain.place.dto.PlaceCategoryDto;
 import com.main10.domain.place.dto.PlaceDto;
-import com.main10.domain.place.dto.PlaceResponseDto;
 import com.main10.domain.place.entity.PlaceImage;
 import com.main10.domain.reserve.dto.ReserveDto;
 import com.main10.domain.reserve.entity.Reserve;
@@ -59,8 +58,8 @@ public class PlaceGetTest extends PlaceControllerTest{
                         .endTime(reserve.getEndTime())
                 .build());
 
-        PlaceResponseDto responseDto =
-                new PlaceResponseDto(place, placeImages, categories, member, isBookmark, reserves);
+        PlaceDto.DetailResponse responseDto =
+                new PlaceDto.DetailResponse(place, placeImages, categories, member, isBookmark, reserves);
 
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         given(placeService.searchPlace(Mockito.anyLong(), Mockito.anyString()))

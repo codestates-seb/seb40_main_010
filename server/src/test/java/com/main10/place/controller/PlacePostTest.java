@@ -1,6 +1,6 @@
 package com.main10.place.controller;
 
-import com.main10.domain.place.dto.PlacePostDto;
+import com.main10.domain.place.dto.PlaceDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -35,7 +35,7 @@ public class PlacePostTest extends PlaceControllerTest{
         categoryList.add("공유오피스");
         categoryList.add("바다근처");
 
-        PlacePostDto key = PlacePostDto.builder()
+        PlaceDto.Create key = PlaceDto.Create.builder()
                 .score(0.0)
                 .title("공유 스튜디오")
                 .categoryList(categoryList)
@@ -50,11 +50,9 @@ public class PlacePostTest extends PlaceControllerTest{
                 new MockMultipartFile("file", "test.jpg", "image/jpg", "<<jpg data>>".getBytes());
 
         String content = gson.toJson(key);
-        String accessToken = jwtTokenUtils.generateAccessToken(member);
-        String refreshToken = jwtTokenUtils.generateRefreshToken(member);
 
         given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(placeService).createPlace(Mockito.any(PlacePostDto.class), Mockito.anyString(), Mockito.anyList());
+        doNothing().when(placeService).createPlace(Mockito.any(PlaceDto.Create.class), Mockito.anyString(), Mockito.anyList());
 
         ResultActions actions =
                 mockMvc.perform(
@@ -63,7 +61,6 @@ public class PlacePostTest extends PlaceControllerTest{
                                 .file(new MockMultipartFile("key", "", "application/json", content.getBytes(StandardCharsets.UTF_8)))
                                 .contentType("multipart/form-data")
                                 .accept(MediaType.APPLICATION_JSON)
-                                .characterEncoding("UTF-8")
                                 .content(content)
                                 .header(AUTHORIZATION, "Bearer " + accessToken)
                                 .header(REFRESH, refreshToken)
