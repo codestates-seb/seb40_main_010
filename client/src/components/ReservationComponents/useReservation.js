@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import header from '../../utils/header';
+// import header from '../../utils/header';
 
 import {
   reservationStartDate,
@@ -49,10 +49,17 @@ const useReservation = charge => {
 
   const onClickPaymentKaKaoButton = async () => {
     try {
-      const response = await axios.get(
-        `/place/reserve/${reserveId}/payment`,
-        header,
-      );
+      const response = await axios.get(`/place/reserve/${reserveId}/payment`, {
+        headers: {
+          'ngrok-skip-browser-warning': '010',
+          Authorization: (await localStorage.getItem('ACCESS'))
+            ? `Bearer ${localStorage.getItem('ACCESS')}`
+            : '',
+          RefreshToken: (await localStorage.getItem('REFRESH'))
+            ? localStorage.getItem('REFRESH')
+            : '',
+        },
+      });
       const paymentUrl = response.data.data;
       onClickPaymentButton(paymentUrl);
       setModalOpen(false);
