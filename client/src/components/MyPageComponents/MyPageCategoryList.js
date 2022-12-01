@@ -183,7 +183,7 @@ function MyPageCategoryList({ listData, type }) {
               </CategoryButton>
             )}
             {type === 'reservation' && (
-              <Div>
+              <>
                 {handleDate(today) < handleDate(listData.startTime) ? (
                   <CategoryButton onClick={showModal}>취소하기</CategoryButton>
                 ) : (
@@ -200,7 +200,7 @@ function MyPageCategoryList({ listData, type }) {
                     modalAction={reservationCancel}
                   />
                 )}
-              </Div>
+              </>
             )}
             {type === 'bookmark' && (
               <CategoryButton onClick={bookMarkStatusChange}>
@@ -389,11 +389,6 @@ const PlaceImage = styled.img`
     width: 5rem;
     height: 5rem;
   }
-`;
-
-const Div = styled.div`
-  width: 100vw;
-  height: 100vh;
 `;
 
 export default MyPageCategoryList;
