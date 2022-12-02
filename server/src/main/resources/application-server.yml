@@ -1,10 +1,10 @@
 cloud:
   aws:
     credentials:
-      accessKey: ${/config/param/access-key}      # AWS IAM AccessKey 적기
+      accessKey: ${/config/param/access-key}  # AWS IAM AccessKey 적기
       secretKey: ${/config/param/secret-key}  # AWS IAM SecretKey 적기
     s3:
-      bucket: ${/config/param/bucket}   # ex) marryting-gyunny
+      bucket: ${/config/param/bucket}  # ex) marryting-gyunny
     region:
       static: ${/config/param/region}
     stack:

@@ -97,12 +97,11 @@ dependencies {
     // mockito library
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
     // aws parameter store
-    implementation group: 'io.awspring.cloud', name: 'spring-cloud-starter-aws-parameter-store-config'
+    implementation 'com.coveo:spring-boot-parameter-store-integration:1.5.0'
 }
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}" // feign client dependency
-        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:2.3.3"
     }
 }
 
