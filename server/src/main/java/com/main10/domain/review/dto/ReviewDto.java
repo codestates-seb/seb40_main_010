@@ -25,7 +25,7 @@ public class ReviewDto {
         private double score;
 
         @NotBlank
-        @Length(min = 10, max = 300, message = "글자 수는 최소 10자 이상 최대 300자 이하여야 합니다.")
+        @Length(min = 5, max = 300, message = "글자 수는 최소 5자 이상 최대 300자 이하여야 합니다.")
         private String comment;
 
         @Builder
@@ -43,7 +43,7 @@ public class ReviewDto {
         private Double score;
 
         @NotBlank
-        @Length(min = 10, max = 300, message = "글자 수는 최소 10자 이상 최대 300자 이하여야 합니다.")
+        @Length(min = 5, max = 300, message = "글자 수는 최소 5자 이상 최대 300자 이하여야 합니다.")
         private String comment;
 
         @Builder

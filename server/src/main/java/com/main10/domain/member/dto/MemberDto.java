@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -18,22 +19,21 @@ public class MemberDto {
         private String mbti;
 
         @NotBlank(message = "이메일은 공백이 아니어야 합니다.")
-        @Pattern(regexp = "/\\S+@\\S+\\.\\S+/"
-                , message = "이메일 형식이 맞지 않습니다.")
+        @Email(message = "이메일 형식이 맞지 않습니다.")
         private String email;
 
         @NotBlank(message = "비밀번호는 공백이 아니어야 합니다.")
-        @Pattern(regexp = "/^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[$@$!%*#?&])[A-Za-z\\\\d$@$!%*#?&]{8,}$/"
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$"
                 , message = "8자 이상, 영문, 숫자, 특수문자가 포함되어야 합니다.")
         private String password;
 
         @NotBlank(message = "닉네임은 공백이 아니어야 합니다.")
-        @Pattern(regexp = "/[0-9]|[a-z]|[A-Z]|[가-힣]/"
-                , message = "한 글자 이상, 한글, 영문, 숫자만 쓸 수 있습니다.")
+        @Pattern(regexp = "^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$"
+                , message = "특수문자는 사용할 수 없습니다.")
         private String nickname;
 
         @NotBlank(message = "전화번호는 공백이 아니어야 합니다.")
-        @Pattern(regexp = "/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/"
+        @Pattern(regexp = "^010-\\d{3,4}-\\d{4}$"
                 , message = "전화번호 양식에 맞지 않습니다.")
         private String phoneNumber;
 
@@ -54,8 +54,8 @@ public class MemberDto {
         private String mbti;
 
         @NotBlank(message = "닉네임은 공백이 아니어야 합니다.")
-        @Pattern(regexp = "/[0-9]|[a-z]|[A-Z]|[가-힣]/"
-                , message = "한 글자 이상, 한글, 영문, 숫자만 쓸 수 있습니다.")
+        @Pattern(regexp = "^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$"
+                , message = "특수문자는 사용할 수 없습니다.")
         private String nickname;
 
         @Builder
