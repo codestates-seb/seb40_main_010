@@ -27,7 +27,6 @@ jobs:
             ${{ runner.os }}-node-modules-
 
       - name: Install Dependencies
-        if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm install
 
       - name: create env file
