@@ -84,13 +84,12 @@ const ButtonContainer = styled.div`
 `;
 
 const ModalButton = styled.button`
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: #e0e0e0;
   color: #303030;
   width: 8.75rem;
   height: 3rem;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   border-radius: 2rem;
   font-weight: bold;
   &.cancel {
