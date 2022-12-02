@@ -25,8 +25,9 @@ function SignUp() {
       <Container>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="signup-container">
+            <Img src="/logo3.png" alt="logo" />
             <div className="wrapper">
-              <div className="title">Email</div>
+              <div className="title">이메일</div>
               <Input
                 type="email"
                 placeholder="code@gmail.com"
@@ -46,7 +47,7 @@ function SignUp() {
               )}
             </div>
             <div className="wrapper">
-              <div className="title">Password</div>
+              <div className="title">비밀번호</div>
               <Input
                 placeholder="8자 이상 영문, 숫자, 특수문자를 사용하세요."
                 type="password"
@@ -90,7 +91,7 @@ function SignUp() {
               )}
             </div>
             <div className="wrapper">
-              <div className="title">Re-Enter Password</div>
+              <div className="title">비밀번호 확인</div>
               <Input
                 placeholder="비밀번호를 다시 입력해주세요."
                 type="password"
@@ -109,7 +110,7 @@ function SignUp() {
               )}
             </div>
             <div className="wrapper">
-              <div className="title">Nickname</div>
+              <div className="title">닉네임</div>
               <Input
                 placeholder="1자 이상의 한글, 영문, 숫자만 사용할 수 있습니다"
                 {...register('nickname', {
@@ -132,7 +133,7 @@ function SignUp() {
               )}
             </div>
             <div className="wrapper">
-              <div className="title">Phone number</div>
+              <div className="title">핸드폰 번호</div>
               <Input
                 placeholder="010-1234-5678"
                 {...register('phoneNumber', {
@@ -173,9 +174,9 @@ function SignUp() {
               className="submit-button"
               disabled={isSubmitting}
             >
-              Sign Up
+              회원가입
             </button>
-            <LogInLink to="/log-in">Log In</LogInLink>
+            <LogInLink to="/log-in">로그인</LogInLink>
           </div>
         </form>
       </Container>
@@ -312,4 +313,9 @@ const LogInLink = styled(Link)`
   color: #666666;
   font-size: 0.8rem;
   font-weight: 500;
+`;
+
+const Img = styled.img`
+  width: 90px;
+  margin-bottom: 80px;
 `;

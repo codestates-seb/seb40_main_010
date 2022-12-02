@@ -24,7 +24,7 @@ export default function LogIn() {
           <div className="login-container">
             <Img src="/logo3.png" alt="logo" />
             <div className="wrapper">
-              <div className="title">Email</div>
+              <div className="title">이메일</div>
               <Input
                 placeholder="code@gmail.com"
                 {...register('email', {
@@ -43,7 +43,7 @@ export default function LogIn() {
               )}
             </div>
             <div className="wrapper">
-              <div className="title">Password</div>
+              <div className="title">비밀번호</div>
               <Input
                 type="password"
                 {...register('password', {
@@ -62,9 +62,9 @@ export default function LogIn() {
               className="submit-button"
               disabled={isSubmitting}
             >
-              Log In
+              로그인
             </button>
-            <SignUpLink to="/sign-up">Sign Up</SignUpLink>
+            <SignUpLink to="/sign-up">회원가입</SignUpLink>
           </div>
         </form>
       </Container>
