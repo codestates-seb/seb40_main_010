@@ -1,5 +1,5 @@
 # fe-dev.yml
-
+#
 name: Deploy to Production
 
 on:
@@ -27,6 +27,7 @@ jobs:
             ${{ runner.os }}-node-modules-
 
       - name: Install Dependencies
+      run: git --version
         run: npm install
 
       - name: create env file
