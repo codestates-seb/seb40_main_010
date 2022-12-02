@@ -29,6 +29,7 @@ jobs:
       - name: Install Dependencies
       run: git --version
         run: npm install
+        working-directory: /home/runner/work/seb40_main_010/client
 
       - name: create env file
         env:
