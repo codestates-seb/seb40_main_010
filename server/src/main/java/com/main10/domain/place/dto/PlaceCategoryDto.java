@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 public class PlaceCategoryDto {
 
     @Getter
@@ -17,11 +19,6 @@ public class PlaceCategoryDto {
     public static class Search {
         private Long categoryId;
         private String categoryName;
-
-/*        public Search(PlaceCategory placeCategory) {
-            this.categoryId = placeCategory.getId();
-            this.categoryName = placeCategory.getCategoryName();
-        }*/
     }
 
     @Getter

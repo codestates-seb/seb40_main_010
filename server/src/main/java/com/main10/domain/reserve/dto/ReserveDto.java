@@ -5,6 +5,7 @@ import com.main10.domain.reserve.entity.Reserve;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
@@ -14,14 +15,13 @@ public class ReserveDto {
     @NoArgsConstructor
     public static class Post {
 
-        @NotBlank(message = "인원 수는 공백이 아니어야 합니다.")
         @Positive(message = "인원 수가 0이 되어서는 안됩니다.")
         private int capacity;
 
-        @NotBlank(message = "체크인 시간은 공백이 아니어야 합니다.")
+        @NotNull(message = "체크인 시간은 공백이 아니어야 합니다.")
         private LocalDateTime startTime;
 
-        @NotBlank(message = "체크아웃 시간은 공백이 아니어야 합니다.")
+        @NotNull(message = "체크아웃 시간은 공백이 아니어야 합니다.")
         private LocalDateTime endTime;
 
         @Builder
@@ -35,14 +35,14 @@ public class ReserveDto {
     @Getter
     @NoArgsConstructor
     public static class Patch {
-        @NotBlank(message = "인원 수는 공백이 아니어야 합니다.")
+        @NotNull(message = "인원 수는 공백이 아니어야 합니다.")
         @Positive(message = "인원 수가 0이 되어서는 안됩니다.")
         private int capacity;
 
-        @NotBlank(message = "체크인 시간은 공백이 아니어야 합니다.")
+        @NotNull(message = "체크인 시간은 공백이 아니어야 합니다.")
         private LocalDateTime startTime;
 
-        @NotBlank(message = "체크아웃 시간은 공백이 아니어야 합니다.")
+        @NotNull(message = "체크아웃 시간은 공백이 아니어야 합니다.")
         private LocalDateTime endTime;
 
         @Builder

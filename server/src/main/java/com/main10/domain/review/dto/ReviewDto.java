@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ public class ReviewDto {
     @Getter
     @NoArgsConstructor
     public static class Post {
-        @NotBlank
+        @NotNull
         @Positive(message = "평점은 음수가 될 수 없습니다.")
         private double score;
 
@@ -37,7 +38,7 @@ public class ReviewDto {
     @Getter
     @NoArgsConstructor
     public static class Patch {
-        @NotBlank
+        @NotNull
         @Positive(message = "평점은 음수가 될 수 없습니다.")
         private Double score;
 
