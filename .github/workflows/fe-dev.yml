@@ -16,7 +16,7 @@ jobs:
      run: npm install # 나는 npm 사용해서
      working-directory: /home/runner/work/seb40_main_010/client
 
-   - name: Build
+   - name: Build 
         run: npm run build
         env:
           CI: ''
