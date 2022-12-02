@@ -106,6 +106,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
         configuration.addAllowedOrigin("http://daeyeo4u.com");
+        configuration.addAllowedOrigin("http://backend.daeyeo4u.shop");
         configuration.addAllowedOrigin("https://kapi.kakao.com");
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH"));
