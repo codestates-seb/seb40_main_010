@@ -116,7 +116,7 @@ function SignUp() {
                   required: '필수 정보입니다.',
                   pattern: {
                     value: /[0-9]|[a-z]|[A-Z]|[가-힣]/,
-                    message: '이름 형식에 맞지 않습니다.',
+                    message: '닉네임 형식에 맞지 않습니다.',
                   },
                   validate: {
                     spaceCheck: value =>
