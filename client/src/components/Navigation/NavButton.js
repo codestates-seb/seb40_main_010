@@ -58,7 +58,7 @@ export function NavLeftButtonContainer() {
   }
   return (
     <Link to="/log-in">
-      <NavLeftButton onClick={onClickAnotherPage}>Log In</NavLeftButton>
+      <NavLeftButton onClick={onClickAnotherPage}>로그인</NavLeftButton>
     </Link>
   );
 }
@@ -118,7 +118,7 @@ export function NavRightButtonContainer() {
   if (isLogIn && myPageUrl) {
     return (
       <Link to="/">
-        <NavRightButton onClick={onClickLogOutButton}>Log Out</NavRightButton>
+        <NavRightButton onClick={onClickLogOutButton}>로그아웃</NavRightButton>
       </Link>
     );
   }
@@ -137,7 +137,7 @@ export function NavRightButtonContainer() {
 
   return (
     <Link to="/sign-up">
-      <NavRightButton onClick={onClickAnotherPage}>Sign Up</NavRightButton>
+      <NavRightButton onClick={onClickAnotherPage}>회원가입</NavRightButton>
     </Link>
   );
 }
