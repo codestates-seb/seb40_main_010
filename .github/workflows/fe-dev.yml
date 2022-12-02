@@ -1,55 +1,37 @@
 # fe-dev.yml
 
 name: Deploy to Production
-
-on:
-  push:
-    branches: fe-dev
-  pull_request:
-    branches: fe-dev
-
+on: 
+ push: 
+   branches:
+    - fe-dev
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
+ build:
+  runs-on: ubuntu-latest
+  steps: 
+   - name: Checkout source code
+     uses: actions/checkout@v3
 
-      - name: Cache node modules
-        uses: actions/cache@v3
-        id: node-cache
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
+   - name: Install dependencies
+     run: npm install # 나는 npm 사용해서
+     working-directory: /home/runner/work/seb40_main_010/client
 
-      - name: Install Dependencies
-      run: git --version
-        run: npm install
-        working-directory: /home/runner/work/seb40_main_010/client
-
-      - name: create env file
-        env:
-          ENVIORNMENT_VARIABLES: ${{ secrets.ENVIORNMENT_VARIABLES }}
-        shell: bash
-        run: |
-          echo "$ENVIORNMENT_VARIABLES" > .env
-
-      - name: Build
+   - name: Build
         run: npm run build
         env:
           CI: ''
           REACT_APP_SERVER_BASE_URL: ${{ secrets.REACT_APP_SERVER_BASE_URL }}
+     working-directory: /home/runner/work/seb40_main_010/client
 
-      - name: Deploy
-        env:
+   - name: Deploy
+     env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws s3 cp \
-            --recursive \
+     run: |
+         aws s3 cp \
             --region ap-northeast-2 \
             build s3://daeyeo4u.com
+     working-directory: /home/runner/work/seb40_main_010/client
+
+
+
