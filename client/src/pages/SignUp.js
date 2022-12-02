@@ -196,7 +196,7 @@ const Container = styled.div`
 
   .signup-container {
     margin-top: 35%;
-    width: 33rem;
+    width: 38rem;
     height: flex;
     padding: 70px 0px;
     background-color: #ffffff;
