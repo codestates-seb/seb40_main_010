@@ -1,0 +1,6 @@
+aws:
+  paramstore:
+    enabled: true
+    prefix: /spring-boot-aws
+    name: seb40_main_010 # 리소스 이름을 작성합니다.
+    profileSeparator: _
