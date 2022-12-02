@@ -9,7 +9,7 @@ phases:
       - echo Build Starting on `date`
       - cd server
       - chmod +x ./gradlew
-      - ./gradlew build
+      - ./gradlew build -x test
   post_build:
     commands:
       - echo $(basename ./server/build/libs/*.jar)

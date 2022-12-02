@@ -105,7 +105,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
-        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedOrigin("http://deayeo4u.com");
         configuration.addAllowedOrigin("https://kapi.kakao.com");
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH"));
