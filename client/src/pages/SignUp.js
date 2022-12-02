@@ -21,7 +21,7 @@ function SignUp() {
 
   return (
     <div className="test">
-      <Nav navColor="#FFDA77" buttonColor="#89BBFF" />
+      <Nav />
       <Container>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="signup-container">

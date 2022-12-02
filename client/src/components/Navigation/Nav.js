@@ -139,7 +139,7 @@ const NavBackground = styled.div`
 
 const Img = styled.img`
   margin-left: 40px;
-  width: 180px;
+  width: 140px;
   &:hover {
     cursor: pointer;
   }
