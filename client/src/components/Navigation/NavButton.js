@@ -19,7 +19,7 @@ import {
   navSearchValue,
 } from '../../atoms';
 
-export function NavLeftButtonContainer({ buttonColor }) {
+export function NavLeftButtonContainer() {
   const logInUrl = useMatch('/log-in');
   const registerUrl = useMatch('/register');
 
@@ -52,17 +52,13 @@ export function NavLeftButtonContainer({ buttonColor }) {
   if (isLogIn) {
     return (
       <Link to="/register">
-        <NavLeftButton buttonColor={buttonColor} onClick={onClickAnotherPage}>
-          장소등록
-        </NavLeftButton>
+        <NavLeftButton onClick={onClickAnotherPage}>장소등록</NavLeftButton>
       </Link>
     );
   }
   return (
     <Link to="/log-in">
-      <NavLeftButton buttonColor={buttonColor} onClick={onClickAnotherPage}>
-        Log In
-      </NavLeftButton>
+      <NavLeftButton onClick={onClickAnotherPage}>Log In</NavLeftButton>
     </Link>
   );
 }
@@ -153,14 +149,14 @@ const NavLeftButton = styled.button`
   padding: 8px;
   border-radius: 20px;
   border: none;
-  background-color: ${props => props.buttonColor || '#ffda77'};
+  background-color: #ffda77;
   font-size: 0.8rem;
   font-weight: 500;
   line-height: 20px;
   text-align: center;
   color: #2b2b2b;
   &:hover {
-    background-color: #fff9eb;
+    background-color: #eb7470;
     transition: 0.7s;
     cursor: pointer;
   }
