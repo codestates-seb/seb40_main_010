@@ -4,9 +4,9 @@ name: Deploy to Production
 
 on:
   push:
-    branches: - fe-dev
+    branches: fe-dev
   pull_request:
-    branches: - fe-dev
+    branches: fe-dev
 
 jobs:
   deploy:
