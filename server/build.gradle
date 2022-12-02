@@ -60,10 +60,9 @@ dependencies {
     //스프링데이터 JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     //h2
-    runtimeOnly 'com.h2database:h2'
+//    runtimeOnly 'com.h2database:h2'
     // mysql
-//    runtimeOnly 'com.mysql:mysql-connector-java'
-//    implementation 'mysql:mysql-connector-java'
+    implementation 'mysql:mysql-connector-java'
     //mapper 자동 생성
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
