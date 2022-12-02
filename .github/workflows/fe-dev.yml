@@ -14,14 +14,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install # 나는 npm 사용해서
-        working-directory: /home/runner/work/seb40_main_010/client
 
       - name: Build
         run: npm run build
         env:
           CI: ''
           REACT_APP_SERVER_BASE_URL: ${{ secrets.REACT_APP_SERVER_BASE_URL }}
-        working-directory: /home/runner/work/seb40_main_010/client
 
       - name: Deploy
         env:
@@ -31,4 +29,3 @@ jobs:
           aws s3 cp \
             --region ap-northeast-2 \
             build s3://daeyeo4u.com
-        working-directory: /home/runner/work/seb40_main_010/client
