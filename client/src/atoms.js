@@ -147,4 +147,5 @@ export const wholeData = atom({
 // export const userMbtiValue = atom({
 //   key: 'userMbtiValue',
 //   default: '',
+//   effects_UNSTABLE: [persistAtom],
 // });
