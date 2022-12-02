@@ -19,7 +19,10 @@ function ReservationBottomButtons() {
 
   const handleBookmark = async () => {
     try {
-      const response = await axios.get(`/bookmark/${placeId}`, header);
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/bookmark/${placeId}`,
+        header,
+      );
       setIsBookmark(response.data);
     } catch (error) {
       console.log(error);

@@ -13,7 +13,6 @@ import MyPage from './pages/MyPage';
 import Register from './pages/Register';
 import SignUp from './pages/SignUp';
 import NotFound from './components/NotFound';
-import header from './utils/header';
 import { HasRefresh, mbtiPlaceDataState } from './atoms';
 
 function App() {
@@ -46,7 +45,20 @@ function App() {
     }
 
     if (exp - currentTime <= 60 * 3) {
-      const response = await axios.get('/auth/re-issue', header);
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/auth/re-issue`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
+        },
+      );
       localStorage.setItem(
         'ACCESS',
         `Bearer ${response.headers.authorization}`,

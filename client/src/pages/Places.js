@@ -26,17 +26,20 @@ export default function Places() {
 
   const getPageData = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${url}${page}`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: localStorage.getItem('ACCESS')
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: localStorage.getItem('REFRESH')
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}${url}${page}`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: localStorage.getItem('ACCESS')
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: localStorage.getItem('REFRESH')
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
 
       if (!mainPlaceData) {
         setMainPlaceData([...data.data]);

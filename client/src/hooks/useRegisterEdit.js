@@ -67,13 +67,17 @@ const useRegisterEdit = () => {
     });
 
     try {
-      await axios.post(`/place/${editData.placeId}/edit`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-          RefreshToken: localStorage.getItem('REFRESH'),
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/place/${editData.placeId}/edit`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+            RefreshToken: localStorage.getItem('REFRESH'),
+          },
         },
-      });
+      );
       setCheckedList([]);
       setImages([]);
       setPreviewImages([]);

@@ -91,17 +91,20 @@ const useMyPage = () => {
   const callRegistrationList = async () => {
     try {
       clearCategory();
-      const response = await axios.get(`/place`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/place`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       setListData([...response.data.data]);
     } catch (err) {
       clearCategory();
@@ -112,17 +115,20 @@ const useMyPage = () => {
   const reservationList = async () => {
     try {
       clearCategory();
-      const response = await axios.get(`/reserve`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/reserve`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       setListData([...response.data.data]);
     } catch (err) {
       clearCategory();
@@ -133,17 +139,20 @@ const useMyPage = () => {
   const bookmarkList = async () => {
     try {
       clearCategory();
-      const response = await axios.get(`/bookmark`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/bookmark`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
 
       setListData(() => [...response.data.data]);
     } catch (err) {
@@ -155,17 +164,20 @@ const useMyPage = () => {
   const reviewList = async () => {
     try {
       clearCategory();
-      const response = await axios.get(`/review`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/review`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       setListData([...response.data.data]);
     } catch (err) {
       clearCategory();
@@ -175,17 +187,20 @@ const useMyPage = () => {
 
   const callUserData = async () => {
     try {
-      const response = await axios.get('/member', {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/member`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       setMemberData(response.data);
       setUserNickName(response.data.nickname);
       setUserMBTI(response.data.mbti);
@@ -204,13 +219,17 @@ const useMyPage = () => {
     formData.append('file', profileImage);
 
     try {
-      await axios.post(`/member/profile`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-          RefreshToken: localStorage.getItem('REFRESH'),
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/member/profile`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
+            RefreshToken: localStorage.getItem('REFRESH'),
+          },
         },
-      });
+      );
       callUserData();
       editStatusChange();
     } catch (err) {
@@ -262,7 +281,7 @@ const useMyPage = () => {
     userImageEdit();
     try {
       await axios.patch(
-        `/member/edit`,
+        `${process.env.REACT_APP_SERVER_BASE_URL}/member/edit`,
         {
           nickname: userNickName,
           mbti: userMBTI,

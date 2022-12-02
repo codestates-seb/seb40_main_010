@@ -34,17 +34,21 @@ function ReviewWrite({
       comment: reviewText,
     };
     try {
-      await axios.post(`/review/${placeId}/reserve/${reserveId}`, data, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/review/${placeId}/reserve/${reserveId}`,
+        data,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       showReviewModal();
     } catch (err) {
       console.log(err);
@@ -57,17 +61,21 @@ function ReviewWrite({
       comment: reviewText,
     };
     try {
-      await axios.patch(`/review/${reviewId}/edit`, data, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      await axios.patch(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/review/${reviewId}/edit`,
+        data,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       showReviewModal();
       await reviewList();
     } catch (err) {

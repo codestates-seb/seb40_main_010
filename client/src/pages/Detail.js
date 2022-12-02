@@ -27,17 +27,20 @@ function Detail() {
   const getDetailData = async () => {
     try {
       if (id) {
-        const response = await axios.get(`/place/${id}`, {
-          headers: {
-            'ngrok-skip-browser-warning': '010',
-            Authorization: (await localStorage.getItem('ACCESS'))
-              ? `Bearer ${localStorage.getItem('ACCESS')}`
-              : '',
-            RefreshToken: (await localStorage.getItem('REFRESH'))
-              ? localStorage.getItem('REFRESH')
-              : '',
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_BASE_URL}/place/${id}`,
+          {
+            headers: {
+              'ngrok-skip-browser-warning': '010',
+              Authorization: (await localStorage.getItem('ACCESS'))
+                ? `Bearer ${localStorage.getItem('ACCESS')}`
+                : '',
+              RefreshToken: (await localStorage.getItem('REFRESH'))
+                ? localStorage.getItem('REFRESH')
+                : '',
+            },
           },
-        });
+        );
 
         setDetailInformation({ ...response.data });
         setIsBookmark(response.data.bookmark);
