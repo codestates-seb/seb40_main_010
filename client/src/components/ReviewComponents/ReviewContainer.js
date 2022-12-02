@@ -11,11 +11,14 @@ function ReviewContainer() {
 
   const callReviews = async () => {
     try {
-      const response = await axios.get(`/review/${id}`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/review/${id}`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+          },
         },
-      });
+      );
       setReviews([...response.data.data]);
     } catch (err) {
       setReviews([]);

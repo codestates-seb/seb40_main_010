@@ -16,17 +16,20 @@ function MbtiPlaces() {
     if (!isLogIn) return setMbtiPlaceData([]);
 
     try {
-      const getMbtiPlaces = await axios.get('/mbti', {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const getMbtiPlaces = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/mbti`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
 
       if (!getMbtiPlaces.data.data) {
         setMbtiPlaceData([]);

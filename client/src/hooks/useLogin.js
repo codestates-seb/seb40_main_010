@@ -57,7 +57,10 @@ const useLogin = () => {
 
   const onSubmit = async data => {
     try {
-      const response = await axios.post(`/auth/login`, data);
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/auth/login`,
+        data,
+      );
       await localStorage.setItem('ACCESS', response.headers.authorization);
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
 

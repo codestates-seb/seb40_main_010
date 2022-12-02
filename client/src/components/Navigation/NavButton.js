@@ -92,7 +92,7 @@ export function NavRightButtonContainer() {
   const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
 
   const onClickLogOutButton = async () => {
-    await axios.delete('/auth/logout', {
+    await axios.delete(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/logout`, {
       headers: {
         'ngrok-skip-browser-warning': '010',
         Authorization: (await localStorage.getItem('ACCESS'))

@@ -18,7 +18,10 @@ const useSignUp = () => {
 
   const onSubmit = async data => {
     try {
-      await axios.post(`/member/join`, data);
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/member/join`,
+        data,
+      );
       alert('회원가입이 완료되었습니다.');
       navigator('/log-in');
     } catch (err) {

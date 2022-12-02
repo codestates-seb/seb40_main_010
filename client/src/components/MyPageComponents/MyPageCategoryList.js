@@ -68,16 +68,19 @@ function MyPageCategoryList({ listData, type }) {
 
   const reviewDelete = async () => {
     try {
-      await axios.delete(`/review/${listData.reviewId}`, {
-        headers: {
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/review/${listData.reviewId}`,
+        {
+          headers: {
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       showModal();
       await reviewList();
     } catch (err) {
@@ -87,17 +90,20 @@ function MyPageCategoryList({ listData, type }) {
 
   const bookMarkStatusChange = async () => {
     try {
-      await axios.get(`/bookmark/${listData.placeId}`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/bookmark/${listData.placeId}`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       await bookmarkList();
     } catch (err) {
       console.log(err);
@@ -106,17 +112,20 @@ function MyPageCategoryList({ listData, type }) {
 
   const registerEditDataSend = async () => {
     try {
-      const response = await axios.get(`/place/${listData.placeId}`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/place/${listData.placeId}`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       // TODO : 다른 방식으로 바꿔보기, 직접 할당 X
       response.data.filePath = [];
       response.data.category = [];
@@ -133,17 +142,20 @@ function MyPageCategoryList({ listData, type }) {
 
   const reservationCancel = async () => {
     try {
-      await axios.delete(`/reserve/${listData.reserveId}`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/reserve/${listData.reserveId}`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       showModal();
       await reservationList();
     } catch (err) {

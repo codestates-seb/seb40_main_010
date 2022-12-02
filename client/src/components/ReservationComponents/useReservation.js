@@ -48,17 +48,20 @@ const useReservation = charge => {
 
   const onClickPaymentKaKaoButton = async () => {
     try {
-      const response = await axios.get(`/place/reserve/${reserveId}/payment`, {
-        headers: {
-          'ngrok-skip-browser-warning': '010',
-          Authorization: (await localStorage.getItem('ACCESS'))
-            ? `Bearer ${localStorage.getItem('ACCESS')}`
-            : '',
-          RefreshToken: (await localStorage.getItem('REFRESH'))
-            ? localStorage.getItem('REFRESH')
-            : '',
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/place/reserve/${reserveId}/payment`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
         },
-      });
+      );
       const paymentUrl = response.data.data;
       onClickPaymentButton(paymentUrl);
       setModalOpen(false);
@@ -96,7 +99,7 @@ const useReservation = charge => {
 
     try {
       const response = await axios.post(
-        `/place/${id}/reserve`,
+        `${process.env.REACT_APP_SERVER_BASE_URL}/place/${id}/reserve`,
         reservationInformation,
         {
           headers: {
@@ -114,7 +117,7 @@ const useReservation = charge => {
       setReserveId(response.data);
 
       await axios.post(
-        `/reserve/${response.data}/mail`,
+        `${process.env.REACT_APP_SERVER_BASE_URL}/reserve/${response.data}/mail`,
         {},
         {
           headers: {
