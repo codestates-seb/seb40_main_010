@@ -36,5 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 application-local.yml
-application-server.yml
 

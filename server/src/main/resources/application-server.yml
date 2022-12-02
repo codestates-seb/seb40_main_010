@@ -1,0 +1,54 @@
+cloud:
+  aws:
+    stack:
+      auto: false
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+
+  mail:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            scope:
+              - email
+              - profile
+          kakao:
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+            client-name: kakao
+        provider:
+          kakao:
+            authorization_uri: https://kauth.kakao.com/oauth/authorize
+            token_uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user_name_attribute: id
+
+logging:
+  level:
+    com.project: debug
