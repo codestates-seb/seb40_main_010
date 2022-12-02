@@ -106,3 +106,6 @@ kakao:
 default :
   image :
     address : ${/config/param/default-url}
+
+awsParameterStorePropertySource:
+  enabled: true
