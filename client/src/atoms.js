@@ -149,3 +149,8 @@ export const userMbtiValue = atom({
   default: '',
   effects_UNSTABLE: [persistAtom],
 });
+
+export const placeMaxCapacity = atom({
+  key: 'placeMaxCapacity',
+  default: null,
+});
