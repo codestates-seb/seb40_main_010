@@ -47,6 +47,12 @@ function MyPageCategoryList({ listData, type }) {
     setReviewModalOpen(!reviewModalOpen);
   };
 
+  const handleDateComparison = createdAt => {
+    if (createdAt === undefined) return null;
+    const date = dayjs(createdAt);
+    return Number(date.format('YYYYMMDDhh'));
+  };
+
   const handleDate = createdAt => {
     if (createdAt === undefined) return null;
 
@@ -205,7 +211,8 @@ function MyPageCategoryList({ listData, type }) {
             )}
             {type === 'reservation' && (
               <>
-                {handleDate(today) < handleDate(listData.startTime) ? (
+                {handleDateComparison(today) <
+                handleDateComparison(listData.startTime) ? (
                   <CategoryButton onClick={showModal}>취소하기</CategoryButton>
                 ) : (
                   <CategoryButton onClick={showReviewModal}>
@@ -279,7 +286,6 @@ const CategoryItemList = styled.div`
   align-items: center;
   border-top: 1px solid #aaa;
   border-bottom: 1px solid #aaa;
-  border-radius: 1rem;
   margin: 1rem 0px;
 
   @media (max-width: 840px) {
