@@ -19,6 +19,11 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
   const maxEndDate = new Date(startDate).setHours(23);
 
   const handleStartDate = time => {
+    const initializeDate = () => {
+      setEndDate(false);
+      setEndCalendarSelectedDay('dayNull');
+    };
+
     const clickedTime = new Date(time);
     const now = new Date();
 
@@ -59,8 +64,7 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
     }
 
     setIsStartDateSelected(time);
-    setEndDate(false);
-    setEndCalendarSelectedDay('dayNull');
+    initializeDate();
   };
 
   const handleEndDate = time => {

@@ -61,13 +61,15 @@ const useLogin = () => {
         `${process.env.REACT_APP_SERVER_BASE_URL}/auth/login`,
         data,
       );
+
+      setIsLogIn(true);
+      invalidate();
+      // setAccessToken('ACCESS')
+
       await localStorage.setItem('ACCESS', response.headers.authorization);
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
 
       // setUserMbti(response.data.mbti);
-
-      setIsLogIn(true);
-      invalidate();
     } catch (error) {
       const validationType = getErrorType(error.response.data.status);
 

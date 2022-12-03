@@ -1,13 +1,9 @@
-const header = {
+const getHeader = (AccessToken = '', RefreshToken = '') => ({
   headers: {
     'ngrok-skip-browser-warning': '010',
-    Authorization: localStorage.getItem('ACCESS')
-      ? `Bearer ${localStorage.getItem('ACCESS')}`
-      : '',
-    RefreshToken: localStorage.getItem('REFRESH')
-      ? localStorage.getItem('REFRESH')
-      : '',
+    Authorization: `Bearer ${AccessToken}`,
+    RefreshToken,
   },
-};
+});
 
-export default header;
+export default getHeader;

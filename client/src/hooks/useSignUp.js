@@ -7,13 +7,11 @@ const useSignUp = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const getErrorType = message => {
-    if (message === '이미 존재하는 닉네임입니다.') {
-      return setErrorMessage('이미 존재하는 닉네임입니다.');
-    }
-    if (message === '이미 존재하는 이메일입니다.') {
-      return setErrorMessage('이미 존재하는 이메일입니다.');
-    }
-    return null;
+    if (message.indexOf('닉네임') === -1) return null;
+
+    if (message.indexOf('이메일') === -1) return null;
+
+    return setErrorMessage(message);
   };
 
   const onSubmit = async data => {
