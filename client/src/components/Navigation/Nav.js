@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState, useResetRecoilState } from 'recoil';
+import { useSetRecoilState, useResetRecoilState, useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
 
@@ -18,7 +18,7 @@ function Nav() {
   const [currentSearch, setCurrentSearch] = useState('');
 
   const setSearch = useSetRecoilState(navSearchValue);
-  const setFocusCategoryID = useSetRecoilState(categoryFocus);
+  const [focusCategoryID, setFocusCategoryID] = useRecoilState(categoryFocus);
   const setPage = useSetRecoilState(pageState);
   const resetMainPlaceData = useResetRecoilState(mainDataState);
   const setUrl = useSetRecoilState(settingUrl);
@@ -53,12 +53,21 @@ function Nav() {
       return setCurrentSearch('');
     }
 
-    // const encoded = encodeURI(replacedSearch);
+    const encoded = encodeURI(replacedSearch);
 
-    // const url = `/search/${encoded}?size=20&page=`;
+    if (focusCategoryID === 0) {
+      const url = `/search/${encoded}?size=20&page=`;
+      setUrl(() => url);
+      invalidate();
+    }
+    if (focusCategoryID !== 0) {
+      const url = `/category/${focusCategoryID}/search/${encoded}?size=20&page=`;
+      setUrl(() => url);
+      invalidate();
+    }
 
     // setUrl(() => url);
-    invalidate();
+    // invalidate();
   };
 
   // eslint-disable-next-line consistent-return
@@ -73,7 +82,18 @@ function Nav() {
       return setCurrentSearch('');
     }
 
-    // const encoded = encodeURI(replacedSearch);
+    const encoded = encodeURI(replacedSearch);
+
+    if (focusCategoryID === 0) {
+      const url = `/search/${encoded}?size=20&page=`;
+      setUrl(() => url);
+      invalidate();
+    }
+    if (focusCategoryID !== 0) {
+      const url = `/category/${focusCategoryID}/search/${encoded}?size=20&page=`;
+      setUrl(() => url);
+      invalidate();
+    }
 
     // const url = `/search/${encoded}?size=20&page=`;
 
