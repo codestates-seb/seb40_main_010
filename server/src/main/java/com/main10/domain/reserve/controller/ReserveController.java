@@ -85,10 +85,7 @@ public class ReserveController {
 
         if (message.getData() == null) getFailedPayMessage();
 
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(message);
+        return ResponseEntity.ok().build();
     }
 
 

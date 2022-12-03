@@ -194,6 +194,7 @@ public class ReservePaymentTest extends ReserveControllerTest{
                                 .header(AUTHORIZATION, "Bearer " + accessToken)
                                 .header(REFRESH, refreshToken)
                                 .param("pg_token", pgToken));
+
         actions
                 .andExpect(status().isOk())
                 .andDo(document(
@@ -208,51 +209,51 @@ public class ReservePaymentTest extends ReserveControllerTest{
                         ),
                         requestParameters(
                                 parameterWithName("pg_token").description("pgToken")
-                        ),
-                        responseFields(
-                                List.of(
-                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결제 데이터").optional(),
-                                        fieldWithPath("data.aid").type(JsonFieldType.STRING).description("aid"),
-                                        fieldWithPath("data.tid").type(JsonFieldType.STRING).description("tid"),
-                                        fieldWithPath("data.cid").type(JsonFieldType.STRING).description("cid"),
-                                        fieldWithPath("data.sid").type(JsonFieldType.STRING).description("sid"),
-                                        fieldWithPath("data.partner_order_id").type(JsonFieldType.STRING).description("partnerOrderId"),
-                                        fieldWithPath("data.partner_user_id").type(JsonFieldType.STRING).description("partnerUserId"),
-                                        fieldWithPath("data.payment_method_type").type(JsonFieldType.STRING).description("paymentMethodType"),
-
-                                        fieldWithPath("data.amount").type(JsonFieldType.OBJECT).description("amount 데이터"),
-                                        fieldWithPath("data.amount.total").type(JsonFieldType.NUMBER).description("total"),
-                                        fieldWithPath("data.amount.tax_free").type(JsonFieldType.NUMBER).description("taxFree"),
-                                        fieldWithPath("data.amount.vat").type(JsonFieldType.NUMBER).description("vat"),
-                                        fieldWithPath("data.amount.point").type(JsonFieldType.NUMBER).description("point"),
-                                        fieldWithPath("data.amount.discount").type(JsonFieldType.NUMBER).description("discount"),
-
-                                        fieldWithPath("data.card_info").type(JsonFieldType.OBJECT).description("cardInfo 데이터").optional(),
-                                        fieldWithPath("data.card_info.purchase_corp").type(JsonFieldType.STRING).description("purchaseCorp"),
-                                        fieldWithPath("data.card_info.purchase_corp_code").type(JsonFieldType.STRING).description("purchaseCorpCode"),
-                                        fieldWithPath("data.card_info.issuer_corp").type(JsonFieldType.STRING).description("issuerCorp"),
-                                        fieldWithPath("data.card_info.issuer_corp_code").type(JsonFieldType.STRING).description("issuerCorpCode"),
-                                        fieldWithPath("data.card_info.bin").type(JsonFieldType.STRING).description("bin"),
-                                        fieldWithPath("data.card_info.card_type").type(JsonFieldType.STRING).description("cardType"),
-                                        fieldWithPath("data.card_info.install_month").type(JsonFieldType.STRING).description("installMonth"),
-                                        fieldWithPath("data.card_info.approved_id").type(JsonFieldType.STRING).description("approvedId"),
-                                        fieldWithPath("data.card_info.card_mid").type(JsonFieldType.STRING).description("cardMid"),
-                                        fieldWithPath("data.card_info.interest_free_install").type(JsonFieldType.STRING).description("interestFreeInstall"),
-                                        fieldWithPath("data.card_info.card_item_code").type(JsonFieldType.STRING).description("cardItemCode"),
-
-                                        fieldWithPath("data.item_name").type(JsonFieldType.STRING).description("itemName"),
-                                        fieldWithPath("data.item_code").type(JsonFieldType.STRING).description("itemCode"),
-                                        fieldWithPath("data.payload").type(JsonFieldType.STRING).description("payload"),
-                                        fieldWithPath("data.quantity").type(JsonFieldType.NUMBER).description("quantity"),
-                                        fieldWithPath("data.tax_free_amount").type(JsonFieldType.NUMBER).description("taxFreeAmount"),
-                                        fieldWithPath("data.vat_amount").type(JsonFieldType.NUMBER).description("vatAmount"),
-                                        fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("createdAt"),
-                                        fieldWithPath("data.approved_at").type(JsonFieldType.STRING).description("approvedAt"),
-                                        fieldWithPath("data.order_status").type(JsonFieldType.STRING).description("orderStatus"),
-
-                                        fieldWithPath("message").type(JsonFieldType.STRING).description("메세지")
-                                )
                         )
+//                        responseFields(
+//                                List.of(
+//                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결제 데이터").optional(),
+//                                        fieldWithPath("data.aid").type(JsonFieldType.STRING).description("aid"),
+//                                        fieldWithPath("data.tid").type(JsonFieldType.STRING).description("tid"),
+//                                        fieldWithPath("data.cid").type(JsonFieldType.STRING).description("cid"),
+//                                        fieldWithPath("data.sid").type(JsonFieldType.STRING).description("sid"),
+//                                        fieldWithPath("data.partner_order_id").type(JsonFieldType.STRING).description("partnerOrderId"),
+//                                        fieldWithPath("data.partner_user_id").type(JsonFieldType.STRING).description("partnerUserId"),
+//                                        fieldWithPath("data.payment_method_type").type(JsonFieldType.STRING).description("paymentMethodType"),
+//
+//                                        fieldWithPath("data.amount").type(JsonFieldType.OBJECT).description("amount 데이터"),
+//                                        fieldWithPath("data.amount.total").type(JsonFieldType.NUMBER).description("total"),
+//                                        fieldWithPath("data.amount.tax_free").type(JsonFieldType.NUMBER).description("taxFree"),
+//                                        fieldWithPath("data.amount.vat").type(JsonFieldType.NUMBER).description("vat"),
+//                                        fieldWithPath("data.amount.point").type(JsonFieldType.NUMBER).description("point"),
+//                                        fieldWithPath("data.amount.discount").type(JsonFieldType.NUMBER).description("discount"),
+//
+//                                        fieldWithPath("data.card_info").type(JsonFieldType.OBJECT).description("cardInfo 데이터").optional(),
+//                                        fieldWithPath("data.card_info.purchase_corp").type(JsonFieldType.STRING).description("purchaseCorp"),
+//                                        fieldWithPath("data.card_info.purchase_corp_code").type(JsonFieldType.STRING).description("purchaseCorpCode"),
+//                                        fieldWithPath("data.card_info.issuer_corp").type(JsonFieldType.STRING).description("issuerCorp"),
+//                                        fieldWithPath("data.card_info.issuer_corp_code").type(JsonFieldType.STRING).description("issuerCorpCode"),
+//                                        fieldWithPath("data.card_info.bin").type(JsonFieldType.STRING).description("bin"),
+//                                        fieldWithPath("data.card_info.card_type").type(JsonFieldType.STRING).description("cardType"),
+//                                        fieldWithPath("data.card_info.install_month").type(JsonFieldType.STRING).description("installMonth"),
+//                                        fieldWithPath("data.card_info.approved_id").type(JsonFieldType.STRING).description("approvedId"),
+//                                        fieldWithPath("data.card_info.card_mid").type(JsonFieldType.STRING).description("cardMid"),
+//                                        fieldWithPath("data.card_info.interest_free_install").type(JsonFieldType.STRING).description("interestFreeInstall"),
+//                                        fieldWithPath("data.card_info.card_item_code").type(JsonFieldType.STRING).description("cardItemCode"),
+//
+//                                        fieldWithPath("data.item_name").type(JsonFieldType.STRING).description("itemName"),
+//                                        fieldWithPath("data.item_code").type(JsonFieldType.STRING).description("itemCode"),
+//                                        fieldWithPath("data.payload").type(JsonFieldType.STRING).description("payload"),
+//                                        fieldWithPath("data.quantity").type(JsonFieldType.NUMBER).description("quantity"),
+//                                        fieldWithPath("data.tax_free_amount").type(JsonFieldType.NUMBER).description("taxFreeAmount"),
+//                                        fieldWithPath("data.vat_amount").type(JsonFieldType.NUMBER).description("vatAmount"),
+//                                        fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("createdAt"),
+//                                        fieldWithPath("data.approved_at").type(JsonFieldType.STRING).description("approvedAt"),
+//                                        fieldWithPath("data.order_status").type(JsonFieldType.STRING).description("orderStatus"),
+//
+//                                        fieldWithPath("message").type(JsonFieldType.STRING).description("메세지")
+//                                )
+//                        )
                 ));
     }
 
