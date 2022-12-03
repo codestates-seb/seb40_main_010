@@ -31,12 +31,14 @@ function MyPageComponent() {
     nickNameCheck,
     nickNameValidationMessage,
     checkNickNameValidation,
+    userImageEdit,
   } = useMyPage();
 
   const hiddenFileInput = useRef(null);
 
   const handleImageSelect = () => {
     hiddenFileInput.current.click();
+    userImageEdit();
   };
 
   useEffect(() => {
@@ -59,15 +61,13 @@ function MyPageComponent() {
           />
         )}
         {!editStatus && <BiPencil onClick={editStatusChange} size="24" />}
-        {editStatus && (
-          <input
-            type="file"
-            accept="image/*"
-            style={{ display: 'none' }}
-            ref={editStatus ? hiddenFileInput : null}
-            onChange={handleUploadImage}
-          />
-        )}
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          ref={editStatus ? hiddenFileInput : null}
+          onChange={handleUploadImage}
+        />
         {editStatus && nickNameCheck ? (
           <EditText onClick={userDataEdit}>수정하기</EditText>
         ) : (
@@ -196,9 +196,11 @@ const MyProfileImage = styled.img`
   overflow: hidden;
   border-radius: 35px;
   margin-bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0);
 
   :hover {
     cursor: pointer;
+    border: 1px solid #ffda77;
   }
 `;
 
@@ -344,12 +346,12 @@ const MbtiSelect = styled(Select)`
 
 const UserNickNameChange = styled.input`
   font-size: 1rem;
-  width: 6.5rem;
+  width: 106px;
   border: 1px solid #ffce31;
   border-radius: 5px;
   cursor: pointer;
   color: #2b2b2b;
-  margin-left: 99px;
+  margin-left: 108px;
 `;
 
 const ValidationErrorMessage = styled.p`
