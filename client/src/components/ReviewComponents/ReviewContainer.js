@@ -12,7 +12,7 @@ function ReviewContainer() {
   const callReviews = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_BASE_URL}/review/${id}`,
+        `${process.env.REACT_APP_SERVER_BASE_URL}/review/place/${id}`,
         {
           headers: {
             'ngrok-skip-browser-warning': '010',
@@ -77,7 +77,6 @@ const ReviewFilter = styled.div`
 `;
 
 const ReviewBorder = styled.div`
-  /* border: 1px solid red; */
   padding: 30px 0px;
   width: 100%;
   border-top: 1px solid #aaa;
