@@ -65,7 +65,7 @@ function MyPageComponent() {
           type="file"
           accept="image/*"
           style={{ display: 'none' }}
-          ref={editStatus ? hiddenFileInput : null}
+          ref={hiddenFileInput}
           onChange={handleUploadImage}
         />
         {editStatus && nickNameCheck ? (
@@ -196,11 +196,11 @@ const MyProfileImage = styled.img`
   overflow: hidden;
   border-radius: 35px;
   margin-bottom: 8px;
-  border: 1px solid rgba(255, 255, 255, 0);
+  border: 2px solid rgba(255, 255, 255, 0);
 
   :hover {
     cursor: pointer;
-    border: 1px solid #ffda77;
+    border: 2px solid #ffda77;
   }
 `;
 
