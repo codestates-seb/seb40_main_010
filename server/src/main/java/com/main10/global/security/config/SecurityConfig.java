@@ -79,9 +79,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 /* --------------------------------------------     기타      -----------------------------------------*/
-//                .antMatchers(HttpMethod.GET, "/h2/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/h2/**").hasRole("ADMIN")
                 /* --------------------------------------------  AUTH 도메인  -----------------------------------------*/
-//                .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/auth/logout").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.GET, "/auth/re-issue").hasAuthority("ROLE_USER")
                 /* -------------------------------------------- MEMBER 도메인 -----------------------------------------*/
@@ -94,17 +94,17 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/bookmark/**").hasAuthority("ROLE_USER")
                 /* --------------------------------------------  PLACE 도메인  -----------------------------------------*/
                 // - place
-//                .antMatchers(HttpMethod.GET, "/place/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/place/*").permitAll()
                 .antMatchers(HttpMethod.GET, "/place").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.DELETE, "/place/*").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.POST, "/place/post").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.POST, "/place/*/edit").hasAuthority("ROLE_USER")
-//                .antMatchers(HttpMethod.GET, "/home").permitAll()
-//                .antMatchers(HttpMethod.GET, "/home/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/home").permitAll()
+                .antMatchers(HttpMethod.GET, "/home/*").permitAll()
                 // -search
-//                .antMatchers(HttpMethod.GET, "/category/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/search/*").permitAll()
-//                .antMatchers(HttpMethod.POST, "/search/detail").permitAll()
+                .antMatchers(HttpMethod.GET, "/category/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/search/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/search/detail").permitAll()
                 /* -------------------------------------------- RESERVE 도메인 -----------------------------------------*/
                 .antMatchers(HttpMethod.GET, "/reserve").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.DELETE, "/reserve/*").hasAuthority("ROLE_USER")
