@@ -124,6 +124,7 @@ function MyPageComponent() {
         </MyPageCategoryItem>
       </MyPageContentCategory>
       <MyPageCategoryItemTitle>{myPageCategory}</MyPageCategoryItemTitle>
+      {listData.length > 0 && <BolderLine />}
       <MyPageCategoryItemList>
         {myPageCategory === '등록내역' &&
           listData.map(el => {
@@ -281,12 +282,16 @@ const MyPageCategoryItemTitle = styled.div`
   width: 680px;
   font-size: 1rem;
   font-weight: 500;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid #aaa;
 
   @media (max-width: 840px) {
     width: 400px;
   }
+`;
+
+const BolderLine = styled.div`
+  margin-top: 0.5rem;
+  width: 680px;
+  border-bottom: 1px solid #aaa;
 `;
 
 const MyPageCategoryItemList = styled.div`
