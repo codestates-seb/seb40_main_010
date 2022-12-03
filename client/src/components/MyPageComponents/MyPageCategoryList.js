@@ -196,17 +196,13 @@ function MyPageCategoryList({ listData, type }) {
   const today = new Date();
 
   const handleDateComparison = () => {
-    console.log('today', Number(dayjs(today).format('YYYYMMDDhh')));
-    console.log(
-      'startTime',
-      Number(dayjs(listData.startTime).format('YYYYMMDDhh')),
-    );
-
     return (
       Number(dayjs(today).format('YYYYMMDDhh')) <
-      Number(dayjs(listData.startTime).format('YYYYMMDDhh'))
+      Number(dayjs(listData.startTime).add(9, 'hour').format('YYYYMMDDhh'))
     );
   };
+
+  console.log(handleDateComparison());
 
   return (
     <CategoryItemList>
@@ -248,7 +244,7 @@ function MyPageCategoryList({ listData, type }) {
             )}
             {type === 'reservation' && (
               <>
-                {handleDateComparison ? (
+                {handleDateComparison() ? (
                   <>
                     <CategoryButton onClick={showModal}>
                       취소하기
