@@ -19,6 +19,8 @@ function SignUp() {
 
   const { errorMessage, onSubmit } = useSignUp();
 
+  // String.replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/\-{1,2}$/g, "");
+
   return (
     <div className="test">
       <Nav />
@@ -217,7 +219,7 @@ const Container = styled.div`
   .title {
     width: 100%;
     height: fit-content;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     font-weight: 500;
     color: black;
     margin-bottom: 10px;
