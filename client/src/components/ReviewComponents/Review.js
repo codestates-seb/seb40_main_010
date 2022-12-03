@@ -5,10 +5,7 @@ import dayjs from 'dayjs';
 
 function Review({ reviewData }) {
   const handleDate = createdAt => {
-    if (createdAt === undefined) return null;
-
-    const date = dayjs(createdAt).subtract(2000, 'y');
-    return date.format('YY.MM.DD');
+    return dayjs(createdAt).format('YYYYMMDD');
   };
 
   return (
