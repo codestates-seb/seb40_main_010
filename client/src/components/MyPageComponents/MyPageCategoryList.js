@@ -284,9 +284,7 @@ const CategoryItemList = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #aaa;
   border-bottom: 1px solid #aaa;
-  margin: 1rem 0px;
 
   @media (max-width: 840px) {
     width: 20rem;

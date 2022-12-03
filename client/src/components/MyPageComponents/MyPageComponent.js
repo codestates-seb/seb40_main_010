@@ -295,6 +295,7 @@ const MyPageCategoryItemList = styled.div`
   width: 750px;
   height: 25rem;
   overflow: auto;
+  border-bottom: 1px solid #aaa;
 
   @media (max-width: 840px) {
     width: 323px;
