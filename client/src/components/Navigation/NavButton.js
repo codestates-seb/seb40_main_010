@@ -17,6 +17,7 @@ import {
   mainDataState,
   settingUrl,
   navSearchValue,
+  reservationEditData,
 } from '../../atoms';
 
 export function NavLeftButtonContainer() {
@@ -30,6 +31,7 @@ export function NavLeftButtonContainer() {
   const resetMainPlaceData = useResetRecoilState(mainDataState);
   const setUrl = useSetRecoilState(settingUrl);
   const setSearch = useSetRecoilState(navSearchValue);
+  const setEditData = useSetRecoilState(reservationEditData);
 
   const navigate = useNavigate();
 
@@ -49,10 +51,17 @@ export function NavLeftButtonContainer() {
     setUrl(() => `/home?size=20&page=`);
   };
 
+  const onClickRegisterPage = () => {
+    setEditData(null);
+    setSearch('');
+    invalidate();
+    setUrl(() => `/home?size=20&page=`);
+  };
+
   if (isLogIn) {
     return (
       <Link to="/register">
-        <NavLeftButton onClick={onClickAnotherPage}>장소등록</NavLeftButton>
+        <NavLeftButton onClick={onClickRegisterPage}>장소등록</NavLeftButton>
       </Link>
     );
   }
