@@ -111,7 +111,7 @@ const TitleContainer = styled.div`
 `;
 
 const PlaceName = styled.div`
-  width: 83%;
+  width: 100%;
   font-weight: 500;
   font-size: 17px;
   word-break: keep-all;
