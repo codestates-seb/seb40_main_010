@@ -39,8 +39,8 @@ public class ReserveController {
     public ResponseEntity postReserve(@PathVariable("place-id") Long placeId,
                                       @RequestBody @Valid ReserveDto.Post post,
                                       @RequestHeader(REFRESH_TOKEN) String refreshToken) {
-        reserveService.createReserve(post, placeId, refreshToken);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Long reserveId = reserveService.createReserve(post, placeId, refreshToken);
+        return new ResponseEntity<>(reserveId, HttpStatus.CREATED);
     }
 
 

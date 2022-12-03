@@ -36,8 +36,8 @@ public class ReserveDbService {
      * @param reserve
      * @author LeeGoh
      */
-    public void saveReserve(Reserve reserve) {
-        reserveRepository.save(reserve);
+    public Reserve saveReserve(Reserve reserve) {
+        return reserveRepository.save(reserve);
     }
 
     /**
