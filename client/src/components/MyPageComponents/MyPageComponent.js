@@ -282,6 +282,7 @@ const MyPageCategoryItemTitle = styled.div`
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
+  border-bottom: 1px solid #aaa;
 
   @media (max-width: 840px) {
     width: 400px;
@@ -295,7 +296,6 @@ const MyPageCategoryItemList = styled.div`
   width: 750px;
   height: 25rem;
   overflow: auto;
-  border-bottom: 1px solid #aaa;
 
   @media (max-width: 840px) {
     width: 323px;
