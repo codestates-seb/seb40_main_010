@@ -53,12 +53,6 @@ function MyPageCategoryList({ listData, type }) {
     setReviewModalOpen(!reviewModalOpen);
   };
 
-  const handleDateComparison = createdAt => {
-    if (createdAt === undefined) return null;
-    const date = dayjs(createdAt);
-    return Number(date.format('YYYYMMDDhh'));
-  };
-
   const handleDate = createdAt => {
     if (createdAt === undefined) return null;
 
@@ -201,6 +195,19 @@ function MyPageCategoryList({ listData, type }) {
 
   const today = new Date();
 
+  const handleDateComparison = () => {
+    console.log('today', Number(dayjs(today).format('YYYYMMDDhh')));
+    console.log(
+      'startTime',
+      Number(dayjs(listData.startTime).format('YYYYMMDDhh')),
+    );
+
+    return (
+      Number(dayjs(today).format('YYYYMMDDhh')) <
+      Number(dayjs(listData.startTime).format('YYYYMMDDhh'))
+    );
+  };
+
   return (
     <CategoryItemList>
       <CategoryContainer>
@@ -241,8 +248,7 @@ function MyPageCategoryList({ listData, type }) {
             )}
             {type === 'reservation' && (
               <>
-                {handleDateComparison(today) <
-                handleDateComparison(listData.startTime) ? (
+                {handleDateComparison ? (
                   <>
                     <CategoryButton onClick={showModal}>
                       취소하기
