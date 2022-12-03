@@ -16,7 +16,7 @@ import {
   NextPage,
 } from '../atoms';
 import { categoryData, getURL } from '../utils/categoryData';
-import categoryButton from '../utils/categoryButton';
+import CategoryButton from '../utils/CategoryButton';
 
 function Category() {
   const [focusCategoryID, setFocusCategoryID] = useRecoilState(categoryFocus);
@@ -28,24 +28,27 @@ function Category() {
 
   const categories = categoryData;
 
-  const onClickCategoryButton = async (e, idx) => {
+  const onClickCategoryButton = async index => {
     resetMainPlaceData();
-    setUrl(() => getURL(idx, search));
+    setUrl(() => getURL(index, search));
     setPage(1);
-    setFocusCategoryID(idx);
+    setFocusCategoryID(index);
     setHasNextPage(true);
   };
 
   return (
     <CategoryContainer>
-      {categories.map((category, idx) => {
-        return categoryButton({
-          category,
-          idx,
-          onClickCategoryButton,
-          focusCategoryID,
-        });
-      })}
+      {categories.map(({ categoryId, icon, name }, index) => (
+        <CategoryButton
+          key={categoryId}
+          categoryId={categoryId}
+          icon={icon}
+          name={name}
+          index={index}
+          onClickCategoryButton={onClickCategoryButton}
+          focusCategoryID={focusCategoryID}
+        />
+      ))}
     </CategoryContainer>
   );
 }

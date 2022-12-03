@@ -9,6 +9,7 @@ import {
   useResetRecoilState,
 } from 'recoil';
 import axios from 'axios';
+
 import {
   HasRefresh,
   NextPage,
@@ -41,13 +42,13 @@ export function NavLeftButtonContainer() {
     navigate('/');
   };
 
-  if (registerUrl || logInUrl) return null;
-
   const onClickAnotherPage = () => {
     setSearch('');
     invalidate();
     setUrl(() => `/home?size=20&page=`);
   };
+
+  if (registerUrl || logInUrl) return null;
 
   if (isLogIn) {
     return (
@@ -73,6 +74,7 @@ export function NavRightButtonContainer() {
   const resetMainPlaceData = useResetRecoilState(mainDataState);
   const setUrl = useSetRecoilState(settingUrl);
   const setSearch = useSetRecoilState(navSearchValue);
+  const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
 
   const navigate = useNavigate();
 
@@ -84,8 +86,6 @@ export function NavRightButtonContainer() {
     navigate('/');
     setUrl(() => `/home?size=20&page=`);
   };
-
-  const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
 
   const onClickLogOutButton = async () => {
     await axios.delete(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/logout`, {
@@ -126,11 +126,11 @@ export function NavRightButtonContainer() {
   if (isLogIn && !myPageUrl) {
     return (
       <Link to="/my-page">
-        <NavRightButton onClick={onClickAnotherPage}>
+        <NavMyPageButton onClick={onClickAnotherPage}>
           <MyPageDiv>
             <BsFillPersonFill />
           </MyPageDiv>
-        </NavRightButton>
+        </NavMyPageButton>
       </Link>
     );
   }
@@ -141,6 +141,31 @@ export function NavRightButtonContainer() {
     </Link>
   );
 }
+
+const NavMyPageButton = styled.button`
+  width: 35px;
+  height: 35px;
+  font-family: inherit;
+  margin: 10px 10px;
+  padding: 10px 0px 0px 0px;
+  border-radius: 20px;
+  border: none;
+  background-color: #ffda77;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  overflow: hidden;
+  color: #fff9eb;
+  &:hover {
+    background-color: #eb7470;
+    transition: 0.7s;
+    cursor: pointer;
+  }
+  &:focus {
+    box-shadow: none;
+  }
+`;
 
 const NavLeftButton = styled.button`
   width: 80px;

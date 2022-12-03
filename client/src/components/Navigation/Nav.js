@@ -62,24 +62,24 @@ function Nav({ buttonColor }) {
   };
 
   // eslint-disable-next-line consistent-return
-  const onClickSearch = async () => {
-    const trimmedSearch = currentSearch.trim();
-    const replacedSearch = trimmedSearch.replace(/ +(?= )/g, '');
+  // const onClickSearch = () => {
+  //   const trimmedSearch = currentSearch.trim();
+  //   const replacedSearch = trimmedSearch.replace(/ +(?= )/g, '');
 
-    setSearch(replacedSearch);
+  //   setSearch(replacedSearch);
 
-    if (!trimmedSearch) {
-      alert('검색어를 입력해주세요');
-      return setCurrentSearch('');
-    }
+  //   if (!trimmedSearch) {
+  //     alert('검색어를 입력해주세요');
+  //     return setCurrentSearch('');
+  //   }
 
-    const encoded = encodeURI(replacedSearch);
+  //   const encoded = encodeURI(replacedSearch);
 
-    const url = `/search/${encoded}?size=20&page=`;
+  //   const url = `/search/${encoded}?size=20&page=`;
 
-    setUrl(() => url);
-    invalidate();
-  };
+  //   setUrl(() => url);
+  //   invalidate();
+  // };
 
   const onClickHomeIcon = () => {
     setSearch('');
@@ -93,7 +93,9 @@ function Nav({ buttonColor }) {
         <Img src="/logo1.png" alt="logo" onClick={onClickHomeIcon} />
         <SearchContainer onSubmit={onSubmit}>
           <SearchInput value={currentSearch} onChange={onChangeSearch} />
-          <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />
+          <button type="submit">
+            <AiOutlineSearch className="searchIcon" />
+          </button>
         </SearchContainer>
         <ButtonContainer>
           <NavLeftButtonContainer buttonColor={buttonColor} />

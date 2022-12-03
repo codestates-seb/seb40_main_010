@@ -53,7 +53,7 @@ function MbtiPlaces() {
         <>
           {/* <MbtiTitle>{userMbti}가 방문한 장소</MbtiTitle> */}
           <MbtiTitle>
-            <span>Mbti</span>가 방문한 장소
+            <span>Mbti</span>별 추천 장소
           </MbtiTitle>
           <MbtiPlacesContainer>
             {mbtiPlaceData.map(placeData => {

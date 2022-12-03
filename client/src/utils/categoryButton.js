@@ -1,30 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const categoryButton = ({
-  category,
-  idx,
+function CategoryButton({
+  categoryId,
+  icon,
+  name,
+  index,
   onClickCategoryButton,
   focusCategoryID,
-}) => {
-  const { categoryId, icon, name } = category;
-
+}) {
   return (
-    <CategoryButton
+    <StyledCategoryButton
       type="button"
       key={categoryId}
-      onClick={e => onClickCategoryButton(e, idx)}
+      onClick={() => onClickCategoryButton(index)}
       className={focusCategoryID === categoryId ? 'focus' : null}
     >
       <i className={icon} />
       {name}
-    </CategoryButton>
+    </StyledCategoryButton>
   );
-};
+}
 
-export default categoryButton;
+export default CategoryButton;
 
-const CategoryButton = styled.button`
+const StyledCategoryButton = styled.button`
   font-family: inherit;
   -webkit-appearance: none;
   -moz-appearance: none;

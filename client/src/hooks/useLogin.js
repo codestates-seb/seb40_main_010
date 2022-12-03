@@ -58,12 +58,17 @@ const useLogin = () => {
   const onSubmit = async data => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_BASE_URL}/auth/login`,
+        `https://aff3-182-226-233-7.jp.ngrok.io/auth/login`,
         data,
+        {
+          headers: {
+            'Access-Control-Allow-Credentials': true,
+          },
+        },
       );
       await localStorage.setItem('ACCESS', response.headers.authorization);
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
-
+      console.log(response);
       // setUserMbti(response.data.mbti);
 
       setIsLogIn(true);

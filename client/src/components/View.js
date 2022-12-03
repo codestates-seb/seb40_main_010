@@ -7,29 +7,32 @@ import FadeCarousel from './Fade';
 import Location from './Map';
 
 function View() {
-  const detailData = useRecoilValue(DetailInformation);
-
-  const { title, category, detailInfo, address, phoneNumber } = detailData;
+  const {
+    title = '',
+    category = [],
+    detailInfo = '',
+    address = '',
+    phoneNumber = '',
+  } = useRecoilValue(DetailInformation);
 
   return (
     <ViewContainer>
       <InformationContainer>
-        <InformationTitle>{title && title}</InformationTitle>
+        <InformationTitle>{title}</InformationTitle>
         <CarouselImageContainer>
           <FadeCarousel />
         </CarouselImageContainer>
         <DetailTitle>상세 정보</DetailTitle>
         <DetailTagContainer>
-          {category &&
-            category.map(placeTag => {
-              return <DetailTag key={placeTag}>{placeTag}</DetailTag>;
-            })}
+          {category.map(placeTag => {
+            return <DetailTag key={placeTag}>{placeTag}</DetailTag>;
+          })}
         </DetailTagContainer>
-        <MoreInformation>{detailInfo && detailInfo}</MoreInformation>
+        <MoreInformation>{detailInfo}</MoreInformation>
         <NormalStyleDetailTitle>위치</NormalStyleDetailTitle>
-        <InformationLocation address={address && address} />
+        <InformationLocation address={address} />
         <NormalStyleDetailTitle>호스트 연락처</NormalStyleDetailTitle>
-        <DetailPhoneNumber>{phoneNumber && phoneNumber}</DetailPhoneNumber>
+        <DetailPhoneNumber>{phoneNumber}</DetailPhoneNumber>
       </InformationContainer>
     </ViewContainer>
   );

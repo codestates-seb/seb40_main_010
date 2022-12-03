@@ -19,7 +19,7 @@ const useSignUp = () => {
   const onSubmit = async data => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_SERVER_BASE_URL}/member/join`,
+        `https://aff3-182-226-233-7.jp.ngrok.io/member/join`,
         data,
       );
       alert('회원가입이 완료되었습니다.');
