@@ -246,9 +246,9 @@ const useMyPage = () => {
     const compressedImage = await handleImageCompress(selectedImages);
     const compressedImageUrl = await handleGetPreviewImagesUrl(compressedImage);
 
-    setProfileImage(compressedImage);
-    setPreviewProfileImage(compressedImageUrl);
-    userImageEdit();
+    await setProfileImage(compressedImage);
+    await setPreviewProfileImage(compressedImageUrl);
+    await userImageEdit();
   };
 
   const onChange = event => {
