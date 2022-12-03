@@ -277,8 +277,8 @@ const CategoryItemList = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #c9c9c9;
-  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px; */
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
   border-radius: 1rem;
   margin: 1rem 0px;
 
@@ -405,7 +405,6 @@ const PlaceCharge = styled.span`
 const PlaceImage = styled.img`
   width: 8rem;
   height: 8rem;
-  border-radius: 1rem;
 
   @media (max-width: 840px) {
     width: 5rem;

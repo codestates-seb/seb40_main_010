@@ -35,7 +35,7 @@ function ReviewWrite({
     };
     try {
       await axios.post(
-        `${process.env.REACT_APP_SERVER_BASE_URL}/review/${placeId}/reserve/${reserveId}`,
+        `${process.env.REACT_APP_SERVER_BASE_URL}/review/place/${placeId}/reserve/${reserveId}`,
         data,
         {
           headers: {
