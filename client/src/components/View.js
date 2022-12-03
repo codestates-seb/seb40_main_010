@@ -27,6 +27,7 @@ function View() {
         </DetailTagContainer>
         <MoreInformation>{detailInfo && detailInfo}</MoreInformation>
         <NormalStyleDetailTitle>위치</NormalStyleDetailTitle>
+        <AddressInfo>{address}</AddressInfo>
         <InformationLocation address={address && address} />
         <NormalStyleDetailTitle>호스트 연락처</NormalStyleDetailTitle>
         <DetailPhoneNumber>{phoneNumber && phoneNumber}</DetailPhoneNumber>
@@ -112,6 +113,16 @@ const DetailTag = styled.div`
 `;
 
 const MoreInformation = styled.div`
+  color: #2b2b2b;
+  margin-left: 20px;
+  width: 800px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 22px;
+  white-space: pre-wrap;
+`;
+
+const AddressInfo = styled.div`
   color: #2b2b2b;
   margin-left: 20px;
   width: 800px;
