@@ -19,6 +19,7 @@ const useMyPage = () => {
   const [nickNameCheck, setNickNameCheck] = useState(false);
   const [nickNameValidationMessage, setNickNameValidationMessage] =
     useState('');
+  const [changeProfileImage, setChangeProfileImage] = useState(false);
 
   // TODO: 더 리팩터링 생각해보기
   const getValidationType = nickname => {
@@ -235,8 +236,10 @@ const useMyPage = () => {
         },
       );
       callUserData();
+      setChangeProfileImage(false);
     } catch (err) {
       console.log(err);
+      setChangeProfileImage(false);
     }
   };
 
@@ -246,9 +249,8 @@ const useMyPage = () => {
     const compressedImage = await handleImageCompress(selectedImages);
     const compressedImageUrl = await handleGetPreviewImagesUrl(compressedImage);
 
-    await setProfileImage(compressedImage);
-    await setPreviewProfileImage(compressedImageUrl);
-    await userImageEdit();
+    setProfileImage(compressedImage);
+    setPreviewProfileImage(compressedImageUrl);
   };
 
   const onChange = event => {
@@ -341,6 +343,9 @@ const useMyPage = () => {
     bookmarkList,
     reviewList,
     reservationList,
+    userImageEdit,
+    changeProfileImage,
+    setChangeProfileImage,
   };
 };
 

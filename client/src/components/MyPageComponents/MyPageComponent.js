@@ -31,12 +31,16 @@ function MyPageComponent() {
     nickNameCheck,
     nickNameValidationMessage,
     checkNickNameValidation,
+    userImageEdit,
+    changeProfileImage,
+    setChangeProfileImage,
   } = useMyPage();
 
   const hiddenFileInput = useRef(null);
 
   const handleImageSelect = () => {
     hiddenFileInput.current.click();
+    setChangeProfileImage(true);
   };
 
   useEffect(() => {
@@ -47,6 +51,9 @@ function MyPageComponent() {
   return (
     <MyPageComponentContainer>
       <MyProfileImage src={previewProfileImage} onClick={handleImageSelect} />
+      {changeProfileImage && (
+        <EditProfile onClick={userImageEdit}>적용하기</EditProfile>
+      )}
       <NameAndEditIconContainer>
         {!editStatus && <MyNickName>{nickname}</MyNickName>}
         {editStatus && (
@@ -219,6 +226,11 @@ const NameAndEditIconContainer = styled.div`
 const EditText = styled.p`
   color: #eb7470;
   margin: 0px 4px;
+  cursor: pointer;
+`;
+
+const EditProfile = styled.p`
+  color: #ffda77;
   cursor: pointer;
 `;
 
