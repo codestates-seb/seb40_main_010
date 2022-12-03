@@ -255,7 +255,6 @@ const useMyPage = () => {
     editStatusChange();
     setUserNickName(memberData.nickname);
     setUserMBTI(memberData.mbti);
-    setPreviewProfileImage(memberData.profileImage);
     setNickNameCheck(true);
     setNickNameValidationMessage('');
   };
@@ -278,7 +277,6 @@ const useMyPage = () => {
   };
 
   const userDataEdit = async () => {
-    userImageEdit();
     try {
       await axios.patch(
         `${process.env.REACT_APP_SERVER_BASE_URL}/member/edit`,
@@ -339,6 +337,7 @@ const useMyPage = () => {
     bookmarkList,
     reviewList,
     reservationList,
+    userImageEdit,
   };
 };
 
