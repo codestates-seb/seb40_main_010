@@ -224,9 +224,13 @@ const useMyPage = () => {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${localStorage.getItem('ACCESS')}`,
-            RefreshToken: localStorage.getItem('REFRESH'),
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
           },
         },
       );
