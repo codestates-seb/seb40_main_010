@@ -10,6 +10,7 @@ import Modal from '../../utils/Modal';
 import ReviewWrite from '../ReviewComponents/ReviewWrite';
 import { reservationEditData } from '../../atoms';
 import useMyPage from '../../hooks/useMyPage';
+import { onClickPaymentButton } from '../../utils/payment';
 
 const chargeComponent = (listData, type) => {
   if (type === 'reviews') {
@@ -32,6 +33,7 @@ const chargeComponent = (listData, type) => {
 
 function MyPageCategoryList({ listData, type }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const setEditData = useSetRecoilState(reservationEditData);
@@ -41,6 +43,10 @@ function MyPageCategoryList({ listData, type }) {
 
   const showModal = () => {
     setModalOpen(!modalOpen);
+  };
+
+  const showPaymentModal = () => {
+    setPaymentModalOpen(!paymentModalOpen);
   };
 
   const showReviewModal = () => {
@@ -91,6 +97,30 @@ function MyPageCategoryList({ listData, type }) {
       await reviewList();
     } catch (err) {
       showModal();
+    }
+  };
+
+  const onClickPaymentKaKaoButton = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/place/reserve/${listData.reserveId}/payment`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
+        },
+      );
+      const paymentUrl = response.data.data;
+      onClickPaymentButton(paymentUrl);
+      await setPaymentModalOpen(false);
+    } catch (error) {
+      console.log('Error', error);
     }
   };
 
@@ -213,7 +243,18 @@ function MyPageCategoryList({ listData, type }) {
               <>
                 {handleDateComparison(today) <
                 handleDateComparison(listData.startTime) ? (
-                  <CategoryButton onClick={showModal}>취소하기</CategoryButton>
+                  <>
+                    <CategoryButton onClick={showModal}>
+                      취소하기
+                    </CategoryButton>
+                    {listData.status === '결제 대기중' ? (
+                      <CategoryButton onClick={showPaymentModal}>
+                        결제하기
+                      </CategoryButton>
+                    ) : (
+                      <CategoryPaymentSuccess>결제완료</CategoryPaymentSuccess>
+                    )}
+                  </>
                 ) : (
                   <CategoryButton onClick={showReviewModal}>
                     리뷰쓰기
@@ -226,6 +267,15 @@ function MyPageCategoryList({ listData, type }) {
                     modalText="예악을 취소하시겠습니까?"
                     modalActionText="취소하기"
                     modalAction={reservationCancel}
+                  />
+                )}
+                {paymentModalOpen && (
+                  <Modal
+                    modalOpen={paymentModalOpen}
+                    setModalOpen={setPaymentModalOpen}
+                    modalText="결제 하시겠습니까?"
+                    modalActionText="결제하기"
+                    modalAction={onClickPaymentKaKaoButton}
                   />
                 )}
               </>
@@ -386,6 +436,14 @@ const CategoryButton = styled.div`
 
   & svg :hover {
     cursor: pointer;
+  }
+`;
+
+const CategoryPaymentSuccess = styled.div`
+  font-size: 1rem;
+  color: #eb7470;
+  @media (max-width: 840px) {
+    font-size: 14px;
   }
 `;
 
