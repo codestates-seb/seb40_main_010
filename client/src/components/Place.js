@@ -12,7 +12,7 @@ function Place({ placeData }) {
 
   const { address, charge, image, score, title, placeId } = placeData;
 
-  const slicedTitle = title.slice(0, 15);
+  // const slicedTitle = title.slice(0, 15);
 
   const addressSlice = address.slice(0, 20);
 
@@ -33,7 +33,7 @@ function Place({ placeData }) {
         <MainComponent onClick={onClickPlaceComponent}>
           <Image src={image} />
           <TitleContainer>
-            <PlaceName>{slicedTitle}</PlaceName>
+            <PlaceName>{title}</PlaceName>
           </TitleContainer>
           <PlaceAddress>{addressSlice}</PlaceAddress>
           <Div>
