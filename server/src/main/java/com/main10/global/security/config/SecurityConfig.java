@@ -30,8 +30,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import static org.springframework.security.config.Customizer.withDefaults;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,7 +38,7 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;

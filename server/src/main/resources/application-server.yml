@@ -22,6 +22,10 @@ spring:
     username: ${/config/param/rds-username}
     password: ${/config/param/rds-password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
