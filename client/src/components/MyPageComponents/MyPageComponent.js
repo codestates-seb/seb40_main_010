@@ -31,14 +31,12 @@ function MyPageComponent() {
     nickNameCheck,
     nickNameValidationMessage,
     checkNickNameValidation,
-    userImageEdit,
   } = useMyPage();
 
   const hiddenFileInput = useRef(null);
 
   const handleImageSelect = () => {
     hiddenFileInput.current.click();
-    userImageEdit();
   };
 
   useEffect(() => {

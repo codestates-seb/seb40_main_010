@@ -235,7 +235,6 @@ const useMyPage = () => {
         },
       );
       callUserData();
-      editStatusChange();
     } catch (err) {
       console.log(err);
     }
@@ -249,6 +248,7 @@ const useMyPage = () => {
 
     setProfileImage(compressedImage);
     setPreviewProfileImage(compressedImageUrl);
+    userImageEdit();
   };
 
   const onChange = event => {
@@ -341,7 +341,6 @@ const useMyPage = () => {
     bookmarkList,
     reviewList,
     reservationList,
-    userImageEdit,
   };
 };
 
