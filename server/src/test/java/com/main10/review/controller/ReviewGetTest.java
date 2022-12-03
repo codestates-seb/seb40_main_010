@@ -68,7 +68,7 @@ public class ReviewGetTest extends ReviewControllerTest {
 
         ResultActions actions =
                 mockMvc.perform(
-                        get("/review/{place-id}", placeId)
+                        get("/review/place/{place-id}", placeId)
                                 .queryParam("page", String.valueOf(page))
                                 .queryParam("size", String.valueOf(size))
                 );
