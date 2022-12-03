@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.RESERVATION_CANCELED;
 
@@ -102,7 +103,7 @@ public class PlaceService {
         }
         placeDbService.savePlace(place);
 
-        List<String> categoryList = placePostDto.getCategoryList();
+        List<String> categoryList = placePostDto.getCategoryList().stream().distinct().collect(Collectors.toList());
         placeCategoryService.saveCategoryList(categoryList, place);
     }
 
@@ -225,14 +226,14 @@ public class PlaceService {
 
         // 공간 카테고리 수정
         addCategoryList = placeCategoryService.getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
+        addCategoryList = addCategoryList.stream().distinct().collect(Collectors.toList());
 
         List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 목록
-        List<MultipartFile> multipartFileList = files; //placePatchDto.getMultipartFiles(); // 전달되어온 파일 목록
         List<MultipartFile> addFileList; // 새롭게 전달되어온 파일들의 목록을 저장할 List
 
         // 파일 업로드 수정
         String dir = "placeImage";
-        addFileList = getAddFileList(dbPlaceImageList, multipartFileList, dir);
+        addFileList = getAddFileList(dbPlaceImageList, files, dir);
 
         List<UploadFile> uploadFileList = s3Upload.uploadFileList(addFileList, dir);
         List<PlaceImage> placeImageList = new ArrayList<>();
