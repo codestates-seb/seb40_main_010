@@ -23,6 +23,7 @@ function ReservationCalendar({
     handleEndDate,
     maxEndDate,
     handleDisabledEndTime,
+    handleDateChangeRaw,
   } = useCalendar({ startDate, setStartDate, endDate, setEndDate, slots });
 
   return (
@@ -45,6 +46,7 @@ function ReservationCalendar({
           filterTime={handleDisableStartTime}
           disabledKeyboardNavigation
           required
+          onChangeRaw={handleDateChangeRaw}
         />
       </DatePick>
       <DatePick marginTop="10px">
@@ -65,6 +67,7 @@ function ReservationCalendar({
           filterTime={handleDisabledEndTime}
           disabled={!isStartDateSelected}
           disabledKeyboardNavigation
+          onChangeRaw={handleDateChangeRaw}
         />
       </DatePick>
     </Container>

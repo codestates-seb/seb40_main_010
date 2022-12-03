@@ -146,6 +146,10 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
     return null;
   };
 
+  const handleDateChangeRaw = event => {
+    event.preventDefault();
+  };
+
   return {
     isStartDateSelected,
     handleStartDate,
@@ -153,6 +157,7 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
     handleEndDate,
     maxEndDate,
     handleDisabledEndTime,
+    handleDateChangeRaw,
   };
 };
 
