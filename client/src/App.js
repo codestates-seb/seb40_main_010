@@ -23,7 +23,7 @@ function App() {
   const token = localStorage.getItem('ACCESS');
   const isLogIn = localStorage.getItem('REFRESH');
 
-  const expiration = 60 * 30 * 1000;
+  // const expiration = 60 * 30 * 1000;
 
   const reIssue = async () => {
     if (!isLogIn) return;
@@ -70,7 +70,7 @@ function App() {
     reIssue();
     setTimeout(() => {
       setTimer(!timer);
-    }, expiration - 60000);
+    }, 60000);
   }, [isLogIn, timer]);
 
   return (
