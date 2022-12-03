@@ -277,7 +277,7 @@ function MyPageCategoryList({ listData, type }) {
                   <Modal
                     modalOpen={modalOpen}
                     setModalOpen={setModalOpen}
-                    modalText="예악을 취소하시겠습니까?"
+                    modalText="예약을 취소하시겠습니까?"
                     modalActionText="취소하기"
                     modalAction={reservationCancel}
                   />
