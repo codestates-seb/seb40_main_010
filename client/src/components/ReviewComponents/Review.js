@@ -16,8 +16,8 @@ function Review({ reviewData }) {
       <UserImage src={reviewData.profileImage} />
       <ReviewBodyContainer>
         <ReviewInfoContainer>
-          <UserName value={reviewData.nickname}>{reviewData.nickname}</UserName>
-          <ReviewCreatedDate value={reviewData.createdAt}>
+          <UserName>{reviewData.nickname}</UserName>
+          <ReviewCreatedDate>
             {handleDate(reviewData.createdAt)}
           </ReviewCreatedDate>
         </ReviewInfoContainer>
