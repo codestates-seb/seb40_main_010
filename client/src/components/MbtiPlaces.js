@@ -4,12 +4,12 @@ import { useRecoilState } from 'recoil';
 import axios from 'axios';
 
 import Place from './Place';
-import { HasRefresh, mbtiPlaceDataState } from '../atoms';
+import { HasRefresh, mbtiPlaceDataState, userMbtiValue } from '../atoms';
 
 function MbtiPlaces() {
   const [mbtiPlaceData, setMbtiPlaceData] = useRecoilState(mbtiPlaceDataState);
   const [isLogIn] = useRecoilState(HasRefresh);
-  // const [userMbti,setUserMbti] = useRecoilState(userMbtiValue)
+  const [userMbti] = useRecoilState(userMbtiValue);
 
   // eslint-disable-next-line consistent-return
   const setMbtiPlaces = async () => {
@@ -51,10 +51,12 @@ function MbtiPlaces() {
     <MbtiContentsContainer>
       {mbtiPlaceData.length > 0 && (
         <>
-          {/* <MbtiTitle>{userMbti}가 방문한 장소</MbtiTitle> */}
           <MbtiTitle>
-            <span>Mbti</span>가 방문한 장소
+            <span>{userMbti}</span>가 방문한 장소
           </MbtiTitle>
+          {/* <MbtiTitle>
+            <span>Mbti</span>가 방문한 장소
+          </MbtiTitle> */}
           <MbtiPlacesContainer>
             {mbtiPlaceData.map(placeData => {
               const { placeId } = placeData;
@@ -77,7 +79,7 @@ const MbtiTitle = styled.div`
   margin-bottom: 20px;
   & > span {
     color: #96c2ff;
-    padding-right: 3px;
+    padding-right: 2px;
   }
 `;
 

@@ -14,7 +14,7 @@ import {
 } from '../../atoms';
 import { NavLeftButtonContainer, NavRightButtonContainer } from './NavButton';
 
-function Nav({ buttonColor }) {
+function Nav() {
   const [currentSearch, setCurrentSearch] = useState('');
 
   const setSearch = useSetRecoilState(navSearchValue);
@@ -31,7 +31,7 @@ function Nav({ buttonColor }) {
     resetMainPlaceData();
     setHasNextPage(true);
     setPage(() => 1);
-    setFocusCategoryID(0);
+    // setFocusCategoryID(0);
     navigate('/');
   };
 
@@ -53,11 +53,11 @@ function Nav({ buttonColor }) {
       return setCurrentSearch('');
     }
 
-    const encoded = encodeURI(replacedSearch);
+    // const encoded = encodeURI(replacedSearch);
 
-    const url = `/search/${encoded}?size=20&page=`;
+    // const url = `/search/${encoded}?size=20&page=`;
 
-    setUrl(() => url);
+    // setUrl(() => url);
     invalidate();
   };
 
@@ -73,17 +73,18 @@ function Nav({ buttonColor }) {
       return setCurrentSearch('');
     }
 
-    const encoded = encodeURI(replacedSearch);
+    // const encoded = encodeURI(replacedSearch);
 
-    const url = `/search/${encoded}?size=20&page=`;
+    // const url = `/search/${encoded}?size=20&page=`;
 
-    setUrl(() => url);
+    // setUrl(() => url);
     invalidate();
   };
 
   const onClickHomeIcon = () => {
     setSearch('');
     invalidate();
+    setFocusCategoryID(0);
     setUrl(() => `/home?size=20&page=`);
   };
 
@@ -96,7 +97,7 @@ function Nav({ buttonColor }) {
           <AiOutlineSearch onClick={onClickSearch} className="searchIcon" />
         </SearchContainer>
         <ButtonContainer>
-          <NavLeftButtonContainer buttonColor={buttonColor} />
+          <NavLeftButtonContainer />
           <NavRightButtonContainer />
         </ButtonContainer>
       </NavBackground>
