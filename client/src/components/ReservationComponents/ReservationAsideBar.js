@@ -7,7 +7,7 @@ import ReservationBottomButtons from './ReservationBottomButtons';
 import Modal from '../../utils/Modal';
 import useReservation from './useReservation';
 
-function ReservationAsideBar({ charge, slots }) {
+function ReservationAsideBar({ charge, slots, maxCapacity }) {
   const {
     startDate,
     setStartDate,
@@ -50,6 +50,7 @@ function ReservationAsideBar({ charge, slots }) {
           <ReservationCapacityHandler
             capacity={capacity}
             setCapacity={setCapacity}
+            maxCapacity={maxCapacity}
           />
         </OuterWrapper>
         {endDate ? (

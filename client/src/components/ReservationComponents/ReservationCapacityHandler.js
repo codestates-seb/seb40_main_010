@@ -2,13 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaCaretRight, FaCaretLeft } from 'react-icons/fa';
 
-function ReservationCapacityHandler({ capacity, setCapacity }) {
+function ReservationCapacityHandler({ capacity, setCapacity, maxCapacity }) {
   const handleCapacity = event => {
     setCapacity(event.target.value);
   };
 
   const plusCapacity = event => {
     event.stopPropagation();
+    if (capacity > maxCapacity) return;
     setCapacity(capacity + 1);
   };
 
