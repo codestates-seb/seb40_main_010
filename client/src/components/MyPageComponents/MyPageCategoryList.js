@@ -202,8 +202,6 @@ function MyPageCategoryList({ listData, type }) {
     );
   };
 
-  console.log(handleDateComparison());
-
   return (
     <CategoryItemList>
       <CategoryContainer>
