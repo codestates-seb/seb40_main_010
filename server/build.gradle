@@ -105,7 +105,6 @@ dependencyManagement {
     }
 }
 
-
 // (6)
 tasks.named('test') {
     outputs.dir snippetsDir

@@ -43,15 +43,14 @@ public class ReservePaymentTest extends ReserveControllerTest{
         Long placeId = 1L;
 
         ReserveDto.Post post = ReserveDto.Post.builder()
-                .startTime(LocalDateTime.of(2022, 11, 30, 15, 00))
-                .endTime(LocalDateTime.of(2022, 11, 30, 16, 00))
+                .startTime(LocalDateTime.of(2022, 11, 30, 15, 0))
+                .endTime(LocalDateTime.of(2022, 11, 30, 16, 0))
                 .capacity(2)
                 .build();
 
         String content = gson.toJson(post);
 
-        doNothing().when(reserveService)
-                .createReserve(Mockito.any(ReserveDto.Post.class), Mockito.anyLong(), Mockito.anyString());
+        given(reserveService.createReserve(Mockito.any(ReserveDto.Post.class), Mockito.anyLong(), Mockito.anyString())).willReturn(1L);
 
         ResultActions actions =
                 mockMvc.perform(
