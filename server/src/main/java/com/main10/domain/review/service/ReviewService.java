@@ -151,9 +151,15 @@ public class ReviewService {
         Long reviewer = reviewDbService.countByPlaceId(placeId);
         String str = String.format("%.2f", totalScore / reviewer);
         double score = Double.parseDouble(str);
-        findPlace.setTotalScore(totalScore);
-        findPlace.setScore(score);
-        placeDbService.savePlace(findPlace);
+        if(Double.isNaN(score)) {
+            findPlace.setTotalScore(totalScore);
+            findPlace.setScore(0);
+            placeDbService.savePlace(findPlace);
+        } else {
+            findPlace.setTotalScore(totalScore);
+            findPlace.setScore(score);
+            placeDbService.savePlace(findPlace);
+        }
     }
 }
 
