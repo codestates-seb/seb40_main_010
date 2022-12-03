@@ -261,7 +261,7 @@ const useMyPage = () => {
     editStatusChange();
     setUserNickName(memberData.nickname);
     setUserMBTI(memberData.mbti);
-    setNickNameCheck(true);
+    setNickNameCheck(false);
     setNickNameValidationMessage('');
   };
 
