@@ -5,8 +5,8 @@ package com.main10.global.security.utils;
  * @author mozzi327
  */
 public class AuthConstants {
-    public static final String REFRESH_TOKEN = "RefreshToken";
-    public static final String AUTHORIZATION = "Authorization";
+    public static final String REFRESH_TOKEN = "refreshtoken";
+    public static final String AUTHORIZATION = "authorization";
     public static final String BEARER = "Bearer ";
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";

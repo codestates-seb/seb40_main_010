@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.main10.global.security.utils.AuthConstants.BEARER;
+
 /**
  * 헤더에 실린 토큰 정보를 통해 요청에 대한 인가를 처리해주는 클래스
  * @author mozzi327
@@ -45,7 +47,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         String accessToken = req.getHeader(AuthConstants.AUTHORIZATION);
 
-        if (StringUtils.hasText(accessToken)) {
+        if (StringUtils.hasText(accessToken) && accessToken.startsWith(BEARER)) {
             accessToken = jwtTokenUtils.parseAccessToken(accessToken);
             String isLogout = redisUtils.isBlackList(accessToken);
             if (isLogout == null) { // 유효한 토큰일 경우
@@ -54,7 +56,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                 setAuthenticationToContext(authenticated);
             }
         }
-
         doFilter(req, res, filterChain);
     }
 

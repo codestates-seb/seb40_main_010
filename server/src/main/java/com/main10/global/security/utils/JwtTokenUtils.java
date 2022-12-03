@@ -33,7 +33,7 @@ public class JwtTokenUtils {
     @Getter
     private final int refreshTokenExpirationMinutes;
 
-    public JwtTokenUtils(@Value("${JWT_SECRET_KEY}") String secretKey,
+    public JwtTokenUtils(@Value("${jwt.secret-key}") String secretKey,
                          @Value("${jwt.access-token-expiration-minutes}") int accessTokenExpirationMinutes,
                          @Value("${jwt.refresh-token-expiration-minutes}") int refreshTokenExpirationMinutes) {
         this.secretKey = secretKey;

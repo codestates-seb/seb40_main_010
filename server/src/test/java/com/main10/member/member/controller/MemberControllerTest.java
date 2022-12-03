@@ -60,7 +60,7 @@ public class MemberControllerTest {
 
         post = MemberDto.Post.builder()
                 .email("hgd@gmail.com")
-                .password("ghdrlfehd")
+                .password("ghdrlfehd1!")
                 .mbti("INFJ")
                 .nickname("홍길동")
                 .phoneNumber("010-1234-5678")

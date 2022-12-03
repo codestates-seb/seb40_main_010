@@ -69,8 +69,8 @@ public class SecurityConfig {
                 .addFilterBefore(encodingFilter, CsrfFilter.class)
                 .headers().frameOptions().disable()
                 .and()
-                .cors(withDefaults())
-//                .cors().disable()
+//                .cors(withDefaults())
+                .cors().disable()
                 .csrf().disable()
                 .httpBasic().disable()
                 .formLogin().disable()
@@ -78,8 +78,46 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers(HttpMethod.POST, "/member/join").permitAll()
-                .antMatchers(HttpMethod.GET, "/h2/**").permitAll()
+                /* --------------------------------------------     기타      -----------------------------------------*/
+                .antMatchers(HttpMethod.GET, "/h2/**").hasRole("ADMIN")
+                /* --------------------------------------------  AUTH 도메인  -----------------------------------------*/
+                .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/auth/logout").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/auth/re-issue").hasAuthority("ROLE_USER")
+                /* -------------------------------------------- MEMBER 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.GET, "/member").hasAuthority("ROLE_USER")
+//                .antMatchers(HttpMethod.POST, "/member/join").permitAll()
+                .antMatchers(HttpMethod.PATCH, "/member/edit").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.PATCH, "/member/profile").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.PATCH, "/member/profileLocal").hasAuthority("ROLE_USER")
+                /* -------------------------------------------- BOOKMARK 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.GET, "/bookmark/**").hasAuthority("ROLE_USER")
+                /* --------------------------------------------  PLACE 도메인  -----------------------------------------*/
+                // - place
+                .antMatchers(HttpMethod.GET, "/place/*").permitAll()
+                .antMatchers(HttpMethod.GET, "/place").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.DELETE, "/place/*").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.POST, "/place/post").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.POST, "/place/*/edit").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/home").permitAll()
+                .antMatchers(HttpMethod.GET, "/home/*").permitAll()
+                // -search
+                .antMatchers(HttpMethod.GET, "/category/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/search/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/search/detail").permitAll()
+                /* -------------------------------------------- RESERVE 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.GET, "/reserve").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.DELETE, "/reserve/*").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/api/reserve/**").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.POST, "/place/*/reserve").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/place/reserve/*/payment").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/place/reserve/*/edit").hasAuthority("ROLE_USER")
+                /* -------------------------------------------- REVIEW 도메인 -----------------------------------------*/
+                .antMatchers(HttpMethod.POST, "/review/place/*/reserve/*").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.PATCH, "/review/*/edit").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.DELETE, "/review/*").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/review").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/review/place/*").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()
@@ -105,9 +143,13 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
-        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedOrigin("http://daeyeo4u.com");
+        configuration.addAllowedOrigin("http://backend.daeyeo4u.shop");
         configuration.addAllowedOrigin("https://kapi.kakao.com");
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH"));
         source.registerCorsConfiguration("/**", configuration);
         return source;

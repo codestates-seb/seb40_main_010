@@ -41,10 +41,10 @@ public class PlaceController {
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
 
         /** 로컬 환경 */
-        placeService.createPlace(placePostDto,  refreshToken, files);
+//        placeService.createPlace(placePostDto,  refreshToken, files);
 
         /** S3 환경 */
-        //placeService.createPlaceS3(placePostDto, refreshToken, files);
+        placeService.createPlaceS3(placePostDto, refreshToken, files);
     }
 
 
@@ -79,10 +79,10 @@ public class PlaceController {
                            @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
         /** 로컬 환경 */
-        placeService.updatePlace(placeId, placePatchDto, refreshToken, files);
+//        placeService.updatePlace(placeId, placePatchDto, refreshToken, files);
 
         /** S3 환경 */
-        //placeService.updatePlaceS3(placeId, placePatchDto, refreshToken, files);
+        placeService.updatePlaceS3(placeId, placePatchDto, refreshToken, files);
     }
 
 
