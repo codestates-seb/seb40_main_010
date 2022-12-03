@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import {
   categoryFocus,
@@ -8,7 +8,7 @@ import {
   mainDataState,
   NextPage,
   pageState,
-  // userMbtiValue,
+  userMbtiValue,
 } from '../atoms';
 
 const useLogin = () => {
@@ -19,7 +19,7 @@ const useLogin = () => {
   const setFocusCategoryID = useSetRecoilState(categoryFocus);
   const setPage = useSetRecoilState(pageState);
   const resetMainPlaceData = useResetRecoilState(mainDataState);
-  // const [userMbti,setUserMbti] = useRecoilState(userMbtiValue)
+  const [, setUserMbti] = useRecoilState(userMbtiValue);
 
   const navigator = useNavigate();
 
@@ -64,7 +64,7 @@ const useLogin = () => {
       await localStorage.setItem('ACCESS', response.headers.authorization);
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
 
-      // setUserMbti(response.data.mbti);
+      setUserMbti(response.data.mbti);
 
       setIsLogIn(true);
       invalidate();
