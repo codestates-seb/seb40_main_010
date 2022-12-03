@@ -23,6 +23,7 @@ function Detail() {
   const setStartDate = useSetRecoilState(reservationStartDate);
   const setEndDate = useSetRecoilState(reservationEndDate);
   const [slots, setSlots] = useState([{}]);
+  const [maxCapacity, setMaxCapacity] = useState(null);
 
   const getDetailData = async () => {
     try {
@@ -60,6 +61,7 @@ function Detail() {
         setDetailInformation({ ...response.data });
         setIsBookmark(response.data.bookmark);
         setSlots(prev => [...prev, ...response.data.reserves]);
+        setMaxCapacity(response.data.maxCapacity);
         setStartDate(false);
         setEndDate(false);
       }
@@ -84,6 +86,7 @@ function Detail() {
         <ReservationAsideBar
           charge={detailInformation.charge || '0'}
           slots={slots}
+          maxCapacity={maxCapacity}
         />
       </DetailContainer>
       <ReviewContainer />
