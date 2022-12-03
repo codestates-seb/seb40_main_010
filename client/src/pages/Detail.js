@@ -9,6 +9,8 @@ import {
   bookmarkState,
   reservationStartDate,
   reservationEndDate,
+  placeMaxCapacity,
+  reservationMaxCapacity,
 } from '../atoms';
 import ReservationAsideBar from '../components/ReservationComponents/ReservationAsideBar';
 import Nav from '../components/Navigation/Nav';
@@ -23,7 +25,8 @@ function Detail() {
   const setStartDate = useSetRecoilState(reservationStartDate);
   const setEndDate = useSetRecoilState(reservationEndDate);
   const [slots, setSlots] = useState([{}]);
-  const [maxCapacity, setMaxCapacity] = useState(null);
+  const setMaxCapacity = useSetRecoilState(placeMaxCapacity);
+  const setCapacity = useSetRecoilState(reservationMaxCapacity);
 
   const getDetailData = async () => {
     try {
@@ -58,6 +61,7 @@ function Detail() {
         //   },
         // );
         // console.log(reservationResponse);
+        setCapacity(1);
         setDetailInformation({ ...response.data });
         setIsBookmark(response.data.bookmark);
         setSlots(prev => [...prev, ...response.data.reserves]);
@@ -86,7 +90,6 @@ function Detail() {
         <ReservationAsideBar
           charge={detailInformation.charge || '0'}
           slots={slots}
-          maxCapacity={maxCapacity}
         />
       </DetailContainer>
       <ReviewContainer />
