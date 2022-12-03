@@ -106,7 +106,9 @@ public class SecurityConfig {
                 /* -------------------------------------------- RESERVE 도메인 -----------------------------------------*/
                 .antMatchers(HttpMethod.GET, "/reserve").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.DELETE, "/reserve/*").hasAuthority("ROLE_USER")
-                .antMatchers(HttpMethod.GET, "/api/reserve/**").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/api/reserve/*/cancel").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/reserve/*/fail").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/reserve/*/completed").permitAll()
                 .antMatchers(HttpMethod.POST, "/place/*/reserve").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.GET, "/place/reserve/*/payment").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.GET, "/place/reserve/*/edit").hasAuthority("ROLE_USER")
