@@ -42,24 +42,24 @@ function Detail() {
           },
         );
 
-        const reservationResponse = await axios.get(
-          `${process.env.REACT_APP_SERVER_BASE_URL}/reserve/place/${id}`,
-          {
-            headers: {
-              'ngrok-skip-browser-warning': '010',
-              Authorization: (await localStorage.getItem('ACCESS'))
-                ? `Bearer ${localStorage.getItem('ACCESS')}`
-                : '',
-              RefreshToken: (await localStorage.getItem('REFRESH'))
-                ? localStorage.getItem('REFRESH')
-                : '',
-            },
-          },
-        );
-
+        // const reservationResponse = await axios.get(
+        //   `${process.env.REACT_APP_SERVER_BASE_URL}/reserve/place/${id}`,
+        //   {
+        //     headers: {
+        //       'ngrok-skip-browser-warning': '010',
+        //       Authorization: (await localStorage.getItem('ACCESS'))
+        //         ? `Bearer ${localStorage.getItem('ACCESS')}`
+        //         : '',
+        //       RefreshToken: (await localStorage.getItem('REFRESH'))
+        //         ? localStorage.getItem('REFRESH')
+        //         : '',
+        //     },
+        //   },
+        // );
+        // console.log(reservationResponse);
         setDetailInformation({ ...response.data });
         setIsBookmark(response.data.bookmark);
-        setSlots(prev => [...prev, ...reservationResponse.data.reserves]);
+        setSlots(prev => [...prev, ...response.data.reserves]);
         setStartDate(false);
         setEndDate(false);
       }
