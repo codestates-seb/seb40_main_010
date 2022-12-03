@@ -56,7 +56,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                 setAuthenticationToContext(authenticated);
             }
         }
-
         doFilter(req, res, filterChain);
     }
 

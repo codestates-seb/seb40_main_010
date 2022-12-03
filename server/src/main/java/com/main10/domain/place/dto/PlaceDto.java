@@ -27,7 +27,7 @@ public class PlaceDto {
         private double score;
 
         @NotBlank(message = "장소명은 공백이 아니어야 합니다.")
-        @Length(max = 15, message = "글자 수는 최대 15자 이하여야 합니다.")
+        @Length(max = 20, message = "글자 수는 최대 20자 이하여야 합니다.")
         private String title;
 
         private List<String> categoryList;
@@ -76,7 +76,7 @@ public class PlaceDto {
         private double score;
 
         @NotBlank(message = "장소명은 공백이 아니어야 합니다.")
-        @Length(max = 15, message = "글자 수는 최대 15자 이하여야 합니다.")
+        @Length(max = 20, message = "글자 수는 최대 20자 이하여야 합니다.")
         private String title;
         private List<String> categoryList;
 

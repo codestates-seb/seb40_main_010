@@ -100,7 +100,6 @@ public class Reserve {
         this.totalCharge = totalCharge;
     }
 
-
     public void editReserve(int capacity,
                             LocalDateTime startTime,
                             LocalDateTime endTime){
@@ -109,14 +108,9 @@ public class Reserve {
         this. endTime = endTime;
     }
 
-
     public void setStatus(ReserveStatus reserveStatus) {
         this.status = reserveStatus;
     }
-
-
-
-
 
     public enum ReserveStatus {
         PAY_IN_PROGRESS(1, "결제 대기중"),
@@ -131,7 +125,6 @@ public class Reserve {
 
         @Getter
         private String status;
-
 
         ReserveStatus(int stepNumber, String status) {
             this.stepNumber = stepNumber;
