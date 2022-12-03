@@ -193,6 +193,15 @@ function MyPageCategoryList({ listData, type }) {
     }
   };
 
+  // eslint-disable-next-line consistent-return
+  const isPayCompleted = PayStatus => {
+    if (PayStatus.status === '결제 완료') return '결제 완료';
+    if (PayStatus.status === '결제 실패') return '결제 실패';
+    if (PayStatus.status === '체크아웃') return '체크아웃';
+    if (PayStatus.status === '예약 취소') return '예약 취소';
+    return null;
+  };
+
   const today = new Date();
 
   const handleDateComparison = () => {
@@ -221,7 +230,13 @@ function MyPageCategoryList({ listData, type }) {
             </ReservationDate>
           </PlaceBodyContainer>
           {/* url이나 search를 사용해서 바꿔보기 */}
-          {type === 'reservation' ? null : (
+          {type === 'reservation' ? (
+            <CategoryPaymentSuccessContainer>
+              <CategoryPaymentSuccess>
+                {isPayCompleted(listData)}
+              </CategoryPaymentSuccess>
+            </CategoryPaymentSuccessContainer>
+          ) : (
             <RatingStarContainer>
               <ImStarFull size={22} />
               <PlaceRating>{listData.score}</PlaceRating>
@@ -247,13 +262,11 @@ function MyPageCategoryList({ listData, type }) {
                     <CategoryButton onClick={showModal}>
                       취소하기
                     </CategoryButton>
-                    {listData.status === '결제 대기중' ? (
+                    {listData.status !== '결제 완료' ? (
                       <CategoryButton onClick={showPaymentModal}>
-                        결제하기
+                        결제 하기
                       </CategoryButton>
-                    ) : (
-                      <CategoryPaymentSuccess>결제완료</CategoryPaymentSuccess>
-                    )}
+                    ) : null}
                   </>
                 ) : (
                   <CategoryButton onClick={showReviewModal}>
@@ -438,11 +451,19 @@ const CategoryButton = styled.div`
 `;
 
 const CategoryPaymentSuccess = styled.div`
-  font-size: 1rem;
+  /* width: fit-content; */
+  width: 2.65rem;
+  font-size: 0.6rem;
   color: #eb7470;
   @media (max-width: 840px) {
-    font-size: 14px;
+    font-size: 12px;
   }
+`;
+
+const CategoryPaymentSuccessContainer = styled.div`
+  width: fit-content;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const ReservationDate = styled.div`
