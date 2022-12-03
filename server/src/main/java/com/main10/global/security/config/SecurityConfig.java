@@ -38,7 +38,7 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenUtils jwtTokenUtils;
