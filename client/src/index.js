@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { createGlobalStyle } from 'styled-components';
 import App from './App';
+import ScrollToTop from './components/ScrollToTop';
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -62,6 +63,7 @@ root.render(
     <RecoilRoot>
       <BrowserRouter>
         <GlobalStyle />
+        <ScrollToTop />
         <App />
       </BrowserRouter>
     </RecoilRoot>
