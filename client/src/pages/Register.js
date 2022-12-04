@@ -32,196 +32,202 @@ export default function Register() {
   return (
     <>
       <Nav />
-      <Container>
-        <FormContainer>
-          <Wrapper>
-            <Title>제목</Title>
-            {editData ? (
-              <>
-                <Input
-                  onChange={editHandleChange}
-                  value={editData.title}
-                  name="title"
-                />
-                {editData.title.length > 20 && (
-                  <Validation>제목을 20글자 이내로 작성해주세요</Validation>
-                )}
-              </>
-            ) : (
-              <>
-                <Input onChange={handleChange} name="title" />
-                {title.length > 20 && (
-                  <Validation>제목을 20글자 이내로 작성해주세요</Validation>
-                )}
-                {title.trim().length < 1 && (
-                  <Validation>제목을 작성해주세요</Validation>
-                )}
-              </>
-            )}
-          </Wrapper>
-          <Wrapper>
-            <Title>카테고리</Title>
-            <RegisterCategory addItem={addItem} removeItem={removeItem} />
-            {checkedList.length < 1 && (
-              <Validation>1개 이상 선택해주세요</Validation>
-            )}
-          </Wrapper>
-          <Wrapper>
-            <Title>최대 인원</Title>
-            <div className="capacity-wrapper">
+      <form autoComplete="off">
+        <Container>
+          <FormContainer>
+            <Wrapper>
+              <Title>제목</Title>
               {editData ? (
-                <LeftIcon onClick={editHandleChange} id="capacityMinus" />
+                <>
+                  <Input
+                    onChange={editHandleChange}
+                    value={editData.title}
+                    name="title"
+                  />
+                  {editData.title.length > 20 && (
+                    <Validation>제목을 20글자 이내로 작성해주세요</Validation>
+                  )}
+                </>
               ) : (
-                <LeftIcon onClick={minusCapacity} />
+                <>
+                  <Input onChange={handleChange} name="title" />
+                  {title.length > 20 && (
+                    <Validation>제목을 20글자 이내로 작성해주세요</Validation>
+                  )}
+                  {title.trim().length < 1 && (
+                    <Validation>제목을 작성해주세요</Validation>
+                  )}
+                </>
               )}
-              {editData ? (
-                <SmallInput
-                  width="20px"
-                  type="number"
-                  name="capacity"
-                  onChange={editHandleChange}
-                  value={editData.maxCapacity}
-                  readOnly
-                />
-              ) : (
-                <SmallInput
-                  width="20px"
-                  type="number"
-                  onChange={handleChange}
-                  name="maxCapacity"
-                  value={maxCapacity}
-                  readOnly
-                />
+            </Wrapper>
+            <Wrapper>
+              <Title>카테고리</Title>
+              <RegisterCategory addItem={addItem} removeItem={removeItem} />
+              {checkedList.length < 1 && (
+                <Validation>1개 이상 선택해주세요</Validation>
               )}
-              {editData ? (
-                <RightIcon onClick={editHandleChange} id="capacityPlus" />
-              ) : (
-                <RightIcon onClick={plusCapacity} />
-              )}
-            </div>
-          </Wrapper>
-          <Wrapper>
-            <Title>주소</Title>
-            {editData ? (
-              <>
-                <Input
-                  type="text"
-                  onClick={() => postCodeEdit()}
-                  value={editData.address}
-                  onChange={editHandleChange}
-                  readOnly
-                  name="address"
-                />
-                {!editData.address && (
-                  <Validation>주소를 입력해주세요</Validation>
+            </Wrapper>
+            <Wrapper>
+              <Title>최대 인원</Title>
+              <div className="capacity-wrapper">
+                {editData ? (
+                  <LeftIcon onClick={editHandleChange} id="capacityMinus" />
+                ) : (
+                  <LeftIcon onClick={minusCapacity} />
                 )}
-              </>
-            ) : (
-              <>
-                <Input
-                  type="text"
-                  onClick={() => postCode()}
-                  value={address}
-                  readOnly
-                />
-                {!address && <Validation>주소를 입력해주세요</Validation>}
-              </>
-            )}
-            <Title marginTop="20px">상세주소</Title>
-            <Input type="text" onChange={handleChange} name="detailedAddress" />
-          </Wrapper>
-          <Wrapper>
-            <Title>상세정보</Title>
-            {editData ? (
-              <Textarea
-                type="text"
-                onChange={editHandleChange}
-                value={editData.detailInfo}
-                name="detailInfo"
-              />
-            ) : (
-              <Textarea
+                {editData ? (
+                  <SmallInput
+                    width="20px"
+                    type="number"
+                    name="capacity"
+                    onChange={editHandleChange}
+                    value={editData.maxCapacity}
+                    readOnly
+                  />
+                ) : (
+                  <SmallInput
+                    width="20px"
+                    type="number"
+                    onChange={handleChange}
+                    name="maxCapacity"
+                    value={maxCapacity}
+                    readOnly
+                  />
+                )}
+                {editData ? (
+                  <RightIcon onClick={editHandleChange} id="capacityPlus" />
+                ) : (
+                  <RightIcon onClick={plusCapacity} />
+                )}
+              </div>
+            </Wrapper>
+            <Wrapper>
+              <Title>주소</Title>
+              {editData ? (
+                <>
+                  <Input
+                    type="text"
+                    onClick={() => postCodeEdit()}
+                    value={editData.address}
+                    onChange={editHandleChange}
+                    readOnly
+                    name="address"
+                  />
+                  {!editData.address && (
+                    <Validation>주소를 입력해주세요</Validation>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Input
+                    type="text"
+                    onClick={() => postCode()}
+                    value={address}
+                    readOnly
+                  />
+                  {!address && <Validation>주소를 입력해주세요</Validation>}
+                </>
+              )}
+              <Title marginTop="20px">상세주소</Title>
+              <Input
                 type="text"
                 onChange={handleChange}
-                name="detailedInformation"
+                name="detailedAddress"
               />
-            )}
-          </Wrapper>
-          <Wrapper>
-            <Title>사진</Title>
-            <RegisterImages images={images} setImages={setImages} />
-            {images.length < 1 && (
-              <Validation>이미지를 업로드해주세요</Validation>
-            )}
-          </Wrapper>
-          <Wrapper>
-            <Title>금액 설정</Title>
-            <div className="set-charge">
-              <div className="hour-description">1시간 / </div>
+            </Wrapper>
+            <Wrapper>
+              <Title>상세정보</Title>
               {editData ? (
-                <SmallInput
-                  type="number"
-                  width="100px"
+                <Textarea
+                  type="text"
                   onChange={editHandleChange}
-                  value={editData.charge}
-                  name="charge"
+                  value={editData.detailInfo}
+                  name="detailInfo"
                 />
               ) : (
-                <SmallInput
-                  type="number"
-                  width="100px"
+                <Textarea
+                  type="text"
                   onChange={handleChange}
-                  name="charge"
+                  name="detailedInformation"
                 />
               )}
-              <div className="hour-description">원</div>
-            </div>
-            {charge < 1 && !editData && (
-              <Validation>금액을 설정해주세요</Validation>
-            )}
-          </Wrapper>
-          <ButtonWrapper>
-            {editData ? (
-              <button
-                type="submit"
-                className="form-register-button"
-                onClick={handleEditSubmit}
-                disabled={
-                  !(
-                    // 한 줄로 줄여보기 의미있는 단어로
-                    (
-                      editData.title.length < 20 &&
-                      checkedList.length > 0 &&
-                      editData.address &&
-                      images.length > 0 &&
-                      editData.charge > 0
+            </Wrapper>
+            <Wrapper>
+              <Title>사진</Title>
+              <RegisterImages images={images} setImages={setImages} />
+              {images.length < 1 && (
+                <Validation>이미지를 업로드해주세요</Validation>
+              )}
+            </Wrapper>
+            <Wrapper>
+              <Title>금액 설정</Title>
+              <div className="set-charge">
+                <div className="hour-description">1시간 / </div>
+                {editData ? (
+                  <SmallInput
+                    type="number"
+                    width="100px"
+                    onChange={editHandleChange}
+                    value={editData.charge}
+                    name="charge"
+                  />
+                ) : (
+                  <SmallInput
+                    type="number"
+                    width="100px"
+                    onChange={handleChange}
+                    name="charge"
+                  />
+                )}
+                <div className="hour-description">원</div>
+              </div>
+              {charge < 1 && !editData && (
+                <Validation>금액을 설정해주세요</Validation>
+              )}
+            </Wrapper>
+            <ButtonWrapper>
+              {editData ? (
+                <button
+                  type="submit"
+                  className="form-register-button"
+                  onClick={handleEditSubmit}
+                  disabled={
+                    !(
+                      // 한 줄로 줄여보기 의미있는 단어로
+                      (
+                        editData.title.length < 20 &&
+                        checkedList.length > 0 &&
+                        editData.address &&
+                        images.length > 0 &&
+                        editData.charge > 0
+                      )
                     )
-                  )
-                }
-              >
-                수정하기
-              </button>
-            ) : (
-              <button
-                type="submit"
-                className="form-register-button"
-                onClick={handleSubmit}
-                disabled={
-                  !(
-                    title.length < 20 &&
-                    checkedList.length > 0 &&
-                    address &&
-                    images.length > 0 &&
-                    charge > 0
-                  )
-                }
-              >
-                등록하기
-              </button>
-            )}
-          </ButtonWrapper>
-        </FormContainer>
-      </Container>
+                  }
+                >
+                  수정하기
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="form-register-button"
+                  onClick={handleSubmit}
+                  disabled={
+                    !(
+                      title.length < 20 &&
+                      checkedList.length > 0 &&
+                      address &&
+                      images.length > 0 &&
+                      charge > 0
+                    )
+                  }
+                >
+                  등록하기
+                </button>
+              )}
+            </ButtonWrapper>
+          </FormContainer>
+        </Container>
+      </form>
     </>
   );
 }
