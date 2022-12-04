@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   handleImageCompress,
   handleGetPreviewImagesUrl,
 } from '../utils/images';
-import { wholeData } from '../atoms';
+import { userMbtiValue, wholeData } from '../atoms';
 
 const useMyPage = () => {
   const [myPageCategory, setMyPageCategory] = useState('등록내역');
@@ -20,6 +20,7 @@ const useMyPage = () => {
   const [nickNameValidationMessage, setNickNameValidationMessage] =
     useState('');
   const [changeProfileImage, setChangeProfileImage] = useState(false);
+  const setUserMbti = useSetRecoilState(userMbtiValue);
 
   // TODO: 더 리팩터링 생각해보기
   const getValidationType = nickname => {
@@ -304,6 +305,8 @@ const useMyPage = () => {
       );
       callUserData();
       editStatusChange();
+      // mbti 수정 후 메인 페이지 mbti 변경
+      setUserMbti(userMBTI);
     } catch (err) {
       console.log(err);
       if (err.response.data.message === '이미 존재하는 닉네임입니다.') {
