@@ -91,8 +91,6 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
     const selectedTime = new Date(time);
     const isPastTime = currentTime.getTime() > selectedTime.getTime();
 
-    console.log(slots);
-
     if (isPastTime) return null;
     for (let i = 0; i < slots.length; i += 1) {
       const slot = slots[i];
