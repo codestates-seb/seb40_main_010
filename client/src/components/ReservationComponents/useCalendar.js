@@ -80,8 +80,8 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
 
   const getTimes = (slot, time) => {
     const targetTime = dayjs(time);
-    const slotStartTime = dayjs(slot.startTime);
-    const slotEndTime = dayjs(slot.endTime);
+    const slotStartTime = dayjs(slot.startTime).add(9, 'hour');
+    const slotEndTime = dayjs(slot.endTime).add(9, 'hour');
     const reservationStartTime = dayjs(startDate);
     return { targetTime, slotStartTime, slotEndTime, reservationStartTime };
   };
@@ -91,7 +91,6 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
     const selectedTime = new Date(time);
     const isPastTime = currentTime.getTime() > selectedTime.getTime();
 
-    if (slots.length === 0) slots.push({});
     if (isPastTime) return null;
     for (let i = 0; i < slots.length; i += 1) {
       const slot = slots[i];
