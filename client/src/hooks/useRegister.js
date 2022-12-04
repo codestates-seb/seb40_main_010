@@ -72,6 +72,13 @@ const useRegister = () => {
 
   const postCode = ReactDaumPost(postConfig);
 
+  const initialize = () => {
+    setCheckedList([]);
+    setAddress('');
+    setImages([]);
+    setPreviewImages([]);
+  };
+
   const handleSubmit = async () => {
     const json = JSON.stringify({
       title,
@@ -102,10 +109,8 @@ const useRegister = () => {
           },
         },
       );
-      setCheckedList([]);
-      setAddress('');
-      setImages([]);
-      setPreviewImages([]);
+
+      initialize();
       navigator('/');
     } catch (err) {
       console.log('Error >>', err);

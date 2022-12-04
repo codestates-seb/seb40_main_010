@@ -18,6 +18,7 @@ import {
   settingUrl,
   navSearchValue,
   reservationEditData,
+  registerFormMaxCapacity,
 } from '../../atoms';
 
 export function NavLeftButtonContainer() {
@@ -32,6 +33,7 @@ export function NavLeftButtonContainer() {
   const setUrl = useSetRecoilState(settingUrl);
   const setSearch = useSetRecoilState(navSearchValue);
   const setEditData = useSetRecoilState(reservationEditData);
+  const resetMaxCapacity = useSetRecoilState(registerFormMaxCapacity);
 
   const navigate = useNavigate();
 
@@ -54,6 +56,7 @@ export function NavLeftButtonContainer() {
   const onClickRegisterPage = () => {
     setEditData(null);
     setSearch('');
+    resetMaxCapacity(1);
     invalidate();
     setUrl(() => `/home?size=20&page=`);
   };
