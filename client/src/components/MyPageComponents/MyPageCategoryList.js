@@ -67,7 +67,7 @@ function MyPageCategoryList({ listData, type }) {
   const handleReviewDate = createdAt => {
     if (createdAt === undefined) return null;
 
-    const date = dayjs(createdAt).subtract(2000, 'y');
+    const date = dayjs(createdAt);
 
     return `${date.$y}.${date.$M + 1}.${date.$D}`;
   };
@@ -210,6 +210,8 @@ function MyPageCategoryList({ listData, type }) {
       Number(dayjs(listData.startTime).add(9, 'hour').format('YYYYMMDDhh'))
     );
   };
+
+  console.log(listData);
 
   return (
     <CategoryItemList>
