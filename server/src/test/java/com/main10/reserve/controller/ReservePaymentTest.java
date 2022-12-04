@@ -92,7 +92,7 @@ public class ReservePaymentTest extends ReserveControllerTest{
                 .nextRedirectPcUrl("nextRedirectPcUrl")
                 .build();
 
-        Message message = Message.builder()
+        Message<Object> message = Message.builder()
                 .data(payReadyDto.getNextRedirectPcUrl())
                 .message(PAY_URI_MSG)
                 .build();

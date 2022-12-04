@@ -54,7 +54,6 @@ public class ReviewGetTest extends ReviewControllerTest {
                 .id(1L)
                 .score(0.5)
                 .comment("그렇게 장사하지 마세요!!")
-                .createdAt(LocalDateTime.now())
                 .build();
 
         PlaceImage placeImage = PlaceImage.builder().filePath("image.jpg").build();
@@ -120,7 +119,6 @@ public class ReviewGetTest extends ReviewControllerTest {
                 .id(1L)
                 .score(5.0)
                 .comment("화장실이 너무 급해서 잠깐 이용했는데 만족했어요.")
-                .createdAt(LocalDateTime.now())
                 .build();
 
         PlaceImage placeImage = PlaceImage.builder().filePath("image.jpg").build();

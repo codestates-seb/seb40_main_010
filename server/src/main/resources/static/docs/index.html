@@ -448,11 +448,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/post?_csrf=114f6115-2f83-47d2-9604-e693b7e8e198' -i -X POST \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/post?_csrf=8a4c93c0-f990-4a1b-ba93-2eb81372873e' -i -X POST \
     -H 'Content-Type: multipart/form-data;charset=UTF-8' \
     -H 'Accept: application/json' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNzksImV4cCI6MTY3MDA3Njg3OX0.iMMz5VLG6J1_ziKV9-ImV0xE2YxbyS9YlqXqnX8qgFn9595mBoAAGbJoT9JwZwkPF-JIZ5RpPLChmgTkCllQOQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDc5LCJleHAiOjE2NzAxNjE0Nzl9.4bl2aEDzurgiRiq0P8u4yv88tYyJPYzi7TzSVF6iY1FKZxFFlPcmsUU5dmFL1WGyXT3mtTwHxpsNHqxi2g7w7Q' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzMsImV4cCI6MTY3MDEzNDczM30.m8Kunp8K3dwSgEZGhZvIS2oQp5eFzhjFIXzj4r8JbbPWFU3bNi4_GVPZc0qJ0D_63rQyYdJeJB1sr-7msq1iNw' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTMzLCJleHAiOjE2NzAyMTkzMzN9.GvvsFX9hg-zytCcFVtcARtRd6NwMDCt0661sdMUS1VegVWimywe2-FIYiTTkp5XJddqHS54wkXtxIiWiqyEUYg' \
     -F 'file=@test.jpg;type=image/jpg' \
     -F 'key={"score":0.0,"title":"공유 스튜디오","categoryList":["공유오피스","바다근처"],"maxCapacity":4,"address":"서울 마포구","detailInfo":"조용한 스튜디오","charge":5000,"endTime":22};type=application/json' \
     -d '{"score":0.0,"title":"공유 스튜디오","categoryList":["공유오피스","바다근처"],"maxCapacity":4,"address":"서울 마포구","detailInfo":"조용한 스튜디오","charge":5000,"endTime":22}'</code></pre>
@@ -461,11 +461,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /place/post?_csrf=114f6115-2f83-47d2-9604-e693b7e8e198 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /place/post?_csrf=8a4c93c0-f990-4a1b-ba93-2eb81372873e HTTP/1.1
 Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNzksImV4cCI6MTY3MDA3Njg3OX0.iMMz5VLG6J1_ziKV9-ImV0xE2YxbyS9YlqXqnX8qgFn9595mBoAAGbJoT9JwZwkPF-JIZ5RpPLChmgTkCllQOQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDc5LCJleHAiOjE2NzAxNjE0Nzl9.4bl2aEDzurgiRiq0P8u4yv88tYyJPYzi7TzSVF6iY1FKZxFFlPcmsUU5dmFL1WGyXT3mtTwHxpsNHqxi2g7w7Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzMsImV4cCI6MTY3MDEzNDczM30.m8Kunp8K3dwSgEZGhZvIS2oQp5eFzhjFIXzj4r8JbbPWFU3bNi4_GVPZc0qJ0D_63rQyYdJeJB1sr-7msq1iNw
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTMzLCJleHAiOjE2NzAyMTkzMzN9.GvvsFX9hg-zytCcFVtcARtRd6NwMDCt0661sdMUS1VegVWimywe2-FIYiTTkp5XJddqHS54wkXtxIiWiqyEUYg
 Content-Length: 203
 Host: localhost:8080
 
@@ -558,11 +558,11 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/1/edit?_csrf=a39ebee4-947a-4cf8-8934-2f776d6ebd5e' -i -X POST \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/1/edit?_csrf=87b4c70d-2fb2-470e-ac03-d340492ec738' -i -X POST \
     -H 'Content-Type: multipart/form-data;charset=UTF-8' \
     -H 'Accept: application/json' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNzksImV4cCI6MTY3MDA3Njg3OX0.iMMz5VLG6J1_ziKV9-ImV0xE2YxbyS9YlqXqnX8qgFn9595mBoAAGbJoT9JwZwkPF-JIZ5RpPLChmgTkCllQOQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDc5LCJleHAiOjE2NzAxNjE0Nzl9.4bl2aEDzurgiRiq0P8u4yv88tYyJPYzi7TzSVF6iY1FKZxFFlPcmsUU5dmFL1WGyXT3mtTwHxpsNHqxi2g7w7Q' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzMsImV4cCI6MTY3MDEzNDczM30.m8Kunp8K3dwSgEZGhZvIS2oQp5eFzhjFIXzj4r8JbbPWFU3bNi4_GVPZc0qJ0D_63rQyYdJeJB1sr-7msq1iNw' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTMzLCJleHAiOjE2NzAyMTkzMzN9.GvvsFX9hg-zytCcFVtcARtRd6NwMDCt0661sdMUS1VegVWimywe2-FIYiTTkp5XJddqHS54wkXtxIiWiqyEUYg' \
     -F 'file=@updateFile.jpg;type=image/jpg' \
     -F 'key={"score":0.0,"title":"공부방","categoryList":["스터디룸","짐보관"],"maxCapacity":4,"address":"서울 양천구","detailInfo":"조용한 공부방","charge":1000,"endTime":22};type=application/json' \
     -d '{"score":0.0,"title":"공부방","categoryList":["스터디룸","짐보관"],"maxCapacity":4,"address":"서울 양천구","detailInfo":"조용한 공부방","charge":1000,"endTime":22}'</code></pre>
@@ -571,11 +571,11 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /place/1/edit?_csrf=a39ebee4-947a-4cf8-8934-2f776d6ebd5e HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /place/1/edit?_csrf=87b4c70d-2fb2-470e-ac03-d340492ec738 HTTP/1.1
 Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNzksImV4cCI6MTY3MDA3Njg3OX0.iMMz5VLG6J1_ziKV9-ImV0xE2YxbyS9YlqXqnX8qgFn9595mBoAAGbJoT9JwZwkPF-JIZ5RpPLChmgTkCllQOQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDc5LCJleHAiOjE2NzAxNjE0Nzl9.4bl2aEDzurgiRiq0P8u4yv88tYyJPYzi7TzSVF6iY1FKZxFFlPcmsUU5dmFL1WGyXT3mtTwHxpsNHqxi2g7w7Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzMsImV4cCI6MTY3MDEzNDczM30.m8Kunp8K3dwSgEZGhZvIS2oQp5eFzhjFIXzj4r8JbbPWFU3bNi4_GVPZc0qJ0D_63rQyYdJeJB1sr-7msq1iNw
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTMzLCJleHAiOjE2NzAyMTkzMzN9.GvvsFX9hg-zytCcFVtcARtRd6NwMDCt0661sdMUS1VegVWimywe2-FIYiTTkp5XJddqHS54wkXtxIiWiqyEUYg
 Content-Length: 184
 Host: localhost:8080
 
@@ -669,16 +669,16 @@ Host: localhost:8080
 <div class="title">curl-request</div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/1' -i -X GET \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNzgsImV4cCI6MTY3MDA3Njg3OH0.JcKNJUvRFx1WyKRE--vYGZh2IbJA86fjAcZcm7FLinRpk6R82pk-8W-EZTpVSfBF-C6IIi2EhxPauBQtMtBzqQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDc4LCJleHAiOjE2NzAxNjE0Nzh9.Th9C4Jss3eV2epDiBh8Uwfzjb0O8z7s_GkZE0d0wWB4Ey9F5fWt_1kr2uA1BjvSg_XtkWlrX6_iMUo2rCkn_7A'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzMsImV4cCI6MTY3MDEzNDczM30.m8Kunp8K3dwSgEZGhZvIS2oQp5eFzhjFIXzj4r8JbbPWFU3bNi4_GVPZc0qJ0D_63rQyYdJeJB1sr-7msq1iNw' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTMzLCJleHAiOjE2NzAyMTkzMzN9.GvvsFX9hg-zytCcFVtcARtRd6NwMDCt0661sdMUS1VegVWimywe2-FIYiTTkp5XJddqHS54wkXtxIiWiqyEUYg'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /place/1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNzgsImV4cCI6MTY3MDA3Njg3OH0.JcKNJUvRFx1WyKRE--vYGZh2IbJA86fjAcZcm7FLinRpk6R82pk-8W-EZTpVSfBF-C6IIi2EhxPauBQtMtBzqQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDc4LCJleHAiOjE2NzAxNjE0Nzh9.Th9C4Jss3eV2epDiBh8Uwfzjb0O8z7s_GkZE0d0wWB4Ey9F5fWt_1kr2uA1BjvSg_XtkWlrX6_iMUo2rCkn_7A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzMsImV4cCI6MTY3MDEzNDczM30.m8Kunp8K3dwSgEZGhZvIS2oQp5eFzhjFIXzj4r8JbbPWFU3bNi4_GVPZc0qJ0D_63rQyYdJeJB1sr-7msq1iNw
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTMzLCJleHAiOjE2NzAyMTkzMzN9.GvvsFX9hg-zytCcFVtcARtRd6NwMDCt0661sdMUS1VegVWimywe2-FIYiTTkp5XJddqHS54wkXtxIiWiqyEUYg
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1140,7 +1140,7 @@ Content-Length: 311
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/search/detail?_csrf=bc74a45b-0596-4ff4-aade-f1e67c796a30' -i -X POST \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/search/detail?_csrf=4b95edd2-7eb0-46b6-9400-4939807fea27' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
     -H 'Accept: application/json' \
     -d '{
@@ -1153,7 +1153,7 @@ Content-Length: 311
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /search/detail?_csrf=bc74a45b-0596-4ff4-aade-f1e67c796a30 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /search/detail?_csrf=4b95edd2-7eb0-46b6-9400-4939807fea27 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Content-Length: 67
@@ -1624,17 +1624,17 @@ Content-Length: 311
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/1?_csrf=720eb0bd-24b8-4c12-b233-1d40b356b9c2' -i -X DELETE \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNzgsImV4cCI6MTY3MDA3Njg3OH0.JcKNJUvRFx1WyKRE--vYGZh2IbJA86fjAcZcm7FLinRpk6R82pk-8W-EZTpVSfBF-C6IIi2EhxPauBQtMtBzqQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDc4LCJleHAiOjE2NzAxNjE0Nzh9.Th9C4Jss3eV2epDiBh8Uwfzjb0O8z7s_GkZE0d0wWB4Ey9F5fWt_1kr2uA1BjvSg_XtkWlrX6_iMUo2rCkn_7A'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/1?_csrf=73de2a9d-f90d-4a1b-9aad-1706a19a1f2f' -i -X DELETE \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzMsImV4cCI6MTY3MDEzNDczM30.m8Kunp8K3dwSgEZGhZvIS2oQp5eFzhjFIXzj4r8JbbPWFU3bNi4_GVPZc0qJ0D_63rQyYdJeJB1sr-7msq1iNw' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTMzLCJleHAiOjE2NzAyMTkzMzN9.GvvsFX9hg-zytCcFVtcARtRd6NwMDCt0661sdMUS1VegVWimywe2-FIYiTTkp5XJddqHS54wkXtxIiWiqyEUYg'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /place/1?_csrf=720eb0bd-24b8-4c12-b233-1d40b356b9c2 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNzgsImV4cCI6MTY3MDA3Njg3OH0.JcKNJUvRFx1WyKRE--vYGZh2IbJA86fjAcZcm7FLinRpk6R82pk-8W-EZTpVSfBF-C6IIi2EhxPauBQtMtBzqQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDc4LCJleHAiOjE2NzAxNjE0Nzh9.Th9C4Jss3eV2epDiBh8Uwfzjb0O8z7s_GkZE0d0wWB4Ey9F5fWt_1kr2uA1BjvSg_XtkWlrX6_iMUo2rCkn_7A
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /place/1?_csrf=73de2a9d-f90d-4a1b-9aad-1706a19a1f2f HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzMsImV4cCI6MTY3MDEzNDczM30.m8Kunp8K3dwSgEZGhZvIS2oQp5eFzhjFIXzj4r8JbbPWFU3bNi4_GVPZc0qJ0D_63rQyYdJeJB1sr-7msq1iNw
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTMzLCJleHAiOjE2NzAyMTkzMzN9.GvvsFX9hg-zytCcFVtcARtRd6NwMDCt0661sdMUS1VegVWimywe2-FIYiTTkp5XJddqHS54wkXtxIiWiqyEUYg
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1725,10 +1725,10 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/1/reserve?_csrf=365e25b0-88c4-4594-ac93-dbf5d6763f6e' -i -X POST \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/1/reserve?_csrf=ea801389-f24a-421b-b180-942a7cd3da1f' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg' \
     -H 'Accept: application/json' \
     -d '{
   "capacity" : 2,
@@ -1740,10 +1740,10 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /place/1/reserve?_csrf=365e25b0-88c4-4594-ac93-dbf5d6763f6e HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /place/1/reserve?_csrf=ea801389-f24a-421b-b180-942a7cd3da1f HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg
 Accept: application/json
 Content-Length: 106
 Host: localhost:8080
@@ -1836,16 +1836,16 @@ Host: localhost:8080
 <div class="title">curl-request</div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/reserve/1/payment' -i -X GET \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /place/reserve/1/payment HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1944,16 +1944,16 @@ Content-Length: 68
 <div class="title">curl-request</div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/api/reserve/1/completed?pg_token=pgToken' -i -X GET \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/reserve/1/completed?pg_token=pgToken HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2287,10 +2287,10 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/reserve/1/edit?_csrf=4f2e2804-d8b0-44b7-965a-eba1f6575c04' -i -X PATCH \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/place/reserve/1/edit?_csrf=0178a7bf-5138-4f6f-893e-ba42eb115234' -i -X PATCH \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg' \
     -H 'Accept: application/json' \
     -d '{
   "capacity" : 5,
@@ -2302,10 +2302,10 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /place/reserve/1/edit?_csrf=4f2e2804-d8b0-44b7-965a-eba1f6575c04 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /place/reserve/1/edit?_csrf=0178a7bf-5138-4f6f-893e-ba42eb115234 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg
 Accept: application/json
 Content-Length: 106
 Host: localhost:8080
@@ -2378,17 +2378,17 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/reserve/1?_csrf=4ad8f2b5-0697-45a1-943c-0d8eef1dca0b' -i -X DELETE \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q'</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/reserve/1?_csrf=9238bb1f-3dd0-48c4-9000-f6ae65bc68ad' -i -X DELETE \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /reserve/1?_csrf=4ad8f2b5-0697-45a1-943c-0d8eef1dca0b HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODIsImV4cCI6MTY3MDA3Njg4Mn0.uATWu1d-STkKMFgHIijO5DQ1vQWtx1QpnXXoOHOjYzlCxw0Tl8xdvawISKIyF1LovOezSdG2yNjc6ksJbCAzSQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDgyLCJleHAiOjE2NzAxNjE0ODJ9.I_9tqhG-mJXvLCxpCh7afjr7Mj9d4jgO3gf1sk8DzNlFe5jZyRK0TXroBSGBtpJUrJXYhswhWzDNZpkYpmof3Q
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /reserve/1?_csrf=9238bb1f-3dd0-48c4-9000-f6ae65bc68ad HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzUsImV4cCI6MTY3MDEzNDczNX0.GOLg-MZrLNM89mESAxbBwEMbshOyuJi5RWH9MP5ulAP-maWDrx7OdeDSePiPx8qFeg6Co2p9EYVYosZdmqdLqA
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM1LCJleHAiOjE2NzAyMTkzMzV9.hLr4Rvke_o0csOTpXtCtWmD8B-LwC4kXhZsLbqbodSUOzDjRgIK-CukRJs_SbC4BC04g2GIrIehcbrX62g86xg
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2445,10 +2445,10 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/1/reserve/1?_csrf=b77bbc24-efb7-43cf-8b5a-f3337c7106af' -i -X POST \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/place/1/reserve/1?_csrf=8539d510-0e6b-4c57-b3c3-a0eda2eff288' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODUsImV4cCI6MTY3MDA3Njg4NX0.XcrMz3pZ9CO36C92amgG0yuOnQtctn8MDkWURJlIDEJD4WCOqDg6TUh1v8RsZm5EgoVo3NcqBUkKRS7OihZEKQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDg1LCJleHAiOjE2NzAxNjE0ODV9.KSYYCiTJLdlGRbGPeEur1re876sQt7i71OK225pk7VPsAdsePBekkcgt16LBnm1ofmMViguM2nexOYkBEzgtng' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzYsImV4cCI6MTY3MDEzNDczNn0.eKv4ZRya_bQZ69uPmmwNFnpZpSWPVnuFsAni1AgP6JMNaXBDSWrvKZbjETItEzSKOGvB8fVenrDMU-ctRPsjhQ' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM2LCJleHAiOjE2NzAyMTkzMzZ9.NT_EmGiOF00nDww408Qe-q_2z_PbRwO6Q2eEvHtzplwo41PVlPPawqObdyYUwS1d4vHZXr-Q1kAYFcU2idZl3w' \
     -H 'Accept: application/json' \
     -d '{
   "score" : 4.5,
@@ -2459,10 +2459,10 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /review/1/reserve/1?_csrf=b77bbc24-efb7-43cf-8b5a-f3337c7106af HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /review/place/1/reserve/1?_csrf=8539d510-0e6b-4c57-b3c3-a0eda2eff288 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODUsImV4cCI6MTY3MDA3Njg4NX0.XcrMz3pZ9CO36C92amgG0yuOnQtctn8MDkWURJlIDEJD4WCOqDg6TUh1v8RsZm5EgoVo3NcqBUkKRS7OihZEKQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDg1LCJleHAiOjE2NzAxNjE0ODV9.KSYYCiTJLdlGRbGPeEur1re876sQt7i71OK225pk7VPsAdsePBekkcgt16LBnm1ofmMViguM2nexOYkBEzgtng
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzYsImV4cCI6MTY3MDEzNDczNn0.eKv4ZRya_bQZ69uPmmwNFnpZpSWPVnuFsAni1AgP6JMNaXBDSWrvKZbjETItEzSKOGvB8fVenrDMU-ctRPsjhQ
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM2LCJleHAiOjE2NzAyMTkzMzZ9.NT_EmGiOF00nDww408Qe-q_2z_PbRwO6Q2eEvHtzplwo41PVlPPawqObdyYUwS1d4vHZXr-Q1kAYFcU2idZl3w
 Accept: application/json
 Content-Length: 55
 Host: localhost:8080
@@ -2501,7 +2501,7 @@ Host: localhost:8080
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 34. /review/{place-id}/reserve/{reserve-id}</caption>
+<caption class="title">Table 34. /review/place/{place-id}/reserve/{reserve-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2529,10 +2529,10 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/1/edit?_csrf=4a96881d-f292-4c57-b365-4e1e6fbfae76' -i -X PATCH \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/1/edit?_csrf=127b06e0-ff67-4a59-8424-b502c46770ce' -i -X PATCH \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODUsImV4cCI6MTY3MDA3Njg4NX0.XcrMz3pZ9CO36C92amgG0yuOnQtctn8MDkWURJlIDEJD4WCOqDg6TUh1v8RsZm5EgoVo3NcqBUkKRS7OihZEKQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDg1LCJleHAiOjE2NzAxNjE0ODV9.KSYYCiTJLdlGRbGPeEur1re876sQt7i71OK225pk7VPsAdsePBekkcgt16LBnm1ofmMViguM2nexOYkBEzgtng' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzYsImV4cCI6MTY3MDEzNDczNn0.eKv4ZRya_bQZ69uPmmwNFnpZpSWPVnuFsAni1AgP6JMNaXBDSWrvKZbjETItEzSKOGvB8fVenrDMU-ctRPsjhQ' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM2LCJleHAiOjE2NzAyMTkzMzZ9.NT_EmGiOF00nDww408Qe-q_2z_PbRwO6Q2eEvHtzplwo41PVlPPawqObdyYUwS1d4vHZXr-Q1kAYFcU2idZl3w' \
     -H 'Accept: application/json' \
     -d '{
   "score" : 2.5,
@@ -2543,10 +2543,10 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /review/1/edit?_csrf=4a96881d-f292-4c57-b365-4e1e6fbfae76 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /review/1/edit?_csrf=127b06e0-ff67-4a59-8424-b502c46770ce HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODUsImV4cCI6MTY3MDA3Njg4NX0.XcrMz3pZ9CO36C92amgG0yuOnQtctn8MDkWURJlIDEJD4WCOqDg6TUh1v8RsZm5EgoVo3NcqBUkKRS7OihZEKQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDg1LCJleHAiOjE2NzAxNjE0ODV9.KSYYCiTJLdlGRbGPeEur1re876sQt7i71OK225pk7VPsAdsePBekkcgt16LBnm1ofmMViguM2nexOYkBEzgtng
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzYsImV4cCI6MTY3MDEzNDczNn0.eKv4ZRya_bQZ69uPmmwNFnpZpSWPVnuFsAni1AgP6JMNaXBDSWrvKZbjETItEzSKOGvB8fVenrDMU-ctRPsjhQ
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM2LCJleHAiOjE2NzAyMTkzMzZ9.NT_EmGiOF00nDww408Qe-q_2z_PbRwO6Q2eEvHtzplwo41PVlPPawqObdyYUwS1d4vHZXr-Q1kAYFcU2idZl3w
 Accept: application/json
 Content-Length: 61
 Host: localhost:8080
@@ -2632,18 +2632,18 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/1?_csrf=98048b8f-de72-41fb-9a20-870bcce63b85' -i -X DELETE \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODQsImV4cCI6MTY3MDA3Njg4NH0.2fxlej3EivK7bLw7IGm5CI6Phlyr3s5a7y7HZyTlT-2zQ7L1CixYFZFCqluZhKgbwUgJiK9EHdOJKcOxyOdrMg' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDg0LCJleHAiOjE2NzAxNjE0ODR9.57soa672RyokcWdwYPhEW5INSI7rpGJnFTJVJq98Aq7l9JkWj7l2KwLqYdbb_Wn4rSMKCxf4-91U9WDnpgxoRg' \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/1?_csrf=535f1642-95ae-410a-b4b0-f06b67ee114e' -i -X DELETE \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzYsImV4cCI6MTY3MDEzNDczNn0.eKv4ZRya_bQZ69uPmmwNFnpZpSWPVnuFsAni1AgP6JMNaXBDSWrvKZbjETItEzSKOGvB8fVenrDMU-ctRPsjhQ' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM2LCJleHAiOjE2NzAyMTkzMzZ9.NT_EmGiOF00nDww408Qe-q_2z_PbRwO6Q2eEvHtzplwo41PVlPPawqObdyYUwS1d4vHZXr-Q1kAYFcU2idZl3w' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /review/1?_csrf=98048b8f-de72-41fb-9a20-870bcce63b85 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODQsImV4cCI6MTY3MDA3Njg4NH0.2fxlej3EivK7bLw7IGm5CI6Phlyr3s5a7y7HZyTlT-2zQ7L1CixYFZFCqluZhKgbwUgJiK9EHdOJKcOxyOdrMg
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDg0LCJleHAiOjE2NzAxNjE0ODR9.57soa672RyokcWdwYPhEW5INSI7rpGJnFTJVJq98Aq7l9JkWj7l2KwLqYdbb_Wn4rSMKCxf4-91U9WDnpgxoRg
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /review/1?_csrf=535f1642-95ae-410a-b4b0-f06b67ee114e HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzYsImV4cCI6MTY3MDEzNDczNn0.eKv4ZRya_bQZ69uPmmwNFnpZpSWPVnuFsAni1AgP6JMNaXBDSWrvKZbjETItEzSKOGvB8fVenrDMU-ctRPsjhQ
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM2LCJleHAiOjE2NzAyMTkzMzZ9.NT_EmGiOF00nDww408Qe-q_2z_PbRwO6Q2eEvHtzplwo41PVlPPawqObdyYUwS1d4vHZXr-Q1kAYFcU2idZl3w
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -2696,18 +2696,18 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/1?page=1&amp;size=5' -i -X GET</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/place/1?page=1&amp;size=5' -i -X GET</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review/1?page=1&amp;size=5 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review/place/1?page=1&amp;size=5 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 40. /review/{place-id}</caption>
+<caption class="title">Table 40. /review/place/{place-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2747,7 +2747,7 @@ Content-Length: 329
     "nickname" : "cornCheese",
     "score" : 0.5,
     "comment" : "그렇게 장사하지 마세요!!",
-    "createdAt" : "2022-12-03T22:44:44.970062",
+    "createdAt" : "2022-12-04T14:48:56.551641",
     "profileImage" : "image.jpg"
   } ],
   "pageInfo" : {
@@ -2843,16 +2843,16 @@ Content-Length: 329
 <div class="title">curl-request</div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review?page=1&amp;size=5' -i -X GET \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODUsImV4cCI6MTY3MDA3Njg4NX0.XcrMz3pZ9CO36C92amgG0yuOnQtctn8MDkWURJlIDEJD4WCOqDg6TUh1v8RsZm5EgoVo3NcqBUkKRS7OihZEKQ' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDg1LCJleHAiOjE2NzAxNjE0ODV9.KSYYCiTJLdlGRbGPeEur1re876sQt7i71OK225pk7VPsAdsePBekkcgt16LBnm1ofmMViguM2nexOYkBEzgtng'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzYsImV4cCI6MTY3MDEzNDczNn0.eKv4ZRya_bQZ69uPmmwNFnpZpSWPVnuFsAni1AgP6JMNaXBDSWrvKZbjETItEzSKOGvB8fVenrDMU-ctRPsjhQ' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM2LCJleHAiOjE2NzAyMTkzMzZ9.NT_EmGiOF00nDww408Qe-q_2z_PbRwO6Q2eEvHtzplwo41PVlPPawqObdyYUwS1d4vHZXr-Q1kAYFcU2idZl3w'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review?page=1&amp;size=5 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwODUsImV4cCI6MTY3MDA3Njg4NX0.XcrMz3pZ9CO36C92amgG0yuOnQtctn8MDkWURJlIDEJD4WCOqDg6TUh1v8RsZm5EgoVo3NcqBUkKRS7OihZEKQ
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDg1LCJleHAiOjE2NzAxNjE0ODV9.KSYYCiTJLdlGRbGPeEur1re876sQt7i71OK225pk7VPsAdsePBekkcgt16LBnm1ofmMViguM2nexOYkBEzgtng
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGdkQGdtYWlsLmNvbSIsInN1YiI6ImhnZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MzYsImV4cCI6MTY3MDEzNDczNn0.eKv4ZRya_bQZ69uPmmwNFnpZpSWPVnuFsAni1AgP6JMNaXBDSWrvKZbjETItEzSKOGvB8fVenrDMU-ctRPsjhQ
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoZ2RAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTM2LCJleHAiOjE2NzAyMTkzMzZ9.NT_EmGiOF00nDww408Qe-q_2z_PbRwO6Q2eEvHtzplwo41PVlPPawqObdyYUwS1d4vHZXr-Q1kAYFcU2idZl3w
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2878,7 +2878,7 @@ Content-Length: 406
     "title" : "잠깐 화장실로 쓰실분 구해요.",
     "score" : 5.0,
     "comment" : "화장실이 너무 급해서 잠깐 이용했는데 만족했어요.",
-    "createdAt" : "2022-12-03T22:44:45.188294",
+    "createdAt" : "2022-12-04T14:48:56.601186",
     "placeId" : 1,
     "filePath" : "image.jpg"
   } ],
@@ -2985,16 +2985,16 @@ Content-Length: 406
 <div class="title">curl-request</div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/bookmark' -i -X GET \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNjYsImV4cCI6MTY3MDA3Njg2Nn0.R9PWpNZBazi4kVmjYWLF73prRd6akRVE55WyPpXVeZAuzGnROpQsMLIUV8LW1PAnVZqLEXYxlJ9Kc7GTcRS61g' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDY2LCJleHAiOjE2NzAxNjE0NjZ9.Tsp42lwn3JDV88e9z557VlaURgZ6DAp7V2Fg2coDFbFZNjicKapqQyV28G8DXTj72ShPk2rr9FHb7XK_VxND4Q'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MjYsImV4cCI6MTY3MDEzNDcyNn0.SOveMy4AMCt0cJeqaWmOglr-8ioA9M5lbL_qv82AF2oh_21fZ6VogSEu93T47lems_Ay2-5lZNq3Vutw7EddGg' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTI2LCJleHAiOjE2NzAyMTkzMjZ9.6TnWdzLgAmHHrPC4KIbJToXP4EwMfJ8VXEiW_k_DlteBCK9ls3SCtlD0EQ4HsCaVvatovMJfmhQaKjqY47m2uA'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /bookmark HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNjYsImV4cCI6MTY3MDA3Njg2Nn0.R9PWpNZBazi4kVmjYWLF73prRd6akRVE55WyPpXVeZAuzGnROpQsMLIUV8LW1PAnVZqLEXYxlJ9Kc7GTcRS61g
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDY2LCJleHAiOjE2NzAxNjE0NjZ9.Tsp42lwn3JDV88e9z557VlaURgZ6DAp7V2Fg2coDFbFZNjicKapqQyV28G8DXTj72ShPk2rr9FHb7XK_VxND4Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MjYsImV4cCI6MTY3MDEzNDcyNn0.SOveMy4AMCt0cJeqaWmOglr-8ioA9M5lbL_qv82AF2oh_21fZ6VogSEu93T47lems_Ay2-5lZNq3Vutw7EddGg
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTI2LCJleHAiOjE2NzAyMTkzMjZ9.6TnWdzLgAmHHrPC4KIbJToXP4EwMfJ8VXEiW_k_DlteBCK9ls3SCtlD0EQ4HsCaVvatovMJfmhQaKjqY47m2uA
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3152,8 +3152,8 @@ Content-Length: 364
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/bookmark/1' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNjQsImV4cCI6MTY3MDA3Njg2NH0.056Rv8fgy6mv3Il-WKLVDWa387uQ1ReQ80hPe6oRQ7qhC_V7pynAxzZr3U_508PNbFXZ3SYiAcHCUK8R4Hf6Xg' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDY1LCJleHAiOjE2NzAxNjE0NjV9._WJjHxtUH4OMG-9E44oAxbVEThYJzW63mK554LlvULJwZo3nRW1AXWPHC6mAtCToy6mpshP1eC5ppWk3a40fcQ' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MjUsImV4cCI6MTY3MDEzNDcyNX0.C4e5hK3py5bFRhjfoJon1sMc2XJBXWMlXrL1CMu7gL7AWZQJpEpghZmDkfKLME4KGESH7nFC2OYweAMG-WU53w' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTI1LCJleHAiOjE2NzAyMTkzMjV9.3LImjHJAdfz9Cm8lUBNaBck4LafW5u45NxhoikLrCDHbdEySmfNWzh0GN62kROyxprv_9u7Y6Ho4Lg-KxsZL2A' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
@@ -3162,8 +3162,8 @@ Content-Length: 364
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /bookmark/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNjQsImV4cCI6MTY3MDA3Njg2NH0.056Rv8fgy6mv3Il-WKLVDWa387uQ1ReQ80hPe6oRQ7qhC_V7pynAxzZr3U_508PNbFXZ3SYiAcHCUK8R4Hf6Xg
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDY1LCJleHAiOjE2NzAxNjE0NjV9._WJjHxtUH4OMG-9E44oAxbVEThYJzW63mK554LlvULJwZo3nRW1AXWPHC6mAtCToy6mpshP1eC5ppWk3a40fcQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MjUsImV4cCI6MTY3MDEzNDcyNX0.C4e5hK3py5bFRhjfoJon1sMc2XJBXWMlXrL1CMu7gL7AWZQJpEpghZmDkfKLME4KGESH7nFC2OYweAMG-WU53w
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTI1LCJleHAiOjE2NzAyMTkzMjV9.3LImjHJAdfz9Cm8lUBNaBck4LafW5u45NxhoikLrCDHbdEySmfNWzh0GN62kROyxprv_9u7Y6Ho4Lg-KxsZL2A
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -3237,8 +3237,8 @@ true</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/bookmark/1' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNjYsImV4cCI6MTY3MDA3Njg2Nn0.R9PWpNZBazi4kVmjYWLF73prRd6akRVE55WyPpXVeZAuzGnROpQsMLIUV8LW1PAnVZqLEXYxlJ9Kc7GTcRS61g' \
-    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDY2LCJleHAiOjE2NzAxNjE0NjZ9.Tsp42lwn3JDV88e9z557VlaURgZ6DAp7V2Fg2coDFbFZNjicKapqQyV28G8DXTj72ShPk2rr9FHb7XK_VxND4Q' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MjYsImV4cCI6MTY3MDEzNDcyNn0.SOveMy4AMCt0cJeqaWmOglr-8ioA9M5lbL_qv82AF2oh_21fZ6VogSEu93T47lems_Ay2-5lZNq3Vutw7EddGg' \
+    -H 'RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTI2LCJleHAiOjE2NzAyMTkzMjZ9.6TnWdzLgAmHHrPC4KIbJToXP4EwMfJ8VXEiW_k_DlteBCK9ls3SCtlD0EQ4HsCaVvatovMJfmhQaKjqY47m2uA' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
@@ -3247,8 +3247,8 @@ true</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /bookmark/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAwNzUwNjYsImV4cCI6MTY3MDA3Njg2Nn0.R9PWpNZBazi4kVmjYWLF73prRd6akRVE55WyPpXVeZAuzGnROpQsMLIUV8LW1PAnVZqLEXYxlJ9Kc7GTcRS61g
-RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMDc1MDY2LCJleHAiOjE2NzAxNjE0NjZ9.Tsp42lwn3JDV88e9z557VlaURgZ6DAp7V2Fg2coDFbFZNjicKapqQyV28G8DXTj72ShPk2rr9FHb7XK_VxND4Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiaGpkQGdtYWlsLmNvbSIsInN1YiI6ImhqZEBnbWFpbC5jb20iLCJpYXQiOjE2NzAxMzI5MjYsImV4cCI6MTY3MDEzNDcyNn0.SOveMy4AMCt0cJeqaWmOglr-8ioA9M5lbL_qv82AF2oh_21fZ6VogSEu93T47lems_Ay2-5lZNq3Vutw7EddGg
+RefreshToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoamRAZ21haWwuY29tIiwiaWF0IjoxNjcwMTMyOTI2LCJleHAiOjE2NzAyMTkzMjZ9.6TnWdzLgAmHHrPC4KIbJToXP4EwMfJ8VXEiW_k_DlteBCK9ls3SCtlD0EQ4HsCaVvatovMJfmhQaKjqY47m2uA
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
