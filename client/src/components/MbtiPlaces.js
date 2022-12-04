@@ -43,6 +43,17 @@ function MbtiPlaces() {
     }
   };
 
+  const isMbti = mbti => {
+    if (mbti === 'NONE') {
+      return <MbtiTitle>지금 가장 핫한 장소🔥</MbtiTitle>;
+    }
+    return (
+      <MbtiTitle>
+        <span>{userMbti}</span>가 방문한 장소
+      </MbtiTitle>
+    );
+  };
+
   useEffect(() => {
     setMbtiPlaces();
   }, [isLogIn]);
@@ -51,9 +62,10 @@ function MbtiPlaces() {
     <MbtiContentsContainer>
       {mbtiPlaceData.length > 0 && (
         <>
-          <MbtiTitle>
+          {isMbti(userMbti)}
+          {/* <MbtiTitle>
             <span>{userMbti}</span>가 방문한 장소
-          </MbtiTitle>
+          </MbtiTitle> */}
           {/* <MbtiTitle>
             <span>Mbti</span>가 방문한 장소
           </MbtiTitle> */}
