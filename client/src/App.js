@@ -59,10 +59,8 @@ function App() {
           },
         },
       );
-      localStorage.setItem(
-        'ACCESS',
-        `Bearer ${response.headers.authorization}`,
-      );
+      console.log(response.headers.authorization);
+      localStorage.setItem('ACCESS', `${response.headers.authorization}`);
     }
   };
 
