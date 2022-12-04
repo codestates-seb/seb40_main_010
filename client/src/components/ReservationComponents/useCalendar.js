@@ -18,8 +18,6 @@ const useCalendar = ({ startDate, setStartDate, setEndDate, slots }) => {
 
   const maxEndDate = new Date(startDate).setHours(23);
 
-  console.log(slots);
-
   const handleStartDate = time => {
     const clickedTime = new Date(time);
     const now = new Date();
