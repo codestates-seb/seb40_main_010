@@ -73,7 +73,7 @@ public class JwtTokenUtils {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA).getTime())
+                .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact();
@@ -94,7 +94,7 @@ public class JwtTokenUtils {
 
         return Jwts.builder()
                 .setSubject(subject)
-                .setIssuedAt(Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA).getTime())
+                .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact();

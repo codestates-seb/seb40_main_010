@@ -82,6 +82,7 @@ public class ReserveGetTest extends ReserveControllerTest{
                                         fieldWithPath("data[].capacity").type(JsonFieldType.NUMBER).description("장소 평점"),
                                         fieldWithPath("data[].totalCharge").type(JsonFieldType.NUMBER).description("장소 시간당 가격"),
                                         fieldWithPath("data[].address").type(JsonFieldType.STRING).description("장소 주소"),
+                                        fieldWithPath("data[].status").type(JsonFieldType.STRING).description("예약 상태"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),

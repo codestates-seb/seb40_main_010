@@ -63,6 +63,7 @@ public class ReserveDto {
         private String address;
         private String image;
         private int capacity;
+        private String status;
         private LocalDateTime startTime;
         private LocalDateTime endTime;
         private Long totalCharge;
@@ -75,6 +76,7 @@ public class ReserveDto {
             this.title = place.getTitle();
             this.address = place.getAddress();
             this.image = place.getPlaceImages().get(0).getFilePath();
+            this.status = reserve.getStatus().getStatus();
             this.capacity = reserve.getCapacity();
             this.startTime = reserve.getStartTime();
             this.endTime = reserve.getEndTime();

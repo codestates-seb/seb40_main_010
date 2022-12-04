@@ -40,20 +40,20 @@ public class ReviewService {
         Long memberId = redisUtils.getId(refreshToken);
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
-//        if (findPlace.getMemberId().equals(memberId)) {
-//            throw new BusinessLogicException(ExceptionCode.HOST_CANNOT_REVIEW);
-//        }
+        if (findPlace.getMemberId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.HOST_CANNOT_REVIEW);
+        }
 
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
 
         // 예약 상태가 결제 진행중이 아니라면 리뷰 달지 못함
-        if (!findReserve.getStatus().equals(PAY_IN_PROGRESS)) {
-            throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
-        }
-
-//        if (!findReserve.getStatus().equals(PAY_SUCCESS)) {
+//        if (!findReserve.getStatus().equals(PAY_IN_PROGRESS)) {
 //            throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
 //        }
+
+        if (!findReserve.getStatus().equals(Reserve.ReserveStatus.PAY_SUCCESS)) {
+            throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
+        }
 
         Review review = Review.builder()
                 .score(post.getScore())
@@ -151,9 +151,15 @@ public class ReviewService {
         Long reviewer = reviewDbService.countByPlaceId(placeId);
         String str = String.format("%.2f", totalScore / reviewer);
         double score = Double.parseDouble(str);
-        findPlace.setTotalScore(totalScore);
-        findPlace.setScore(score);
-        placeDbService.savePlace(findPlace);
+        if(Double.isNaN(score)) {
+            findPlace.setTotalScore(totalScore);
+            findPlace.setScore(0);
+            placeDbService.savePlace(findPlace);
+        } else {
+            findPlace.setTotalScore(totalScore);
+            findPlace.setScore(score);
+            placeDbService.savePlace(findPlace);
+        }
     }
 }
 

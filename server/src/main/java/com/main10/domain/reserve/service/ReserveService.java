@@ -50,7 +50,7 @@ public class ReserveService {
      * @author LimJaeminZ
      */
     @Transactional
-    public void createReserve(ReserveDto.Post post, Long placeId, String refreshToken) {
+    public Long createReserve(ReserveDto.Post post, Long placeId, String refreshToken) {
         Long memberId = redisUtils.getId(refreshToken);
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
@@ -63,13 +63,15 @@ public class ReserveService {
                 .endTime(post.getEndTime())
                 .placeId(findPlace.getId())
                 .memberId(memberId)
-                .totalCharge((long)(post.getEndTime().getHour() - post.getStartTime().getHour()) * findPlace.getCharge())
+                .totalCharge((long) Math.abs(post.getEndTime().getHour() - post.getStartTime().getHour()) * findPlace.getCharge())
                 .build();
 
         // 최대 수용인원 초과 예약 금지
         if (reserve.getCapacity() > findPlace.getMaxCapacity()) {
             throw new BusinessLogicException(ExceptionCode.RESERVATION_MAX_CAPACITY_OVER);
-        } else reserveDbService.saveReserve(reserve);
+        } else reserve = reserveDbService.saveReserve(reserve);
+
+        return reserve.getId();
     }
 
 

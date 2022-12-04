@@ -39,8 +39,8 @@ public class ReserveController {
     public ResponseEntity postReserve(@PathVariable("place-id") Long placeId,
                                       @RequestBody @Valid ReserveDto.Post post,
                                       @RequestHeader(REFRESH_TOKEN) String refreshToken) {
-        reserveService.createReserve(post, placeId, refreshToken);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Long reserveId = reserveService.createReserve(post, placeId, refreshToken);
+        return new ResponseEntity<>(reserveId, HttpStatus.CREATED);
     }
 
 
@@ -57,13 +57,10 @@ public class ReserveController {
     public ResponseEntity<Message> orderAction(@PathVariable(name = "reserve-id") Long reserveId,
                                                @RequestHeader(REFRESH_TOKEN) String refreshToken,
                                                HttpServletRequest req) {
-
         String requestUrl = req.getRequestURL()
                 .toString()
                 .replace(req.getRequestURI(), "");
-
         Message message = reserveService.getKaKaoPayUrl(reserveId, refreshToken, requestUrl);
-
         if (message.getData() == null) getFailedPayMessage();
 
         return ResponseEntity
@@ -88,10 +85,7 @@ public class ReserveController {
 
         if (message.getData() == null) getFailedPayMessage();
 
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(message);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -84,7 +84,7 @@ public class ReviewDto {
         private String comment;
         private LocalDateTime createdAt;
         private Long placeId;
-        private String filePath;
+        private String image;
 
         @Builder
         @QueryProjection
@@ -95,7 +95,7 @@ public class ReviewDto {
             this.comment = review.getComment();
             this.createdAt = review.getCreatedAt();
             this.placeId = place.getId();
-            this.filePath = place.getPlaceImages().get(0).getFilePath();
+            this.image = place.getPlaceImages().get(0).getFilePath();
         }
     }
 }

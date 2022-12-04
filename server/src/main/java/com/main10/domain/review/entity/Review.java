@@ -27,7 +27,6 @@ public class Review {
 
     private Long placeId;
 
-    @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
@@ -37,14 +36,13 @@ public class Review {
                   Double score,
                   String comment,
                   Long memberId,
-                  Long placeId,
-                  LocalDateTime createdAt) {
+                  Long placeId) {
         this.id = id;
         this.score = score;
         this.comment = comment;
         this.memberId = memberId;
         this.placeId = placeId;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
     }
 
     public void editReview(Double score, String comment) {

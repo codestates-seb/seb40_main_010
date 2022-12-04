@@ -14,11 +14,11 @@ hooks:
     - location: initialize.sh
       timeout: 3000
       runas: root
-  ApplicationStart:
-    - location: server_start.sh
-      timeout: 3000
-      runas: root
   ApplicationStop:
     - location: server_stop.sh
+      timeout: 3000
+      runas: root
+  ApplicationStart:
+    - location: server_start.sh
       timeout: 3000
       runas: root

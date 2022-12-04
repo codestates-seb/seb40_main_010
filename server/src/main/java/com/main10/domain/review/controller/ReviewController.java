@@ -30,7 +30,7 @@ public class ReviewController {
      * @return ResponseEntity
      * @author Quartz614
      */
-    @PostMapping("/{place-id}/reserve/{reserve-id}")
+    @PostMapping("/place/{place-id}/reserve/{reserve-id}")
     public ResponseEntity postReview(@PathVariable("place-id") Long placeId,
                                      @PathVariable("reserve-id") Long reserveId,
                                      @RequestBody @Valid ReviewDto.Post post,
@@ -78,7 +78,7 @@ public class ReviewController {
      * @return ResponseEntity
      * @author Quartz614
      */
-    @GetMapping("/{place-id}")
+    @GetMapping("/place/{place-id}")
     public ResponseEntity getReview(@PathVariable("place-id") Long placeId, Pageable pageable) {
         Page<ReviewDto.Response> getReview = reviewService.getPlaceReviews(placeId, pageable);
         List<ReviewDto.Response> reviews = getReview.getContent();

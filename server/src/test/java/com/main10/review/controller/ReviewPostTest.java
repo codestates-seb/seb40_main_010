@@ -49,7 +49,7 @@ public class ReviewPostTest extends ReviewControllerTest {
 
         ResultActions actions =
                 mockMvc.perform(
-                        post("/review/{place-id}/reserve/{reserve-id}", placeId, reserveId)
+                        post("/review/place/{place-id}/reserve/{reserve-id}", placeId, reserveId)
                                 .header(AUTHORIZATION, "Bearer " + accessToken)
                                 .header(REFRESH, refreshToken)
                                 .accept(MediaType.APPLICATION_JSON)

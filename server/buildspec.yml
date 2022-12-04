@@ -12,7 +12,7 @@ phases:
       - ./gradlew build
   post_build:
     commands:
-      - echo $(basename ./server/build/libs/*.jar)
+      - echo $(basename ./server/build/libs/*.jar --spring.profiles.active=server)
 artifacts:
   files:
     - server/build/libs/*.jar
