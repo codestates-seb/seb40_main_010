@@ -211,8 +211,6 @@ function MyPageCategoryList({ listData, type }) {
     );
   };
 
-  console.log(listData);
-
   return (
     <CategoryItemList>
       <CategoryContainer>
