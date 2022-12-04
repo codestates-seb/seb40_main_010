@@ -402,12 +402,15 @@ public class PlaceService {
                 );
             } else { // 전달된 파일 한장 이상
                 List<String> dbOriginFileNameList = new ArrayList<>();
-
+                List<String> multipartFileOriginNameList = new ArrayList<>();
+                multipartFileList.forEach(
+                        multipartFile -> multipartFileOriginNameList.add(multipartFile.getOriginalFilename())
+                );
                 for (PlaceImage placeImage : dbPlaceImageList) {
-                    PlaceImageDto dbPlaceImageDto = placeImageService.findByFiledId(placeImage.getId());
-                    String dbOriginFileName = dbPlaceImageDto.getOriginFileName();
 
-                    if (!multipartFileList.contains(dbOriginFileName)) {
+                    String dbOriginFileName = placeImage.getOriginFileName();
+
+                    if (!multipartFileOriginNameList.contains(dbOriginFileName)) {
                         if(dir.equals("Local")) {
                             placeImageService.delete(placeImage.getId());
                         }
