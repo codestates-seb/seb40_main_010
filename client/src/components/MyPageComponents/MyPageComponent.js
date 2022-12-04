@@ -296,7 +296,7 @@ const MyPageCategoryItemTitle = styled.div`
   font-weight: 500;
 
   @media (max-width: 840px) {
-    width: 400px;
+    width: 20rem;
   }
 `;
 
@@ -304,6 +304,10 @@ const BolderLine = styled.div`
   margin-top: 0.5rem;
   width: 680px;
   border-bottom: 1px solid #aaa;
+
+  @media (max-width: 840px) {
+    width: 20rem;
+  }
 `;
 
 const MyPageCategoryItemList = styled.div`

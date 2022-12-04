@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 
 function Review({ reviewData }) {
   const handleDate = createdAt => {
-    return dayjs(createdAt).format('YYYYMMDD');
+    return dayjs(createdAt).format('YYYY.MM.DD');
   };
 
   return (
