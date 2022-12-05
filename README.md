@@ -62,9 +62,31 @@ yujung Choi</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_
 ## 📌 기술 스택
 ![스크린샷 2022-12-04 오후 9 06 54](https://user-images.githubusercontent.com/96826217/205555150-98bae0d9-2f4d-4a1d-a625-812505369e1a.png)
 
-## BACKEND <br>
-<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/Oauth2-EB5424?style=for-the-badge&logo=&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/QueryDsl-0769AD?style=for-the-badge&logo=QueryDsl&logoColor=white"> <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"> <img src="https://img.shields.io/badge/AWS-CC0200?style=for-the-badge&logo=AmazonAWS&logoColor=white"> <img src="https://img.shields.io/badge/AWS-CC0200?style=for-the-badge&logo=AmazonS3logoColor=white"> <img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white">
+## BACK-END <br>
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"></a>
+<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"></a>
+<img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"></a>
+<img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"></a>
+<img src="https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"></a>
+<img src="https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"></a>
+<img src="https://img.shields.io/badge/Spring%20Cloud-6DB33F?style=for-the-badge&logo=spring&logoColor=white"></a>
+<img src="https://img.shields.io/badge/Spring%20rest%20docs-6DB33F?style=for-the-badge&logo=spring&logoColor=white"></a>
+<img src="https://img.shields.io/badge/Oauth2-EB5424?style=for-the-badge&logo=&logoColor=white"></a>
+<img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/QueryDsl-0769AD?style=for-the-badge&logo=QueryDsl&logoColor=white"></a>
+<img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"></a>
+<img src="https://img.shields.io/badge/AWS-CC0200?style=for-the-badge&logo=AmazonAWS&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/AmazonEC2-232F3E?style=for-the-badge&logo=AmazonEC2&logoColor=white"></a>
+<img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/CodeDeploy-232F3E?style=for-the-badge&logo=amazon%20AWS&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=AmazonRDS&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=JUnit5&logoColor=white"></a>
 
+
+## FRONT-END
+<img src = "https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-00A7E2?style=for-the-badge&logo=css3&logoColor=white"/> <img src = "https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src = "https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src = "https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"> <img src = "https://img.shields.io/badge/Axios-181717?style=for-the-badge&logo=Axios&logoColor=white"> <img src="https://img.shields.io/badge/AmazonS3-339933?style=for-the-badge&logo=AmazonS3&logoColor=white"> <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=ESLint&logoColor=white"> <img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=black"> <img src="https://img.shields.io/badge/Recoil-000000?style=for-the-badge&logo=&logoColor=white"> <img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white">
 ## 커밋 규칙
 
 - ✨ feat : 새로운 기능 추가, 기존의 기능을 요구 사항에 맞추어 수정
