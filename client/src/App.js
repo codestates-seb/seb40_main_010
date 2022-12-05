@@ -59,7 +59,6 @@ function App() {
           },
         },
       );
-      console.log(response.headers.authorization);
       localStorage.setItem('ACCESS', `${response.headers.authorization}`);
     }
   };
