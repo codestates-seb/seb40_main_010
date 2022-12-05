@@ -157,7 +157,7 @@ public class ReviewGetTest extends ReviewControllerTest {
                                         fieldWithPath("data[].comment").type(JsonFieldType.STRING).description("댓글"),
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("생성일"),
                                         fieldWithPath("data[].placeId").type(JsonFieldType.NUMBER).description("장소 식별자"),
-                                        fieldWithPath("data[].filePath").type(JsonFieldType.STRING).description("대표 이미지"),
+                                        fieldWithPath("data[].image").type(JsonFieldType.STRING).description("대표 이미지"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지"),

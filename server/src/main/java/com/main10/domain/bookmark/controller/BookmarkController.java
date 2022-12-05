@@ -52,6 +52,6 @@ public class BookmarkController {
     public ResponseEntity createBookmark(@PathVariable("place-id") Long placeId,
                                          @RequestHeader(REFRESH_TOKEN) String refreshToken) {
         boolean bookmark = bookmarkService.createBookmark(placeId, refreshToken);
-        return ResponseEntity.ok(bookmark);
+        return new ResponseEntity(bookmark, HttpStatus.OK);
     }
 }
