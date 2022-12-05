@@ -43,9 +43,7 @@ public class ReservePatchTest extends ReserveControllerTest {
                 .build();
 
         String content = gson.toJson(patch);
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(reserveService).updateReserve(Mockito.any(ReserveDto.Patch.class), Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(reserveService).updateReserve(Mockito.any(ReserveDto.Patch.class), Mockito.anyLong(), Mockito.anyLong());
 
         ResultActions actions =
                 mockMvc.perform(

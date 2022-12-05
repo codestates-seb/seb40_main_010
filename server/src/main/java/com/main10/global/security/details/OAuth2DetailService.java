@@ -53,10 +53,9 @@ public class OAuth2DetailService implements OAuth2UserService<OAuth2UserRequest,
 
         String email = oAuth2Attribute.getEmail();
         String nickname = oAuth2Attribute.getName();
-        Member OAuthMember = saveMemberIfNotExist(email, nickname, provider);
-        List<GrantedAuthority> roles = authorityUtils.createAuthorities(OAuthMember.getRoles());
+        Member oAuthMember = saveMemberIfNotExist(email, nickname, provider);
 
-        return new DefaultOAuth2User(roles, oAuth2Attribute.getAttributes(), oAuth2Attribute.getAttributeKey());
+        return new MemberDetails(oAuthMember, oAuth2Attribute.getAttributes());
     }
 
     /**

@@ -60,9 +60,7 @@ public class PlaceGetTest extends PlaceControllerTest{
 
         PlaceDto.DetailResponse responseDto =
                 new PlaceDto.DetailResponse(place, placeImages, categories, member, isBookmark, reserves);
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        given(placeService.searchPlace(Mockito.anyLong(), Mockito.anyString()))
+        given(placeService.searchPlace(Mockito.anyLong(), Mockito.anyLong()))
                 .willReturn(responseDto);
 
         ResultActions actions =
@@ -167,9 +165,7 @@ public class PlaceGetTest extends PlaceControllerTest{
 
         List<PlaceDto.Response> placeList = new ArrayList<>();
         placeList.add(new PlaceDto.Response(place));
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        given(placeDbService.getPlaceMypage(Mockito.anyString(), Mockito.any(Pageable.class)))
+        given(placeDbService.getPlaceMypage(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(placeList));
 
         ResultActions actions =

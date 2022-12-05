@@ -28,9 +28,7 @@ public class ReviewDeleteTest extends ReviewControllerTest {
     void deleteReview() throws Exception {
 
         Long reviewId = 1L;
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyLong());
 
         ResultActions actions =
                 mockMvc.perform(

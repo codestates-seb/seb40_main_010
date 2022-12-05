@@ -24,9 +24,7 @@ public class PlaceDeleteTest extends PlaceControllerTest{
     void deleteHosting() throws Exception{
 
         Long placeId = 1L;
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(placeService).deleteHosting(Mockito.anyString(), Mockito.anyLong());
+        doNothing().when(placeService).deleteHosting(Mockito.anyLong(), Mockito.anyLong());
 
         ResultActions actions =
                 mockMvc.perform(

@@ -20,11 +20,13 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * OAuth2 로그인 성공 핸들러 클래스
@@ -71,7 +73,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String accessToken = jwtTokenUtils.generateAccessToken(member);
         String refreshToken = jwtTokenUtils.generateRefreshToken(member);
 
-        redisUtils.setData(refreshToken, member.getId(), jwtTokenUtils.getRefreshTokenExpirationMinutes());
+        if (!Objects.isNull(redisUtils.getData(member.getEmail(), provider)))
+            redisUtils.deleteData(member.getEmail(), provider);
+
+        redisUtils.setData(email, provider ,refreshToken, jwtTokenUtils.getRefreshTokenExpirationMinutes());
         String responseUrl = createUri(accessToken, refreshToken, provider).toString();
 
         redirectStrategy.sendRedirect(req, res, responseUrl);
@@ -97,8 +102,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
-                .port(8080)
+                .host("daeyeo4u.com")
                 .path("/oauth/" + provider)
                 .queryParams(queryParams)
                 .build()

@@ -2,22 +2,19 @@ package com.main10.domain.place.controller;
 
 import com.main10.domain.place.dto.*;
 import com.main10.domain.dto.MultiResponseDto;
-
 import com.main10.domain.place.service.PlaceDbService;
 import com.main10.domain.place.service.PlaceService;
+import com.main10.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
 import java.util.List;
-
-import static com.main10.domain.member.utils.AuthConstant.REFRESH_TOKEN;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,37 +27,40 @@ public class PlaceController {
      * 공간 생성 컨트롤러
      *
      * @param placePostDto 공간 등록 dto
-     * @param refreshToken 리프래시 토큰
+     * @param authentication 사용자 인증 정보
      * @param files 이미지 파일
-     * @throws Exception
+     * @throws Exception 예외
      * @author LimJaeminZ
      */
     @PostMapping(value = "/place/post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createPlace(@RequestPart(value = "key") @Valid PlaceDto.Create placePostDto,
-                         @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
+    public ResponseEntity<?> createPlace(@RequestPart(value = "key") @Valid PlaceDto.Create placePostDto,
+                         Authentication authentication,
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
-
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         /** 로컬 환경 */
-//        placeService.createPlace(placePostDto,  refreshToken, files);
+        placeService.createPlace(placePostDto,  token.getId(), files);
 
         /** S3 환경 */
-        placeService.createPlaceS3(placePostDto, refreshToken, files);
+//        placeService.createPlaceS3(placePostDto, token.getId(), files);
+        return ResponseEntity.ok().build();
     }
-
 
     /**
      * 공간 상세 조회 컨트롤러
      *
      * @param placeId 공간 식별자
-     * @param refreshToken 리프래시 토큰
+     * @param authentication 사용자 인증 정보
      * @return ResponseEntity
      * @author LimJaeminZ
      */
     @GetMapping("/place/{place-id}")
-    public PlaceDto.DetailResponse getPlace(@PathVariable("place-id") Long placeId,
-                                     @RequestHeader(value = REFRESH_TOKEN, required = false) String refreshToken) {
-
-        return placeService.searchPlace(placeId, refreshToken);
+    public ResponseEntity<PlaceDto.DetailResponse> getPlace(@PathVariable("place-id") Long placeId,
+                                     Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Long memberId;
+        if (token == null) memberId = null;
+        else memberId = token.getId();
+        return ResponseEntity.ok(placeService.searchPlace(placeId, memberId));
     }
 
     /**
@@ -68,21 +68,24 @@ public class PlaceController {
      *
      * @param placeId 공간 식별자
      * @param placePatchDto 공간 수정 dto
-     * @param refreshToken 리프래시 토큰
+     * @param authentication 사용자 인증 정보
      * @param files 이미지 파일
-     * @throws Exception
+     * @throws Exception 예외
      * @author LimJaeminZ
      */
     @PostMapping(value = "/place/{place-id}/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void patchPlace(@PathVariable("place-id") Long placeId,
+    public ResponseEntity<?> patchPlace(@PathVariable("place-id") Long placeId,
                            @RequestPart(value = "key") @Valid PlaceDto.Update placePatchDto,
-                           @RequestHeader(name = REFRESH_TOKEN) String refreshToken,
+                           Authentication authentication,
                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         /** 로컬 환경 */
-//        placeService.updatePlace(placeId, placePatchDto, refreshToken, files);
+        placeService.updatePlace(placeId, placePatchDto, token.getId(), files);
 
         /** S3 환경 */
-        placeService.updatePlaceS3(placeId, placePatchDto, refreshToken, files);
+//        placeService.updatePlaceS3(placeId, placePatchDto, token.getId(), files);
+
+        return ResponseEntity.ok().build();
     }
 
 
@@ -94,22 +97,23 @@ public class PlaceController {
      * @author LeeGoh
      */
     @GetMapping("/home")
-    public ResponseEntity getPlacesPage(Pageable pageable) {
+    public ResponseEntity<MultiResponseDto<?>> getPlacesPage(Pageable pageable) {
         Page<PlaceDto.Response> pagePlace = placeDbService.getPlacesPage(pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
-        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+        return ResponseEntity.ok(new MultiResponseDto<>(place, pagePlace));
     }
 
     /**
      * 공간 전체 조회 테스트(이미지 limit)
-     * @param pageable
-     * @return
+     * @param pageable 페이지 정보
+     * @return ResponseEntity
+     * @author LimJaeMinZ
      */
     @GetMapping("/home/test")
-    public ResponseEntity getPlacesPageTest(Pageable pageable) {
+    public ResponseEntity<MultiResponseDto<?>> getPlacesPageTest(Pageable pageable) {
         Page<PlaceDto.ResponseTest> pagePlace = placeDbService.getPlacesPageTest(pageable);
         List<PlaceDto.ResponseTest> place = pagePlace.getContent();
-        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+        return ResponseEntity.ok(new MultiResponseDto<>(place, pagePlace));
     }
 
     /**
@@ -138,27 +142,26 @@ public class PlaceController {
      * @author LeeGoh
      */
     @GetMapping("category/{category-id}")
-    public ResponseEntity getCategoryPage(@PathVariable("category-id") Long categoryId,
+    public ResponseEntity<MultiResponseDto<?>> getCategoryPage(@PathVariable("category-id") Long categoryId,
                                           Pageable pageable) {
-
         Page<PlaceCategoryDto.Response> pagePlace = placeDbService.getCategoryPage(categoryId, pageable);
         List<PlaceCategoryDto.Response> place = pagePlace.getContent();
-        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+        return ResponseEntity.ok(new MultiResponseDto<>(place, pagePlace));
     }
 
     /**
      * 카테고리별 공간 조회 테스트(이미지 limit)
-     * @param categoryId
-     * @param pageable
-     * @return
+     * @param categoryId 카테고리 식별자
+     * @param pageable 페이지 정보
+     * @return ResponseEntity
+     * @author LimJaeMinZ
      */
     @GetMapping("category/{category-id}/test")
-    public ResponseEntity getCategoryPageTest(@PathVariable("category-id") Long categoryId,
+    public ResponseEntity<MultiResponseDto<?>> getCategoryPageTest(@PathVariable("category-id") Long categoryId,
                                           Pageable pageable) {
-
         Page<PlaceCategoryDto.ResponseTest> pagePlace = placeDbService.getCategoryPageTest(categoryId, pageable);
         List<PlaceCategoryDto.ResponseTest> place = pagePlace.getContent();
-        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+        return ResponseEntity.ok(new MultiResponseDto<>(place, pagePlace));
     }
 
     /**
@@ -187,12 +190,12 @@ public class PlaceController {
      * @author LeeGoh
      */
     @PostMapping("/search/detail")
-    public ResponseEntity searchDetail(@RequestBody @Valid PlaceDto.SearchDetail searchDetail,
+    public ResponseEntity<MultiResponseDto<?>> searchDetail(@RequestBody @Valid PlaceDto.SearchDetail searchDetail,
                                        Pageable pageable) {
 
         Page<PlaceDto.Response> pagePlace = placeDbService.searchDetail(searchDetail, pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
-        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+        return ResponseEntity.ok(new MultiResponseDto<>(place, pagePlace));
     }
 
     /**
@@ -204,11 +207,11 @@ public class PlaceController {
      * @author LeeGoh
      */
     @GetMapping("/search/{title:.+}")
-    public ResponseEntity searchTitleAll(@PathVariable("title") String title,
+    public ResponseEntity<MultiResponseDto<?>> searchTitleAll(@PathVariable("title") String title,
                                          Pageable pageable) {
         Page<PlaceDto.Response> pagePlace = placeDbService.searchTitleAll(title, pageable);
         List<PlaceDto.Response> place = pagePlace.getContent();
-        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+        return ResponseEntity.ok(new MultiResponseDto<>(place, pagePlace));
     }
 
     /**
@@ -221,41 +224,44 @@ public class PlaceController {
      * @author LeeGoh
      */
     @GetMapping("/category/{category-id}/search/{title:.+}")
-    public ResponseEntity searchTitleCategory(@PathVariable("category-id") Long categoryId,
+    public ResponseEntity<MultiResponseDto<?>> searchTitleCategory(@PathVariable("category-id") Long categoryId,
                                               @PathVariable("title") String title,
                                               Pageable pageable) {
         Page<PlaceCategoryDto.Response> pagePlace = placeDbService.searchTitleCategory(categoryId, title, pageable);
         List<PlaceCategoryDto.Response> place = pagePlace.getContent();
-        return new ResponseEntity<>(new MultiResponseDto<>(place, pagePlace), HttpStatus.OK);
+        return ResponseEntity.ok(new MultiResponseDto<>(place, pagePlace));
     }
 
     /**
      * 마이페이지 호스팅 조회 컨트롤
      *
      * @param pageable 페이지 정보
+     * @param authentication 사용자 인증 정보
      * @return ResponseEntity
      * @author Quartz614
      */
     @GetMapping("/place")
-    public ResponseEntity getPlaceMypage(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
+    public ResponseEntity<MultiResponseDto<?>> getPlaceMypage(Authentication authentication,
                                          Pageable pageable) {
-        Page<PlaceDto.Response> hosting = placeDbService.getPlaceMypage(refreshToken, pageable);
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Page<PlaceDto.Response> hosting = placeDbService.getPlaceMypage(token.getId(), pageable);
         List<PlaceDto.Response> place = hosting.getContent();
-        return new ResponseEntity(new MultiResponseDto<>(place, hosting), HttpStatus.OK);
+        return ResponseEntity.ok(new MultiResponseDto<>(place, hosting));
     }
 
     /**
      * 호스팅 삭제 컨트롤러
      *
-     * @param refreshToken 리프래시 토큰
+     * @param authentication 사용자 인증 정보
      * @param placeId 공간 식별자
      * @return ResponseEntity
      * @author Quartz614
      */
     @DeleteMapping("/place/{place-id}")
-    public ResponseEntity deleteHosting(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
+    public ResponseEntity<?> deleteHosting(Authentication authentication,
                                         @PathVariable("place-id") Long placeId) {
-        placeService.deleteHosting(refreshToken, placeId);
-        return new ResponseEntity(HttpStatus.OK);
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        placeService.deleteHosting(token.getId(), placeId);
+        return ResponseEntity.ok().build();
     }
 }

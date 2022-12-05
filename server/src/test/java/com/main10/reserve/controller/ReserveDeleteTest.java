@@ -23,9 +23,7 @@ public class ReserveDeleteTest extends ReserveControllerTest{
     @Test
     @DisplayName("DELETE 예약 삭제")
     void deleteReserve() throws Exception {
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(reserveService).deleteReserve(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(reserveService).deleteReserve(Mockito.anyLong(), Mockito.anyLong());
 
         ResultActions actions =
                 mockMvc.perform(

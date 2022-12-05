@@ -27,8 +27,7 @@ public class GetMemberTest extends MemberControllerTest {
     @Test
     @DisplayName("회원 정보 조회 테스트")
     public void getMember() throws Exception {
-        given(redisUtils.getId(refreshToken)).willReturn(1L);
-        given(memberService.getMember(Mockito.anyString())).willReturn(info);
+        given(memberService.getMember(Mockito.anyLong())).willReturn(info);
 
         ResultActions actions = mockMvc.perform(get("/member")
                 .header(AUTHORIZATION, "Bearer " + accessToken)

@@ -13,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
-
+import java.util.Objects;
 import static com.main10.global.security.utils.AuthConstants.AUTHORIZATION;
 import static com.main10.global.security.utils.AuthConstants.REFRESH_TOKEN;
 
@@ -37,8 +35,11 @@ public class AuthService {
      */
     public TokenDto.Response loginMember(LoginDto login) {
         Member findMember = memberDbService.ifExistMemberByEmail(login.getEmail());
+        String provider = "common";
 
         memberDbService.isValid(findMember, login.getPassword());
+        if (!Objects.isNull(redisUtils.getData(findMember.getEmail(), provider)))
+            redisUtils.deleteData(findMember.getEmail(), findMember.getAccountStatus().getProvider());
 
         String generateAccessToken = jwtTokenUtils.generateAccessToken(findMember);
         String generateRefreshToken = jwtTokenUtils.generateRefreshToken(findMember);
@@ -47,7 +48,7 @@ public class AuthService {
         headers.add(AUTHORIZATION, generateAccessToken);
         headers.add(REFRESH_TOKEN, generateRefreshToken);
 
-        redisUtils.setData(generateRefreshToken, findMember.getId(), jwtTokenUtils.getRefreshTokenExpirationMinutes());
+        redisUtils.setData(findMember.getEmail(), provider, generateRefreshToken, jwtTokenUtils.getRefreshTokenExpirationMinutes());
 
         AuthDto memberRes = AuthDto.builder()
                 .nickname(findMember.getNickname())
@@ -61,16 +62,20 @@ public class AuthService {
                 .build();
     }
 
-
     /**
      * 사용자 로그아웃 비즈니스 로직 메서드
      *
      * @param accessToken  액세스 토큰
      * @param refreshToken 리프레시 토큰
+     * @param memberId 사용자 식별자
      * @author mozzi327
      */
     public void logoutMember(String accessToken,
-                             String refreshToken) {
+                             String refreshToken,
+                             Long memberId) {
+
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+
         // accessToken parsing(Bearer ..)
         accessToken = jwtTokenUtils.parseAccessToken(accessToken);
 
@@ -79,7 +84,7 @@ public class AuthService {
             throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
 
         // refreshToken이 존재하는 경우 리프레시 토큰 삭제
-        redisUtils.deleteData(refreshToken);
+        redisUtils.deleteData(findMember.getEmail(), findMember.getAccountStatus().getProvider());
 
         // 엑세스 토큰 만료 전까지 블랙리스트 처리
         Long expiration = jwtTokenUtils.getExpiration(accessToken);
@@ -92,11 +97,15 @@ public class AuthService {
      *
      * @param accessToken  액세스 토큰
      * @param refreshToken 리프레시 토큰
+     * @param memberId 사용자 식별자
      * @return AuthDto.Response
      * @author mozzi327
      */
     public TokenDto.Response reIssueToken(String accessToken,
-                                         String refreshToken) {
+                                          String refreshToken,
+                                          Long memberId) {
+        Member findMember = memberDbService.ifExistsReturnMember(memberId);
+
         // accessToken parsing(Bearer ..)
         accessToken = jwtTokenUtils.parseAccessToken(accessToken);
 
@@ -105,14 +114,10 @@ public class AuthService {
             throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
 
 //        // refreshToken이 존재하지 않는 경우 예외를 던짐
-//        if (redisUtils.getData(refreshToken) == null)
-//            throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
-
-        // 레디스에 저장된 Id 추출
-        Long memberId = redisUtils.getId(refreshToken);
+        if (redisUtils.getData(findMember.getEmail(), findMember.getAccountStatus().getProvider()) == null)
+            throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
 
         // 액세스 토큰 발행
-        Member findMember = memberDbService.ifExistsReturnMember(memberId);
         String generateToken = jwtTokenUtils.generateAccessToken(findMember);
 
         HttpHeaders headers = new HttpHeaders();

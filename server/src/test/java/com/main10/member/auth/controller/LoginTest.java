@@ -7,7 +7,6 @@ import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 import static com.main10.utils.ApiDocumentUtils.getRequestPreProcessor;
 import static com.main10.utils.ApiDocumentUtils.getResponsePreProcessor;
@@ -28,8 +27,8 @@ public class LoginTest extends AuthControllerTest {
     @DisplayName("회원 로그인 테스트")
     public void loginMember() throws Exception {
 
-        given(redisUtils.getId(refreshToken)).willReturn(1L);
         doNothing().when(memberDbService).saveMember(member);
+        given(redisUtils.getData(Mockito.anyString(), Mockito.anyString())).willReturn(null);
         given(authService.loginMember(Mockito.any(LoginDto.class))).willReturn(resToken);
 
         String content = gson.toJson(login);

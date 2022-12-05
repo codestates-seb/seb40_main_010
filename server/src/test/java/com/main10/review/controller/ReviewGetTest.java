@@ -61,8 +61,6 @@ public class ReviewGetTest extends ReviewControllerTest {
 
         List<ReviewDto.Response> responses = new ArrayList<>();
         responses.add(new ReviewDto.Response(review, member));
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         given(reviewService.getPlaceReviews(Mockito.anyLong(), Mockito.any(Pageable.class))).willReturn(new PageImpl<>(responses));
 
         ResultActions actions =
@@ -126,9 +124,7 @@ public class ReviewGetTest extends ReviewControllerTest {
 
         List<ReviewDto.MyPage> myPages = new ArrayList<>();
         myPages.add(new ReviewDto.MyPage(review, place));
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        given(reviewService.getReviewsMypage(Mockito.anyString(), Mockito.any(Pageable.class))).willReturn(new PageImpl<>(myPages));
+        given(reviewService.getReviewsMypage(Mockito.anyLong(), Mockito.any(Pageable.class))).willReturn(new PageImpl<>(myPages));
 
         ResultActions actions =
                 mockMvc.perform(

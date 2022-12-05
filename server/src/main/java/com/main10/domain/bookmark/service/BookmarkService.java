@@ -7,7 +7,6 @@ import com.main10.domain.place.entity.Place;
 import com.main10.domain.place.service.PlaceDbService;
 import com.main10.global.exception.BusinessLogicException;
 import com.main10.global.exception.ExceptionCode;
-import com.main10.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,18 +22,17 @@ public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
     private final PlaceDbService placeDbService;
-    private final RedisUtils redisUtils;
 
     /**
-     * Pagination 적용
-     * 회원별 북마크 전체 조회 메서드
+     * Pagination 적용<br>
+     * 회원별 북마크 전체 조회 메서드<br>
      *
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @param pageable 페이지 정보
      * @return Page<BookmarkDto.Response>
+     * @author LeeGoh
      */
-    public Page<BookmarkDto.Response> getBookmark(String refreshToken, Pageable pageable) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public Page<BookmarkDto.Response> getBookmark(Long memberId, Pageable pageable) {
         return bookmarkRepository.getBookmark(memberId, pageable);
     }
 
@@ -43,11 +41,11 @@ public class BookmarkService {
      * 북마크가 존재하면 북마크에서 삭제하고, 북마크가 존재하지 않으면 북마크에 추가하는 메서드
      *
      * @param placeId 공간 식별자
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @return boolean
+     * @author LeeGoh
      */
-    public boolean createBookmark(Long placeId, String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public boolean createBookmark(Long placeId, Long memberId) {
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
         if (findPlace.getMemberId().equals(memberId)) {

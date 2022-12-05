@@ -41,10 +41,8 @@ public class ReviewPatchTest extends ReviewControllerTest {
                 .build();
 
         String content = gson.toJson(patch);
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         doNothing().when(reviewService)
-                .updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class), Mockito.anyString());
+                .updateReview(Mockito.anyLong(), Mockito.any(ReviewDto.Patch.class), Mockito.anyLong());
 
         ResultActions actions =
                 mockMvc.perform(

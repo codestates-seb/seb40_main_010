@@ -24,9 +24,7 @@ public class BookmarkDeleteTest extends BookmarkControllerTest{
     void deleteBookmark() throws Exception{
 
         Long placeId = 1L;
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        given(bookmarkService.createBookmark(Mockito.anyLong(), Mockito.anyString())).willReturn(false);
+        given(bookmarkService.createBookmark(Mockito.anyLong(), Mockito.anyLong())).willReturn(false);
 
         ResultActions actions =
                 mockMvc.perform(

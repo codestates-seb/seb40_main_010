@@ -9,7 +9,6 @@ import com.main10.domain.member.dto.MemberDto;
 import com.main10.domain.member.entity.Member;
 import com.main10.domain.member.entity.MemberImage;
 import com.main10.global.security.utils.CustomAuthorityUtils;
-import com.main10.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +24,6 @@ import java.util.List;
 public class MemberService {
 
     private final S3Upload s3Upload;
-    private final RedisUtils redisUtils;
     private final FileHandler fileHandler;
     private final MemberDbService memberDbService;
     private final CustomAuthorityUtils authorityUtils;
@@ -71,12 +69,11 @@ public class MemberService {
 
     /**
      * 회원정보 수정 메서드
-     * @param refreshToken 리프레시 토큰
+     * @param memberId 사용자 식별자
      * @param patch 회원 수정 정보
      * @author Quartz614
      */
-    public void updateMember(String refreshToken, MemberDto.Patch patch) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public void updateMember(Long memberId, MemberDto.Patch patch) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         memberDbService.isExistNickname(patch.getNickname());
         findMember.editMember(patch.getNickname(), patch.getMbti());
@@ -85,12 +82,11 @@ public class MemberService {
 
     /**
      * 회원정보 조회 메서드
-     * @param refreshToken 리프레시 토큰
+     * @param memberId 사용자 식별자
      * @return MemberDto.Info
      * @author Quartz614
      */
-    public MemberDto.Info getMember(String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public MemberDto.Info getMember(Long memberId) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         if (findMember.getMemberImage() != null) {
@@ -109,15 +105,14 @@ public class MemberService {
 
     /**
      * 프로필 사진 업로드 메서드(Deprecated)
-     * @param refreshToken 리프레시 토큰
+     * @param memberId 사용자 식별자
      * @param multipartFiles 사진 정보
      * @author LimJaeminZ
      */
     @Deprecated
     @SneakyThrows
-    public void createProfile(String refreshToken,
+    public void createProfile(Long memberId,
                               List<MultipartFile> multipartFiles) {
-        Long memberId = redisUtils.getId(refreshToken);
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(multipartFiles);
@@ -146,15 +141,14 @@ public class MemberService {
 
     /**
      * 회원 프로필 사진 업로드 S3 메서드
-     * @param refreshToken 리프레시 토큰
+     * @param memberId 사용자 식별자
      * @param file 사진 정보
      * @author LimJaeMinZ
      */
     @SneakyThrows
     @Transactional
-    public void createProfileS3(String refreshToken,
+    public void createProfileS3(Long memberId,
                                 MultipartFile file) {
-        Long memberId = redisUtils.getId(refreshToken);
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
 
         if(!file.isEmpty()) {

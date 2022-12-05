@@ -8,19 +8,15 @@ import com.main10.domain.place.entity.Place;
 import com.main10.domain.place.service.PlaceDbService;
 import com.main10.domain.reserve.entity.Reserve;
 import com.main10.domain.reserve.service.ReserveDbService;
-import com.main10.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.PAY_IN_PROGRESS;
-
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
     private final PlaceDbService placeDbService;
-    private final RedisUtils redisUtils;
     private final ReserveDbService  reserveDbService;
     private final ReviewDbService reviewDbService;
 
@@ -28,16 +24,15 @@ public class ReviewService {
      * 리뷰 등록 로직
      *
      * @param post         등록
-     * @param refreshToken 리프래시 토큰
+     * @param memberId     사용자 식별자
      * @param placeId      장소 식별자
+     * @param reserveId    예약 식별자
      * @author Quartz614
      */
     public void createReview(ReviewDto.Post post,
-                             String refreshToken,
+                             Long memberId,
                              Long placeId,
                              Long reserveId) {
-
-        Long memberId = redisUtils.getId(refreshToken);
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
         if (findPlace.getMemberId().equals(memberId)) {
@@ -46,11 +41,7 @@ public class ReviewService {
 
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
 
-        // 예약 상태가 결제 진행중이 아니라면 리뷰 달지 못함
-//        if (!findReserve.getStatus().equals(PAY_IN_PROGRESS)) {
-//            throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
-//        }
-
+        // 결제 완료 상태가 아니라면 리뷰 달지 못함
         if (!findReserve.getStatus().equals(Reserve.ReserveStatus.PAY_SUCCESS)) {
             throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
         }
@@ -70,11 +61,10 @@ public class ReviewService {
      *
      * @param reviewId     리뷰 식별자
      * @param patch        수정
-     * @param refreshToken 리프래시 토큰
+     * @param memberId     사용자 식별자
      * @author Quartz614
      */
-    public void updateReview(Long reviewId, ReviewDto.Patch patch, String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public void updateReview(Long reviewId, ReviewDto.Patch patch, Long memberId) {
         Review findReview = reviewDbService.ifExistsReturnReview(reviewId);
 
         if (!memberId.equals(findReview.getMemberId()))
@@ -94,8 +84,9 @@ public class ReviewService {
     /**
      * 호스트 페이지에서 리뷰 조회 로직
      *
-     * @param placeId
-     * @return Page<ReviewDto.Response>
+     * @param placeId 사용자 식별자
+     * @param pageable 페이지 정보
+     * @return Page(ReviewDto.Response)
      * @author Quartz614
      */
     public Page<ReviewDto.Response> getPlaceReviews(Long placeId, Pageable pageable) {
@@ -105,12 +96,11 @@ public class ReviewService {
     /**
      * 리뷰 삭제 로직 메서드
      *
-     * @param reviewId     리뷰 식별자
-     * @param refreshToken 리프래시 토큰
+     * @param reviewId 리뷰 식별자
+     * @param memberId 사용자 식별자
      * @author Quartz614
      */
-    public void deleteReview(Long reviewId, String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public void deleteReview(Long reviewId, Long memberId) {
         Review findReview = reviewDbService.ifExistsReturnReview(reviewId);
 
         if (!memberId.equals(findReview.getMemberId()))
@@ -129,20 +119,19 @@ public class ReviewService {
     /**
      * 마이페이지에서 등록한 리뷰 조회 메서드
      *
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @param pageable 페이지 정보
-     * @return Page<ReviewDto.MyPage>
+     * @return Page(ReviewDto.MyPage)
      * @author Quartz614
      */
-    public Page<ReviewDto.MyPage> getReviewsMypage(String refreshToken, Pageable pageable) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public Page<ReviewDto.MyPage> getReviewsMypage(Long memberId, Pageable pageable) {
         return reviewDbService.getReviewsMypage(memberId, pageable);
     }
 
     /**
      * 장소 평점 계산 메서드
      *
-     * @param findPlace 장소
+     * @param findPlace 조회된 장소 정보
      * @param totalScore 등록된 총 평점
      * @param placeId 장소 식별자
      * @author LimJaeminZ

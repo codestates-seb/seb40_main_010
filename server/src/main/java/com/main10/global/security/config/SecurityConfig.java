@@ -77,7 +77,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 /* --------------------------------------------     기타      -----------------------------------------*/
-                .antMatchers(HttpMethod.GET, "/h2/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/h2/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/docs/**").hasAuthority("ROLE_ADMIN")
                 /* --------------------------------------------  AUTH 도메인  -----------------------------------------*/
                 .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/auth/logout").hasAuthority("ROLE_USER")

@@ -16,10 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -36,8 +33,6 @@ public class S3Upload {
         if (multipartFiles.isEmpty()) {
             return fileList;
         }
-
-
 
         multipartFiles.forEach(file -> {
             String fileName = createFileName(file.getOriginalFilename());
@@ -66,6 +61,7 @@ public class S3Upload {
         return fileList;
     }
 
+
     public UploadFile uploadfile(MultipartFile multipartFile, String dir) throws IOException {
         String fileName = createFileName(multipartFile.getOriginalFilename());
 
@@ -74,19 +70,19 @@ public class S3Upload {
 
         amazonS3Client.putObject(bucket, dir + "/" + fileName, multipartFile.getInputStream(), objectMetadata);
 
-        UploadFile uploadFile = UploadFile.builder()
+        return UploadFile.builder()
                 .originFileName(multipartFile.getOriginalFilename())
                 .fileName(fileName)
                 .filePath(amazonS3Client.getUrl(bucket, dir + "/" + fileName).toString())
                 .fileSize(multipartFile.getSize())
                 .build();
-
-        return uploadFile;
     }
+
 
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
+
 
     private String getFileExtension(String fileName) {
         try {
@@ -96,13 +92,11 @@ public class S3Upload {
         }
     }
 
+
     public void delete(String fileName, String dir) {
         String Key = dir + "/" + fileName;
         amazonS3Client.deleteObject(bucket, Key);
     }
-
-
-
 
 
     /*----------------------------------- 테스트용 -----------------------------------*/
@@ -146,7 +140,7 @@ public class S3Upload {
 
     // 로컬에 파일 업로드
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
+        File convertFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { //FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(file.getBytes());

@@ -9,6 +9,7 @@ public enum ExceptionCode {
     BOOKMARK_NOT_FOUND(504, "존재하지 않는 북마크입니다."),
     CATEGORY_NOT_FOUND(504, "존재하지 않는 카테고리입니다."),
     RESERVATION_NOT_FOUND(504, "존재하지 않는 예약입니다."),
+    MBTI_COUNT_NOT_FOUND(504, "존재하지 않는 MBTI 정보입니다."),
 
     INVALID_ACCESS(403, "유효하지 않은 접근입니다."),
     INVALID_MEMBER(403, "회원 정보를 다시 확인하세요."),

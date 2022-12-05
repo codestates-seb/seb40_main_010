@@ -1,5 +1,6 @@
 package com.main10.global.security.token;
 
+import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -9,17 +10,21 @@ import java.util.Collection;
  * Authentication Token 커스텀 클래스
  * @author mozzi327
  */
+@Getter
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private String accessToken;
     private Object principal;
     private Object credentials;
+    private Long id;
 
     public JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities,
                                   Object principal,
+                                  Long id,
                                   Object credentials) {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
+        this.id = id;
         this.setAuthenticated(true);
     }
 

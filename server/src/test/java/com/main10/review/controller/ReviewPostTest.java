@@ -42,10 +42,8 @@ public class ReviewPostTest extends ReviewControllerTest {
                 .build();
 
         String content = gson.toJson(post);
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         doNothing().when(reviewService)
-                .createReview(Mockito.any(ReviewDto.Post.class), Mockito.anyString(), Mockito.anyLong(), Mockito.anyLong());
+                .createReview(Mockito.any(ReviewDto.Post.class), Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong());
 
         ResultActions actions =
                 mockMvc.perform(
