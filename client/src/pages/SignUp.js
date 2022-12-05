@@ -141,7 +141,7 @@ function SignUp() {
                 {...register('phoneNumber', {
                   required: '필수 정보입니다.',
                   pattern: {
-                    value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
+                    value: /^\d{3}-\d{3,4}-\d{4}$/,
                     message: '전화번호 형식에 맞지 않습니다.',
                   },
                 })}
