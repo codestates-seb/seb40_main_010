@@ -89,7 +89,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.PATCH, "/member/profile").hasAuthority("ROLE_USER")
                 .antMatchers(HttpMethod.PATCH, "/member/profileLocal").hasAuthority("ROLE_USER")
                 /* -------------------------------------------- BOOKMARK 도메인 -----------------------------------------*/
-                .antMatchers(HttpMethod.GET, "/bookmark/**").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.GET, "/bookmark/*").hasAuthority("ROLE_USER")
                 /* --------------------------------------------  PLACE 도메인  -----------------------------------------*/
                 // - place
                 .antMatchers(HttpMethod.GET, "/place/*").permitAll()
