@@ -33,7 +33,7 @@ public class MemberDto {
         private String nickname;
 
         @NotBlank(message = "전화번호는 공백이 아니어야 합니다.")
-        @Pattern(regexp = "^010-\\d{3,4}-\\d{4}$"
+        @Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$"
                 , message = "전화번호 양식에 맞지 않습니다.")
         private String phoneNumber;
 
