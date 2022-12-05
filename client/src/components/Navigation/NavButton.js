@@ -20,7 +20,9 @@ import {
   reservationEditData,
   registerFormMaxCapacity,
   userMbtiValue,
+  tokenAtom,
 } from '../../atoms';
+import callHeader from '../../utils/header';
 
 export function NavLeftButtonContainer() {
   const logInUrl = useMatch('/log-in');
@@ -87,6 +89,7 @@ export function NavRightButtonContainer() {
   const setUrl = useSetRecoilState(settingUrl);
   const setSearch = useSetRecoilState(navSearchValue);
   const resetUserMbti = useResetRecoilState(userMbtiValue);
+  const resetTokenState = useResetRecoilState(tokenAtom);
 
   const navigate = useNavigate();
 
@@ -99,20 +102,16 @@ export function NavRightButtonContainer() {
     setUrl(() => `/home?size=20&page=`);
   };
 
+  const header = callHeader();
+
   const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
 
   const onClickLogOutButton = async () => {
-    await axios.delete(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/logout`, {
-      headers: {
-        'ngrok-skip-browser-warning': '010',
-        Authorization: (await localStorage.getItem('ACCESS'))
-          ? `Bearer ${localStorage.getItem('ACCESS')}`
-          : '',
-        RefreshToken: (await localStorage.getItem('REFRESH'))
-          ? localStorage.getItem('REFRESH')
-          : '',
-      },
-    });
+    await axios.delete(
+      `${process.env.REACT_APP_SERVER_BASE_URL}/auth/logout`,
+      header,
+    );
+    resetTokenState();
     await localStorage.removeItem('ACCESS');
     await localStorage.removeItem('REFRESH');
 

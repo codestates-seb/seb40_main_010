@@ -1,13 +1,16 @@
-const header = {
-  headers: {
-    'ngrok-skip-browser-warning': '010',
-    Authorization: localStorage.getItem('ACCESS')
-      ? `Bearer ${localStorage.getItem('ACCESS')}`
-      : '',
-    RefreshToken: localStorage.getItem('REFRESH')
-      ? localStorage.getItem('REFRESH')
-      : '',
-  },
+import { useRecoilValue } from 'recoil';
+import { tokenAtom } from '../atoms';
+
+const callHeader = () => {
+  const tokenState = useRecoilValue(tokenAtom);
+
+  const header = {
+    headers: {
+      Authorization: tokenState.ACCESS,
+      RefreshToken: tokenState.REFRESH,
+    },
+  };
+  return header;
 };
 
-export default header;
+export default callHeader;

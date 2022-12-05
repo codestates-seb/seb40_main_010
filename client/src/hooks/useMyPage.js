@@ -305,7 +305,6 @@ const useMyPage = () => {
       );
       callUserData();
       editStatusChange();
-      // mbti 수정 후 메인 페이지 mbti 변경
       setUserMbti(userMBTI);
     } catch (err) {
       console.log(err);

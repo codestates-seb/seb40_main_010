@@ -7,6 +7,7 @@ import Category from '../components/Category';
 import Nav from '../components/Navigation/Nav';
 import Place from '../components/Place';
 import MbtiPlaces from '../components/MbtiPlaces';
+import callHeader from '../utils/header';
 import {
   mainDataState,
   settingUrl,
@@ -14,6 +15,7 @@ import {
   NextPage,
   HasRefresh,
   navSearchValue,
+  tokenAtom,
 } from '../atoms';
 
 export default function Places() {
@@ -23,24 +25,16 @@ export default function Places() {
   const url = useRecoilValue(settingUrl);
   const isLogIn = useRecoilValue(HasRefresh);
   const search = useRecoilValue(navSearchValue);
+  const tokenState = useRecoilValue(tokenAtom);
 
   const observerTargetElement = useRef(null);
+  const header = callHeader();
 
   const getPageData = useCallback(async () => {
     try {
       const { data } = await axios.get(
         `${process.env.REACT_APP_SERVER_BASE_URL}${url}${page}`,
-        {
-          headers: {
-            'ngrok-skip-browser-warning': '010',
-            Authorization: localStorage.getItem('ACCESS')
-              ? `Bearer ${localStorage.getItem('ACCESS')}`
-              : '',
-            RefreshToken: localStorage.getItem('REFRESH')
-              ? localStorage.getItem('REFRESH')
-              : '',
-          },
-        },
+        header,
       );
 
       if (!mainPlaceData) {
@@ -76,6 +70,8 @@ export default function Places() {
       observation.disconnect();
     };
   }, [getPageData, hasNextPage, url]);
+
+  console.log(tokenState);
 
   return (
     <MainContainer>

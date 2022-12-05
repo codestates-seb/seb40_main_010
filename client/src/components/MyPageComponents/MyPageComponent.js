@@ -48,6 +48,29 @@ function MyPageComponent() {
     callRegistrationList();
   }, []);
 
+  const myPageCategories = [
+    {
+      title: '등록내역',
+      value: 'register',
+      icon: <AiOutlineDollarCircle size="35" />,
+    },
+    {
+      title: '예약내역',
+      value: 'reservation',
+      icon: <BiTimeFive size="35" />,
+    },
+    {
+      title: '관심장소',
+      value: 'bookmark',
+      icon: <IoHeartCircleOutline size="35" />,
+    },
+    {
+      title: '리뷰내역',
+      value: 'review',
+      icon: <CgMenuRound size="35" />,
+    },
+  ];
+
   return (
     <MyPageComponentContainer>
       <MyProfileImage src={previewProfileImage} onClick={handleImageSelect} />
@@ -94,39 +117,19 @@ function MyPageComponent() {
           onChange={onChange}
         />
       )}
+
       <MyPageContentCategory>
-        <MyPageCategoryItem
-          onClick={onClickCategory}
-          value="register"
-          clicked={myPageCategory}
-        >
-          <AiOutlineDollarCircle size="35" />
-          등록내역
-        </MyPageCategoryItem>
-        <MyPageCategoryItem
-          onClick={onClickCategory}
-          value="reservation"
-          clicked={myPageCategory}
-        >
-          <BiTimeFive size="35" />
-          예약내역
-        </MyPageCategoryItem>
-        <MyPageCategoryItem
-          onClick={onClickCategory}
-          value="bookmark"
-          clicked={myPageCategory}
-        >
-          <IoHeartCircleOutline size="35" />
-          관심장소
-        </MyPageCategoryItem>
-        <MyPageCategoryItem
-          onClick={onClickCategory}
-          value="review"
-          clicked={myPageCategory}
-        >
-          <CgMenuRound size="35" />
-          리뷰내역
-        </MyPageCategoryItem>
+        {myPageCategories.map(catogoryItem => (
+          <MyPageCategoryItem
+            onClick={onClickCategory}
+            value={catogoryItem.value}
+            clicked={myPageCategory}
+            key={catogoryItem.value}
+          >
+            {catogoryItem.icon}
+            {catogoryItem.title}
+          </MyPageCategoryItem>
+        ))}
       </MyPageContentCategory>
       <MyPageCategoryItemTitle>{myPageCategory}</MyPageCategoryItemTitle>
       {listData.length > 0 && <BolderLine />}
@@ -136,7 +139,7 @@ function MyPageComponent() {
             return (
               <MyPageCategoryList
                 listData={el}
-                key={el.id}
+                key={el.placeId}
                 type="registration"
               />
             );

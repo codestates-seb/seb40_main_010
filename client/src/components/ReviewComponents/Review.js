@@ -3,34 +3,30 @@ import styled from 'styled-components';
 import { ImStarFull } from 'react-icons/im';
 import dayjs from 'dayjs';
 
-function Review({ reviewData }) {
-  const handleDate = createdAt => {
-    return dayjs(createdAt).format('YYYY.MM.DD');
+function Review({ profileImage, nickname, createdAt, score, comment }) {
+  const handleDate = createdDate => {
+    return dayjs(createdDate).format('YYYY.MM.DD');
   };
 
   return (
     <ReviewContent>
-      <UserImage src={reviewData.profileImage} />
+      <UserImage src={profileImage} />
       <ReviewBodyContainer>
         <ReviewInfoContainer>
-          <UserName>{reviewData.nickname}</UserName>
-          <ReviewCreatedDate>
-            {handleDate(reviewData.createdAt)}
-          </ReviewCreatedDate>
+          <UserName>{nickname}</UserName>
+          <ReviewCreatedDate>{handleDate(createdAt)}</ReviewCreatedDate>
         </ReviewInfoContainer>
         <ReviewRating>
           {[1, 2, 3, 4, 5].map(el => (
             <ImStarFull
-              className={reviewData.score >= el && 'black'}
+              className={score >= el && 'black'}
               key={el}
               id={el}
               size="20"
             />
           ))}
         </ReviewRating>
-        <ReviewComment value={reviewData.comment}>
-          {reviewData.comment}
-        </ReviewComment>
+        <ReviewComment value={comment}>{comment}</ReviewComment>
       </ReviewBodyContainer>
     </ReviewContent>
   );

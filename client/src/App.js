@@ -13,18 +13,22 @@ import MyPage from './pages/MyPage';
 import Register from './pages/Register';
 import SignUp from './pages/SignUp';
 import NotFound from './components/NotFound';
-import { HasRefresh, mbtiPlaceDataState, userMbtiValue } from './atoms';
+import {
+  HasRefresh,
+  mbtiPlaceDataState,
+  userMbtiValue,
+  tokenAtom,
+} from './atoms';
 
 function App() {
   const [timer, setTimer] = useState(false);
   const setLogIn = useSetRecoilState(HasRefresh);
   const resetMbti = useSetRecoilState(mbtiPlaceDataState);
   const resetUserMbti = useResetRecoilState(userMbtiValue);
+  const setToken = useSetRecoilState(tokenAtom);
 
   const token = localStorage.getItem('ACCESS');
   const isLogIn = localStorage.getItem('REFRESH');
-
-  // const expiration = 60 * 30 * 1000;
 
   const reIssue = async () => {
     if (!isLogIn) return;
@@ -71,6 +75,18 @@ function App() {
       setTimer(!timer);
     }, 60000);
   }, [isLogIn, timer]);
+
+  useEffect(() => {
+    setToken(prev => {
+      if (token)
+        return {
+          ...prev,
+          ACCESS: `Bearer ${localStorage.getItem('ACCESS')}`,
+          REFRESH: localStorage.getItem('REFRESH'),
+        };
+      return { ...prev };
+    });
+  }, []);
 
   return (
     <div>

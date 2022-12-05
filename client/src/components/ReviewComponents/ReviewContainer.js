@@ -36,9 +36,20 @@ function ReviewContainer() {
           <ReviewCount>리뷰 {reviews.length}개</ReviewCount>
           <ReviewFilter>≡</ReviewFilter>
         </ReviewHeadContainer>
-        {reviews.map(el => {
-          return <Review reviewData={el} key={el.reviewId} />;
-        })}
+        {reviews.map(
+          ({ profileImage, nickname, createdAt, score, comment, reviewId }) => {
+            return (
+              <Review
+                profileImage={profileImage}
+                nickname={nickname}
+                createdAt={createdAt}
+                score={score}
+                comment={comment}
+                key={reviewId}
+              />
+            );
+          },
+        )}
       </ReviewBorder>
     </ReviewsContainer>
   );

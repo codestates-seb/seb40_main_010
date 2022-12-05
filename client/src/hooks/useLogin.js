@@ -9,6 +9,7 @@ import {
   NextPage,
   pageState,
   userMbtiValue,
+  tokenAtom,
 } from '../atoms';
 
 const useLogin = () => {
@@ -20,6 +21,7 @@ const useLogin = () => {
   const setPage = useSetRecoilState(pageState);
   const resetMainPlaceData = useResetRecoilState(mainDataState);
   const [, setUserMbti] = useRecoilState(userMbtiValue);
+  const setToken = useSetRecoilState(tokenAtom);
 
   const navigator = useNavigate();
 
@@ -61,6 +63,12 @@ const useLogin = () => {
         `${process.env.REACT_APP_SERVER_BASE_URL}/auth/login`,
         data,
       );
+      if (response.headers.authorization) {
+        setToken({
+          ACCESS: `Bearer ${response.headers.authorization}`,
+          REFRESH: response.headers.refreshtoken,
+        });
+      }
       await localStorage.setItem('ACCESS', response.headers.authorization);
       await localStorage.setItem('REFRESH', response.headers.refreshtoken);
 

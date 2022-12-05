@@ -154,3 +154,8 @@ export const placeMaxCapacity = atom({
   key: 'placeMaxCapacity',
   default: null,
 });
+
+export const tokenAtom = atom({
+  key: 'tokenAtom',
+  default: { ACCESS: '', REFRESH: '' },
+});

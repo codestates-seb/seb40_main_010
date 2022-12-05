@@ -59,9 +59,9 @@ function MyPageCategoryList({ listData, type }) {
     const date = dayjs(createdAt).subtract(2000, 'y').add(9, 'hour');
     if (date.$H > 12) {
       date.$H -= 12;
-      return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}PM`;
+      return `${date.format('YY.MM.DD hh')}PM`;
     }
-    return `${date.$y}.${date.$M + 1}.${date.$D} ${date.$H}AM`;
+    return `${date.format('YY.MM.DD hh')}AM`;
   };
 
   const handleReviewDate = createdAt => {
@@ -69,7 +69,7 @@ function MyPageCategoryList({ listData, type }) {
 
     const date = dayjs(createdAt);
 
-    return `${date.$y}.${date.$M + 1}.${date.$D}`;
+    return date.format('YYYY.MM.DD');
   };
 
   const reviewDelete = async () => {
@@ -193,9 +193,8 @@ function MyPageCategoryList({ listData, type }) {
     }
   };
 
-  const today = new Date();
-
   const handleDateComparison = () => {
+    const today = new Date();
     return (
       Number(dayjs(today).format('YYYYMMDDhh')) <
       Number(dayjs(listData.startTime).add(9, 'hour').format('YYYYMMDDhh'))
