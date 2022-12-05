@@ -2,13 +2,22 @@
 <br />
 
 ![로고](https://user-images.githubusercontent.com/93918946/205548192-60e687d3-0383-4c13-a245-9401df932918.jpg)
+<div align="center">
+   공간도 대여가 대여?
+   시간 단위로 공간을 대여해보세요!
+</div>
+<div align="center">
+  <h3>
+    <a href="http://daeyeo4u.com">
+      🌏 배포 주소
+    </a>
+  </h3>
+</div>
 
 <br />
-### 단체사진
 
-![단체사진](https://user-images.githubusercontent.com/96826217/201924160-d90c8de6-0b56-4575-860c-c76c1e9a192a.png)
 
-대여가대여 팀입니다! 아래는 팀원 소개입니다~ 🐥
+## 팀원 소개
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -39,6 +48,22 @@ yujung Choi</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_
 <br/>
 
 <br/>
+
+## 📍 서비스 소개
+
+1박은 부담스럽고 잠깐 쉬고 싶은 분들, 여행하면서 짐을 보관하고 싶은데 마땅히 보관할 곳이 없는 분들, 자기가 소유한 공간을 손쉽게 대여하고 수익을 창출하고 싶은 분들, 이러한 고민을 하는 사람들을 위해 사용자가 공간을 대여하고 대여해줄 수 있는 무언가가 없을까? 하는 고민으로 공간 대여 플랫폼 서비스를 기획하게 되었습니다.
+
+### 서비스 기능
+
+1️⃣ 사용자가 소유 공간을 카테고리 별로 등록할 수 있습니다.<br>
+2️⃣ 사용자는 플랫폼에 등록된 공간을 윈하는 시간을 선택해서 예약할 수 있습니다. <br>
+3️⃣ 사용자와 같은 MBTI 유형의 사용자가 많이 예약한 베스트 공간을 추천하는 기능이 있습니다.
+
+## 📌 기술 스택
+![스크린샷 2022-12-04 오후 9 06 54](https://user-images.githubusercontent.com/96826217/205555150-98bae0d9-2f4d-4a1d-a625-812505369e1a.png)
+
+## BACKEND <br>
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/Oauth2-EB5424?style=for-the-badge&logo=&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/QueryDsl-0769AD?style=for-the-badge&logo=QueryDsl&logoColor=white"> <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"> <img src="https://img.shields.io/badge/AWS-CC0200?style=for-the-badge&logo=AmazonAWS&logoColor=white"> <img src="https://img.shields.io/badge/AWS-CC0200?style=for-the-badge&logo=AmazonS3logoColor=white"> <img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white">
 
 ## 커밋 규칙
 
