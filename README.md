@@ -1,6 +1,8 @@
 # 🏡 대여가 대여
 <br />
+![back2](https://user-images.githubusercontent.com/93918946/205548192-60e687d3-0383-4c13-a245-9401df932918.jpg)
 
+<br />
 ### 단체사진
 
 ![단체사진](https://user-images.githubusercontent.com/96826217/201924160-d90c8de6-0b56-4575-860c-c76c1e9a192a.png)
