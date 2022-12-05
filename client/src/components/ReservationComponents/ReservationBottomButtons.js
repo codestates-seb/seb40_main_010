@@ -6,7 +6,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { FaRegBookmark, FaLink, FaBookmark } from 'react-icons/fa';
 import { PlaceIDState, bookmarkState } from '../../atoms';
-import header from '../../utils/header';
 
 function ReservationBottomButtons() {
   const placeId = useRecoilValue(PlaceIDState);
@@ -22,7 +21,17 @@ function ReservationBottomButtons() {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER_BASE_URL}/bookmark/${placeId}`,
-        header,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
+        },
       );
       setIsBookmark(response.data);
     } catch (error) {
