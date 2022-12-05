@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import Places from './pages/Places';
 import Detail from './pages/Detail';
@@ -13,12 +13,13 @@ import MyPage from './pages/MyPage';
 import Register from './pages/Register';
 import SignUp from './pages/SignUp';
 import NotFound from './components/NotFound';
-import { HasRefresh, mbtiPlaceDataState } from './atoms';
+import { HasRefresh, mbtiPlaceDataState, userMbtiValue } from './atoms';
 
 function App() {
   const [timer, setTimer] = useState(false);
   const setLogIn = useSetRecoilState(HasRefresh);
   const resetMbti = useSetRecoilState(mbtiPlaceDataState);
+  const resetUserMbti = useResetRecoilState(userMbtiValue);
 
   const token = localStorage.getItem('ACCESS');
   const isLogIn = localStorage.getItem('REFRESH');
@@ -42,6 +43,7 @@ function App() {
       await setLogIn(false);
 
       resetMbti([]);
+      resetUserMbti();
     }
 
     if (exp - currentTime <= 60 * 3) {
