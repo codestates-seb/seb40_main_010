@@ -1,0 +1,6 @@
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    name: param # 리소스 이름을 작성합니다.
+    profileSeparator: _

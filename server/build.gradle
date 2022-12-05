@@ -1,0 +1,171 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id "org.asciidoctor.jvm.convert" version "3.3.2"    // (1)
+    id 'java'
+}
+
+group = 'com.main10'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+// (2)
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+// (3)
+configurations {
+    asciidoctorExtensions
+}
+
+
+/** feign client 사용을 위한 스프링클라우드 설정 필요*/
+ext {
+    set('springCloudVersion', "2021.0.3")
+}
+
+dependencies {
+    // (4) mockmvc 라이브러리
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    //스프링 벨리데이션
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // (5) 아스키 닥터
+    asciidoctorExtensions "org.springframework.restdocs:spring-restdocs-asciidoctor"
+    //스프링 웹
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    //스프링 시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // embedded-redis
+    implementation ('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple" }
+    // testcontainers
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    //롬복
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    // 테스트 Slf4j 충돌로 인한 Lombok implementation 추가
+    implementation 'org.projectlombok:lombok'
+    //스프링데이터 JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    //h2
+//    runtimeOnly 'com.h2database:h2'
+    // mysql
+    implementation 'mysql:mysql-connector-java'
+    //mapper 자동 생성
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    //문서화
+    implementation 'com.google.code.gson:gson'
+    // Redis 추가
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    //jjwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly    'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    //test용 시큐리티
+    testImplementation 'org.springframework.security:spring-security-test'
+    //파일 업로드
+    implementation 'commons-io:commons-io:2.11.0'
+    // querydsl 디펜던시 추가
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    // S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    // Spring Batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    testImplementation 'org.springframework.batch:spring-batch-test'
+    // feign client
+    compile("io.github.openfeign:feign-httpclient")
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation group: 'io.github.openfeign', name: 'feign-gson', version: '11.0'
+    // mail sender
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    // oauth2 login
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // mockito library
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.1.0'
+    // aws parameter store
+    implementation 'com.coveo:spring-boot-parameter-store-integration:1.5.0'
+}
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}" // feign client dependency
+    }
+}
+
+
+// (6)
+tasks.named('test') {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+
+// (7)
+tasks.named('asciidoctor') {
+    configurations "asciidoctorExtensions"
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+
+// (8)
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor            // (8-1)
+    from file("${asciidoctor.outputDir}")   // (8-2)
+    into file("src/main/resources/static/docs")   // (8-3)
+}
+
+build {
+    dependsOn copyDocument  // (9)
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+// (10)
+bootJar {
+    dependsOn copyDocument    // (10-1)
+    from("${asciidoctor.outputDir}") {  // (10-2)
+        into 'static/docs'     // (10-3)
+    }
+}
+
+// querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
+def querydslDir = "$buildDir/generated/querydsl"
+
+// JPA 사용여부 및 사용 경로 설정
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+// build시 사용할 sourceSet 추가 설정
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+// querydsl 컴파일 시 사용할 옵션 설정
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+// querydsl이 compileClassPath를 상속하도록 설정
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}

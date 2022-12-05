@@ -1,0 +1,115 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: ${/config/param/access-key}  # AWS IAM AccessKey 적기
+      secretKey: ${/config/param/secret-key}  # AWS IAM SecretKey 적기
+    s3:
+      bucket: ${/config/param/bucket}  # ex) marryting-gyunny
+    region:
+      static: ${/config/param/region}
+    stack:
+      auto: false
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+
+spring:
+  datasource:
+    url: ${/config/param/datasource-url}
+    username: ${/config/param/rds-username}
+    password: ${/config/param/rds-password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${/config/param/mail-admin-email}
+    password: ${/config/param/mail-admin-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${/config/param/google-client-id}
+            client-secret: ${/config/param/google-secret}
+            scope:
+              - email
+              - profile
+            redirect-uri: ${/config/param/google-redirect}
+          kakao:
+            client-id: ${/config/param/kakao-client-id}
+            client-secret: ${/config/param/kakao-secret}
+            redirect-uri: ${/config/param/kakao-redirect}
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+            client-name: kakao
+        provider:
+          kakao:
+            authorization_uri: https://kauth.kakao.com/oauth/authorize
+            token_uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user_name_attribute: id
+
+logging:
+  level:
+    com.project: debug
+
+mail:
+  address:
+    admin: ${/config/param/admin-email}
+
+
+jwt:
+  secret-key: ${/config/param/jwt-secret-key}
+  access-token-expiration-minutes: ${/config/param/access-expiration-minute}
+  refresh-token-expiration-minutes: ${/config/param/refresh-expiration-minute}
+
+redis:
+  host: ${/config/param/redis-host}
+  port: ${/config/param/redis-port}
+
+#kakao pay
+kakao:
+  admin:
+    key: ${/config/param/kakao-admin-key}
+  host: ${/config/param/kakaopay-host}
+  uri:
+    pay-process: ${/config/param/kakaopay-pay-url}
+  pay:
+    ready: ${/config/param/kakaopay-ready-url}
+    approve: ${/config/param/kakaopay-approve-url}
+    cid: ${/config/param/kakaopay-cid}
+    taxfree: ${/config/param/kakaopay-taxfree}
+    cancel: ${/config/param/kakaopay-cancel-url}
+    order: ${/config/param/kakaopay-order-url}
+
+default :
+  image :
+    address : ${/config/param/default-url}
+
+awsParameterStorePropertySource:
+  enabled: true
