@@ -251,16 +251,20 @@ function MyPageCategoryList({ listData, type }) {
                     <CategoryButton onClick={showModal}>
                       취소하기
                     </CategoryButton>
-                    {listData.status !== '결제 완료' ? (
+                    {listData.status !== '결제 완료' && (
                       <CategoryButton onClick={showPaymentModal}>
                         결제 하기
                       </CategoryButton>
-                    ) : null}
+                    )}
                   </>
-                ) : (
+                ) : listData.status === '결제 완료' ? (
                   <CategoryButton onClick={showReviewModal}>
                     리뷰쓰기
                   </CategoryButton>
+                ) : (
+                  <CategoryNotInvalidButton>
+                    결제 가능한 예약 시간이 아닙니다
+                  </CategoryNotInvalidButton>
                 )}
                 {modalOpen && (
                   <Modal
@@ -418,6 +422,15 @@ const ButtonContainer = styled.div`
 
   @media (max-width: 840px) {
     width: 6rem;
+  }
+`;
+
+const CategoryNotInvalidButton = styled.div`
+  font-size: 0.6rem;
+  color: #eb7470;
+
+  @media (max-width: 840px) {
+    font-size: 1px;
   }
 `;
 
