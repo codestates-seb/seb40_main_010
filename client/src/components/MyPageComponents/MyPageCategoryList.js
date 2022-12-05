@@ -193,15 +193,6 @@ function MyPageCategoryList({ listData, type }) {
     }
   };
 
-  // eslint-disable-next-line consistent-return
-  const isPayCompleted = PayStatus => {
-    if (PayStatus.status === '결제 완료') return '결제 완료';
-    if (PayStatus.status === '결제 실패') return '결제 실패';
-    if (PayStatus.status === '체크아웃') return '체크아웃';
-    if (PayStatus.status === '예약 취소') return '예약 취소';
-    return null;
-  };
-
   const today = new Date();
 
   const handleDateComparison = () => {
@@ -232,9 +223,7 @@ function MyPageCategoryList({ listData, type }) {
           {/* url이나 search를 사용해서 바꿔보기 */}
           {type === 'reservation' ? (
             <CategoryPaymentSuccessContainer>
-              <CategoryPaymentSuccess>
-                {isPayCompleted(listData)}
-              </CategoryPaymentSuccess>
+              <CategoryPaymentSuccess>{listData.status}</CategoryPaymentSuccess>
             </CategoryPaymentSuccessContainer>
           ) : (
             <RatingStarContainer>
@@ -452,7 +441,8 @@ const CategoryButton = styled.div`
 
 const CategoryPaymentSuccess = styled.div`
   /* width: fit-content; */
-  width: 2.65rem;
+  text-align: end;
+  width: 4rem;
   font-size: 0.6rem;
   color: #eb7470;
   @media (max-width: 840px) {
