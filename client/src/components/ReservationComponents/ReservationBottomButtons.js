@@ -1,15 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { FaRegBookmark, FaLink, FaBookmark } from 'react-icons/fa';
-import { PlaceIDState, bookmarkState } from '../../atoms';
+import { PlaceIDState, bookmarkState, HasRefresh } from '../../atoms';
 
 function ReservationBottomButtons() {
+  const navigator = useNavigate();
   const placeId = useRecoilValue(PlaceIDState);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
+  const isLogin = useRecoilValue(HasRefresh);
 
   const placeUrl = window.location.href;
 
@@ -18,6 +21,11 @@ function ReservationBottomButtons() {
   };
 
   const handleBookmark = async () => {
+    if (!isLogin) {
+      alert('로그인이 필요합니다.');
+      navigator('/log-in');
+    }
+
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER_BASE_URL}/bookmark/${placeId}`,

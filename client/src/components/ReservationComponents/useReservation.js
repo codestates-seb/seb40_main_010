@@ -86,6 +86,7 @@ const useReservation = charge => {
       setStartDate(false);
       setEndDate(false);
       setCapacity(1);
+      // alert('로그인이 필요합니다.');
       navigator('/log-in');
     }
 
