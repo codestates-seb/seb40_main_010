@@ -13,6 +13,7 @@ import {
   pageState,
   NextPage,
   HasRefresh,
+  navSearchValue,
 } from '../atoms';
 
 export default function Places() {
@@ -21,6 +22,7 @@ export default function Places() {
   const [page, setPage] = useRecoilState(pageState);
   const url = useRecoilValue(settingUrl);
   const isLogIn = useRecoilValue(HasRefresh);
+  const search = useRecoilValue(navSearchValue);
 
   const observerTargetElement = useRef(null);
 
@@ -82,7 +84,11 @@ export default function Places() {
       <DisplayComponentDiv>
         {isLogIn ? <MbtiPlaces /> : null}
         <MainDiv>
-          <Div>전체 게시글</Div>
+          {search ? (
+            <Div>&quot;{search}&#34; 에 대한 게시글</Div>
+          ) : (
+            <Div>전체게시글</Div>
+          )}
           <MainComponentContainer>
             <Structure>
               {mainPlaceData &&

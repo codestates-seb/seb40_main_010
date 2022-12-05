@@ -50,6 +50,8 @@ function Nav() {
 
     if (!trimmedSearch) {
       alert('검색어를 입력해주세요');
+      invalidate();
+      setUrl(() => `/home?size=20&page=`);
       return setCurrentSearch('');
     }
 
@@ -79,6 +81,8 @@ function Nav() {
 
     if (!trimmedSearch) {
       alert('검색어를 입력해주세요');
+      invalidate();
+      setUrl(() => `/home?size=20&page=`);
       return setCurrentSearch('');
     }
 
