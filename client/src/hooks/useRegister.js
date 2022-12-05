@@ -132,6 +132,7 @@ const useRegister = () => {
     maxCapacity,
     address,
     charge,
+    detailedInformation,
   };
 };
 
