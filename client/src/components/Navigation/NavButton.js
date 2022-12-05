@@ -19,6 +19,7 @@ import {
   navSearchValue,
   reservationEditData,
   registerFormMaxCapacity,
+  userMbtiValue,
 } from '../../atoms';
 
 export function NavLeftButtonContainer() {
@@ -85,6 +86,7 @@ export function NavRightButtonContainer() {
   const resetMainPlaceData = useResetRecoilState(mainDataState);
   const setUrl = useSetRecoilState(settingUrl);
   const setSearch = useSetRecoilState(navSearchValue);
+  const resetUserMbti = useResetRecoilState(userMbtiValue);
 
   const navigate = useNavigate();
 
@@ -116,6 +118,7 @@ export function NavRightButtonContainer() {
 
     await setIsLogIn(false);
     await invalidate();
+    resetUserMbti();
     alert('로그아웃 되셨습니다');
   };
 
