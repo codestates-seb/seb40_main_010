@@ -12,9 +12,11 @@
 </div>
 <div align="center">
   <h3>
-    <a href="http://daeyeo4u.com">
+    <a href="https://daeyeo4u.com">
       🌏 배포 주소
     </a>
+     <a href="https://quartz614s-organization.gitbook.io/undefined/">
+     📚 API 문서
   </h3>
 </div>
 <br><br><br><br>
@@ -109,27 +111,27 @@ yujung Choi</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_
    
 | 일반 / 소셜 로그인 |
 |:---:|
-| <img src= https://user-images.githubusercontent.com/96826217/205934830-38831620-33dc-47b2-a773-3ac86ada3eea.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205934830-38831620-33dc-47b2-a773-3ac86ada3eea.gif width = "800"> |
 | 회원가입 |
-| <img src= https://user-images.githubusercontent.com/96826217/205928736-7245b06d-5f4e-42d3-a6be-f79e09542e71.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205928736-7245b06d-5f4e-42d3-a6be-f79e09542e71.gif width = "800"> |
 | 상세 페이지 | 
-| <img src= https://user-images.githubusercontent.com/96826217/205930078-5e86ae24-8299-4c64-a747-9aaa976a791a.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205930078-5e86ae24-8299-4c64-a747-9aaa976a791a.gif width = "800"> |
 | 글 등록 | 
-| <img src= https://user-images.githubusercontent.com/96826217/205933658-df25d0f9-763c-4e66-b152-63302b88fc9d.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205933658-df25d0f9-763c-4e66-b152-63302b88fc9d.gif width = "800"> |
 | 글 수정 |
-| <img src= https://user-images.githubusercontent.com/96826217/205934127-3bbea3bc-fab6-425f-bdd5-4755061b88ce.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205934127-3bbea3bc-fab6-425f-bdd5-4755061b88ce.gif width = "800"> |
 | 카테고리 |
-| <img src= https://user-images.githubusercontent.com/96826217/205935446-62140cab-595b-4658-912d-b6b13031e409.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205935446-62140cab-595b-4658-912d-b6b13031e409.gif width = "800"> |
 | 북마크 |
-| <img src= https://user-images.githubusercontent.com/96826217/205935733-6cb1b04e-cbc6-45fc-91d2-3a91b37fc879.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205935733-6cb1b04e-cbc6-45fc-91d2-3a91b37fc879.gif width = "800"> |
 | 예약 |
-| <img src= https://user-images.githubusercontent.com/96826217/205937729-9489efda-cb29-4eaf-9a82-e5bd0f3730a4.gif width = "900"> |   
+| <img src= https://user-images.githubusercontent.com/96826217/205937729-9489efda-cb29-4eaf-9a82-e5bd0f3730a4.gif width = "800"> |   
 | 결제 |
-| <img src= https://user-images.githubusercontent.com/96826217/205941793-7872a1e3-a919-4d63-8f33-f0238c86f722.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205941793-7872a1e3-a919-4d63-8f33-f0238c86f722.gif width = "800"> |
 | 마이페이지 |
-| <img src= https://user-images.githubusercontent.com/96826217/205942259-ddc18050-8280-4489-b5d4-c54c14d447c6.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205942259-ddc18050-8280-4489-b5d4-c54c14d447c6.gif width = "800"> |
 | 리뷰 작성 |
-| <img src= https://user-images.githubusercontent.com/96826217/205942736-7d298a6c-7c69-4061-b6e7-dba549ec68f3.gif width = "900"> |
+| <img src= https://user-images.githubusercontent.com/96826217/205942736-7d298a6c-7c69-4061-b6e7-dba549ec68f3.gif width = "800"> |
    
 
 </div>
