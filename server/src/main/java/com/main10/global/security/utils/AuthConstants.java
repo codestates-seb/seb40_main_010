@@ -15,4 +15,5 @@ public class AuthConstants {
     public static final String KAKAO_ACCOUNT = "kakao_account";
     public static final String GOOGLE = "google";
     public static final String NAVER = "naver";
+    public static final String MBTI = "mbti";
 }
