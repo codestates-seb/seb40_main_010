@@ -54,6 +54,7 @@ function ReservationBottomButtons() {
         await localStorage.removeItem('REFRESH');
         setIsLogIn(false);
         resetUserMbti();
+        alert('다시 로그인해주세요');
       }
     }
   };
