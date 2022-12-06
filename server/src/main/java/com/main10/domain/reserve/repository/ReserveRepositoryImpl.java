@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import static com.main10.domain.place.entity.QPlace.place;
 import static com.main10.domain.reserve.entity.QReserve.reserve;
@@ -39,7 +40,8 @@ public class ReserveRepositoryImpl implements CustomReserveRepository {
                 .from(reserve)
                 .leftJoin(place).on(reserve.placeId.eq(place.id))
                 .where(reserve.memberId.eq(memberId),
-                        reserve.status.ne(RESERVATION_CANCELED))
+                        reserve.status.ne(RESERVATION_CANCELED),
+                        reserve.endTime.lt(LocalDateTime.now()))
                 .orderBy(reserve.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
