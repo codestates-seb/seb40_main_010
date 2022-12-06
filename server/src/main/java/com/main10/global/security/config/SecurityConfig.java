@@ -13,6 +13,7 @@ import com.main10.global.security.utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import java.util.List;
 
+import static com.main10.global.security.utils.AuthConstants.AUTHORIZATION;
+import static com.main10.global.security.utils.AuthConstants.REFRESH_TOKEN;
+
 /**
  * Security 설정 정보 Configuration 클래스
  * @author mozzi327
@@ -42,6 +46,22 @@ import java.util.List;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    @Value("${address.front-local}")
+    private final String FRONT_LOCAL;
+
+    @Value("${address.front-server}")
+    private final String FRONT_SERVER;
+
+    @Value("${address.front-server-https}")
+    private final String FRONT_SERVER_HTTPS;
+
+    @Value("${address.domain}")
+    private final String DOMAIN;
+
+    @Value("${address.local}")
+    private final String LOCAL;
+
     private final JwtTokenUtils jwtTokenUtils;
     private final RedisUtils redisUtils;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
@@ -68,9 +88,9 @@ public class SecurityConfig {
                 .addFilterBefore(encodingFilter, CsrfFilter.class)
                 .headers().frameOptions().disable()
                 .and()
-                .cors(Customizer.withDefaults())
-//                .cors().disable()
                 .csrf().disable()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .httpBasic().disable()
                 .formLogin().disable()
                 .apply(new CustomFilterConfig())
@@ -143,17 +163,19 @@ public class SecurityConfig {
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin(FRONT_LOCAL);
+        configuration.addAllowedOrigin(FRONT_SERVER);
+        configuration.addAllowedOrigin(FRONT_SERVER_HTTPS);
+        configuration.addAllowedOrigin(DOMAIN);
+        configuration.addAllowedOrigin(LOCAL);
         configuration.addAllowedHeader("*");
-        configuration.addAllowedOrigin("https://daeyeo4u.com");
-        configuration.addAllowedOrigin("https://backend.daeyeo4u.shop");
-        configuration.addAllowedOrigin("https://kapi.kakao.com");
-        configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH", "OPTIONS"));
+        configuration.addExposedHeader(AUTHORIZATION);
+        configuration.addExposedHeader(REFRESH_TOKEN);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

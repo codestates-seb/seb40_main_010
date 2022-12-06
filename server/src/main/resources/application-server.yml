@@ -127,3 +127,10 @@ default :
 
 awsParameterStorePropertySource:
   enabled: true
+
+address :
+  local-front: ${/config/param/local-front}
+  front-s3: ${/config/param/front-s3}
+  front-https: ${/config/param/front-https}
+  domain: ${/config/param/domain}
+  local: ${/config/param/local}
