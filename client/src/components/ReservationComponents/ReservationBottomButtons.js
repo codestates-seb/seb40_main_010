@@ -1,18 +1,24 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import axios from 'axios';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { FaRegBookmark, FaLink, FaBookmark } from 'react-icons/fa';
-import { PlaceIDState, bookmarkState, HasRefresh } from '../../atoms';
+import {
+  PlaceIDState,
+  bookmarkState,
+  HasRefresh,
+  userMbtiValue,
+} from '../../atoms';
 
 function ReservationBottomButtons() {
   const navigator = useNavigate();
   const placeId = useRecoilValue(PlaceIDState);
   const [isBookmark, setIsBookmark] = useRecoilState(bookmarkState);
-  const isLogin = useRecoilValue(HasRefresh);
+  const [isLogin, setIsLogIn] = useRecoilState(HasRefresh);
+  const resetUserMbti = useResetRecoilState(userMbtiValue);
 
   const placeUrl = window.location.href;
 
@@ -43,7 +49,12 @@ function ReservationBottomButtons() {
       );
       setIsBookmark(response.data);
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 401) {
+        await localStorage.removeItem('ACCESS');
+        await localStorage.removeItem('REFRESH');
+        setIsLogIn(false);
+        resetUserMbti();
+      }
     }
   };
 
