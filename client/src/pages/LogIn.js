@@ -135,6 +135,10 @@ const Container = styled.div`
       box-shadow: none;
     }
 
+    :hover {
+      cursor: pointer;
+    }
+
     :disabled {
       cursor: not-allowed;
       opacity: 0.7;
