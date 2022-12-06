@@ -53,8 +53,7 @@ public class PlacePatchTest extends PlaceControllerTest {
 
         String content = gson.toJson(key);
 
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(placeService).updatePlace(Mockito.anyLong(), Mockito.any(PlaceDto.Update.class), Mockito.anyString(), Mockito.anyList());
+        doNothing().when(placeService).updatePlace(Mockito.anyLong(), Mockito.any(PlaceDto.Update.class), Mockito.anyLong(), Mockito.anyList());
 
         ResultActions actions =
                 mockMvc.perform(

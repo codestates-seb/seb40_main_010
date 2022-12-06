@@ -23,31 +23,27 @@ public class MailService {
     private final ReserveDbService reserveDbService;
     private final PlaceDbService placeDbService;
     private final MemberDbService memberDbService;
-    private final RedisUtils redisUtils;
     private static final String FROM_ADDRESS = "YOUR_EMAIL_ADDRESS";
 
     public MailService(ReserveDbService reserveDbService,
                        PlaceDbService placeDbService,
-                       MemberDbService memberDbService,
-                       RedisUtils redisUtils) {
+                       MemberDbService memberDbService) {
         this.reserveDbService = reserveDbService;
         this.placeDbService = placeDbService;
         this.memberDbService = memberDbService;
-        this.redisUtils = redisUtils;
     }
 
     /**
      * 예약 확정(결제 완료) 내역 메일 전송 메서드
      *
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @param reserveId 예약 식별자
      * @author LeeGoh
      */
     @Async
-    public void mailSend(String refreshToken, Long reserveId) {
+    public void mailSend(Long memberId, Long reserveId) {
 
         // 예약, 공간, 회원 찾아오기
-        Long memberId = redisUtils.getId(refreshToken);
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
         Place findPlace = placeDbService.ifExistsReturnPlace(findReserve.getPlaceId());
         Member findMember = memberDbService.ifExistsReturnMember(memberId);

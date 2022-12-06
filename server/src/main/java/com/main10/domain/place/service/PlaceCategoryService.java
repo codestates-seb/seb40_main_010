@@ -11,7 +11,6 @@ import com.main10.domain.place.entity.PlaceCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +21,13 @@ public class PlaceCategoryService {
     private final PlaceCategoryRepository placeCategoryRepository;
     private final CategoryRepository categoryRepository;
 
+    /**
+     * 장소별 카테고리 리스트 조회 메서드
+     * @param placeId 장소 식별자
+     * @return List(String)
+     * @author LimJaeMinZ
+     */
     public List<String>findByAllPlaceCategoryList(Long placeId) {
-
         List<PlaceCategory> placeCategoryList = placeCategoryRepository.findAllByPlaceId(placeId);
 
         return placeCategoryList.stream()
@@ -31,31 +35,41 @@ public class PlaceCategoryService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 장소 카테고리 리스트 조회 메서드2(객체)
+     * @param placeId 장소 식별자
+     * @return List(PlaceCategory)
+     * @author LimJaeMinZ
+     */
     public List<PlaceCategory>findByAllPlaceCategoryList2(Long placeId) {
-
-        List<PlaceCategory> placeCategoryList = placeCategoryRepository.findAllByPlaceId(placeId);
-
-        return placeCategoryList;
+        return placeCategoryRepository.findAllByPlaceId(placeId);
     }
 
+    /**
+     * 장소별 카테고리 삭제 메서드
+     * @param Id 장소 카테고리 식별자
+     * @author LimJaeMinZ
+     */
     public void deletePlaceCategory(Long Id) {
-
         placeCategoryRepository.deleteById(Id);
     }
 
+    /**
+     * 장소별 카테고리 조회 메서드
+     * @param Id 장소 카테고리 식별자
+     * @return PlaceCategoryDto.Search
+     * @author LimJaeMinZ
+     */
     public PlaceCategoryDto.Search findByPlaceCategoryId(Long Id) {
 
         PlaceCategory placeCategory = placeCategoryRepository.findById(Id).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.CATEGORY_NOT_FOUND));
 
-        PlaceCategoryDto.Search placeCategoryDto = PlaceCategoryDto.Search
+        return PlaceCategoryDto.Search
                 .builder()
                 .categoryId(placeCategory.getId())
                 .categoryName(placeCategory.getCategoryName())
                 .build();
-
-
-        return placeCategoryDto;
     }
 
     /**

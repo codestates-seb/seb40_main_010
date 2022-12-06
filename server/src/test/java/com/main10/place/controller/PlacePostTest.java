@@ -50,9 +50,7 @@ public class PlacePostTest extends PlaceControllerTest{
                 new MockMultipartFile("file", "test.jpg", "image/jpg", "<<jpg data>>".getBytes());
 
         String content = gson.toJson(key);
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        doNothing().when(placeService).createPlace(Mockito.any(PlaceDto.Create.class), Mockito.anyString(), Mockito.anyList());
+        doNothing().when(placeService).createPlace(Mockito.any(PlaceDto.Create.class), Mockito.anyLong(), Mockito.anyList());
 
         ResultActions actions =
                 mockMvc.perform(

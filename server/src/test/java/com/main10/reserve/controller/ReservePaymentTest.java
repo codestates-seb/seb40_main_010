@@ -50,7 +50,7 @@ public class ReservePaymentTest extends ReserveControllerTest{
 
         String content = gson.toJson(post);
 
-        given(reserveService.createReserve(Mockito.any(ReserveDto.Post.class), Mockito.anyLong(), Mockito.anyString())).willReturn(1L);
+        given(reserveService.createReserve(Mockito.any(ReserveDto.Post.class), Mockito.anyLong(), Mockito.anyLong())).willReturn(1L);
 
         ResultActions actions =
                 mockMvc.perform(
@@ -97,7 +97,7 @@ public class ReservePaymentTest extends ReserveControllerTest{
                 .message(PAY_URI_MSG)
                 .build();
 
-        given(reserveService.getKaKaoPayUrl(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString()))
+        given(reserveService.getKaKaoPayUrl(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString()))
                 .willReturn(message);
 
         ResultActions actions =

@@ -3,11 +3,12 @@ package com.main10.global.security.utils;
 import com.main10.global.exception.ExceptionCode;
 import com.main10.global.security.exception.AuthException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,10 +16,11 @@ import java.util.concurrent.TimeUnit;
  * @author mozzi327
  */
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class RedisUtils {
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final RedisTemplate<String, Object> redisBlackListTemplate;
+    private final StringRedisTemplate redisTemplate;
+    private final StringRedisTemplate redisBlackListTemplate;
 
     /**
      * redis에서 key-value를 저장하는 메서드
@@ -26,9 +28,10 @@ public class RedisUtils {
      * @param o String(key)
      * @author mozzi327
      */
-    public void setData(String key, Object o, int minutes) {
+    public void setData(String key, String provider ,String  o, int minutes) {
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(o.getClass()));
-        redisTemplate.opsForValue().set(key, o, minutes, TimeUnit.MINUTES);
+        String refreshKey = provider + "RT :" + key;
+        redisTemplate.opsForValue().set(refreshKey, o, minutes * 60L, TimeUnit.SECONDS);
     }
 
     /**
@@ -37,8 +40,9 @@ public class RedisUtils {
      * @return String(key)
      * @author mozzi327
      */
-    public Object getData(String key) {
-        return redisTemplate.opsForValue().get(key);
+    public Object getData(String key, String provider) {
+        String refreshKey = provider + "RT :" + key;
+        return redisTemplate.opsForValue().get(refreshKey);
     }
 
     /**
@@ -46,8 +50,9 @@ public class RedisUtils {
      * @param key REFRESH_TOKEN
      * @author mozzi327
      */
-    public void deleteData(String key) {
-        redisTemplate.delete(key);
+    public void deleteData(String key, String provider) {
+        String refreshKey = provider + "RT :" + key;
+        redisTemplate.delete(refreshKey);
     }
 
     /**
@@ -56,9 +61,10 @@ public class RedisUtils {
      * @param setTime 만료시간(분)
      * @author mozzi327
      */
-    public void setBlackList(String key, Object o, Long setTime) {
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(o.getClass()));
-        redisBlackListTemplate.opsForValue().set(key, o, setTime, TimeUnit.MILLISECONDS);
+    public void setBlackList(String key, String o, Long setTime) {
+        ValueOperations<String, String> stringStringValueOperations = redisBlackListTemplate.opsForValue();
+        redisBlackListTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(o.getClass()));
+        stringStringValueOperations.set(key, o, setTime, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -68,7 +74,8 @@ public class RedisUtils {
      * @author mozzi327
      */
     public String isBlackList(String key) {
-        return (String) redisBlackListTemplate.opsForValue().get(key);
+        ValueOperations<String, String> stringValueOperations = redisBlackListTemplate.opsForValue();
+        return stringValueOperations.get(key);
     }
 
     /**
@@ -80,8 +87,8 @@ public class RedisUtils {
     public Long getId(String refreshToken) {
         if (!StringUtils.hasText(refreshToken))
             throw new AuthException(ExceptionCode.INVALID_REFRESH_TOKEN);
-        Long memberId = (Long) redisTemplate.opsForValue().get(refreshToken);
-        if (memberId == null) throw new AuthException(ExceptionCode.INVALID_REFRESH_TOKEN);
-        return memberId;
+        ValueOperations<String, String> stringValueOperations = redisBlackListTemplate.opsForValue();
+        String id = String.valueOf(stringValueOperations.get(refreshToken));
+        return Long.valueOf(id);
     }
 }

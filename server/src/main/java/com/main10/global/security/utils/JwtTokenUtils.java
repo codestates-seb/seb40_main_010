@@ -63,6 +63,7 @@ public class JwtTokenUtils {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
+        claims.put("id", member.getId());
 
         String subject = member.getEmail();
         Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());

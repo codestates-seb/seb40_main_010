@@ -28,9 +28,7 @@ public class EditMemberTest extends MemberControllerTest {
     @DisplayName("회원 정보 수정 테스트")
     public void patchMember() throws Exception {
         String content = gson.toJson(patch);
-
-        given(redisUtils.getId(refreshToken)).willReturn(1L);
-        doNothing().when(memberService).updateMember(Mockito.anyString(), Mockito.any(MemberDto.Patch.class));
+        doNothing().when(memberService).updateMember(Mockito.anyLong(), Mockito.any(MemberDto.Patch.class));
 
 
         ResultActions actions = mockMvc.perform(patch("/member/edit")

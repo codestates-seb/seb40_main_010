@@ -44,9 +44,8 @@ public class UploadProfileImageTest extends MemberControllerTest {
                 .fileSize(58698L)
                 .build();
 
-        given(redisUtils.getId(refreshToken)).willReturn(1L);
         given(s3Upload.uploadfile(Mockito.any(MultipartFile.class), Mockito.anyString())).willReturn(profile);
-        doNothing().when(memberService).createProfileS3(Mockito.anyString(), Mockito.any(MultipartFile.class));
+        doNothing().when(memberService).createProfileS3(Mockito.anyLong(), Mockito.any(MultipartFile.class));
 
         ResultActions actions = mockMvc.perform(multipart("/member/profile")
                 .file(files)

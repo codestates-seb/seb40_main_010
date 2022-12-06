@@ -48,9 +48,7 @@ public class ReserveGetTest extends ReserveControllerTest{
 
         List<ReserveDto.Response> reserveList = new ArrayList<>();
         reserveList.add(new ReserveDto.Response(reserve, place));
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        given(reserveService.getReservation(Mockito.anyString(), Mockito.any(Pageable.class)))
+        given(reserveService.getReservation(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(reserveList));
 
         ResultActions actions =

@@ -15,15 +15,21 @@ import com.main10.domain.reserve.pay.PayApproveInfo;
 import com.main10.domain.reserve.pay.PayReadyInfo;
 import com.main10.domain.reserve.pay.ReadyToPaymentInfo;
 import com.main10.domain.reserve.pay.RequestForReserveInfo;
-import com.main10.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalField;
+import java.util.List;
+
+import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.RESERVATION_CANCELED;
 import static com.main10.domain.reserve.utils.PayConstants.*;
 import static com.main10.domain.reserve.utils.ReserveConstants.INFO_URI_MSG;
 import static com.main10.domain.reserve.utils.ReserveConstants.PAY_URI_MSG;
@@ -32,8 +38,6 @@ import static com.main10.domain.reserve.utils.ReserveConstants.PAY_URI_MSG;
 @Service
 @RequiredArgsConstructor
 public class ReserveService {
-
-    private final RedisUtils redisUtils;
     private final FeignService feignService;
     private final PlaceDbService placeDbService;
     private final MemberDbService memberDbService;
@@ -46,12 +50,11 @@ public class ReserveService {
      *
      * @param post         예약 등록 정보
      * @param placeId      장소 식별자
-     * @param refreshToken 리프레시 토큰
+     * @param memberId     사용자 식별자
      * @author LimJaeminZ
      */
     @Transactional
-    public Long createReserve(ReserveDto.Post post, Long placeId, String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public Long createReserve(ReserveDto.Post post, Long placeId, Long memberId) {
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
 
         if (memberId.equals(findPlace.getMemberId()))
@@ -79,19 +82,17 @@ public class ReserveService {
      * 예약 프로세스 2 - 결제 진행중 : 결제 URL 요청 메서드
      *
      * @param reserveId    예약 식별자
-     * @param refreshToken
+     * @param memberId     사용자 식별자
      * @param requestUrl   요청 URL
      * @return URL(결제 페이지)
      * @author mozzi327
      */
     @Transactional
     public Message getKaKaoPayUrl(Long reserveId,
-                                 String refreshToken,
+                                 Long memberId,
                                  String requestUrl) {
 
         /*  Todo : 예약 가능한지 확인하는 이벤트 처리(논의중)  */
-
-        Long memberId = redisUtils.getId(refreshToken);
 
         // 사용자, 예약, 호스트 정보 조회
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
@@ -119,6 +120,7 @@ public class ReserveService {
     /**
      * 예약 프로세스 3 - 결제 완료 : 예약 정보 반환 메서드
      *
+     * @param reserveId 예약 식별자
      * @param pgToken Payment Gateway Token
      * @return PayApprovalDto
      * @author mozzi327
@@ -149,10 +151,9 @@ public class ReserveService {
                 .build();
     }
 
-
     /**
      * 예약 프로세스 4 - 결제 취소 시 결제 취소 상태 변경 메서드
-     *
+     * @param reserveId 예약 식별자
      * @author mozzi327
      */
     public void setCanceledStatus(Long reserveId) {
@@ -161,10 +162,9 @@ public class ReserveService {
         reserveDbService.saveReserve(findReserve);
     }
 
-
     /**
      * 예약 프로세스 5 - 결제 실패 시 결제 실패 상태 변경 메서드
-     *
+     * @param reserveId 예약 식별자
      * @author mozzi327
      */
     public void setFailedStatus(Long reserveId) {
@@ -173,34 +173,37 @@ public class ReserveService {
         reserveDbService.saveReserve(findReserve);
     }
 
-
     /* ------------------------------------ 예약 프로세스 끝 -------------------------------------*/
-
 
     /**
      * 예약 전체 조회 메서드
      *
      * @return List
-     * @Param refreshToken
+     * @param memberId 사용자 식별자
      * @author LeeGoh
      */
-    public Page<ReserveDto.Response> getReservation(String refreshToken, Pageable pageable) {
-        Long memberId = redisUtils.getId(refreshToken);
-        return reserveDbService.getReservation(memberId, pageable);
+    public Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable) {
+        Page<ReserveDto.Response> info = reserveDbService.getReservation(memberId, pageable);
+        List<ReserveDto.Response> res = info.getContent();
+        System.out.println("debug");
+        res.removeIf(x -> (LocalDateTime.now().isBefore(x.getEndTime())
+                    && (x.getStatus().equals(Reserve.ReserveStatus.PAY_FAILED.getStatus())
+                        || x.getStatus().equals(Reserve.ReserveStatus.PAY_CANCELED.getStatus())
+                        )));
+        int total = res.size();
+        return new PageImpl<>(res, pageable, total);
     }
 
-
     /**
-     * 예약 삭제 메서드
-     * 예약 삭제 시 취소 사유 작성
-     * 예약 취소 시 mbtiCount -1, spaceCount -1
+     * 예약 삭제 메서드<br>
+     * 예약 삭제 시 취소 사유 작성<br>
+     * 예약 취소 시 mbtiCount -1, spaceCount -1<br>
      *
-     * @param reserveId    예약 식별자
-     * @param refreshToken
+     * @param reserveId 예약 식별자
+     * @param memberId 사용자 식별자
      * @author LeeGoh
      */
-    public void deleteReserve(Long reserveId, String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public void deleteReserve(Long reserveId, Long memberId) {
 
         // 예약 조회
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
@@ -222,55 +225,21 @@ public class ReserveService {
         reserveDbService.saveReserve(findReserve);
     }
 
-
-
-
-
-
-    /* ------------------------------------ 일단 예외 -------------------------------------*/
-
-
-
-
-
     /**
-     * 예약 수정 메서드(사용 미정)
+     * 예약 수정 메서드
      *
      * @param patch        에약 수정 정보
      * @param reserveId    예약 식별자
-     * @param refreshToken
+     * @param memberId 사용자 식별자
      * @author Quartz614
      */
-    public void updateReserve(ReserveDto.Patch patch, Long reserveId, String refreshToken) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public void updateReserve(ReserveDto.Patch patch, Long reserveId, Long memberId) {
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId); // 추후 수정
         if (!memberId.equals(findReserve.getMemberId()))
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
         findReserve.editReserve(patch.getCapacity(), patch.getStartTime(), patch.getEndTime());
         reserveDbService.saveReserve(findReserve);
-    }
-
-
-
-
-
-
-
-
-
-    /* ------------------------------------ Common Method --------------------------------------*/
-
-
-    /**
-     * OrderId를 파싱하는 메서드
-     *
-     * @param orderId 카카오 주문 정보 식별자
-     * @return String[]
-     * @author mozzi327
-     */
-    private String[] parseOrderInfo(String orderId) {
-        return orderId.split("/");
     }
 }
 

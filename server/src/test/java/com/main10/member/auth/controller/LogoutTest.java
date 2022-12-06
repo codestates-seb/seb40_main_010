@@ -23,9 +23,9 @@ public class LogoutTest extends AuthControllerTest {
     @DisplayName("회원 로그아웃 테스트")
     public void logoutMember() throws Exception {
 
-        doNothing().when(redisUtils).deleteData(refreshToken);
+        doNothing().when(redisUtils).deleteData(Mockito.anyString(), Mockito.anyString());
         doNothing().when(redisUtils).setBlackList(Mockito.anyString(), Mockito.anyString(), Mockito.anyLong());
-        doNothing().when(authService).logoutMember(Mockito.anyString(), Mockito.anyString());
+        doNothing().when(authService).logoutMember(Mockito.anyString(), Mockito.anyString(), Mockito.anyLong());
 
         ResultActions actions = mockMvc.perform(delete("/auth/logout")
                 .header(AUTHORIZATION, "Bearer " + accessToken)

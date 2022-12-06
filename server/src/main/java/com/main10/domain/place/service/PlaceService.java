@@ -18,14 +18,11 @@ import com.main10.domain.reserve.entity.Reserve;
 import com.main10.global.batch.service.MbtiCountService;
 import com.main10.domain.reserve.service.ReserveDbService;
 import com.main10.domain.review.service.ReviewDbService;
-import com.main10.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +37,12 @@ import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.RESERVATION
 @RequiredArgsConstructor
 public class PlaceService {
 
-    private final RedisUtils redisUtils;
     private final PlaceDbService placeDbService;
     private final ReserveDbService reserveDbService;
     private final MemberDbService memberDbService;
     private final ReviewDbService reviewDbService;
 
     private final FileHandler fileHandler;
-
     private final MbtiCountService mbtiCountService;
     private final PlaceImageService placeImageService;
     private final PlaceCategoryService placeCategoryService;
@@ -60,14 +55,12 @@ public class PlaceService {
      * 공간 저장 (S3)
      *
      * @param placePostDto 공간 등록 dto
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @param files 이미지 파일
      * @author LimJaeminZ
      */
     @Transactional
-    public void createPlaceS3(PlaceDto.Create placePostDto, String refreshToken, List<MultipartFile> files) {
-        //유저 확인
-        Long memberId = redisUtils.getId(refreshToken);
+    public void createPlaceS3(PlaceDto.Create placePostDto, Long memberId, List<MultipartFile> files) {
 
         Place place = Place.builder()
                 .title(placePostDto.getTitle())
@@ -111,15 +104,13 @@ public class PlaceService {
      * 공간 저장 (Local)
      *
      * @param placePostDto 공간 등록 dto
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @param files 이미지 파일
-     * @throws Exception
+     * @throws Exception 예외
      * @author LimJaeminZ
      */
     @Transactional
-    public void createPlace(PlaceDto.Create placePostDto, String refreshToken, List<MultipartFile> files) throws Exception {
-        //유저 확인
-        Long memberId = redisUtils.getId(refreshToken);
+    public void createPlace(PlaceDto.Create placePostDto, Long memberId, List<MultipartFile> files) throws Exception {
 
         Place place = Place.builder()
                 .title(placePostDto.getTitle())
@@ -162,22 +153,19 @@ public class PlaceService {
      * 공간 상세 조회 메서드
      *
      * @param placeId 공간 식별자
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @return PlaceResponseDto
      * @author LimJaeminZ
      */
     @Transactional
-    public PlaceDto.DetailResponse searchPlace(Long placeId, String refreshToken) {//, List<String> filePath, List<String> categoryList) {
+    public PlaceDto.DetailResponse searchPlace(Long placeId, Long memberId) {//, List<String> filePath, List<String> categoryList) {
         boolean isBookmark = false;
-
-        if (StringUtils.hasText(refreshToken)) {
-            Long memberId = redisUtils.getId(refreshToken);
+        if (memberId != null) {
             Optional<Bookmark> findBookmark = bookmarkRepository
                     .findBookmarkByMemberIdAndPlaceId(memberId, placeId);
             if (findBookmark.isPresent())
                 isBookmark = true;
         }
-
 
         Place place = placeDbService.ifExistsReturnPlace(placeId);
         Member findMember = memberDbService.ifExistsReturnMember(place.getMemberId());
@@ -199,13 +187,11 @@ public class PlaceService {
      *
      * @param placeId 공간 식별자
      * @param placePatchDto 공간 수정 dto
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @param files 이미지 파일
      * @author LimjaeminZ
      */
-    public void updatePlaceS3(Long placeId, PlaceDto.Update placePatchDto, String refreshToken, List<MultipartFile> files) {
-        //유저 확인
-        Long memberId = redisUtils.getId(refreshToken);
+    public void updatePlaceS3(Long placeId, PlaceDto.Update placePatchDto, Long memberId, List<MultipartFile> files) {
 
         Place updatePlace = placeDbService.ifExistsReturnPlace(placeId);
 
@@ -265,14 +251,12 @@ public class PlaceService {
      *
      * @param placeId 공간 식별자
      * @param placePatchDto 공간 수정 dto
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @param files 이미지 파일
-     * @throws Exception
+     * @throws Exception 예외
      * @author LimjaeminZ
      */
-    public void updatePlace(Long placeId, PlaceDto.Update placePatchDto, String refreshToken, List<MultipartFile> files) throws Exception {
-        //유저 확인
-        Long memberId = redisUtils.getId(refreshToken);
+    public void updatePlace(Long placeId, PlaceDto.Update placePatchDto, Long memberId, List<MultipartFile> files) throws Exception {
 
         Place updatePlace = placeDbService.ifExistsReturnPlace(placeId);
 
@@ -294,12 +278,11 @@ public class PlaceService {
         addCategoryList = placeCategoryService.getAddCategoryList(updatePlace.getId(), dbCategoryList, categoryList);
 
         List<PlaceImage> dbPlaceImageList = placeImageService.findAllByPlaceImage(placeId); // db 저장 파일 목록
-        List<MultipartFile> multipartFileList = files; //placePatchDto.getMultipartFiles(); // 전달되어온 파일 목록
         List<MultipartFile> addFileList; // 새롭게 전달되어온 파일들의 목록을 저장할 List
 
         // 파일 업로드 수정
         String dir = "Local";
-        addFileList = getAddFileList(dbPlaceImageList, multipartFileList, dir);
+        addFileList = getAddFileList(dbPlaceImageList, files, dir);
 
         List<UploadFile> uploadFileList = fileHandler.parseUploadFileInfo(addFileList);
         List<PlaceImage> placeImageList = new ArrayList<>();
@@ -331,13 +314,12 @@ public class PlaceService {
     /**
      * 공간 삭제 메서드
      *
-     * @param refreshToken 리프래시 토큰
+     * @param memberId 사용자 식별자
      * @param placeId 공간 식별자
      * @author Quartz614
      */
     @Transactional
-    public void deleteHosting(String refreshToken, Long placeId) {
-        Long memberId = redisUtils.getId(refreshToken);
+    public void deleteHosting(Long memberId, Long placeId) {
         Member findMember = memberDbService.ifExistsReturnMember(memberId);
         Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
         List<Reserve> findReserve = reserveDbService.findAllByReserves(placeId);
@@ -349,8 +331,8 @@ public class PlaceService {
         bookmarkRepository.deleteAllByPlaceId(placeId);
 
         // 예약 취소 후 상태 변경
-        for (int i = 0; i < findReserve.size(); i++) {
-            if (findReserve.get(i).getStatus().equals(RESERVATION_CANCELED)) {
+        for (Reserve reserve : findReserve) {
+            if (reserve.getStatus().equals(RESERVATION_CANCELED)) {
                 throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
             }
 
@@ -358,8 +340,8 @@ public class PlaceService {
             mbtiCountService.reduceMbtiCount(findMember, placeId);
 
             // 예약 상태 변경 ... -> RESERVATION_CANCELED
-            findReserve.get(i).setStatus(RESERVATION_CANCELED);
-            reserveDbService.saveReserve(findReserve.get(i));
+            reserve.setStatus(RESERVATION_CANCELED);
+            reserveDbService.saveReserve(reserve);
         }
 
         // 공간 카테고리 & 공간 삭제
@@ -381,11 +363,8 @@ public class PlaceService {
 
         if (CollectionUtils.isEmpty(dbPlaceImageList)) { // db 존재 x
             if (!CollectionUtils.isEmpty(multipartFileList)) { // 전달된 파일 한장 이상
-                multipartFileList.forEach(
-                        multipartFile -> {
-                            addFileList.add(multipartFile); // 저장 파일 목록에 추가
-                        }
-                );
+                // 저장 파일 목록에 추가
+                addFileList.addAll(multipartFileList);
             }
         } else { // db에 한장 이상 존재
             if (CollectionUtils.isEmpty(multipartFileList)) { // 전달된 파일 x

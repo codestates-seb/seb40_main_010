@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +32,8 @@ public class CustomAuthorityUtils {
      * @return List(GrantedAuthority)
      * @author mozzi327
      */
-    public List<GrantedAuthority> createAuthorities(String email) {
-        if (email.equals(addminMailAddress)) return ADMIN_ROLES;
+    public List<GrantedAuthority> createAuthorities(String email, String provider) {
+        if (email.equals(addminMailAddress) && provider.equals("common")) return ADMIN_ROLES;
         return USER_ROLES;
     }
 
@@ -56,8 +55,8 @@ public class CustomAuthorityUtils {
      * @return List(String)
      * @author mozzi327
      */
-    public List<String> createRoles(String email) {
-        if (email.equals(addminMailAddress)) return ADMIN_ROLES_STRING;
+    public List<String> createRoles(String email, String provider) {
+        if (email.equals(addminMailAddress) && provider.equals("common")) return ADMIN_ROLES_STRING;
         return USER_ROLES_STRING;
     }
 

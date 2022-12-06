@@ -1,8 +1,10 @@
 package com.main10.global.helper;
 
+import com.main10.global.security.token.JwtAuthenticationToken;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +27,10 @@ public class MailController {
      * @author LeeGoh
      */
     @PostMapping("/reserve/{reserve-id}/mail")
-    public ResponseEntity execMail(@PathVariable("reserve-id") Long reserveId,
-                                   @RequestHeader(REFRESH_TOKEN) String refreshToken) {
-        mailService.mailSend(refreshToken, reserveId);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<?> execMail(@PathVariable("reserve-id") Long reserveId,
+                                   Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        mailService.mailSend(token.getId(), reserveId);
+        return ResponseEntity.ok().build();
     }
 }

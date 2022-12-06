@@ -27,12 +27,9 @@ public class ReIssueTest extends AuthControllerTest {
     @Test
     @DisplayName("액세스 토큰 리이슈 테스트")
     public void reIssueTokenTest() throws Exception {
-
-        Object tmp = new Object();
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
         given(memberDbService.ifExistsReturnMember(Mockito.anyLong())).willReturn(member);
-        given(redisUtils.getData(Mockito.anyString())).willReturn(tmp);
-        given(authService.reIssueToken(Mockito.anyString(), Mockito.anyString())).willReturn(resToken);
+        given(redisUtils.getData(Mockito.anyString(), Mockito.anyString())).willReturn(null);
+        given(authService.reIssueToken(Mockito.anyString(), Mockito.anyString(), Mockito.anyLong())).willReturn(resToken);
 
         ResultActions actions = mockMvc.perform(get("/auth/re-issue")
                         .header(AUTHORIZATION, "Bearer " + accessToken)

@@ -218,9 +218,9 @@ include::{snippets}/예약3 결제 승인/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/예약3 결제 승인/http-response.adoc[]
-
-.response-fields
-include::{snippets}/예약3 결제 승인/response-fields.adoc[]
+//
+// .response-fields
+// include::{snippets}/예약3 결제 승인/response-fields.adoc[]
 
 
 === 예약4 결제 취소

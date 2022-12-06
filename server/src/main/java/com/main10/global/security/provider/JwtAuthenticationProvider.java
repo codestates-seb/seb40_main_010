@@ -38,10 +38,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 .getClaims(jwtToken.getAccessToken());
         String email = (String) claims.get(AuthConstants.USERNAME);
         List<String> roles = (List<String>) claims.get(AuthConstants.ROLES);
+        String stringId = claims.get("id").toString();
+        Long id = Long.valueOf(stringId);
 
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities(roles);
 
-        return new JwtAuthenticationToken(authorities, email, null);
+        return new JwtAuthenticationToken(authorities, email, id ,null);
     }
 
     /**

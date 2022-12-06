@@ -24,9 +24,7 @@ public class BookmarkCreateTest extends BookmarkControllerTest {
     void createBookmark() throws Exception{
 
         Long placeId = 1L;
-
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        given(bookmarkService.createBookmark(Mockito.anyLong(), Mockito.anyString())).willReturn(true);
+        given(bookmarkService.createBookmark(Mockito.anyLong(), Mockito.anyLong())).willReturn(true);
 
         ResultActions actions =
                 mockMvc.perform(

@@ -26,6 +26,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class BookmarkGetTest extends BookmarkControllerTest{
@@ -33,8 +34,6 @@ public class BookmarkGetTest extends BookmarkControllerTest{
     @Test
     @DisplayName("GET 북마크 조회")
     void getBookmark() throws Exception{
-
-
         Bookmark bookmark = Bookmark.builder().id(1L).placeId(1L).memberId(1L).build();
 
         Place place = Place.builder()
@@ -51,8 +50,7 @@ public class BookmarkGetTest extends BookmarkControllerTest{
         List<BookmarkDto.Response> bookmarkList = new ArrayList<>();
         bookmarkList.add(new BookmarkDto.Response(bookmark, place));
 
-        given(redisUtils.getId(Mockito.anyString())).willReturn(1L);
-        given(bookmarkService.getBookmark(Mockito.anyString(), Mockito.any(Pageable.class)))
+        given(bookmarkService.getBookmark(Mockito.anyLong(), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<>(bookmarkList));
 
         ResultActions actions =
@@ -60,6 +58,7 @@ public class BookmarkGetTest extends BookmarkControllerTest{
                         get("/bookmark")
                                 .header(AUTHORIZATION, "Bearer " + accessToken)
                                 .header(REFRESH, refreshToken)
+                                .with(csrf())
                 );
 
         actions

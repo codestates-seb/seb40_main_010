@@ -9,15 +9,14 @@ import com.main10.domain.place.dto.PlaceCategoryDto;
 import com.main10.domain.place.dto.PlaceDto;
 import com.main10.domain.place.entity.Place;
 import com.main10.domain.place.entity.PlaceImage;
-import com.main10.global.security.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -27,7 +26,6 @@ public class PlaceDbService {
     private final PlaceRepository placeRepository;
     private final PlaceImageRepository placeImageRepository;
     private final PlaceCategoryRepository placeCategoryRepository;
-    private final RedisUtils redisUtils;
 
     /**
      * 공간 정보 조회 메서드
@@ -43,8 +41,8 @@ public class PlaceDbService {
 
     /**
      * 공간 저장 메서드
-     * @param place
-     * @author
+     * @param place 저장할 장소 정보
+     * @author LimJaeMinZ
      */
     public void savePlace(Place place) {
         placeRepository.save(place);
@@ -53,9 +51,9 @@ public class PlaceDbService {
     /**
      * 공간 이미지 저장 메서드
      *
-     * @param placeImage
-     * @return
-     * @author
+     * @param placeImage 저장할 장소 이미지 정보
+     * @return PlaceImage
+     * @author LimJaeMinZ
      */
     public PlaceImage savePlaceImage(PlaceImage placeImage) {
         return placeImageRepository.save(placeImage);
@@ -64,7 +62,7 @@ public class PlaceDbService {
     /**
      * 공간 삭제 메서드
      *
-     * @param place
+     * @param place 삭제할 장소 이미지 정보
      * @author quartz614
      */
     public void deletePlace(Place place) {
@@ -74,7 +72,7 @@ public class PlaceDbService {
     /**
      * 공간 카테고리 삭제 메서드
      *
-     * @param placeId
+     * @param placeId 장소 식별자
      * @author LeeGoh
      */
     public void deletePlaceCategory(Long placeId) {
@@ -85,8 +83,8 @@ public class PlaceDbService {
     /**
      * Pagination 적용한 공간 전체 조회 메서드
      *
-     * @param pageable
-     * @return
+     * @param pageable 페이지 정보
+     * @return Page(PlaceDto.Response)
      * @author LeeGoh
      */
     public Page<PlaceDto.Response> getPlacesPage(Pageable pageable) {
@@ -95,8 +93,9 @@ public class PlaceDbService {
 
     /**
      * 공간 전체 조회 테스트(이미지 limit)
-     * @param pageable
-     * @return
+     * @param pageable 페이지 정보
+     * @return Page(PlaceDto.ResponseTest)
+     * @author LimJaeMinZ
      */
     public Page<PlaceDto.ResponseTest> getPlacesPageTest(Pageable pageable) {
        List<Place> placeList = placeRepository.findAll();
@@ -112,9 +111,8 @@ public class PlaceDbService {
        );
        final int start = (int)pageable.getOffset();
        final int end = Math.min((start + pageable.getPageSize()), responseTestList.size());
-       final Page<PlaceDto.ResponseTest> responseTestPage = new PageImpl<>(responseTestList.subList(start, end), pageable, responseTestList.size());
 
-       return responseTestPage;
+        return new PageImpl<>(responseTestList.subList(start, end), pageable, responseTestList.size());
     }
 
     /**
@@ -133,9 +131,9 @@ public class PlaceDbService {
     /**
      * Pagination 적용한 카테고리별 공간 조회 메서드
      *
-     * @param categoryId
-     * @param pageable
-     * @return
+     * @param categoryId 카테고리 식별자
+     * @param pageable 페이지 정보
+     * @return Page(PlaceCategoryDto.Response)
      * @author LeeGoh
      */
     public Page<PlaceCategoryDto.Response> getCategoryPage(Long categoryId, Pageable pageable) {
@@ -144,9 +142,10 @@ public class PlaceDbService {
 
     /**
      * 카테고리별 공간 조회 테스트(이미지 limit)
-     * @param categoryId
-     * @param pageable
-     * @return
+     * @param categoryId 카테고리 식별자
+     * @param pageable 페이지 정보
+     * @return Page(PlaceCategoryDto.ResponseTest)
+     * @author LimJaeMinZ
      */
     public Page<PlaceCategoryDto.ResponseTest> getCategoryPageTest(Long categoryId, Pageable pageable) {
         List<Place> placeList = placeRepository.getCategoryPageTest(categoryId);
@@ -163,9 +162,8 @@ public class PlaceDbService {
         );
         final int start = (int)pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), responseTestList.size());
-        final Page<PlaceCategoryDto.ResponseTest> responseTestPage = new PageImpl<>(responseTestList.subList(start, end), pageable, responseTestList.size());
 
-        return responseTestPage;
+        return new PageImpl<>(responseTestList.subList(start, end), pageable, responseTestList.size());
     }
 
     /**
@@ -185,24 +183,22 @@ public class PlaceDbService {
     /**
      * 공간 마이페이지 조회 메서드
      *
-     * @param refreshToken
-     * @param pageable
-     * @return
-     * @author quartz614
+     * @param memberId 사용자 식별자
+     * @param pageable 페이지 정보
+     * @return Page(PlaceDto.Response)
+     * @author Quartz614
      */
     @Transactional
-    public Page<PlaceDto.Response> getPlaceMypage(String refreshToken, Pageable pageable) {
-        //유저 확인
-        Long memberId = redisUtils.getId(refreshToken);
+    public Page<PlaceDto.Response> getPlaceMypage(Long memberId, Pageable pageable) {
         return placeRepository.getPlaceMypage(memberId, pageable);
     }
 
     /**
      * 공간 최소 가격, 최대 가격, 인원수별 상세 검색 메서드
      *
-     * @param searchDetail
-     * @param pageable
-     * @return
+     * @param searchDetail 상세 검색 정보
+     * @param pageable 페이지 정보
+     * @return Page(PlaceDto.Response)
      * @author LeeGoh
      */
     public Page<PlaceDto.Response> searchDetail(PlaceDto.SearchDetail searchDetail, Pageable pageable) {
@@ -212,9 +208,9 @@ public class PlaceDbService {
     /**
      * 공간 전체 타이틀 검색 메서드
      *
-     * @param title
-     * @param pageable
-     * @return
+     * @param title 장소 제목
+     * @param pageable 페이지 정보
+     * @return Page(PlaceDto.Response)
      * @author LeeGoh
      */
     public Page<PlaceDto.Response> searchTitleAll(String title, Pageable pageable) {
@@ -224,10 +220,10 @@ public class PlaceDbService {
     /**
      * 공간 카테고리별 타이틀 검색 메서드
      *
-     * @param categoryId
-     * @param title
-     * @param pageable
-     * @return
+     * @param categoryId 카테고리 식별자
+     * @param title 장소 제목
+     * @param pageable 페이지 정보
+     * @return Page(PlaceCategoryDto.Response)
      * @author LeeGoh
      */
     public Page<PlaceCategoryDto.Response> searchTitleCategory(Long categoryId, String title, Pageable pageable) {
@@ -237,16 +233,14 @@ public class PlaceDbService {
     /**
      * Stirng 검색어 공백을 기준으로 분리하여 List에 담는 메서드
      *
-     * @param title
-     * @return
+     * @param title 장소 제목
+     * @return List(String)
      * @author LeeGoh
      */
     public List<String> split(String title) {
         List<String> titles = new ArrayList<>();
         String[] list = title.split(" ");
-        for (int i = 0; i < list.length; i++) {
-            titles.add(list[i]);
-        }
+        Collections.addAll(titles, list);
         return titles;
     }
 }
