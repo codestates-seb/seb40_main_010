@@ -55,6 +55,7 @@
       "last 1 safari version"
     ]
   },
+  "proxy":"https://686c-182-226-233-7.jp.ngrok.io",
   "devDependencies": {
     "eslint": "^8.27.0",
     "eslint-config-airbnb": "^19.0.4",

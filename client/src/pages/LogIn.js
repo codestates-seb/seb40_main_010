@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 
 import Nav from '../components/Navigation/Nav';
 import useLogin from '../hooks/useLogin';
+import KakaoLogin from '../components/Login/KakaoLogin';
+// import GoogleLogin from '../components/Login/GoogleLogin';
 
 export default function LogIn() {
   const {
@@ -57,6 +59,8 @@ export default function LogIn() {
                 <div className="alert">{errorMessage}</div>
               )}
             </div>
+            <KakaoLogin />
+            {/* <GoogleLogin /> */}
             <button
               type="submit"
               className="submit-button"
@@ -112,7 +116,7 @@ const Container = styled.div`
   .submit-button {
     width: 15rem;
     height: 3rem;
-    margin-top: 60px;
+    margin-top: 15px;
     margin-bottom: 15px;
     background-color: #ffda77;
     border-radius: 40px;

@@ -12,7 +12,7 @@ import LogIn from './pages/LogIn';
 import MyPage from './pages/MyPage';
 import Register from './pages/Register';
 import SignUp from './pages/SignUp';
-import NotFound from './components/NotFound';
+import OAuth2RedirectHandler from './components/Login/OAuth2RedirectHandler';
 import { HasRefresh, mbtiPlaceDataState, userMbtiValue } from './atoms';
 
 function App() {
@@ -81,7 +81,8 @@ function App() {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/oauth/kakao" element={<OAuth2RedirectHandler />} />
+        <Route path="/oauth/google" element={<OAuth2RedirectHandler />} />
       </Routes>
     </div>
   );
