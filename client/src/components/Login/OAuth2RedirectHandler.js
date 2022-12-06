@@ -17,7 +17,9 @@ function OAuth2RedirectHandler() {
     'refreshtoken',
   );
 
-  const Mbti = new URL(window.location.href).searchParams.get('MBTI');
+  const params = new URLSearchParams(window.location.href);
+
+  const Mbti = params.get('mbti');
 
   console.log(Mbti);
 
