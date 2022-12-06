@@ -46,21 +46,20 @@ import static com.main10.global.security.utils.AuthConstants.REFRESH_TOKEN;
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     @Value("${address.local-front}")
-    private final String FRONT_LOCAL;
+    private String FRONT_LOCAL;
 
     @Value("${address.front-s3}")
-    private final String FRONT_SERVER;
+    private String FRONT_SERVER;
 
     @Value("${address.front-https}")
-    private final String FRONT_SERVER_HTTPS;
+    private String FRONT_SERVER_HTTPS;
 
     @Value("${address.domain}")
-    private final String DOMAIN;
+    private String DOMAIN;
 
     @Value("${address.local}")
-    private final String LOCAL;
+    private String LOCAL;
 
     private final JwtTokenUtils jwtTokenUtils;
     private final RedisUtils redisUtils;
