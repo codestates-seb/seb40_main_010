@@ -25,11 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalField;
 import java.util.List;
 
-import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.RESERVATION_CANCELED;
+import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.PAY_CANCELED;
+import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.PAY_FAILED;
 import static com.main10.domain.reserve.utils.PayConstants.*;
 import static com.main10.domain.reserve.utils.ReserveConstants.INFO_URI_MSG;
 import static com.main10.domain.reserve.utils.ReserveConstants.PAY_URI_MSG;
@@ -158,7 +157,7 @@ public class ReserveService {
      */
     public void setCanceledStatus(Long reserveId) {
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
-        findReserve.setStatus(Reserve.ReserveStatus.PAY_CANCELED);
+        findReserve.setStatus(PAY_CANCELED);
         reserveDbService.saveReserve(findReserve);
     }
 
@@ -169,7 +168,7 @@ public class ReserveService {
      */
     public void setFailedStatus(Long reserveId) {
         Reserve findReserve = reserveDbService.ifExistsReturnReserve(reserveId);
-        findReserve.setStatus(Reserve.ReserveStatus.PAY_FAILED);
+        findReserve.setStatus(PAY_FAILED);
         reserveDbService.saveReserve(findReserve);
     }
 

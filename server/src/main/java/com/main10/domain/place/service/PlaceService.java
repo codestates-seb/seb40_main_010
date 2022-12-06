@@ -350,6 +350,43 @@ public class PlaceService {
     }
 
     /**
+     * POSTMAN 장소 삭제 메서드
+     *
+     * @param placeId 장소 식별자
+     * @author LeeGoh
+     */
+    @Transactional
+    public void deleteHostingMaster(Long placeId) {
+        Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
+        Member findMember = memberDbService.ifExistsReturnMember(findPlace.getMemberId());
+        List<Reserve> findReserve = reserveDbService.findAllByReserves(placeId);
+
+        // 리뷰 삭제
+        reviewDbService.deleteAllByReviews(placeId);
+
+        // 북마크 삭제
+        bookmarkRepository.deleteAllByPlaceId(placeId);
+
+        // 예약 취소 후 상태 변경
+        for (int i = 0; i < findReserve.size(); i++) {
+            if (findReserve.get(i).getStatus().equals(RESERVATION_CANCELED)) {
+                throw new BusinessLogicException(ExceptionCode.RESERVATION_NOT_FOUND);
+            }
+
+            // mbtiCount -1
+            mbtiCountService.reduceMbtiCount(findMember, placeId);
+
+            // 예약 상태 변경 ... -> RESERVATION_CANCELED
+            findReserve.get(i).setStatus(RESERVATION_CANCELED);
+            reserveDbService.saveReserve(findReserve.get(i));
+        }
+
+        // 공간 카테고리 & 공간 삭제
+        placeDbService.deletePlaceCategory(placeId);
+        placeDbService.deletePlace(findPlace);
+    }
+
+    /**
      * 새롭게 전달받은 파일 리스트 반환 메서드
      *
      * @param dbPlaceImageList 조회된 이미지 리스트

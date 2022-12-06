@@ -1,6 +1,7 @@
 package com.main10.domain.reserve.controller;
 
 import com.main10.domain.reserve.response.Message;
+import com.main10.domain.reserve.service.ReserveDbService;
 import com.main10.domain.reserve.service.ReserveService;
 import com.main10.domain.dto.MultiResponseDto;
 import com.main10.domain.reserve.dto.ReserveDto;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+
 import static com.main10.domain.reserve.utils.ReserveConstants.*;
 
 @RestController
 @RequiredArgsConstructor
 public class ReserveController {
     private final ReserveService reserveService;
+    private final ReserveDbService reserveDbService;
 
 
     /**
@@ -182,5 +185,25 @@ public class ReserveController {
         reserveService.updateReserve(patch, reserveId, token.getId());
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * 호스트가 등록한 장소별 예약 조회 컨트롤러 메서드
+     *
+     * @param placeId 장소 식별자
+     * @param pageable 페이지 정보
+     * @param authentication 사용자 인증 정보
+     * @return ResponseEntity
+     * @author LeeGoh
+     */
+    @GetMapping("/place/{place-id}/reserve/host")
+    public ResponseEntity getReserveHost(@PathVariable("place-id") Long placeId,
+                                         Pageable pageable,
+                                         Authentication authentication) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
+        Page<ReserveDto.Host> pageReserve = reserveDbService.getReservationHost(token.getId(), placeId, pageable);
+        List<ReserveDto.Host> place = pageReserve.getContent();
+        return new ResponseEntity<>(new MultiResponseDto<>(place, pageReserve), HttpStatus.OK);
+    }
+
 
 }
