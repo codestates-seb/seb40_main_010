@@ -12,7 +12,6 @@ function KakaoLogin() {
             alt="kakao"
             src="https://images-ext-2.discordapp.net/external/sVYggvT-UJIu06acazxnhxbW0TMzlcXQIKIutnnfdqQ/%3F20151013114543/https/upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Kakao_Corp._symbol_-_2012.svg/100px-Kakao_Corp._symbol_-_2012.svg.png"
           />
-          카카오 로그인
         </button>
       </a>
     </Container>
@@ -28,9 +27,8 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 15rem;
+    width: 3rem;
     height: 3rem;
-    margin-top: 60px;
     background-color: #fee500;
     border-radius: 40px;
     border: none;
@@ -40,7 +38,6 @@ const Container = styled.div`
 
     .kakao {
       height: 18px;
-      margin-right: 10px;
       padding-bottom: 1.2px;
     }
 

@@ -4,10 +4,11 @@ import styled from 'styled-components';
 
 import { useForm } from 'react-hook-form';
 
-import Nav from '../components/Navigation/Nav';
 import useLogin from '../hooks/useLogin';
+import Nav from '../components/Navigation/Nav';
 import KakaoLogin from '../components/Login/KakaoLogin';
-// import GoogleLogin from '../components/Login/GoogleLogin';
+import NaverLogin from '../components/Login/NaverLogin';
+import GoogleLogin from '../components/Login/GoogleLogin';
 
 export default function LogIn() {
   const {
@@ -59,8 +60,11 @@ export default function LogIn() {
                 <div className="alert">{errorMessage}</div>
               )}
             </div>
-            <KakaoLogin />
-            {/* <GoogleLogin /> */}
+            <SocialLogIn>
+              <KakaoLogin />
+              <NaverLogin />
+              <GoogleLogin />
+            </SocialLogIn>
             <button
               type="submit"
               className="submit-button"
@@ -176,4 +180,14 @@ const SignUpLink = styled(Link)`
 const Img = styled.img`
   width: 90px;
   margin-bottom: 80px;
+`;
+
+const SocialLogIn = styled.div`
+  margin-top: 40px;
+  width: 15rem;
+  height: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 `;
