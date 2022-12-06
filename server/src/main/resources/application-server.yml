@@ -121,9 +121,16 @@ kakao:
     cancel: ${/config/param/kakaopay-cancel-url}
     order: ${/config/param/kakaopay-order-url}
 
-default :
-  image :
-    address : ${/config/param/default-url}
+default:
+  image:
+    address: ${/config/param/default-url}
 
 awsParameterStorePropertySource:
   enabled: true
+
+address:
+  local-front: ${/config/param/local-front}
+  front-s3: ${/config/param/front-s3}
+  front-https: ${/config/param/front-https}
+  domain: ${/config/param/domain}
+  local: ${/config/param/local}

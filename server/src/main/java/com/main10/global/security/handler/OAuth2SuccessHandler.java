@@ -28,6 +28,8 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.main10.global.security.utils.AuthConstants.*;
+
 /**
  * OAuth2 로그인 성공 핸들러 클래스
  * @author mozzi327
@@ -77,7 +79,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             redisUtils.deleteData(member.getEmail(), provider);
 
         redisUtils.setData(email, provider ,refreshToken, jwtTokenUtils.getRefreshTokenExpirationMinutes());
-        String responseUrl = createUri(accessToken, refreshToken, provider).toString();
+        String responseUrl = createUri(accessToken, refreshToken, provider, member.getMbti()).toString();
 
         redirectStrategy.sendRedirect(req, res, responseUrl);
 
@@ -94,14 +96,16 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
      */
     private URI createUri(String accessToken,
                           String refreshToken,
-                          String provider) {
+                          String provider,
+                          String mbti) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add(AuthConstants.AUTHORIZATION, accessToken);
-        queryParams.add(AuthConstants.REFRESH_TOKEN, refreshToken);
+        queryParams.add(AUTHORIZATION, accessToken);
+        queryParams.add(REFRESH_TOKEN, refreshToken);
+        queryParams.add(MBTI, mbti);
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("http")
+                .scheme("https")
                 .host("daeyeo4u.com")
                 .path("/oauth/" + provider)
                 .queryParams(queryParams)

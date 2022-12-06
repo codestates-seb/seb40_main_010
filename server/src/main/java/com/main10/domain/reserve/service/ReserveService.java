@@ -182,16 +182,9 @@ public class ReserveService {
      * @author LeeGoh
      */
     public Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable) {
-        Page<ReserveDto.Response> info = reserveDbService.getReservation(memberId, pageable);
-        List<ReserveDto.Response> res = info.getContent();
-        System.out.println("debug");
-        res.removeIf(x -> (LocalDateTime.now().isBefore(x.getEndTime())
-                    && (x.getStatus().equals(Reserve.ReserveStatus.PAY_FAILED.getStatus())
-                        || x.getStatus().equals(Reserve.ReserveStatus.PAY_CANCELED.getStatus())
-                        )));
-        int total = res.size();
-        return new PageImpl<>(res, pageable, total);
+        return reserveDbService.getReservation(memberId, pageable);
     }
+
 
     /**
      * 예약 삭제 메서드<br>
