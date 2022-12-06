@@ -27,6 +27,8 @@ public class AuthController {
      * @author mozzi327
      */
     @PostMapping("/login")
+    @CrossOrigin(origins = {"https://backend.daeyeo4u.shop", "https://daeyeo4u.com"},
+                allowedHeaders = {"Authorization", "Origin", "RefreshToken"})
     public ResponseEntity<AuthDto> loginMember(@RequestBody @Valid LoginDto loginDto) {
         TokenDto.Response response = authService.loginMember(loginDto);
         return ResponseEntity.ok()
@@ -42,6 +44,8 @@ public class AuthController {
      * @param authentication 사용자 인증 정보
      * @author mozzi327
      */
+    @CrossOrigin(origins = {"https://backend.daeyeo4u.shop", "https://daeyeo4u.com"},
+            allowedHeaders = {"Authorization", "Origin", "RefreshToken"})
     @DeleteMapping("/logout")
     public ResponseEntity<?> logoutMember(@RequestHeader(AUTHORIZATION) String accessToken,
                                        @RequestHeader(REFRESH_TOKEN) String refreshToken,
@@ -59,6 +63,8 @@ public class AuthController {
      * @return ResponseEntity
      * @author mozzi327
      */
+    @CrossOrigin(origins = {"https://backend.daeyeo4u.shop", "https://daeyeo4u.com"},
+            allowedHeaders = {"Authorization", "Origin", "RefreshToken"})
     @GetMapping("/re-issue")
     public ResponseEntity<AuthDto> reIssueToken(@RequestHeader(AUTHORIZATION) String accessToken,
                                        @RequestHeader(REFRESH_TOKEN) String refreshToken,
