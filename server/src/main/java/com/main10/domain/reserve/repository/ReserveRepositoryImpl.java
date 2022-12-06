@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 import static com.main10.domain.place.entity.QPlace.place;
 import static com.main10.domain.reserve.entity.QReserve.reserve;

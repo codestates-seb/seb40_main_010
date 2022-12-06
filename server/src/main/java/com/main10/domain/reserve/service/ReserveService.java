@@ -18,11 +18,18 @@ import com.main10.domain.reserve.pay.RequestForReserveInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalField;
+import java.util.List;
+
+import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.RESERVATION_CANCELED;
 import static com.main10.domain.reserve.utils.PayConstants.*;
 import static com.main10.domain.reserve.utils.ReserveConstants.INFO_URI_MSG;
 import static com.main10.domain.reserve.utils.ReserveConstants.PAY_URI_MSG;
@@ -176,9 +183,16 @@ public class ReserveService {
      * @author LeeGoh
      */
     public Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable) {
-        return reserveDbService.getReservation(memberId, pageable);
+        Page<ReserveDto.Response> info = reserveDbService.getReservation(memberId, pageable);
+        List<ReserveDto.Response> res = info.getContent();
+        System.out.println("debug");
+        res.removeIf(x -> (LocalDateTime.now().isBefore(x.getEndTime())
+                    && (x.getStatus().equals(Reserve.ReserveStatus.PAY_FAILED.getStatus())
+                        || x.getStatus().equals(Reserve.ReserveStatus.PAY_CANCELED.getStatus())
+                        )));
+        int total = res.size();
+        return new PageImpl<>(res, pageable, total);
     }
-
 
     /**
      * 예약 삭제 메서드<br>
