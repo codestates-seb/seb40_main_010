@@ -10,10 +10,14 @@ function OAuth2RedirectHandler() {
   const setIsLogIn = useSetRecoilState(HasRefresh);
   const setUserMbti = useSetRecoilState(userMbtiValue);
 
-  const params = new URLSearchParams(window.location.href);
+  const Access = new URL(window.location.href).searchParams.get(
+    'authorization',
+  );
+  const Refresh = new URL(window.location.href).searchParams.get(
+    'refreshtoken',
+  );
 
-  const Access = params.get('authorization');
-  const Refresh = params.get('refreshtoken');
+  const params = new URLSearchParams(window.location.href);
   const Mbti = params.get('mbti');
 
   useEffect(() => {
