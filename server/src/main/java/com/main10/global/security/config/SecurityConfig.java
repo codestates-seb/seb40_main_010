@@ -47,13 +47,13 @@ import static com.main10.global.security.utils.AuthConstants.REFRESH_TOKEN;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Value("${address.front-local}")
+    @Value("${address.local-front}")
     private final String FRONT_LOCAL;
 
-    @Value("${address.front-server}")
+    @Value("${address.front-s3}")
     private final String FRONT_SERVER;
 
-    @Value("${address.front-server-https}")
+    @Value("${address.front-https}")
     private final String FRONT_SERVER_HTTPS;
 
     @Value("${address.domain}")
