@@ -1,8 +1,12 @@
 # 🏡 대여가 대여
 <br />
 
-![로고](https://user-images.githubusercontent.com/93918946/205548192-60e687d3-0383-4c13-a245-9401df932918.jpg)
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/96826217/205915741-cf6be120-063a-4f92-bbb9-80069c91890b.gif)
+
+
 <div align="center">
+  
+
    공간도 대여가 대여?
    시간 단위로 공간을 대여해보세요!
 </div>
@@ -13,8 +17,7 @@
     </a>
   </h3>
 </div>
-
-<br />
+<br><br><br><br>
 
 
 ## 팀원 소개
@@ -45,24 +48,23 @@ yujung Choi</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-<br/>
-
-<br/>
+<br><br><br><br>
 
 ## 📍 서비스 소개
 
 1박은 부담스럽고 잠깐 쉬고 싶은 분들, 여행하면서 짐을 보관하고 싶은데 마땅히 보관할 곳이 없는 분들, 자기가 소유한 공간을 손쉽게 대여하고 수익을 창출하고 싶은 분들, 이러한 고민을 하는 사람들을 위해 사용자가 공간을 대여하고 대여해줄 수 있는 무언가가 없을까? 하는 고민으로 공간 대여 플랫폼 서비스를 기획하게 되었습니다.
-
+<br><br>
 ### 서비스 기능
 
 1️⃣ 사용자가 소유 공간을 카테고리 별로 등록할 수 있습니다.<br>
 2️⃣ 사용자는 플랫폼에 등록된 공간을 윈하는 시간을 선택해서 예약할 수 있습니다. <br>
 3️⃣ 사용자와 같은 MBTI 유형의 사용자가 많이 예약한 베스트 공간을 추천하는 기능이 있습니다.
-
+<br><br><br><br>
 ## 📌 기술 스택
 ![스크린샷 2022-12-04 오후 9 06 54](https://user-images.githubusercontent.com/96826217/205555150-98bae0d9-2f4d-4a1d-a625-812505369e1a.png)
+<br><br><br><br>
 
-## BACK-END <br>
+### BACK-END <br>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"></a>
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"></a>
 <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"></a>
@@ -85,8 +87,53 @@ yujung Choi</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_
 <img src="https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=JUnit5&logoColor=white"></a>
 
 
-## FRONT-END
-<img src = "https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-00A7E2?style=for-the-badge&logo=css3&logoColor=white"/> <img src = "https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src = "https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src = "https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"> <img src = "https://img.shields.io/badge/Axios-181717?style=for-the-badge&logo=Axios&logoColor=white"> <img src="https://img.shields.io/badge/AmazonS3-339933?style=for-the-badge&logo=AmazonS3&logoColor=white"> <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=ESLint&logoColor=white"> <img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=black"> <img src="https://img.shields.io/badge/Recoil-000000?style=for-the-badge&logo=&logoColor=white"> <img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white">
+### FRONT-END
+<img src = "https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/CSS3-00A7E2?style=for-the-badge&logo=css3&logoColor=white"/></a>
+<img src = "https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"></a> 
+<img src = "https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"></a> 
+<img src = "https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"></a> 
+<img src = "https://img.shields.io/badge/Axios-181717?style=for-the-badge&logo=Axios&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/AmazonS3-339933?style=for-the-badge&logo=AmazonS3&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=ESLint&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=black"></a> 
+<img src="https://img.shields.io/badge/Recoil-000000?style=for-the-badge&logo=&logoColor=white"></a> 
+<img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white"></a> 
+<br><br><br><br>
+
+## 서버 구조
+![백엔드 인프라 001](https://user-images.githubusercontent.com/96826217/205853760-93ebbe59-340e-40c8-b26b-394cc5b4aa1d.jpeg)
+
+## 주요 기능 시연
+<div align="center">
+   
+| 일반 / 소셜 로그인 |
+|:---:|
+| <img src= https://user-images.githubusercontent.com/96826217/205934830-38831620-33dc-47b2-a773-3ac86ada3eea.gif width = "900"> |
+| 회원가입 |
+| <img src= https://user-images.githubusercontent.com/96826217/205928736-7245b06d-5f4e-42d3-a6be-f79e09542e71.gif width = "900"> |
+| 상세 페이지 | 
+| <img src= https://user-images.githubusercontent.com/96826217/205930078-5e86ae24-8299-4c64-a747-9aaa976a791a.gif width = "900"> |
+| 글 등록 | 
+| <img src= https://user-images.githubusercontent.com/96826217/205933658-df25d0f9-763c-4e66-b152-63302b88fc9d.gif width = "900"> |
+| 글 수정 |
+| <img src= https://user-images.githubusercontent.com/96826217/205934127-3bbea3bc-fab6-425f-bdd5-4755061b88ce.gif width = "900"> |
+| 카테고리 |
+| <img src= https://user-images.githubusercontent.com/96826217/205935446-62140cab-595b-4658-912d-b6b13031e409.gif width = "900"> |
+| 북마크 |
+| <img src= https://user-images.githubusercontent.com/96826217/205935733-6cb1b04e-cbc6-45fc-91d2-3a91b37fc879.gif width = "900"> |
+| 예약 |
+| <img src= https://user-images.githubusercontent.com/96826217/205937729-9489efda-cb29-4eaf-9a82-e5bd0f3730a4.gif width = "900"> |   
+| 결제 |
+| <img src= https://user-images.githubusercontent.com/96826217/205941793-7872a1e3-a919-4d63-8f33-f0238c86f722.gif width = "900"> |
+| 마이페이지 |
+| <img src= https://user-images.githubusercontent.com/96826217/205942259-ddc18050-8280-4489-b5d4-c54c14d447c6.gif width = "900"> |
+| 리뷰 작성 |
+| <img src= https://user-images.githubusercontent.com/96826217/205942736-7d298a6c-7c69-4061-b6e7-dba549ec68f3.gif width = "900"> |
+   
+
+</div>
+<br><br><br><br>
 ## 커밋 규칙
 
 - ✨ feat : 새로운 기능 추가, 기존의 기능을 요구 사항에 맞추어 수정
@@ -100,4 +147,6 @@ yujung Choi</b></sub></a><br /><a href="https://github.com/codestates-seb/seb40_
 - 🔀 merge : 병합
 - 🗃 db : 데이터베이스 관련 수정
 - 👽 api : api 관련 수정
+![스크린샷 2022-12-06 오후 9 33 24](https://user-images.githubusercontent.com/96826217/205915320-4371cb22-c5f3-48d9-92d1-b36cf3cce77e.png)
+
 
