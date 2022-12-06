@@ -102,24 +102,36 @@ export function NavRightButtonContainer() {
   const [isLogIn, setIsLogIn] = useRecoilState(HasRefresh);
 
   const onClickLogOutButton = async () => {
-    await axios.delete(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/logout`, {
-      headers: {
-        'ngrok-skip-browser-warning': '010',
-        Authorization: (await localStorage.getItem('ACCESS'))
-          ? `Bearer ${localStorage.getItem('ACCESS')}`
-          : '',
-        RefreshToken: (await localStorage.getItem('REFRESH'))
-          ? localStorage.getItem('REFRESH')
-          : '',
-      },
-    });
-    await localStorage.removeItem('ACCESS');
-    await localStorage.removeItem('REFRESH');
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/auth/logout`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '010',
+            Authorization: (await localStorage.getItem('ACCESS'))
+              ? `Bearer ${localStorage.getItem('ACCESS')}`
+              : '',
+            RefreshToken: (await localStorage.getItem('REFRESH'))
+              ? localStorage.getItem('REFRESH')
+              : '',
+          },
+        },
+      );
+      await localStorage.removeItem('ACCESS');
+      await localStorage.removeItem('REFRESH');
 
-    await setIsLogIn(false);
-    await invalidate();
-    resetUserMbti();
-    alert('로그아웃 되셨습니다');
+      await setIsLogIn(false);
+      await invalidate();
+      resetUserMbti();
+      alert('로그아웃 되셨습니다');
+    } catch (error) {
+      if (error.response.status === 401) {
+        await localStorage.removeItem('ACCESS');
+        await localStorage.removeItem('REFRESH');
+        setIsLogIn(false);
+        resetUserMbti();
+      }
+    }
   };
 
   const onClickAnotherPage = () => {
