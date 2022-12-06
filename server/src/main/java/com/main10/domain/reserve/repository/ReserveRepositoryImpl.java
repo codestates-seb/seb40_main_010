@@ -40,8 +40,7 @@ public class ReserveRepositoryImpl implements CustomReserveRepository {
                 .from(reserve)
                 .leftJoin(place).on(reserve.placeId.eq(place.id))
                 .where(reserve.memberId.eq(memberId),
-                        reserve.status.ne(RESERVATION_CANCELED),
-                        reserve.endTime.lt(LocalDateTime.now()))
+                        reserve.status.ne(RESERVATION_CANCELED))
                 .orderBy(reserve.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
