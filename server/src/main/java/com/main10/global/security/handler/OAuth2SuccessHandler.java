@@ -101,7 +101,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("http")
+                .scheme("https")
                 .host("daeyeo4u.com")
                 .path("/oauth/" + provider)
                 .queryParams(queryParams)

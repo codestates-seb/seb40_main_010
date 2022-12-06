@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -67,8 +68,8 @@ public class SecurityConfig {
                 .addFilterBefore(encodingFilter, CsrfFilter.class)
                 .headers().frameOptions().disable()
                 .and()
-//                .cors(withDefaults())
-                .cors().disable()
+                .cors(Customizer.withDefaults())
+//                .cors().disable()
                 .csrf().disable()
                 .httpBasic().disable()
                 .formLogin().disable()
@@ -145,14 +146,14 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
-        configuration.addAllowedOrigin("http://daeyeo4u.com");
-        configuration.addAllowedOrigin("http://backend.daeyeo4u.shop");
+        configuration.addAllowedOrigin("https://daeyeo4u.com");
+        configuration.addAllowedOrigin("https://backend.daeyeo4u.shop");
         configuration.addAllowedOrigin("https://kapi.kakao.com");
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.setAllowCredentials(true);
         configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH", "OPTIONS"));
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
