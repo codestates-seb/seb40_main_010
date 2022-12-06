@@ -8,6 +8,7 @@ import com.main10.global.security.token.JwtAuthenticationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -263,5 +264,18 @@ public class PlaceController {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         placeService.deleteHosting(token.getId(), placeId);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * POSTMAN 호스팅 삭제 컨트롤러
+     *
+     * @param placeId 장소 식별자
+     * @return ResponseEntity
+     * @author LeeGoh
+     */
+    @DeleteMapping("/place/{place-id}/master")
+    public ResponseEntity deleteHostingMaster(@PathVariable("place-id") Long placeId) {
+        placeService.deleteHostingMaster(placeId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -9,5 +9,7 @@ import java.util.List;
 public interface CustomReserveRepository {
     Page<ReserveDto.Response> getReservation(Long memberId, Pageable pageable);
 
+    Page<ReserveDto.Host> getReservationHost(Long placeId, Pageable pageable);
+
     List<ReserveDto.Detail> getDetailReservationTime(Long placeId);
 }

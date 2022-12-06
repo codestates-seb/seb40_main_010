@@ -1,5 +1,6 @@
 package com.main10.domain.reserve.dto;
 
+import com.main10.domain.member.entity.Member;
 import com.main10.domain.place.entity.Place;
 import com.main10.domain.reserve.entity.Reserve;
 import com.querydsl.core.annotations.QueryProjection;
@@ -96,6 +97,43 @@ public class ReserveDto {
         public Detail(LocalDateTime startTime, LocalDateTime endTime) {
             this.startTime = startTime;
             this.endTime = endTime;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class Host {
+        private Long reserveId;
+        private Long placeId;
+        private String title;
+        private String address;
+        private String image;
+        private int capacity;
+        private String status;
+        private LocalDateTime startTime;
+        private LocalDateTime endTime;
+        private Long totalCharge;
+
+        private String nickname;
+        private String phone;
+        private String email;
+
+        @Builder
+        @QueryProjection
+        public Host(Place place, Reserve reserve, Member member) {
+            this.reserveId = reserve.getId();
+            this.placeId = place.getId();
+            this.title = place.getTitle();
+            this.address = place.getAddress();
+            this.image = place.getPlaceImages().get(0).getFilePath();
+            this.status = reserve.getStatus().getStatus();
+            this.capacity = reserve.getCapacity();
+            this.startTime = reserve.getStartTime();
+            this.endTime = reserve.getEndTime();
+            this.totalCharge = reserve.getTotalCharge();
+            this.nickname = member.getNickname();
+            this.phone = member.getPhoneNumber();
+            this.email = member.getEmail();
         }
     }
 }

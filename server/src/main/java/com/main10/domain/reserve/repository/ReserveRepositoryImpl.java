@@ -1,6 +1,8 @@
 package com.main10.domain.reserve.repository;
 
+import com.main10.domain.member.entity.QMember;
 import com.main10.domain.reserve.dto.QReserveDto_Detail;
+import com.main10.domain.reserve.dto.QReserveDto_Host;
 import com.main10.domain.reserve.dto.QReserveDto_Response;
 import com.main10.domain.reserve.dto.ReserveDto;
 import com.main10.domain.reserve.entity.Reserve;
@@ -10,6 +12,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import java.util.List;
+
+import static com.main10.domain.member.entity.QMember.member;
 import static com.main10.domain.place.entity.QPlace.place;
 import static com.main10.domain.reserve.entity.QReserve.reserve;
 import static com.main10.domain.reserve.entity.Reserve.ReserveStatus.RESERVATION_CANCELED;
@@ -66,5 +70,35 @@ public class ReserveRepositoryImpl implements CustomReserveRepository {
                 .where(reserve.placeId.eq(placeId),
                         reserve.status.eq(Reserve.ReserveStatus.PAY_SUCCESS))
                 .fetch();
+    }
+
+
+    /**
+     * 호스트가 등록한 장소별 예약 조회
+     *
+     * @param placeId 장소 식별자
+     * @param pageable 페이지 정보
+     * @return Page<ReserveDto.Host>
+     * @author LeeGoh
+     */
+    @Override
+    public Page<ReserveDto.Host> getReservationHost(Long placeId, Pageable pageable) {
+        List<ReserveDto.Host> results = queryFactory
+                .select(new QReserveDto_Host(
+                        place,
+                        reserve,
+                        member
+                ))
+                .from(reserve)
+                .leftJoin(place).on(reserve.placeId.eq(place.id))
+                .leftJoin(member).on(reserve.memberId.eq(member.id))
+                .where(reserve.placeId.eq(placeId))
+                .orderBy(reserve.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = results.size();
+        return new PageImpl<>(results, pageable, total);
     }
 }

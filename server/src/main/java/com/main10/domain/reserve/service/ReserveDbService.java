@@ -1,5 +1,7 @@
 package com.main10.domain.reserve.service;
 
+import com.main10.domain.place.entity.Place;
+import com.main10.domain.place.service.PlaceDbService;
 import com.main10.global.exception.BusinessLogicException;
 import com.main10.global.exception.ExceptionCode;
 import com.main10.domain.reserve.dto.ReserveDto;
@@ -17,6 +19,8 @@ import java.util.List;
 public class ReserveDbService {
 
     private final ReserveRepository reserveRepository;
+    private final PlaceDbService placeDbService;
+
 
     /**
      * 예약 정보 조회 메서드
@@ -73,5 +77,21 @@ public class ReserveDbService {
      */
     public List<ReserveDto.Detail> findAllReserveForPlace(Long placeId) {
         return reserveRepository.getDetailReservationTime(placeId);
+    }
+
+
+    /**
+     * 호스트가 등록한 장소별 예약 조회
+     *
+     * @param memberId 사용자 식별자
+     * @param placeId 장소 식별자
+     * @param pageable 페이지 정보
+     * @return Page<ReserveDto.Host>
+     * @author LeeGoh
+     */
+    public Page<ReserveDto.Host> getReservationHost(Long memberId, Long placeId, Pageable pageable) {
+        Place findPlace = placeDbService.ifExistsReturnPlace(placeId);
+        if (!memberId.equals(findPlace.getMemberId())) throw new BusinessLogicException(ExceptionCode.INVALID_ACCESS);
+        return reserveRepository.getReservationHost(placeId, pageable);
     }
 }
