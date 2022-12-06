@@ -63,12 +63,6 @@ function MbtiPlaces() {
       {mbtiPlaceData.length > 0 && (
         <>
           {isMbti(userMbti)}
-          {/* <MbtiTitle>
-            <span>{userMbti}</span>가 방문한 장소
-          </MbtiTitle> */}
-          {/* <MbtiTitle>
-            <span>Mbti</span>가 방문한 장소
-          </MbtiTitle> */}
           <MbtiPlacesContainer>
             {mbtiPlaceData.map(placeData => {
               const { placeId } = placeData;
