@@ -38,10 +38,10 @@ public class PlaceController {
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         /** 로컬 환경 */
-//        placeService.createPlace(placePostDto,  token.getId(), files);
+        placeService.createPlace(placePostDto,  token.getId(), files);
 
         /** S3 환경 */
-        placeService.createPlaceS3(placePostDto, token.getId(), files);
+//        placeService.createPlaceS3(placePostDto, token.getId(), files);
         return ResponseEntity.ok().build();
     }
 
@@ -80,10 +80,10 @@ public class PlaceController {
                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         /** 로컬 환경 */
-//        placeService.updatePlace(placeId, placePatchDto, token.getId(), files);
+        placeService.updatePlace(placeId, placePatchDto, token.getId(), files);
 
         /** S3 환경 */
-        placeService.updatePlaceS3(placeId, placePatchDto, token.getId(), files);
+//        placeService.updatePlaceS3(placeId, placePatchDto, token.getId(), files);
 
         return ResponseEntity.ok().build();
     }
