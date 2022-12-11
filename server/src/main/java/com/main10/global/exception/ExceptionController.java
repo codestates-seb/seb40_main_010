@@ -1,5 +1,6 @@
 package com.main10.global.exception;
 
+import com.main10.global.feign.SendErrorToDiscord;
 import com.main10.global.feign.ServiceError;
 import com.main10.global.feign.WebHookError;
 import com.main10.global.feign.WebHookFeign;
@@ -25,23 +26,13 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ExceptionController {
-    private final WebHookFeign webHookFeign;
+    private final SendErrorToDiscord sendErrorToDiscord;
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
-        ServiceError error = ServiceError.builder()
-                .title(e.getMessage())
-                .description(e.toString())
-                .build();
-
-        WebHookError webHookError = WebHookError.builder()
-                .content("MethodArgumentNotValidException error occurred \n")
-                .embeds(List.of(error))
-                .tts(false)
-                .build();
-        webHookFeign.sendServerLogging("application/json", webHookError);
+        sendErrorToDiscord.sendServerExceptionToDiscord(e);
         return Response.of(e.getBindingResult());
     }
 
@@ -49,25 +40,13 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response handleConstraintViolationException(
             ConstraintViolationException e) {
-        WebHookError webHookError = WebHookError.builder()
-                .content("ConstraintViolationException error occurred \n")
-                .embeds(makeErrorList(e))
-                .tts(false)
-                .build();
-        webHookFeign.sendServerLogging("application/json", webHookError);
-
+        sendErrorToDiscord.sendServerExceptionToDiscord(e);
         return Response.of(e.getConstraintViolations());
     }
 
     @ExceptionHandler
     public ResponseEntity<Response> handleBusinessLogicException(BusinessLogicException e) {
-        WebHookError webHookError = WebHookError.builder()
-                .content("BusinessLogicException error occurred \n" + e.exceptionCode)
-                .embeds(makeErrorList(e))
-                .tts(false)
-                .build();
-        webHookFeign.sendServiceLogging("application/json", webHookError);
-
+        sendErrorToDiscord.sendBusinessExceptionToDiscord(e);
         final Response response = Response.of(e.getExceptionCode());
         return ResponseEntity.status(HttpStatus.valueOf(e.getExceptionCode().getStatus())).body(response);
     }
@@ -76,13 +55,7 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public Response handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException e) {
-        WebHookError webHookError = WebHookError.builder()
-                .content("HttpRequestMethodNotSupportedException error occurred \n")
-                .embeds(makeErrorList(e))
-                .tts(false)
-                .build();
-        webHookFeign.sendServerLogging("application/json", webHookError);
-
+        sendErrorToDiscord.sendServerExceptionToDiscord(e);
         return Response.of(HttpStatus.METHOD_NOT_ALLOWED, "메서드 문법이 틀렸습니다. 문법을 지켜주세요.");
     }
 
@@ -90,13 +63,7 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response handleHttpMessageNotReadableException(
             HttpMessageNotReadableException e) {
-        WebHookError webHookError = WebHookError.builder()
-                .content("HttpMessageNotReadableException error occurred \n")
-                .embeds(makeErrorList(e))
-                .tts(false)
-                .build();
-        webHookFeign.sendServerLogging("application/json", webHookError);
-
+        sendErrorToDiscord.sendServerExceptionToDiscord(e);
         return Response.of(HttpStatus.BAD_REQUEST,
                 "정확한 제이슨 요청을 부탁드립니다.");
     }
@@ -105,22 +72,8 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response handleMissingServletRequestParameterException(
             MissingServletRequestParameterException e) {
-        WebHookError webHookError = WebHookError.builder()
-                .content("MissingServletRequestParameterException error occurred \n")
-                .embeds(makeErrorList(e))
-                .tts(false)
-                .build();
-        webHookFeign.sendServerLogging("application/json", webHookError);
-
+        sendErrorToDiscord.sendServerExceptionToDiscord(e);
         return Response.of(HttpStatus.BAD_REQUEST,
                 "파라미터가 빠졌습니다.");
-    }
-
-    private List<ServiceError> makeErrorList(Exception... exceptions) {
-        return Arrays.stream(exceptions).map(
-                e -> ServiceError.builder()
-                        .title(e.getMessage())
-                        .description(e.toString())
-                        .build()).collect(Collectors.toList());
     }
 }

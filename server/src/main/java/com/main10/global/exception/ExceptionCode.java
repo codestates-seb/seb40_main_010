@@ -21,6 +21,7 @@ public enum ExceptionCode {
     MISMATCH_ACCESS_TOKEN(504, "엑세스 토큰의 유저 정보가 일치하지 않습니다."),
     BLACK_LIST(504, "로그아웃 처리된 토큰입니다."),
     MISSING_HEADER_ACCESS_TOKEN(504,"헤더에 엑세스 토큰을 넣어주세요."),
+    TOKEN_NOT_FOUND(504, "저장소에 토큰이 존재하지 않습니다."),
 
 
     // 중복여부
