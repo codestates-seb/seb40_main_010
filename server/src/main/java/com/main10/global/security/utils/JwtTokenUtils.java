@@ -111,7 +111,6 @@ public class JwtTokenUtils {
     public Map<String, Object> getClaims(String jws) {
         String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build().parseClaimsJws(jws).getBody();
@@ -157,38 +156,9 @@ public class JwtTokenUtils {
      * @return Key
      * @author mozzi327
      */
-    private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
+    public Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
         return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    /**
-     * 토큰 정보를 검증하는 메서드
-     *
-     * @param token 토큰 정보
-     * @return boolean
-     * @author mozzi327
-     */
-    public boolean validateToken(String token) {
-        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-            return false;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
-        }
-        return true;
     }
 
     /**

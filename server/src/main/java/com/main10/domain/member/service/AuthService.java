@@ -8,11 +8,17 @@ import com.main10.global.security.dto.LoginDto;
 import com.main10.global.security.exception.AuthException;
 import com.main10.global.security.utils.JwtTokenUtils;
 import com.main10.global.security.utils.RedisUtils;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.security.Key;
 import java.util.Objects;
 import static com.main10.global.security.utils.AuthConstants.AUTHORIZATION;
 import static com.main10.global.security.utils.AuthConstants.REFRESH_TOKEN;
@@ -80,7 +86,7 @@ public class AuthService {
         accessToken = jwtTokenUtils.parseAccessToken(accessToken);
 
         // 복호화가 가능한지 확인
-        if (jwtTokenUtils.validateToken(accessToken))
+        if (validateToken(accessToken))
             throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
 
         // refreshToken이 존재하는 경우 리프레시 토큰 삭제
@@ -110,7 +116,7 @@ public class AuthService {
         accessToken = jwtTokenUtils.parseAccessToken(accessToken);
 
         // 복호화가 가능한지 확인
-        if (jwtTokenUtils.validateToken(accessToken))
+        if (validateToken(accessToken))
             throw new AuthException(ExceptionCode.INVALID_AUTH_TOKEN);
 
 //        // refreshToken이 존재하지 않는 경우 예외를 던짐
@@ -134,5 +140,34 @@ public class AuthService {
                 .headers(headers)
                 .response(memberRes)
                 .build();
+    }
+
+    /**
+     * 토큰 정보를 검증하는 메서드
+     *
+     * @param token 토큰 정보
+     * @return boolean
+     * @author mozzi327
+     */
+    private boolean validateToken(String token) {
+        String base64EncodedSecretKey = jwtTokenUtils.encodeBase64SecretKey(jwtTokenUtils.getSecretKey());
+        Key key = jwtTokenUtils.getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return false;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("Invalid JWT Token", e);
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT Token", e);
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT Token", e);
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims string is empty.", e);
+        }
+        return true;
     }
 }
