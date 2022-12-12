@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class PlaceController {
-
     private final PlaceService placeService;
     private final PlaceDbService placeDbService;
 
@@ -38,10 +37,10 @@ public class PlaceController {
                          @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         /** 로컬 환경 */
-        placeService.createPlace(placePostDto,  token.getId(), files);
+//        placeService.createPlace(placePostDto,  token.getId(), files);
 
         /** S3 환경 */
-//        placeService.createPlaceS3(placePostDto, token.getId(), files);
+        placeService.createPlaceS3(placePostDto, token.getId(), files);
         return ResponseEntity.ok().build();
     }
 
@@ -80,10 +79,10 @@ public class PlaceController {
                            @RequestPart(value = "file") List<MultipartFile> files) throws Exception {
         JwtAuthenticationToken token = (JwtAuthenticationToken) authentication;
         /** 로컬 환경 */
-        placeService.updatePlace(placeId, placePatchDto, token.getId(), files);
+//        placeService.updatePlace(placeId, placePatchDto, token.getId(), files);
 
         /** S3 환경 */
-//        placeService.updatePlaceS3(placeId, placePatchDto, token.getId(), files);
+        placeService.updatePlaceS3(placeId, placePatchDto, token.getId(), files);
 
         return ResponseEntity.ok().build();
     }
@@ -117,23 +116,6 @@ public class PlaceController {
     }
 
     /**
-     * Slice 무한스크롤 메인페이지 공간 전체 조회 컨트롤
-     *
-     * @param refreshToken 리프래시 토큰
-     * @param pageable 페이지 정보
-     * @return ResponseEntity
-     * @author LeeGoh
-     */
-    /*
-    @GetMapping("/slice")
-    public ResponseEntity getPlacesSlice(@RequestHeader(name = REFRESH_TOKEN) String refreshToken,
-                                         Pageable pageable) {
-        Slice<PlaceDto.Response> place = placeDbService.getPlacesSlice(pageable);
-        return new ResponseEntity<>(place, HttpStatus.OK);
-    }
-     */
-
-    /**
      * 메인페이지 카테고리별 공간 조회 컨트롤
      *
      * @param categoryId 카테고리 식별자
@@ -163,24 +145,6 @@ public class PlaceController {
         List<PlaceCategoryDto.ResponseTest> place = pagePlace.getContent();
         return ResponseEntity.ok(new MultiResponseDto<>(place, pagePlace));
     }
-
-    /**
-     * Slice 무한스크롤 메인페이지 카테고리별 공간 조회 컨트롤
-     *
-     * @param categoryId 카테고리 식별자
-     * @param pageable 페이지 정보
-     * @return ResponseEntity
-     * @author LeeGoh
-     */
-    /*
-    @GetMapping("slice/category/{category-id}")
-    public ResponseEntity getCategorySlice(@PathVariable("category-id") Long categoryId,
-                                           Pageable pageable) {
-
-        Slice<PlaceCategoryDto.Response> place = placeService.getCategorySlice(categoryId, pageable);
-        return new ResponseEntity<>(place, HttpStatus.OK);
-    }
-     */
 
     /**
      * 공간 최소 가격, 최대 가격, 인원수별 상세 검색 컨트롤
