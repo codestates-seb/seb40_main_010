@@ -83,6 +83,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/oauth/kakao" element={<OAuth2RedirectHandler />} />
         <Route path="/oauth/google" element={<OAuth2RedirectHandler />} />
+        <Route path="/oauth/naver" element={<OAuth2RedirectHandler />} />
       </Routes>
     </div>
   );
